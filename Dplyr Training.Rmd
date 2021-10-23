@@ -16,3 +16,9 @@ data<-gapminder %>% filter(year==2002) %>% group_by(continent) %>% mutate(cont_p
 data
 
 ````
+#Hey I wonder what dose this do
+
+``` {r test}
+
+diamonds %>% head()
+```
