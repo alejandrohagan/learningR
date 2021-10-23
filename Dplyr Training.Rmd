@@ -1,0 +1,18 @@
+---
+title: "what is this"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Dyplr
+
+```````{r Groupby}
+
+data<-gapminder %>% filter(year==2002) %>% group_by(continent) %>% mutate(cont_pop=sum(pop))
+
+data
+
+````
