@@ -1,0 +1,89 @@
+---
+title: Excel to R: Perspective of a Financial Analyst
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+install.packages("tidyverse")
+install.packages("sos")
+install.packages("janitor")
+```
+
+
+setting github
+use_git_config(user.name = "haganistic", user.email = "alejandro.hagan@outlook.com")
+
+
+# Admin how to set up your working space
+
+## Manipulating working directories
+
+getwd()
+
+setwd()
+
+list.files(pattern=$^, recursive=T)
+
+
+`.` is equal to your working director `getwd()`
+
+
+## Creating folders & filing guidelines 
+
+file.exists
+dir.exists
+basename("c:/filedir/file.txt") -> "file.txt
+dirname("c:/filedir/file.txt")->
+
+create.dir("./newdir")
+file.create("filename.txt")
+shell.exec("filename.txt")
+filesstrings::move_file("c:home/filename.txt","c:newdir")
+file.copy("filename", "destination")
+file.rename("existing file name","new file name")
+-must be in the same directory
+file.choose()
+base::unlink("filename", recursive=T)
+-recursve must be T to delete directories
+
+[Link to learn more](http://theautomatic.net/2018/07/11/manipulate-files-r/#:~:text=Files%20can%20be%20deleted%20with%20R%20using%20unlink.,parameter%20recursive%20%3D%20TRUE.%20%23%20delete%20a%20file)
+
+
+# How to manipulate & tidy data
+
+## how to import data
+
+read.csv()
+
+read_csv()
+
+fread()
+
+## how to change column types
+
+
+
+
+
+ 
+
+
+
+## how to create data
+seq()
+runif()
+sample(data,# of times, replace,)
+c()
+data.frame()
+
+
+## how to import files
+
+
+ 
+ 
+ 
+ 
+ 
