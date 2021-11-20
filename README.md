@@ -15,3 +15,4 @@ We're learning ggplot2 It's going to be amazing.
 use_git_config(user.name = "haganistic", user.email = "alejandro.hagan@outlook.com")
 install.packages("usethis")
 library(usethis)
+
