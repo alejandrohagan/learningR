@@ -1,14 +1,13 @@
 ---
-title: Excel to R: Perspective of a Financial Analyst
+title: "Graphics with ggplot2"
+author: "Alejandro"
+date: "11/21/2017"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-install.packages("tidyverse")
-install.packages("sos")
-install.packages("janitor")
 ```
 
 
@@ -51,6 +50,12 @@ base::unlink("filename", recursive=T)
 [Link to learn more](http://theautomatic.net/2018/07/11/manipulate-files-r/#:~:text=Files%20can%20be%20deleted%20with%20R%20using%20unlink.,parameter%20recursive%20%3D%20TRUE.%20%23%20delete%20a%20file)
 
 
+## how to connect to github
+
+while all this may seem to new, quite honestly its because we have never been told good versioning and collaboration practices so we are reliant on saving to a LAN system, amending the name with  versioning control
+
+
+
 # How to manipulate & tidy data
 
 ## how to import data
@@ -69,6 +74,18 @@ fread()
 
  
 
+
+``` {r script}
+
+library(tidyverse)
+
+head(mpg)
+
+
+data <- mpg
+
+data %>% ggplot(aes(x=cty, y=hwy))+geom_point()
+```
 
 
 ## how to create data
