@@ -42,8 +42,8 @@ file.create("filename.txt")
 shell.exec("filename.txt")
 filesstrings::move_file("c:home/filename.txt","c:newdir")
 file.copy("filename", "destination")
-file.rename("existing file name","new file name")
--must be in the same directory
+file.rename(directory,"existing file name","new file name")
+-if directory is blank will assume getwd()
 file.choose()
 base::unlink("filename", recursive=T)
 -recursve must be T to delete directories
@@ -78,12 +78,36 @@ sample(data,# of times, replace,)
 c()
 data.frame()
 
+## how to create data with basic loops / repitition
+
+## types of data
+
+vector
+data.frame
+list
+
+
+## some base R basics that will be helpful to you as you read the forums
+
+
 
 ## how to import files
 
+- by folder
+- by website
+- excel spreadsheet
+- powerbi model
+- 
 
- 
- 
+### how to find files by their type
+
+### how to append files together
+
+### how to automate file importation 
+
+
+
+## how to change file
  
  
  
