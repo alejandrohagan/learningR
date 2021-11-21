@@ -55,6 +55,8 @@ base::unlink("filename", recursive=T)
 while all this may seem to new, quite honestly its because we have never been told good versioning and collaboration practices so we are reliant on saving to a LAN system, amending the name with  versioning control
 
 
+## push & committ and commenting
+
 
 # How to manipulate & tidy data
 
@@ -74,18 +76,6 @@ fread()
 
  
 
-
-``` {r script}
-
-library(tidyverse)
-
-head(mpg)
-
-
-data <- mpg
-
-data %>% ggplot(aes(x=cty, y=hwy))+geom_point()
-```
 
 
 ## how to create data
@@ -123,8 +113,54 @@ list
 ### how to automate file importation 
 
 
+## file column names
 
-## how to change file
+### how to change column names
+
+#### statically
+
+
+#### dynamically
+
+#### best practices when naming columns
+
+### how to change column types
+
+#### statically
+
+#### dynamically
+
+### how to check data structure
+
+
+### how to clean data
+
+
+
+### how to shape data
+
+
+### how to subset data
+
+
+#### filter
+
+
+### select
+
+
+### grouby
+
+
+### summarize
+
+
+
+
+
+
+
+
  
  
  
