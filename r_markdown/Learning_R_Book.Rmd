@@ -131,7 +131,7 @@ list
 #### dynamically
 
 ### how to check data structure
-
+-unique
 
 ### how to clean data
 
@@ -145,9 +145,15 @@ list
 
 #### filter
 
+dynamic
+
+static
 
 ### select
 
+dynamic
+
+static
 
 ### grouby
 
@@ -155,7 +161,33 @@ list
 ### summarize
 
 
+### mutate
 
+
+### fill / blanks/ replace values
+
+
+### recode
+
+
+### pivot / unpivot
+
+
+### merge
+
+
+### iterate
+
+
+- apply a single function (single input or multiple inputs) to every/ some/ based on criteria column and get its outputs into a data frame (to be accessed)
+
+- apply a single function with multiple inputs
+
+- apply a functions to nested data frames
+
+### explatory analysis 
+
+- start with variance analysis 
 
 
 
