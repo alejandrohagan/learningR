@@ -191,8 +191,45 @@ static
 
 
 
+# how to extract information out of a table
+
+for (i in range){
+
+do something
+}
+
+basic framework 
+1. is to define the vector that you want as an output and its size with `vector("type",vectorsize)`
+2. assign that vector names with `names()` so that data has headings
+3. create for (i in range)
+4. define the task it will do individually to thedataset
+4. assign that to the output vector
 
 
+tips & tricks
+
+- check the task individually against a single element to ensure it works
+- you can extract other elements (typically row / column names) using other techniques (names()) and assign to output (doesn't need to be in the loop)
+-use `seq_along()`, `ncol()`, `[[]]` to define parameters and extract elements
+
+
+``` {r loop_example}
+output <- vector("double",ncol(mtcars)) #assigns the output vector
+
+cols_names <- names(mtcars) # assigns names of the dataframe to variable
+names(output) <- cols_names # assigns the names 
+
+
+for (i in cols_names) { # sometimes useful to use seq_along() here as well
+  
+  
+  output[i] <- mean(mtcars[[i]]) # the double brackets ensures we only take out one item, this needs to be adjusted if two iems are expected, change the vector to a list
+  
+}
+
+output
+
+```
  
  
  
