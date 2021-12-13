@@ -1,0 +1,117 @@
+---
+title: "r_for_data_science_answers"
+author: "Alejandro"
+date: "11/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+install.packages("pacman")
+pacman::p_load(tidyverse,filesstrings)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 3.2.4
+
+*Run ggplot(data = mpg). What do you see?
+
+we don't see anything because no geoms have been mapped
+
+*How many rows are in mpg? How many columns?
+
+There are `r dim(mpg)[1]` rows and `r dim(mpg)[2]` columns
+
+*Make a scatterplot of hwy vs cyl.
+
+
+```{r 3.2.4 scatterplot}
+
+
+mpg %>% ggplot(aes(x=hwy, y=cyl))+geom_point()
+
+```
+
+
+*What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
+
+
+plot isn't useful because they are both character type variables, a count of each of proportion would be more helpful
+
+```{r 3.2.4 scatterplot2}
+
+
+mpg %>% ggplot(aes(x=class, y= drv))+
+geom_point()
+
+```
+
+
+# 3.3.1
+
+*What’s gone wrong with this code? Why are the points not blue?
+
+points are blue because "blue" is mapped as an aes()
+
+*Which variables in mpg are categorical? Which variables are continuous?
+
+``` {r class of mpg }
+
+
+str(mpg) %>% knitr::kable("pipe")
+
+```
+
+
+*Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
+
+
+``` {r class vs. class}
+
+# continuous vs.continuous  
+mpg %>% ggplot(aes(x=.$hwy,y=.$cty, color=.$class, size=.$cyl, shape=.$class))+geom_point()
+
+```
+
+
+
+*What happens if you map the same variable to multiple aesthetics?
+
+
+``` {r multiple mappings}
+
+
+mpg %>% ggplot(aes(x=cty, y=hwy, col=class,size=class,shape=class))+
+  geom_point()
+
+
+
+```
+
+
+*What does the stroke aesthetic do? What shapes does it work with? (Hint: use ?geom_point)
+
+alters color line thickness
+
+``` {r stroke}
+
+
+mpg %>% ggplot(aes(x=cty, y=hwy))+
+  geom_point(aes(stroke=0.4))
+
+```
+
+*What happens if you map an aesthetic to something other than a variable name, like aes(colour = displ < 5)? Note, you’ll also need to specify x and y.v
+
+
+``` {r scatter filter}
+
+
+mpg %>% ggplot(aes(x=cty, y=hwy))+
+  geom_point(aes(stroke=0.4))
+
+aes(colour = displ < 5)
+
+```
+
+

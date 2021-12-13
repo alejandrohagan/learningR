@@ -96,8 +96,6 @@ list
 
 ## some base R basics that will be helpful to you as you read the forums
 
-
-
 ## how to import files
 
 - by folder
@@ -231,5 +229,42 @@ output
 
 ```
  
+ ### Categorical Variables
  
+ In general you will need to distinguishbetwen your character values as either straight character or categorical with levels
  
+ This becomes critical as you look to create categories and relationships in your data
+ 
+ forecats is the gotopackage in particular:
+ 
+
+1) rename
+
+recode() to change values in column
+
+`recode(col,newvalue=oldvalue)`
+
+2) reorder
+
+fct_relevel
+
+`fct_relevel(col,level1,level2,etc)`
+
+3)group variables into another group
+
+case_when()
+
+-typically used in combination with mutate()
+-can reference multiple conditions
+
+`case_when(col1==var1 ~ val1,
+            col1==var2 & col3==var3 ~ var 2,
+            is.na(col1) ~ "missingvalue",
+            TRUE ~ "defaultvalue`
+            )`
+cut()
+
+
+
+
+
