@@ -85,9 +85,9 @@ gitcreds::gitcreds_set(url = "https://github.com/alejandrohagan/learningR.git")
 usethis::use_github()
 usethis::git_default_branch()
 
+gh::gh_whoami()
 
-
-
+usethis::git_remotes()
 
 ```
 
