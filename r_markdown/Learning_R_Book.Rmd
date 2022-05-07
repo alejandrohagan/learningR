@@ -89,6 +89,11 @@ gh::gh_whoami()
 
 usethis::git_remotes()
 
+usethis::pr_push()
+
+usethis::pr_init(branch = "main")
+
+
 ```
 
 usethis::use_git_remote(name = "origin",url =
