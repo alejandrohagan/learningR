@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "Graphics with ggplot2"
 author: "Alejandro"
@@ -18,3 +19,6 @@ use_git_config(user.name = "haganistic", user.email = "alejandro.hagan@outlook.c
 install.packages("usethis")
 library(usethis)
 
+=======
+# learningR
+>>>>>>> 7daa783b164b9f2e23eea5a944ec0d59708c4724
