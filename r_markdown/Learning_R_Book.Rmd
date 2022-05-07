@@ -11,6 +11,9 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+
+
+
 ```
 
 setting github use_git_config(user.name = "haganistic", user.email =
@@ -18,7 +21,9 @@ setting github use_git_config(user.name = "haganistic", user.email =
 
 # Admin how to set up your working space {style="background-color: black; color: white"}
 
-## Manipulating working directories
+## Man
+
+## ipulating working directories
 
 getwd()
 
@@ -67,6 +72,30 @@ gert::git_remote_ls()
 get information
 
 resources
+
+```{r}
+usethis::use_git_remote("origin",url=NULL,overwrite=TRUE)
+usethis::use_github()
+usethis::gh_token_help()
+
+usethis::use_git_remote(name = "origin",url = "https://github.com/alejandrohagan/learningR.git",overwrite=TRUE)
+
+gitcreds::gitcreds_set(url = "https://github.com/alejandrohagan/learningR.git")
+
+usethis::use_github()
+usethis::git_default_branch()
+
+
+
+
+
+```
+
+usethis::use_git_remote(name = "origin",url =
+"[https://github.com/alejandrohagan/learningR.git",overwrite=TRUE)](https://github.com/alejandrohagan/learningR.git",overwrite=TRUE))
+
+    • To create a personal access token, call `create_github_token()`
+    • To store a token for current and future use, call `gitcreds::gitcreds_set()`
 
 [5 steps to change GitHub default branch from master to main \|
 R-bloggers](https://www.r-bloggers.com/2020/07/5-steps-to-change-github-default-branch-from-master-to-main/)
