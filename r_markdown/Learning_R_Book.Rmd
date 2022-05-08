@@ -73,17 +73,16 @@ get information
 
 resources
 
-```{r}
 usethis::use_git_remote("origin",url=NULL,overwrite=TRUE)
-usethis::use_github()
-usethis::gh_token_help()
+usethis::use_github() usethis::gh_token_help()
 
-usethis::use_git_remote(name = "origin",url = "https://github.com/alejandrohagan/learningR.git",overwrite=TRUE)
+usethis::use_git_remote(name = "origin",url =
+"<https://github.com/alejandrohagan/learningR.git>",overwrite=TRUE)
 
-gitcreds::gitcreds_set(url = "https://github.com/alejandrohagan/learningR.git")
+gitcreds::gitcreds_set(url =
+"<https://github.com/alejandrohagan/learningR.git>")
 
-usethis::use_github()
-usethis::git_default_branch()
+usethis::use_github() usethis::git_default_branch()
 
 gh::gh_whoami()
 
@@ -91,10 +90,7 @@ usethis::git_remotes()
 
 usethis::pr_push()
 
-usethis::pr_init(branch = "main")
-
-
-```
+usethis::pr_init(branch = "rcloud")
 
 usethis::use_git_remote(name = "origin",url =
 "[https://github.com/alejandrohagan/learningR.git",overwrite=TRUE)](https://github.com/alejandrohagan/learningR.git%22,overwrite=TRUE))
@@ -111,7 +107,10 @@ R-bloggers](https://www.r-bloggers.com/2022/04/dont-lose-your-head-over-default-
 [Git: Moving from Master to Main \|
 R-bloggers](https://www.r-bloggers.com/2021/10/git-moving-from-master-to-main/)
 
-## push & committ and commenting
+[Chapter 18 Git and GitHub \| R Packages
+(r-pkgs.org)](https://r-pkgs.org/git.html#github-init)
+
+push & committ and commenting
 
 # How to manipulate & tidy data
 
@@ -771,6 +770,26 @@ group
     -   take one element .x\<-list[[1]]
 
     -   do the formula based on that element
+
+-   principles
+
+    -   takes a every object of a list and applies a function to it and
+        stores that output in a list
+
+    -   if two inputs are given in will apply in alterantive order
+        (better to control this in advanced then to count on recycling)
+
+    -   passing on a df %\>% into map doesn't always work well, so
+        better to explicity call arguments
+
+    -   when using pmap, you should call argument explicity in a list
+
+    -   if you have alot nest lists you can should use
+        listviewer::jsonedit
+
+    -   `[` is used to subset
+
+    -   `+ is used to add, etc`
 
 -   set_names() without argument sets the names equal to the values
 
