@@ -1,0 +1,328 @@
+# Chapter 1: Let's get started
+
+# Named Objects
+
+::: callout-note
+In this package, we will use the following libraries
+
+library(tidyverse)
+:::
+
+### how to create and reference objects and generate series
+
+Although not the most glamorous place to start, learning how to create named objects, reference and manipulate them as well generate data becomes incredibly useful down the road when combined with other techniques and workflows.
+
+In R this is main way you save, reference, and manipulate your data
+
+You use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
+
+```{r}
+#| echo: true
+object <- 1+1
+```
+
+Whatever name type will become the object's name, if type in the object, it will return whatever you assigned to the name
+
+Although this is fairly intuitive to understand, if you are coming from an Excel background, it will take time to develop this habit of assigning names to results because in Excel, you can refer to a result by its cell location by physically pointing a formula to a input.
+
+For quick and simple calculations, this will be quicker but if you try to do something even beyond a simple calculation, you will see it becomes very difficult to manage, easy to make mistakes and reduces your producivity as you have to constantly point to those input cells or have to remember non-intuitive names `eg C5` .
+
+In excel, you can also name a cell by putting your cursor over the cell and click on the named box in the top left.
+
+To keep track of all the names, you can press F5 and you will see a dialog box that will help you manage all of your names.
+
+When you want to refer to that cell, you can simply type in the cell name.
+
+Although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
+
+### how to create and named Tables
+
+##### In R
+
+Regardless if the data object is a cell or a table (or actually any type of object) the naming methodology is the same.
+
+However creating a table isn't as straight forward because you don't have the same GUI.
+
+Data entry is not R (or any scripting languages) strong suit - which doesn't mean you can't do it but if you are strictly entering in data (of great length), use excel.
+
+However, below shows you how to create tables
+
+#### tibble / data frame
+
+```{r}
+library(tidyverse)
+df_example <- tibble(x=1:10,
+                     y=2:11,
+                     z=3:12
+                     )
+
+```
+
+#### Tribble
+
+When trying to do data entry that you need to reference columns wise & rowwise, this can challenging, so thats why there is a `tribble`, a handy way to still see your columnwise and rowwise data together
+
+::: callout-note
+There is a concept of vectorization, which for now, we will define as recycling. Which is to say if I put one column with 10 elements, and another column with only 1 element, tibble will recycle the "1" until it length of the tibble.
+:::
+
+```{r}
+df_tribble <- tribble(
+  ~col1,~col2,~col3,
+  1,2,3,
+  5,6,7,
+  8,9,10
+  
+  
+)
+```
+
+Another methodology which can be useful are the `data.edit` and
+
+```{r}
+
+```
+
+::: callout-tip
+What naming convention should we use in R? This is where you will start to see namng conventions that you are not familiar with such as snake_case, kebab-case, or Upper_camel.
+
+For this book, we will use snake_case (but you use whatever is easist for you).
+
+Coming up with names for variables will be challenging as you will either type too little or too much, over time you will get your own convention. It is not important what is optimal, more important to focus on convention (means consistency) so that when you read something you immediately know what it is.
+:::
+
+### Excel Skills to be covered
+
+Named cells 
+
+Named Tables 
+
+Adding columns to Tables 
+
+Adding rows to Tables 
+
+Referencing named objects 
+
+F5 
+
+Index() 
+
+Tab references 
+
+How to edit named objects 
+
+Data Entry Form add in 
+
+Creating vector 
+
+Fill Series Tips 
+
+Existing data 
+
+New series of Numbers 
+
+New series of Dates 
+
+Flash Fill tips 
+
+Adding/subtracting/dividing/multiplying columns 
+
+One formula works against all rows in a column 
+
+Rowwise equvalant 
+
+Colwise equvailant 
+
+Mean 
+
+Median 
+
+Sum 
+
+Count 
+
+Aggregate 
+
+Error handling 
+
+Iferror() 
+
+NA vs. null vs. ref 
+
+Array \[what did I mean by this\]
+
+## R skills to be covered
+
+Tibbles 
+
+Lists 
+
+Vectors 
+
+dataeditR 
+
+Arrange() 
+
+Generating data 
+
+-numbers 
+
+-letters 
+
+-dates 
+
+-rep() 
+
+-seq() 
+
+-mutate
+
+::: {#special .sidebar}
+::: warning
+Here is a warning.
+:::
+
+More content.
+:::
+
+
+
+#tidymodels
+
+Split data & sample folds
+
+1.  rsample::initial_sample(dataframe,strata=variable)
+
+2.  rsample::training(split_data)
+
+3.  rsample::testing(split_data)
+
+4.  vfold_cv(df_testing, strata = type)
+
+#### recipe to create formula and transform daata
+
+1.  recipes::recpe(outcome \~ predictor,data=train_df)
+
+#### select the ml model and type
+
+parsnip::logistic_reg() %\>% set_mode() %\>% set_engine()
+
+###workflow
+
+workflow() %\>% add_recipe(rec) %\>% add_model(mod)
+
+
+
+
+I(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
+
+#### Metadata for columns
+
+resource:
+
+\[link to original source\](https://www.pipinghotdata.com/posts/2022-09-13-the-case-for-variable-labels-in-r/)
+
+    penguins_metadata <- tribble(
+        ~variable,           ~variable_label, 
+        "species",           "Penguin species",
+        "island",            "Island in Palmer Archipelago, Antarctica",
+        "bill_length_mm",    "Bill length (mm)",
+        "bill_depth_mm",     "Bill depth (mm)",
+        "flipper_length_mm", "Flipper length (mm)",
+        "body_mass_g",       "Body mass (g)",
+        "sex",               "Penguin sex",
+        "year",              "Study year"
+    )
+
+`labelled::generate_dictionary()`
+
+generates a data dictionary
+
+subsittute labels for points in graph
+
+To substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(
+        species           = "Penguin species",
+        island            = "Island in Palmer Archipelago, Antarctica",
+        bill_length_mm    = "Bill length (mm)",
+        bill_depth_mm     = "Bill depth (mm)",
+        flipper_length_mm = "Flipper length (mm)",
+        body_mass_g       = "Body mass (g)",
+        sex               = "Penguin sex",
+        year              = "Study year"
+      )
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(!!!penguins_labels)
+
+
+
+#### Quarto style guides
+
+As best I can tell there are 3 ways to format presentations
+
+
+`:::{.args input1="..." input2="...}`
+
+impact text
+`:::`
+- this appears to reference built in quarto arguments
+- they start with .args followed by inputs into that args
+
+{style="args:..."}`
+- this appears to reference CSS style arguments
+
+##### Change changing style within string
+If you want to edit a single word or string of  words **within a string** 
+
+
+[existing text]{style="args:..."}
+
+
+or if you want to edit a whole string (not just parts of it)
+
+`:::{style="args:..."}` 
+insert text
+`:::` 
+
+*popular arguments* (arguments are separate by `;`)
+margin-top: 200px; 
+margin-bottom: 200px; 
+margin-left: 200px; 
+margin-right: 200px; 
+font-size: 3em; 
+color: red;
+background-color:
+font-style: italic
+border: 4px dotted red;
+border-bottom: 4px dotted red;
+letter-spacing: 2px;
+opacity: 0.3;
+padding-left: 50px;
+position: (absolute, static,relative);
+  right:5px; 
+  top: 5px
+  bottom:
+  top:
+  z-index:
+  
+  
+  
+##### CSS Examples
+
+##### Section heads
+.sectionhead {
+  font-size: 1em;
+  text-align: center;
+  color: $presentation-heading-color;
+  font-family: $presentation-heading-font;
+  background-color: $body-bg;
+  margin: 1px;
+  padding: 2px 2px 2px 2px;
+  width: 120px;
+  border-left: 10px solid;
+}
+
+

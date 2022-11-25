@@ -1,0 +1,37 @@
+# Introduction {.unnumbered}
+
+I've scoured every tip, every yahoo message board, every stackoverflow question, every #RStats tweet, mr. excel forum. I've read all the XX for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. XXX I know it. I've reached all the dead ends that you will encounter and I've stared at the screen frustrated. I've been given all the last minute and impossible tasks to produce reports and faced the reality of ugly, inconsistent, messy data that you will find. Ive heard all the promises of automation and how x,y,z tool will help only to have the same frustration.I've been in your shoes as we data increases yet tools get more complicated. Promises made and promises broken.
+
+But this isn't about me, this is about you. I've cried, I've sweat blood and cried tears so that you don't have to. After working years in financail plannning, budeging , analysis, manipulating system data, external data, data meant to help that hurts, non standard data, excedl models that are so large you pray to the gods that they don't crash.
+
+But there is a solution. If you are dreading your monthly report, your weekly stewardship and KPIs, I am here to tell you that this book will get you answers. Answers that you can use today to fix your problems. No complex macros to learn, no advanced languages. This will solve 80% of your problems, and will point you towards resources to solve the remaining.
+
+This is meant to quickly reference guide. I will teach you patterns techniques so that you can quickly and effectively get to solutions to your problems. This means building up your analysis frameworks and tool kits.
+
+If you've been counting, you've noticed I've used "effective" almost 15 times. What do I mean by that, I'm balancing your time, With all the skills, you can (and some of you should) significantly advanced your knowledge but what happens? For many of you, you'll build a tool only you can use, you will need to spend significantly amount of your time learning these skills and testing these skills. Things will go wrong. You will be frustrated, eventually you'll get it right, you will be better for it. But then you will move, the person replacing you will have no clue what you are doing and will quickly undo it, and sure you've learnt an advance skill, but unless your organization is build around that level of skill standard - you may not intend it but you will do more harm than good.
+
+It also means you will be able to do a typical problem in an defined amount of time. Trust me, there is no point reading this if you can't do a simple analysis in 15 minutes. Why? Because you spent time training on to have any benefit with your work.
+
+By the time you are done, you will gladly look forward to data. It will not intimidate you. You will be excited to quickly semi automate many of your processes. You will be confident. You will be focus on value and process.
+
+I want to tell you that you will be able to great in 2 weeks but I will lie to you. Yes, for sure you will do some great things very quickly and if you are lucky enough that your data is already perfectly organized and your management teams actually know what they want with data than for sure - you will hit the ground running quickly. However for the rest of us, it will take time to replicate your existing Excel skill set in R and than surpass it. However, I promise you, this is investment is worth it when you are able to automate a report in 10 minutes that used to take you a week.
+
+Be patient, the concepts taught here are not hard or complex they are just *different* than what you know. As you become more familiar with the new concepts you will learn it very quickly.
+
+### Books purpose
+
+This book will guide you through realistic business scenarios on how to create and automate reports with an emphasis on maximizing your team'seffectiveness
+
+You read this and 1) will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness (as defined by your team & maintenance of the reports you build)
+
+While there are some fantastic R reasources [www.bigbookofR.com](www.bigbookofR.com), the referenced example datasets rarely prepare you for the real life complexities of dealling with Corporate datasets, including challenges of dealing with messy Corporate datasets, maintaining reports when there is significant process changes, and system and offline manual data manipulation required to generate repoerts.
+
+Additionaly, whther it is R or python, most learning resources tend to have a heavy focus on statistical techniques / applications which while useful in certain contexts in reality do not help most analyts or managers with their business reporting.
+
+This book is focused on developing effective analyst skills that will improve both your R and Excel skills, recognizing that he reality of using exclusively being able to use R in a corporate environment is rare. Furthermore by relating R to excel, you will gain a deeper learning into how R works.
+
+There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be able to maintain (however we will provide resources in case you are curious!)
+
+The dirty secret of popular data science languages are they are **perishable**, that is to say if you don't use them frequently you will forget the techniques, syntax and common patterns to solve your issues.
+
+the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting the discipline to practice R on frequently enough basis to gain confidence in proficiency in its application.

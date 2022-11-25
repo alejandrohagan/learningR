@@ -1,0 +1,28 @@
+project:
+  type: book
+
+book:
+  title: "Excel to R: A Survivor's Guide for the Corporate Environment"
+  author: "Alejandro Hagan"
+  date: "9/10/3"
+  chapters:
+    - part: "Introduction"
+      chapters: 
+        - index.qmd
+        - intro.qmd
+        - learningR.qmd
+        - summary.qmd
+        - new_chapter.qmd
+        - machine_learning.qmd
+        - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: source
+

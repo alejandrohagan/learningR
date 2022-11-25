@@ -1,0 +1,273 @@
+---
+title: "tidymodel_practice"
+format: html
+editor: visual
+---
+
+## Required packages
+
+-   Tidymodels
+    -   `rsample` used to split your sample
+    -   `recipes` used to create recipe and transform data (normlize)
+    -   `parsnip` used to create the model, engine and mode
+    -   `workflow` puts together model (parsnip) and formula (recipe)
+    -   `parsnip` also fits the everything together
+-   usemodels can help set up your workflow including tunning and grid
+-   There is no "set" pattern and these steps can be combined through other variables however below is a typical workflow
+
+### Load libraries
+
+```{r}
+#| echo: true
+pacman::p_load(tidyverse,scales,tidymodels,janitor,lubridate,vip)
+```
+
+### rsample
+
+-   first rsample::initial_split(df,strata=x) to split your data set into training and testing
+    -   `strata` ensures the predicated variable is kept constant in both samples
+-   from here, you need use that split object with `training_split()` and `testing_split()`
+-   this will create a training data set and testing data set (respectively)
+    -   its possible to further break up your training data set into a validation set
+-   you can further "split" your training data into either folds or bootstrap
+-   `rsample::vfold_cv()` is fold your data into sub samples
+    -   `strata` arguments makes sure the outcome variables is equally represented in each sample
+    -   `v` is the number of times "fold" the data, default is 10
+    -   `repeats` will repeat the folding patterns x times, default is 1
+
+```{r split-data}
+#| echo: true
+#| eval: true
+
+
+diamonds <- diamonds %>% 
+  mutate(high_price_indicator=if_else(price>10000,"high","low"),
+         high_price_indicator=factor(high_price_indicator),
+         across(c("cut","color","clarity"),~as.factor(.)))
+
+
+data_split <- rsample::initial_split(diamonds,strata = high_price_indicator)
+
+training_split <- rsample::training(data_split)
+testing_split <- rsample::testing(data_split)
+
+
+diamonds_fold <- rsample::vfold_cv(training_split,strata=high_price_indicator)
+
+```
+
+## Parsnip
+
+-This is package where you choose the model and configure it (set its engine and mode) -most models start with their modeling name (eg.`logistic_reg()`, `rand_forest()`, `linear_reg()`) - following selection the model you need select their engine (typical - name of the underlying package) and their mode (not always applicable; eg classification or regression) - most models have default modes and engine
+
+```{r choose-model}
+#| echo: true
+#| eval: true
+#| warning: false
+
+log_spec <- parsnip::logistic_reg() %>% 
+  parsnip::set_mode("classification") %>%
+  parsnip::set_engine("glm")
+
+
+
+rf_spec <- parsnip::rand_forest(trees = 1000) %>% 
+  set_mode("classification") %>% 
+  set_engine("ranger")
+
+```
+
+### Recipes
+
+-   this is where you put the formula and transformation steps that you want your model
+-   typical to start with recipes::recipe(outcome \~ predictor1+ predictor2, data=df_training)
+-   you can then transform data with `step_?` using tidy select principles
+    -   for the dataset you should put your training set (not your folded data set or testing set)
+    -   `step_other()` takes high variable data and categories minor categories into other
+    -   `step_normalize()` takes data and scales and center its - either directly reference or use `all_numeric()` as a shortcut
+    -   `step_dummy()` which transform categorical variable into columns, use `one_hot=TRUE` ; variables should all be factors
+    -   `step_zv()` to remove variables with zero variation (can use with `all_predictors()`)
+-   while you may have many models and parameters, you would typically have one receipe that can be leverage many times
+
+
+- the dataset only gets used to help recipes determine the column types
+- [recipes links](https://www.tmwr.org/recipes.html)   
+
+
+### prep & bake
+
+-applies recipes steps to a dataset
+- prep(rec,new_data=null)
+
+[prep_and_bake](https://www.tmwr.org/dimensionality.html)
+
+
+```{r}
+rec <- recipes::recipe(high_price_indicator ~., data=training_split) %>%
+  step_string2factor(c("cut","color","clarity")) %>% 
+  recipes::step_normalize(all_numeric_predictors()) %>% 
+  step_zv(all_predictors()) %>% 
+  step_dummy(c("cut","color","clarity"),one_hot = TRUE) %>% 
+  step_rm(price)
+
+
+prep(rec,training_split) %>% juice()
+
+```
+
+### Workflow
+
+-   this stitches together your various elements (model, recipe)
+-   I need to learn more about this but appears it makes it eaier to do thigns later one -add_model(model_spec) -add_recipe(recipe_spec)
+-   You can pass multiple reciepes or models via a list to a workflow to `workflow_set(preproc=recipe_list,models=model_list)`
+-   extract specific models `extact_workflow(workflow_set,id=workflow_id)`
+-   Mainly designed to be used with resamped data
+
+common formulas - `workflow()` - `workflow_set()` if passing multiple formlas or models
+
+::: callout-note
+from the learning site, workflows section of [tidy models book](https://www.tmwr.org/workflows.html), workflows are : if you are using multiple model types, or constantly updating various elements of the model then workflow allows to add / substrat specific elements (without rebuilding the entire model from scratch)
+
+This "full model" is compared to a sequence of the same model that removes each predictor in turn. Using basic hypothesis testing methods or empirical validation, the effect of each predictor can be isolated and assessed.
+:::
+
+link:
+
+```{r}
+workflow <- workflow() %>% 
+  add_model(rf_spec) %>% 
+  add_recipe(rec)
+
+```
+
+### Fit Model
+
+-   This is when you actually apply fit the model to your data and do the "machine learning"
+
+-   if you did not do the `rsample::vfold_cv()` step then you use the `parsnip::fit()`
+
+    -   parsnip::fit(df, workflow)
+
+-   if you did use `rsample::vfold_cv()` then use `tune::fit_resamples`
+
+-   `workflow()` - insert your workflow here
+
+-   `resamples= folds` - this is where you set the folds (data)
+
+-   `control = control_resamples(save_pred = TRUE)` -need to manually save predictions
+
+-   this can take alot of time so turn on parellel processing `doParallel::registerDoParallel()`
+
+```{r fit}
+
+
+doParallel::registerDoParallel()
+
+### if you did not vfold_cv()
+
+#fit_rf <- workflow %>%
+ # fit(data=training_split)
+
+
+### if you did vfold
+fit_folds <- tune::fit_resamples(workflow,
+    resamples = diamonds_fold,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+
+```
+
+Validate model - if you want to see your samples you can do the `collect_metrics(rs_data)`
+
+```{r}
+collect_metrics(fit_folds)
+```
+
+-   use the roc_curve to plot your results - if resampled group by the resampled id
+-   the variable predicted probabilities will use the `pred_var1` and `pred_var1` name
+
+```{r}
+#| eval: false
+collect_predictions(fit_folds) %>%
+  group_by(id) %>%
+  roc_curve(high_price_indicator,.pred_high) %>%
+  autoplot()
+```
+
+### confusion matrix on training data
+
+-   can also do a confusion matrix - no need to unnest data
+
+```{r}
+conf_mat_resampled(fit_folds, tidy = FALSE) %>%
+  autoplot()
+
+
+```
+
+-   you can also apply the confusion matrix on the entire set (including testing set)
+-   must use `last_fit(workfow, original_split)` -- I don't super undersand why
+-   form there follow same path
+
+```{r}
+final_fitted <- last_fit(workflow, data_split)
+
+collect_metrics(final_fitted)
+
+collect_predictions(final_fitted) %>%
+  conf_mat(high_price_indicator, .pred_class) %>%
+  autoplot()
+
+collect_predictions(final_fitted) %>%
+  roc_curve(high_price_indicator,.pred_high) %>%
+  autoplot()
+
+```
+
+-   Can also rank the feature importance with VIP packge
+-   take recipe, prep it and apply it blank data -- still dont under prep() vs. juice() vs. bake()
+-   
+
+```{r}
+library(vip)
+
+imp_data <- rec %>%
+  prep() %>%
+  bake(new_data = NULL)
+
+rf_spec %>%
+  set_engine("ranger", importance = "permutation") %>%
+  fit(high_price_indicator ~ ., data = imp_data) %>%
+  vip(geom = "point")
+```
+
+### Random Forest
+
+-   okay to use between 500 - 1000 trees
+-   can set your cores directly in rand_forest() argument (cores \<- `parallel::detectCores()`)
+-   turn predicted varible into factor
+
+#### Shortcuts to remember things
+
+Great shortcut to set up your model so that you don't have to remember everything - you need to know your receipe and training split ahead of time
+
+##### Usemodels
+
+
+
+
+
+```{r}
+
+
+df <- tibble(x=1:4,
+       y=letters[1:4],
+       z=c("alpha","omega","charlie","echo"))
+
+rec_2 <- recipes::recipe(x~.,data=df) %>% 
+  step_dummy(z,one_hot = TRUE)
+
+rec_2 %>% prep() %>% juice()
+```
+
