@@ -8,6 +8,14 @@ In this package, we will use the following libraries
 library(tidyverse)
 :::
 
+```{r}
+#|echo: false
+
+pacman::p_load(tidyverse)
+
+```
+
+
 ### how to create and reference objects and generate series
 
 Although not the most glamorous place to start, learning how to create named objects, reference and manipulate them as well generate data becomes incredibly useful down the road when combined with other techniques and workflows.
@@ -17,6 +25,8 @@ In R this is main way you save, reference, and manipulate your data
 You use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
 
 ```{r}
+
+
 #| echo: true
 object <- 1+1
 ```
@@ -324,5 +334,79 @@ position: (absolute, static,relative);
   width: 120px;
   border-left: 10px solid;
 }
+
+
+
+##### How to complete missing data
+
+
+###### Set group_by() .drop to FALSE
+
+If data is a factor and you have filtered out the data 
+(but its listed as level), then you can set the `.drops` argument to `FALSE` in the `group_by()` and `summarize()` pattern and levels that have been filtered or do not have values will show up (by default these are droped `.drop=TRUE`)
+
+```{r}
+
+
+missing_data <- diamonds %>% 
+  filter(cut!='Ideal')
+
+
+missing_data %>% 
+  group_by(cut) %>% 
+  summarise(n=n())
+
+
+```
+
+-   Since `Ideal` has been filtered out we don't see it in the table above
+-   Howver, sometimes we do want to show the values are zero
+
+
+```{r}
+
+missing_data %>% 
+  group_by(cut,.drop=FALSE) %>% 
+  summarize(n=n())
+
+
+```
+- Setting `.drop` to `FALSE` will now include the missing levels and their count (0) 
+
+###### Use complete()
+
+
+```{r}
+
+missing_data <- mpg %>% 
+  filter(!((manufacturer=='audi')&(year==2008)))
+
+missing_data %>% 
+  count(manufacturer,year)
+
+```
+
+- we see that the `audi` and `2008` are missing as we have filtered it out
+
+- If we want to show these missing missing values, we can use complete() which will look ensure for every value in each column pair, there is entry
+
+```{r}
+
+#shows the missing values
+
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year)
+
+# replaces the missing values with an entry
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year,fill = list(n=0))
+
+
+```
+
+Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
+
 
 
