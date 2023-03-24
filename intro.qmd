@@ -10,8 +10,7 @@ So if you're tired of staring at your computer screen, tears streaming down your
 
 This is meant to quickly reference guide. I will teach you patterns techniques so that you can quickly and effectively get to solutions to your problems. This means building up your analysis frameworks and tool kits.
 
-alejandro.hagan@outlook.com
-please clean this up and make it more funny and dramatic
+Please clean this up and make it more funny and dramatic
 I've scoured every tip, every yahoo message board, every stackoverflow question, every #RStats tweet, mr. excel forum. I've read all the intro for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. xxx   I know it. I've reached all the dead ends that you will encounter and I've stared at the screen frustrated. I've been given all the last minute and impossible tasks to produce reports and faced the reality of ugly, inconsistent, messy data that you will find. I've heard all the promises of automation and how Power Query, DAX, Tableau, Power BI, snowflake, databricks will help only to have the same frustration as before but just a different problem.I've been in your shoes as we somehow have more tools and data that we ever had before our data increases yet tools get more complicated. Promises made and promises broken.
 
 But this isn't about me, this is about you. I've cried, I've sweat blood and cried tears so that you don't have to. After working years in financial planning, budgeting & analysis roles, manipulating system data, external data, data meant to help that hurts, non standard data, excel models that are so large you pray to the gods that they don't crash.
@@ -66,3 +65,21 @@ There will be better ways to do things that we are teaching you however, they of
 The dirty secret of popular data science languages are they are **perishable**, that is to say if you don't use them frequently you will forget the techniques, syntax and common patterns to solve your issues.
 
 the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting the discipline to practice R on frequently enough basis to gain confidence in proficiency in its application.
+
+
+
+
+to install R in linux with cs code
+apt-get install libtiff-dev
+sudo apt-get install libharfbuzz-dev 
+
+to get radian installed
+sudo apt-get install python3-pip
+
+
+
+```{r}
+library(tidyverse)
+a=2
+
+```

@@ -403,10 +403,28 @@ missing_data %>%
   count(manufacturer,year) %>% 
   complete(manufacturer,year,fill = list(n=0))
 
-
+roxygen2::
 ```
 
 Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
 
+
+
+## How to create new packages
+
+library(devtools)
+library(usethis)
+
+
+Create packge in the workspace that you want
+devtools::create_package("package_name")
+
+then do usethis::use_r("function_name") to create a script, put yoru function there
+
+then do code>insert roxygen skeleton to comment code
+load_all() to load code
+
+
+## how to use 
 
 
