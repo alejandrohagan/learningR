@@ -61,6 +61,14 @@ go to global settings (not repository settings), go to develrop settings and cli
 
 generate new token, copy (consider saving as you can only see it once)
 
+save token with
+credentials::set_github_pat()
+
+check everything with
+gitcreds_get()
+
+git config --global credential.helper 'cache --timeout=10000000'
+
 usethis::git_branch_default()
 
 check local branch
