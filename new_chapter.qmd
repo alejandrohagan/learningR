@@ -197,31 +197,7 @@ More content.
 
 
 
-#tidymodels
-
-Split data & sample folds
-
-1.  rsample::initial_sample(dataframe,strata=variable)
-
-2.  rsample::training(split_data)
-
-3.  rsample::testing(split_data)
-
-4.  vfold_cv(df_testing, strata = type)
-
-#### recipe to create formula and transform daata
-
-1.  recipes::recpe(outcome \~ predictor,data=train_df)
-
-#### select the ml model and type
-
-parsnip::logistic_reg() %\>% set_mode() %\>% set_engine()
-
-###workflow
-
-workflow() %\>% add_recipe(rec) %\>% add_model(mod)
-
-
+`tibble::enframe()` takes a named list and turns into a tibble
 
 
 I(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
