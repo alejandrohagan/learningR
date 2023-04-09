@@ -217,7 +217,200 @@ Split data & sample folds
 
 parsnip::logistic_reg() %\>% set_mode() %\>% set_engine()
 
-###workflow
+### workflow
+
+workflow() %\>% add_recipe(rec) %\>% add_model(mod)
+
+
+
+
+I(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
+
+#### Metadata for columns
+
+resource:
+
+\[link to original source\](https://www.pipinghotdata.com/posts/2022-09-13-the-case-for-variable-labels-in-r/)
+
+    penguins_metadata <- tribble(
+        ~variable,           ~variable_label, 
+        "species",           "Penguin species",
+        "island",            "Island in Palmer Archipelago, Antarctica",
+        "bill_length_mm",    "Bill length (mm)",
+        "bill_depth_mm",     "Bill depth (mm)",
+        "flipper_length_mm", "Flipper length (mm)",
+        "body_mass_g",       "Body mass (g)",
+        "sex",               "Penguin sex",
+        "year",              "Study year"
+    )
+
+`labelled::generate_dictionary()`
+
+generates a data dictionary
+
+subsittute labels for points in graph
+
+To substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(
+        species           = "Penguin species",
+        island            = "Island in Palmer Archipelago, Antarctica",
+        bill_length_mm    = "Bill length (mm)",
+        bill_depth_mm     = "Bill depth (mm)",
+        flipper_length_mm = "Flipper length (mm)",
+        body_mass_g       = "Body mass (g)",
+        sex               = "Penguin sex",
+        year              = "Study year"
+      )
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(!!!penguins_labels)
+
+
+
+#### Quarto style guides
+
+As best I can tell there are 3 ways to format presentations
+
+
+`:::{.args input1="..." input2="...}`
+
+impact text
+`:::`
+- this appears to reference built in quarto arguments
+- they start with .args followed by inputs into that args
+
+{style="args:..."}`
+- this appears to reference CSS style arguments
+
+##### Change changing style within string
+If you want to edit a single word or string of  words **within a string** 
+
+
+[existing text]{style="args:..."}
+
+
+or if you want to edit a whole string (not just parts of it)
+
+`:::{style="args:..."}` 
+insert text
+`:::` 
+
+*popular arguments* (arguments are separate by `;`)
+margin-top: 200px; 
+margin-bottom: 200px; 
+margin-left: 200px; 
+margin-right: 200px; 
+font-size: 3em; 
+color: red;
+background-color:
+font-style: italic
+border: 4px dotted red;
+border-bottom: 4px dotted red;
+letter-spacing: 2px;
+opacity: 0.3;
+padding-left: 50px;
+position: (absolute, static,relative);
+  right:5px; 
+  top: 5px
+  bottom:
+  top:
+  z-index:
+  
+  
+  
+##### CSS Examples
+
+##### Section heads
+.sectionhead {
+  font-size: 1em;
+  text-align: center;
+  color: $presentation-heading-color;
+  font-family: $presentation-heading-font;
+  background-color: $body-bg;
+  margin: 1px;
+  padding: 2px 2px 2px 2px;
+  width: 120px;
+  border-left: 10px solid;
+}
+
+
+
+##### How to complete missing data
+
+
+###### Set group_by() .drop to FALSE
+
+If data is a factor and you have filtered out the data 
+(but its listed as level), then you can set the `.drops` argument to `FALSE` in the `group_by()` and `summarize()` pattern and levels that have been filtered or do not have values will show up (by default these are droped `.drop=TRUE`)
+
+```{r}
+
+
+missing_data <- diamonds %>% 
+  filter(cut!='Ideal')
+
+
+missing_data %>% 
+  group_by(cut) %>% 
+  summarise(n=n())
+
+
+```
+
+-   Since `Ideal` has been filtered out we don't see it in the table above
+-   Howver, sometimes we do want to show the values are zero
+
+
+```{r}
+
+missing_data %>% 
+  group_by(cut,.drop=FALSE) %>% 
+  summarize(n=n())
+
+
+```
+- Setting `.drop` to `FALSE` will now include the missing levels and their count (0) 
+
+###### Use complete()
+
+
+```{r}
+
+missing_data <- mpg %>% 
+  filter(!((manufacturer=='audi')&(year==2008)))
+
+missing_data %>% 
+  count(manufacturer,year)
+
+```
+
+- we see that the `audi` and `2008` are missing as we have filtered it out
+
+- If we want to show these missing missing values, we can use complete() which will look ensure for every value in each column pair, there is entry
+
+```{r}
+
+#shows the missing values
+
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year)
+
+# replaces the missing values with an entry
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year,fill = list(n=0))
+
+roxygen2::
+```
+
+Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
+
+
+
+orkflow
 
 workflow() %\>% add_recipe(rec) %\>% add_model(mod)
 

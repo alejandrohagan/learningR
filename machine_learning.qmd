@@ -270,4 +270,3 @@ rec_2 <- recipes::recipe(x~.,data=df) %>%
 
 rec_2 %>% prep() %>% juice()
 ```
-

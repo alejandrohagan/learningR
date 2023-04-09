@@ -1,0 +1,72 @@
+---
+title: "setup"
+---
+
+# How to install in linux with vs. code
+
+to install R in linux with vs code
+apt-get install libtiff-dev
+sudo apt-get install libharfbuzz-dev 
+
+to get radian installed
+sudo apt-get install python3-pip
+
+While we want to jump right into analysis, to be honest we do  need to focus on basic, such as new concepts such as working directly and command line interfaces for file navigation
+
+Do you need to use the command line interface to access files and set working directories? No (and we will show you how to use that user interface), but to be honest its as good of time as ever to get comfortable using a command line interface to type and execute commands rather than pointing and clikcing a mouse
+
+
+# Working directory and file manipulation concepts
+
+```{r}
+
+
+
+```
+
+
+> how to organize and reference your project files useful packages are `here` and `filestrings`
+
+> `base::getwd()`, `base::setwd()`, `base::list.files()` & `base::ls()`
+
+-   Before you start working you need to understand the concept of a working directory and why that is important to the space you are working in.
+
+        -     Working Directory is just the default file path of where your files will be saved or read from
+        -   In excel, this is equivalent to the default file path when you click "Save As", the default file path that comes up is your "working directory"
+        -   You are not at at all limited to this file path, you can change it or move up or down as much as you want
+        -   For administrative convenience reasons it is helpful to know and set your workign directory as it makes it easier to save and read files for your projects
+
+-   To check your folder path, type `getwd()`^[which I think stands for get working directory]
+
+-   If you don't like your existing working directory, you can use the  `setwd()` to set your folder path to a different location 
+
+        -   To do this we simply insert with quotes ("") the file path we want in between the bracketes of setwd()
+        -   However, now we will get our first gut punch of working in command lines; when you click on a file path in your windows machine you see something like this, 
+        "C:\Desktop\Documents", however in R (and to be fair other programming languages), the "\" is a special character that is reserved, it is not known as an esacpe chracter. We won't go into detail about it for now but just know it is a special character. The challenge is your getting started and your encountering errors which is frustrating
+        -   To fix this, you have two options:
+            -   add an in extra "\" so "C:\Desktop\Documents" becomes "C:\\Desktop\\Documents"
+            -   Or reverse the slash to "/" so that "C:\Desktop\Documents" becomes "C:/Desktop/Documents"  
+        -   Insert this into our function will make it work
+        -   You may be questioning the strategy of using the command line interface at this point given that you can do things much easier and quicker in excel
+        -   However stay with us! I promise you this will make things quicker, easier, faster and more importantly allow for automation of reports - we just have to understand that programming languages like R have some speed bumps.
+        -   The good news is that you're not routinely doing things like this - so don't worry!
+        
+
+
+
+
+        
+
+Other popular system funtions are
+
+-   the abilily to list files or filders in a folder path list.files(pattern=\$\^, recursive=T)
+
+-the ability to check if a file exists?
+
+file.exists dir.exists basename("c:/filedir/file.txt") -\> "file.txt dirname("c:/filedir/file.txt")-\>
+
+-   create files create.dir("./newdir") file.create("filename.txt") shell.exec("filename.txt")
+
+-move files filesstrings::move_file("c:home/filename.txt","c:newdir") file.copy("filename", "destination") file.rename(directory,"existing file name","new file name") -if directory is blank will assume getwd() file.choose() base::unlink("filename", recursive=T) -recursve must be T to delete directories
+
+Link to learn more \[where did I have this???\]
