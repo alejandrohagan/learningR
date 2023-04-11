@@ -50,10 +50,59 @@ Do you need to use the command line interface to access files and set working di
         -   You may be questioning the strategy of using the command line interface at this point given that you can do things much easier and quicker in excel
         -   However stay with us! I promise you this will make things quicker, easier, faster and more importantly allow for automation of reports - we just have to understand that programming languages like R have some speed bumps.
         -   The good news is that you're not routinely doing things like this - so don't worry!
-        
 
+If you are curious what files are listed in a folder then you can use `base::list.files()` to list the files in your working directly. Note if you type the function without any arguments you get the default files names, however you can input arguments to get different results.
+Most functions come with arguments that allow the function's outputs to be changed, in this case I don't just want the file names but their full folderpath. You can do this by setting the "full.names" argument to `TRUE`. 
 
+If you click inside the parenthesis you will see a little box will come up that displays various option arguments, this helps helps you so that you don't need memorize all the various argument arguments
 
+```{r}
+list.files(full.names = TRUE
+           ,all.files = TRUE
+           ,include.dirs = TRUE
+           # ,recursive = TRUE
+           ,no.. = FALSE
+           
+           )
+```
+
+You may see the folderpath displayed as "./example.txt" that is because "." is referenecd as short cut for your working directory so "c:/User/R/example.txt" and "./example.txt" are exactly the same.
+
+If you want to navigate from your project strucutre, the best way is to install our first package, the "here" package. While we certainly won't really need this for a while and we can certainly continue without it, it is a good habit down the road, relatively simple to understand and use
+
+when you type in here::`here()` you are essentially typing in the output of  `getwd()`. If you need to navigate to folderpath downstream of then simply in quotations, enter in the names of the folder path or files
+
+```{r}
+
+here::here("data","textfile.txt")
+
+```
+
+So now that you know how to get your working directory and set your working directory, if you keep all your files in one folder path then you are lucky! but often times you will need to navigate up and down a folderpath or to entirely new folderpaths
+
+Ideally you can set thigns up so everything is under your working directory but for reasons out of yoru control you may need to pull multiple files from muliple locations.
+
+We can 
+
+```{r}
+names_vec <- c(
+"hello edward"
+,"hello you"
+)
+
+list.files()
+library(tidyverse)
+
+old_names <- list.files()
+new_names=map_chr(.x=list.files()
+    ,~janitor::make_clean_names(.x))
+
+names(old_names) <- new_names
+
+old_names
+
+janitor::make_clean_names(names_vec,)
+```
 
         
 

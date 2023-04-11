@@ -69,17 +69,8 @@ the real barrier and challenge to you learning R is not the language itself, alt
 
 
 
-to install R in linux with cs code
-apt-get install libtiff-dev
-sudo apt-get install libharfbuzz-dev 
-
-to get radian installed
-sudo apt-get install python3-pip
+## map & nested
 
 
-
-```{r}
-library(tidyverse)
-a=2
-
-```
+- to access a column from the nested frame, just use the column name
+- access data in an embedded dataframe use .x$var
