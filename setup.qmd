@@ -80,9 +80,24 @@ here::here("data","textfile.txt")
 
 So now that you know how to get your working directory and set your working directory, if you keep all your files in one folder path then you are lucky! but often times you will need to navigate up and down a folderpath or to entirely new folderpaths
 
-Ideally you can set thigns up so everything is under your working directory but for reasons out of yoru control you may need to pull multiple files from muliple locations.
+Ideally you can set things up so everything is under your working directory but for reasons out of yoru control you may need to pull multiple files from muliple locations.
 
-We can 
+We can still navigate betewen directories to upload files by either directly writing the path or you can use the `file.path()` to help build arguments
+
+
+```{r}
+file.path("home","hagan","R","learningR")
+
+
+
+```
+
+Now you will start to notice we assigned variables to our environment, more technically our global environment
+
+How do we know? Over time you may want to know what has been assigned which you can do with the `ls()` function, this lists your variables
+
+You can save over these variables by just assiging a new object to the name. If you want to clear all variables you can use the `rm()`
+
 
 ```{r}
 names_vec <- c(
@@ -104,6 +119,17 @@ old_names
 janitor::make_clean_names(names_vec,)
 ```
 
+```{r}
+
+
+
+tribble(
+  ~col1, ~col2,
+  "a",   "b"
+)
+
+
+```
         
 
 Other popular system funtions are
