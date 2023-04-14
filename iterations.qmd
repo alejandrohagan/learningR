@@ -1,0 +1,845 @@
+---
+title: "iterations"
+---
+
+This chapter review iterations, specifically how do we apply one or more functions/ transformation to each row(s) or column(s) so that you don't need to repeat yourself.
+
+Traditionally this is done with what is called a for loop - almost all programming languages have them and R is no exception. They are not challenging but for new comers it can represent a paradiam shift in how you think about your data. 
+
+If you got to this point of the book and choose to not go further that is okay! you should really smile in your accomplishment in how much you have done - you really are more advanced then the lion's share of people out there and you will benefit.
+
+However if you are willing to push yourself just a bit further you will find that enoromous incremental benefits - truly the lion's share of the benefits awaits you.
+
+This section can be intimadating for excel users not because it is hard its more than it is not as visible or transparent what is happening. Unlike Excel where you can trace what is happening in each caculation cell, here, it will be a bit more opaque which normally ins't an issue until you want ot validate the findings or problem solve.
+
+Don't worry, we are going to solve this for you.
+
+We will show what a tradition for loop is mainly because its the corner stone of what is going on here and no matter what scripting language you use this is a critical skill to learn.
+
+However, you will see that it is super tedious. We won't be using for loops, not because there isn't anything wrong with them but more because we are lazy and want to do as little typing as possible.
+
+There is a great speech by hadley wickam on [purr] (https://www.youtube.com/watch?v=rz3_FDVt9eg) so that you can understand the approach.
+
+Also know that "mapping" is a consistent function across many programming languages
+
+
+```{r}
+library(loopurrr)
+library(tidyverse)
+
+df=diamonds %>% 
+  select(where(is.numeric))
+
+x <- list(1, c(1:2), c(1:3))
+
+df %>% split(names(df)) %>% purrr::map(quantile,.25,na.rm=TRUE) %>% as_loop()
+# --- convert: `purrr::map(split(df, names(df)), quantile, 0....` as loop --- #
+.inp1 <- split(df, names(df))
+out <- vector("list", length = length(.inp1))
+
+for (i in seq_along(.inp1)) {
+  out[[i]] <- quantile(.inp1[[i]], 0.25, na.rm = TRUE)
+}
+
+names(out) <- names(.inp1)
+# --- end loop --- #
+# --- convert: `purrr::map(split(df, col(df)), sum)` as loop --- #
+.inp1 <- split(df, col(df))
+out <- vector("list", length = length(.inp1))
+
+for (i in seq_along(.inp1)) {
+  out[[i]] <- sum(.inp1[[i]])
+}
+
+names(out) <- names(.inp1)
+# --- end loop --- #
+x %>% %>% as_loop()
+
+
+# --- convert: `purrr::map(x, sum)` as loop --- #
+out <- vector("list", length = length(x))
+
+for (i in seq_along(x)) {
+out[[i]] <- sum(x[[i]])
+}
+# --- end loop --- #
+
+
+
+```
+
+
+
+Now there are two approaches to iteration basically what we woudl call column wise operations vs. row wise operations.
+
+While this may seem unusually complex, it is not, its just a matter of convention and depending on what you are trying to do one approach will be easier to use than the other but both can do anything that the other can.^[I think]
+
+
+
+```{r}
+library(tidyverse)
+
+
+diamonds %>% 
+  select(where(is.numeric)) %>% 
+  map(.x=.,quantile,.25)
+
+
+
+
+```
+-Takes arguments and seperates that into lists (if it comes in as data frame)
+-   Assign each split list a variable called .x
+-   Takes one list at a time and applies the function to it (.x)
+-   Captures the results as a list or a specified output
+-   you an see that column title carries forward with the output so it is actually a named lists
+
+
+```{r}
+
+df <- select(diamonds,where(is.numeric))
+
+ncol(df)
+
+out <- vector(mode = "list",length = 7)  
+for (i in 1:7) {
+
+out[i]=mean(df[[i]])
+
+}
+out
+
+
+
+```
+
+
+
+This can be helpful in its on write, such as apply arguments to columns and rows here are some common examples, however the power really shines when you have custom functions (or even just regular functions)
+- Change a column from type a to type b
+
+-   Get attributes of a column
+
+
+
+So how do we combine some of year to date learnings of tidyselect helpers, group_by()+sumamrize(), rename_with(), and our new map() friend?
+
+
+
+
+Get ready to meet across(), an insanely useful and powerful verb that you will use to great satisfiction
+
+
+Some  of the challenges in teh many models approach is how to refer to variables variables when they are part of the dataframe you are iterating over or a column from the input column or from the global environment
+
+
+## how to use nested map
+
+- if access arguments in a column just access column regularly - no prefix
+- if access nested data frame you can use .x$var
+- if column is quoted then use .data[[var]] and define var="quoted var"
+- if column is inserted as position, you can use .data[[pos]] for position arguments
+
+*Considerations*
+-   need to be mindful about the formula
+      
+    -   tidy friendly formula
+    -   has data argument
+    -   does not have data argument
+-   helpful links
+[r4epi purr](https://www.r4epi.com/using-the-purrr-package.html)
+[paulvan purr](https://paulvanderlaken.com/tag/purrr/)
+framework
+[jenny bc](https://jennybc.github.io/purrr-tutorial/)
+[got](http://zevross.com/blog/2019/06/11/the-power-of-three-purrr-poseful-iteration-in-r-with-map-pmap-and-imap/)
+[presnetation on advance purr functions](https://hendrikvanb.gitlab.io/slides/purrr_beyond_map.html#8)
+
+[going off the map](https://hookedondata.org/posts/2019-01-09_going-off-the-map-exploring-purrrs-other-functions/)
+[scraping data with purr](https://colinfay.me/purrr-web-mining/)
+[rowwise purr](https://thatdatatho.com/rowwise-purrr-pmap-apply-split-apply-combine/)
+
+[modify_if purr](https://thatdatatho.com/rowwise-purrr-pmap-apply-split-apply-combine/)
+[additional purr tricks](https://www.brodrigues.co/blog/2017-03-24-lesser_known_purrr/)
+[overview presentatoin](https://shannonpileggi.github.io/iterating-well-with-purrr/#/title-slide)
+[additional purr functoins](https://rstudio-pubs-static.s3.amazonaws.com/602410_2171106b3c7d429b96e606e8e41960a4.html)
+[examples of purr](http://joshuamccrain.com/tutorials/purrr/purrr_introduction.html)
+[applied purr](https://www.weirdfishes.blog/blog/practical-purrr/)
+[addition purr fucntions](https://www.emilhvitfeldt.com/post/2018-01-08-purrr-tips-and-tricks/)
+
+```{r}
+library(tidyverse)
+
+df <- mtcars %>% 
+  rownames_to_column("brand")
+
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+nested_df
+
+
+  
+
+
+
+```
+
+-   nested dataframe with names of columns directly in formula
+
+```{r}
+df
+
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+agg_fun <- function(df) {
+  sum(df$hp - df$drat)
+}
+
+nested_df %>% 
+  mutate(test=map_dbl(data,agg_fun))
+  
+  
+```
+-   nested dataframe with names passed on as arguments in formula (unquoted)
+
+```{r}
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+agg_fun <- function(df,var1,var2) {
+ x=df %>% pull({{var1}})
+ y=df %>% pull({{var2}})
+ print(sum(x - y))
+}
+
+nested_df %>% 
+  mutate(test=map_dbl(.x=data,~agg_fun(df=.x,hp,drat)))
+
+```
+
+
+
+```{r}
+library(tidyverse)
+tibble(
+  x = 1:10,
+  y = 100:109,
+  r = cor(x, y))
+
+
+```
+
+
+-   nested dataframe with with names reference from source data as arguments in formula
+
+```{r}
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+agg_fun <- function(df,var1,var2) {
+ x=df %>% pull({{var1}})
+ y=df %>% pull({{var2}})
+ print(sum(x - y))
+}
+
+sel_fun <- function(df,...) {
+  df <- df %>% 
+    select(any_of(c(...)))
+
+sum(df[[1]] - df[[2]])
+  
+}
+
+
+
+nested_df %>% 
+  mutate(test=map_dbl(.x=data,
+                      ~sel_fun(df=.x,"qsec","mpg")
+                      )
+         )
+
+```
+
+-   nested dataframe with names names references as list from source data as arguments in formula
+
+
+
+-   trying to do aggregated function (eg return a single value) to each column of a table based on fixed value
+  -   all_of() for quoted columns
+  -   any_of() for quoted columns
+  -   use this when you want to select the column names from vector
+  
+- quos or quos or quo_name()
+    
+    -   example
+      map_dfr(
+      .x = quos(age, ht_in, wt_lbs, bmi),
+      .f = continuous_stats
+      )
+      
+- if you use this then you pair this with {{}} - you don't need to use "" marks
+      
+[quos and purr](https://www.r4epi.com/using-the-purrr-package.html)
+
+
+We haven’t seen the quos() function before. It’s another one of those tidy evaluation functions. You can type ?rlang::quos in your console to read more about it. When we can wrap a single column name with the quo() function, or a list of column names with the quos() function, we are telling R to look for them in the data frame being passed to a dplyr verb rather than looking for them as objects in the global environme
+  
+
+```{r}
+
+#delcare variables
+vars <- c("mpg","wt","magic")
+pos <- c(2,7)
+
+
+# direct and unquoted based on name or position
+df %>% mutate(across(c(mpg,wt),
+              max))
+df %>% mutate(across(c(2,7),mean))
+# direct and quoted
+df %>% mutate(across(c("mpg","wt"),
+              max))
+
+# indirect and quoted based on name or postion
+df %>% mutate(across(any_of(vars),mean))
+df %>% mutate(across(all_of(pos),mean))
+
+
+
+
+```
+
+-   trying to do aggregated function (eg return a single value) to each column of a table based on patterns in the column name
+
+
+```{r}
+
+#delcare variables
+vars <- c("mpg","wt","magic")
+pos <- c(2,7)
+
+
+# direct and unquoted based on name or position
+df %>% mutate(across(starts_with("h"),
+              max))
+
+df %>% mutate(across(matches("^h"),
+              max))
+
+df %>% mutate(across(ends_with("t"),
+              max))
+
+df %>% mutate(across(matches("t$"),
+              max))
+```
+
+
+-   trying to do multiple things to each column of a table base on column type
+
+```{r}
+
+df %>% mutate(across(starts_with("h"),
+              max))
+
+
+
+```
+
+-   trying to do multiple things to each column of a table base on summarized criteria of a column
+
+    - we can use predicate functions with  where() to identify columns that meet those criteria and select those columns
+
+```{r}
+
+mean_check_2 <- function(x,threshold) {
+  threshold < mean(x,na.rm=TRUE)
+}
+select
+mtcars %>% select(where(~mean_check_2(.,10)))
+```
+
+
+-   trying to do multiple things to each column of a table base on a single column attribute (Eg. missing data) 
+  -   goal here is to come up with predicate function that tests the attribute you want and then apply that function to each column
+
+```{r}
+
+missing_df <- tibble(x=1:10,
+                     y=c(1:5,NA_integer_,NA_integer_,1:3),
+                     z=2:11,
+                     a=3:12)
+
+missing_fun <- function(x,threshold) {
+  
+  sum(is.na(x)) > threshold
+  
+}
+
+
+missing_df %>% select(where(~!missing_fun(.,1)))
+
+```
+
+-   trying to do multiple things to each column of a table base on a multiple column attributes (eg. three consecutive rows)
+
+
+```{r}
+
+```
+
+-   trying to do multiple things to each column of a table base on multiple column location attributes
+-   trying to do multiple things on a pair(s) of columns of the above
+
+
+
+
+```{r}
+
+library(tidyverse)
+
+# nested dataframe by geras
+df <- mtcars %>% 
+  group_by(gear) %>% 
+  nest()
+
+
+# custuom function
+count_quoted <- function(data,var) {
+  data %>% 
+    count(.data[[var]])
+}
+
+# rowwise application
+df %>% 
+  rowwise() %>% 
+  mutate(freq=list(
+    count_quoted(data,"carb")
+                   )
+    ) %>% 
+  pull(freq)
+
+#map() application
+df %>% 
+  mutate(freq=map(data,~count_quoted(.x,"carb")
+                   )
+    ) %>% 
+  pull(freq)
+
+```
+
+-   pe
+
+-   
+regex
+
+
+"\\b" is the word boundary eg word1 and word2 will
+
+
+
+if_any or if_all() for summarized attribute test against another test
+
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+library(palmerpenguins)
+
+
+big <- function(x) {
+  x > mean(x, na.rm = TRUE)
+}
+
+penguins %>% 
+  filter(if_all(contains("bill"), big))
+
+penguins %>% 
+  filter(!is.na(bill_length_mm)) %>% 
+  mutate(
+    category = case_when(
+      if_all(contains("bill"), big) ~ "both big", 
+      if_any(contains("bill"), big) ~ "one big", 
+      TRUE                          ~ "small"
+    )) %>% 
+  relocate(last_col())
+
+```
+
+## one note
+
+-   purrr?
+-   vscode?
+-   timeseries?
+
+```{r}
+lass <- tibble(
+  ht_in = c(70, 63, 62, 67, 67, 58, 64, 69, 65, 68, 63, 68, 69, 66, 67, 65, 
+            64, 75, 67, 63, 60, 67, 64, 73, 62, 69, 67, 62, 68, 66, 66, 62, 
+            64, 68, NA, 68, 70, 68, 68, 66, 71, 61, 62, 64, 64, 63, 67, 66, 
+            69, 76, NA, 63, 64, 65, 65, 71, 66, 65, 65, 71, 64, 71, 60, 62, 
+            61, 69, 66, NA),
+  wt_lbs = c(216, 106, 145, 195, 143, 125, 138, 140, 158, 167, 145, 297, 146, 
+             125, 111, 125, 130, 182, 170, 121, 98, 150, 132, 250, 137, 124, 
+             186, 148, 134, 155, 122, 142, 110, 132, 188, 176, 188, 166, 136, 
+             147, 178, 125, 102, 140, 139, 60, 147, 147, 141, 232, 186, 212, 
+             110, 110, 115, 154, 140, 150, 130, NA, 171, 156, 92, 122, 102, 
+             163, 141, NA)
+)
+
+
+cor.test(lass$ht_in,lass$wt_lbs,na.rm=TRUE) %>% broom::tidy()
+```
+
+
+### purrr framework
+
+[purr gapminder example](https://www.rebeccabarter.com/blog/2019-08-19_purrr#simplest-usage-repeated-looping-with-map)
+
+
+```{r}
+gapminder_orig <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv")
+
+
+gapminder_orig
+```
+
+
+[purr good pictures](https://dcl-prog.stanford.edu/purrr-extras.html)
+
+
+## test
+
+
+
+```{r}
+
+eda_fun <- function(df) {
+df %>% tibble(distinct=n_distinct(.x),
+                   range=range(.x),
+                   avg=mean(.x),
+                   median=median(.x)
+                   )
+  )
+}
+
+
+  tibble(
+    name=colnames(mtcars$mpg),
+    class=class(mtcars$mpg),
+    distinct=n_distinct(mtcars$mpg),
+    range=paste0(range(mtcars$mpg)[1]," - ",range(mtcars$mpg)[2]),
+    avg=mean(mtcars$mpg),
+    median=median(mtcars$mpg),
+    missing=sum(is.na(mtcars$mpg))
+    )
+
+  
+gapminder_nested <- gapminder_orig %>% 
+  group_by(continent) %>% 
+  nest()  
+
+args <- tibble(cols=c("pop","lifeExp","gdpPercap"))
+
+new_df <- gapminder_nested %>%
+  crossing(args)
+
+cus_mean <- function(df,cols) {
+
+  cols <- quos(cols)
+  
+  mean(df$cols)
+  
+}
+
+new_df %>% 
+mutate(avg=
+           map2_dbl(.x=data,
+                    .y=cols,
+                    function(.x,.y) .x %>% pull(.y) %>% mean(.,na.rm=TRUE),.progress = TRUE
+                    )
+         )
+```
+## purr continueod
+
+
+group_map()
+
+this works more like summarize on a grouped dataframe, whereas regular map() works more lke mutate (in that you need a mutate to add a couple)
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+df <- data.frame(
+  group = c("A", "A", "B", "B", "B"),
+  value = c(1, 2, 3, 4, 5)
+)
+
+df %>%
+  group_by(group) %>%
+  group_map(~ mean(.$value))
+
+df %>%
+  split(.$group) %>%
+  map(~ mean(.$value))
+
+
+df %>%
+  group_by(group) %>%
+  nest() %>%
+  mutate(mean = map_dbl(data, ~ mean(.$value))) %>%
+  select(group, mean)
+
+
+remotes::install_github("TimTeaFan/loopurrr")
+
+
+```
+
+
+### Rowwise
+
+
+An alternative approach (which actually is equal to the pmap approach if every column was used) is rowwise
+
+#### Simple
+
+1. use `nest_by()` to automatically group,nest and rowwise()
+2. Then you can create a new column, and reference the data column to apply a function but ensure it is wrapped with `list()`
+3. you can continue to use other broom function such as broom::tidy or broom::glimpse to get the model results
+4. unnest to get the results
+
+Advantage
+-   easy to do
+
+Disadvantage
+
+
+```{r}
+
+dplyover::csat
+
+lookup_vec <- set_names(names(csatraw), names(csat))
+
+csat_named <- csatraw |>
+  rename(any_of(lookup_vec)) |>
+  select(cust_id, type, product, csat,
+         ends_with("rating"))
+
+
+my_formula <- csat ~ postal_rating + phone_rating + email_rating +
+  website_rating + shop_rating
+
+
+csat_named %>% 
+  nest_by(product) %>% 
+  mutate(mod=
+           list(
+           lm(
+             my_formula
+             ,data=data
+             )
+           )
+         ,modstat=list(broom::glance(mod))
+         ,res=list(broom::tidy(mod))
+         ) %>% 
+  unnest(modstat)
+```
+
+- have to have mutiple versions of your model
+
+
+### Intermediate
+
+compare model subsegment to overall model 
+-   for nested column, copy over values with "ALL"
+-   Bind with the original column so that you double the data (however one has a single catagory all)
+
+```{r}
+csat_all <- csat_named |>
+  mutate(product = "All") |>
+  bind_rows(csat_named) 
+```
+
+add additional subgroups based on filtering criteria
+
+-   expand_grid
+-   list
+
+-   first create a list of your arguments
+
+        -   if you want to filter a column in a data set you can put the filter arguments in `expr()` ofr example expr(type!= "reactive")
+        -   you can add a default argument TRUE so that no filter is applied
+-   Then use `expand_grid` against the nested dataframe so that each group gets all the argument criteria
+-   replicate the column arguments names by taking the names of the list arguments and turning them into columns
+-   then you can add a column that will further filter/create subgroups by using the the `eval()` around the fitler argument list
+
+
+```{r}
+filter_ls <- list(
+  All = TRUE,
+  no_reactivate = expr(type != "reactivate")
+)
+
+
+csat_all_grps <- csat_all |>
+  nest_by(product) |>
+  expand_grid(filter_ls) |>
+  mutate(type = names(filter_ls),
+         .after = product)
+
+csat_all_grps_grid <- csat_all_grps |>
+  rowwise() |>
+  mutate(data = list(
+    filter(data, eval(filter_ls))
+    ),
+    .keep = "unused"
+  )
+
+
+
+```
+
+
+
+dynamically name model outputs with `list2()`
+
+
+-you can not only dynamiclly name different list output but also you can give it glue like syntax in the name 
+
+```{r}
+library(rlang)
+csat_all_grps_grid <- csat_all_grps |>
+  rowwise() |>
+  mutate(mod     = list2("{product}_{type}" := lm(my_formula, data = data)),
+         res     = list2("{product}_{type}" := broom::tidy(mod)),
+         modstat = list2("{product}_{type}" := broom::glance(mod)))
+
+```
+
+data less  grids
+
+1. Use expand_grid() to create all the input columns that would have been created with nest_by()
+2. tricky part is how to tell R when we want to refer to an input column vs the dataframe column
+        
+        - by default an unquoted column referes to a dtaframe column so to refer to the list column we must use `env$colname`
+        -
+-   Pass the filter arguments through to the data portion of the formula
+        
+        -   first filter must be all the combinations of your master group so that input table remains whole (using env$colname)
+        -   pass the eval(filter_args) as you did before
+        
+        
+
+```{r}
+
+
+product <- c(
+  "All", unique(csat_named$product)
+)
+
+all_grps_grid <- expand_grid(product, filter_ls) |>
+  mutate(type = names(filter_ls),
+         .after = product)
+
+
+
+all_grps_grid |>
+  rowwise() |>
+  mutate(mod = list(
+    lm(my_formula,
+       data = filter(csat_named,
+                     # 1. filter product categories
+                     .env$product == "All" | .env$product == product,
+                     
+                     # 2. filter customer types
+                     eval(filter_ls) 
+                     )
+       )
+    )
+    ) |>
+  select(! filter_ls)
+
+
+```
+
+
+Build formulas programmatically so that  you can add incrementally add in factors 
+
+- using `expand_grid()`, add in the indepednet variables that you want to use as characters
+-   in the formuala argument use `reformulate()` and referncence the indepdent column variables with the dependent variable
+-   Create a list with a base (starting formula so you put NULL), and then terms you want to add (as quote)
+-   Then create a new column that just contains the formula using `update(old_formula,reformulate(c(".",update_vars)))`
+
+```{r}
+all_grps_grid_final_res <- all_grps_grid_final |>
+
+  rowwise() |>
+
+  mutate(
+    
+  # dynamically name list
+  form = list2( "{product}_{type}_{model_spec}_{dep_vars}" :=
+  # update formula
+    update(my_formula2, # old formula
+           reformulate(c(".", update_vars), dep_vars)) # changes to formula
+  ),
+    
+  mod = list(
+    lm(form,
+  # create data on the fly
+       data = filter(csat_named_top,
+                     .env$product == "All" | .env$product == product,
+                     eval(filter_ls)
+       )
+    )
+  ),
+
+  res = list(broom::tidy(mod)),
+
+  modstat = list(broom::glance(mod))
+
+  ) |>
+  select(product:model_spec, dep_vars, mod:modstat)
+
+```
+
+
+resrouces
+[Timtea Blog](https://tim-tiefenbach.de/post/2023-dplyr-many-models/)
+
+
+
+## alterantives to columnwise iterators
+
+
+dplyover::over(create multiple lead lag against a singel column)
+
+
+```{r}
+tibble(a = 1:25) %>% 
+   mutate(over(c(1:3),
+              list(lag  = ~ lag(a, .x),
+                   lead = ~ lead(a, .x)),
+              .names = "a_{fn}{x}"))
+
+
+
+```
+
+
+```{r}
+iris %>%
+   transmute(
+     crossover(starts_with("sepal"),
+                1:5,
+                list(lag = ~ lag(.x, .y)),
+                .names = "{xcol}_{fn}{y}"))
+```
+
+
+
