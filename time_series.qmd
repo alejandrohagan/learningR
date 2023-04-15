@@ -3,6 +3,19 @@ title: "time series"
 ---
 
 
+framework
+
+1. summarize by date column
+2. add dimensions that you want in learning
+3. add corelations
+4. scale and normalize data, including log
+5. add time related dimensinos
+
+
+
+
+
+
 # how to create aggreation fucntion
 
 timetk::summarize_by_time(
@@ -159,110 +172,456 @@ plot_modeltime_forecast()
 
 )
 
-## mode diagnosics
-detect lagged fuctions
+# overview of functions
+
+## diagnostics functions
+
+### ACF
+
+-   helpful to detect lagged functions and how many lags to use
+
 plot_acf_diagnoistcs(
 .lags="1 year", 25:100,100
-.ccf_vars=columns,
+.ccf_vars=columns:columns   
 .show_ccf_vars-only=TRUe # ony cross correlations var
 ,.facet_ncol=number of column
-
 
 )
 
 
 ## sesaonality
 
+-   Helpful to see if there are certain seasonality drivers
+
 plot_seaonsal_diagnotistc(
 feasture_set=c(hour,weekday)
 .geom="violin"
 )
 
-## anolomy
+### anolomy
 
-plot_anomoly_diagomsitc(
+-   helpful to detect anomoly detection
+
+plot_anomoly_diagonsitics(
 .data_var=data_col
-.alpha= .01 #change anonoly sensitivity
-.max_anolomoies =.01 # peak anaolyies
+.alpha= .01 #change anomoly sensitivity
+.max_anolomoies =.01 # peak anomoly
 
 )
 
-## get anoly data
+-   Get underlying anomaly data
 tk::anomoly_diaogasitc(
-same as plot, gets data with anolmogies in it
+.data_var=data_col
+.alpha= .01 #change anomoly sensitivity
+.max_anolomoies =.01 # peak anomoly
 )
 
 ## seasons decomposition
-gives you what is seasonal vs trend vs adjjustment
 
-useful to understand how anomoliges are being detcted
+-   Useful to understand how anomoliges are being detcted
 plot_stl_diagostics(
 
 
 )
-## uses linear regression
 
-helps ot identify useful features
+
+## linear regression plot
+
+-   shortcut function of `lm()` to help identify which features are meaningful or not
 
 plot_time_series_regression(
 .date_var=data column
 .formula= value~ as.numeric(date_col)+
 wday(date_col)+
 month(date_col)
-show_summary=TRUE
+show_summary= TRUE, shows summary ouptut
 )
 
+## transformation functions
 
-provides time based mutate over time windows this is like group_by + mutate
+-   provides time based mutate over time windows this is like group_by + mutate
 mutate_by_time(
 .by="week"
 ,formula
-
-
-transofmration
-
-loglp - applies log
-standarize_vec - standardize and centers
-
-
-tk_index() creates index
-
-tk_make_timeseries makes time table
-
-tk_make_holiday_sequence(
-year_start
-year_end
-clandar
-) %>% 
-tk_get_holiday_signature( converst to grid matrix)
-
-makes future time series
-ts_make_future_time_zeries
-
-future_frame(
-lengt_out=periods
 )
 
+- applies log +1 to a column
+loglp() 
+
+- standardize and centers
+standarize_vec() 
+
+-   normalize a vector
+timetk::normalize_vec()
 
 
+-   lags a columns
 
+lag_vec( shifts a vector)
 
-)
+-   creates many lags against a column
 
+tk_augment_lag(
+.lags=1:10
 )
 
 date_col %-time% "1 day"
 
 date_col %+time% "6 weeks"
 
-hello are you today, i am doing well but this is a significant enough change that i do need to learn how to type all all over again which is frustrating. that being said, i have gotten  used to the left space bar button sooner that i thought.''
- hopefully this will improbe some of the ergonomiv issues that i have and make type muvh quivker and faaster than bebefore.i
- 
- 
- hello hwo are you today i am doing so well, now that ia  have typing with myleft
- 
- 
+
+
+slidify(
+.f= function that you want ~cor(.x,.y,use="pairwise.complete.obs")
+,period= window length
+,align=where is the gap
+,partial=what to do with partial
+)
+
+slidify_vec()
+
+- similar put to a vector
+
+
+-   creates differences between a log
+-   typically used with cumsum for changes in a series
+diff_vec(
+lag
+,difference=1 for normal 2 for acceleration
+)
+
+- creates forier funcitons, similiar to lag
+forier_vec(
+period = lag
+k=offset
+type=cos,sin
+)
 
 
 
-library(fpaR)
+## Signature
+- creates index
+tk_index() 
+
+makes time table similiar to create date
+
+tk_make_timeseries() 
+
+- makes a holiday sequence signatures
+
+tk_make_holiday_sequence(
+year_start
+year_end
+calendar
+)
+
+tk_get_holiday_signature()
+
+
+
+makes future time series
+ts_make_future_time_zeries()
+
+future_frame(
+lengt_out=periods
+)
+
+# Framework
+
+## Extend forcast window
+
+- scale & normalize variables
+
+- create horizon
+-   create rolling lag based on horizon
+-   create rolling periods
+
+basically make sure our dataframe has everything that it needs for future projects (eg. lags and rolling averages)
+- tip create rolling lag of forecast period
+
+- add window
+
+bind_rows(
+dataframe,
+dataframe %>% 
+future_frame(
+.data_var
+.length_out)
+)
+
+- add lags
+
+
+tk_augment_lags(
+variable
+.lags
+)
+
+- add rolling averages
+tk_augment_slidify(
+.value=thing that you want rolling average
+.f=mean or whatever
+.period= c(30,60,90)
+.align="center"
+.partial=true
+)
+
+- add events
+
+anonlomies and external regressors
+
+- save forecast table as seperate table and historical table as seperate
+
+
+## split and train
+
+-take historical dataset and assign it to object this is your splits
+
+time_series_split(
+assess=time horizon
+cumulative=TRUE
+)
+
+- validate teh splits are right you can use:
+
+tk_time_series_cv_plan() %>% 
+plot_time_seris_cv_plan()
+
+
+## recipe
+
+- can create a base recipe
+
+- to see how these recipes happen use prep() %>% juice() to apply transformats to the dataset
+
+recipe(
+formula
+data)
+%>% 
+
+### creates time series seinguatre
+step_timeseries_siganture() #
+)
+
+### normalize
+
+- consider to normalize time series signatures 
+
+step_normalize()
+
+### dummy variables
+step_dummy(one_hot=TRUE)
+
+### interaction
+step_interaction(~ (col)*(col))
+
+### foriere
+- base foriere on lags
+
+step_fourier(date,periods=c(),K=2)
+
+### spline
+- need to remove lag and date column if you do this
+- step_ns(
+ends_with(index.num),deg_free=2
+)
+
+### lag
+
+-   make sure to remove nas with step_naomit
+-   lags added with tk_augment_lags
+
+
+## workflow
+
+-workflow are model management tools
+-   workflows are data dependent due to reciept spec dependecy
+-   new data must have the same structure as the unstranformed recipe data
+-   worlfow should be created for each combination of model & recipe
+-   fitting a wroflow trains the model & recipe on data
+
+- add model and recipe and can fit
+- ensure fit is based on same data as reciept (training)
+
+add_model()
+add_reciepe()
+fit()
+## modeltime
+
+- how you compare and forecast models
+- basically add to to modetime so you acollection of workflows
+-   then caolbirate against a dataset (testing)
+    
+    -   then forecast (against against testing set)
+    -   or get accuracy
+
+-add worlflow to model modeltime table
+modeltime_table(workflow1,workwlow2)
+
+you can rename model IDs with update_model_description()
+
+- to apply model to different data set (testing),  you use modeltime_calibrate
+- ensure you same the calibrated table as a new object
+modeltime_calibrate(new_data=testing(split))
+
+
+-   use modeltime_forecast to apply model to a forecast (pass calibration table)
+modeltime_forecast(
+new_data=testing(splits)
+,actual_date=
+)
+
+- to get accuracy use modeltime_accuracy() (pass calibration data through to it)
+
+### refit
+-     use to pass model specs to new data source like your future forecasted dataset
+-   pass calibration table to modeltime_refit
+calibration_tbl %>% 
+modeltime_refit(data=originaltbl)
+
+
+## transfer and revert back
+
+- keep track of parateters that were used to transfrom (log) or normalize data
+- make sure you do it in the right order
+
+standarize_inv_vec() to undon standarization
+
+log_interval_inv_vec() to undo log
+
+
+## Extract elements
+-   to pull fit of a workflow use pull_workflow_fit %>% pluck (fit) %>% summary(0)
+-   this will tell you how the applied workflow fit looks like
+
+
+## compare models
+-   add wor
+
+```{r}
+
+
+library(tidyverse)
+library(timetk)
+
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    revenue=unit_price*sales_quantity
+   ,date=mdy(date_key) 
+    ) 
+
+
+
+daily_sales_tbl <- df %>% 
+  relocate(last_col()) %>%
+  timetk::summarise_by_time(date
+                            ,.by = "day"
+                            ,n= n()
+                            ,revenue=sum(revenue)
+                            ,quantity=sum(sales_quantity)
+                            ,store_count=length(unique(store_key))
+                            ,rev_per_store=revenue/store_count
+                            ,quantity_per_store=quantity/store_count
+                            )
+
+
+augment_daily_sales_tbl <- daily_sales_tbl %>% 
+  # plot_acf_diagnostics(
+  #   .date_var = date
+  #   ,.value = rev_per_store
+  # )
+
+  mutate(across(-date,timetk::standardize_vec)) %>% 
+  tk_augment_lags(
+    revenue
+    ,.lags = 1:5
+                  ) %>% 
+  tk_augment_lags(
+    quantity
+    ,.lags = 1:5
+                  ) %>% 
+  tk_augment_lags(
+    rev_per_store
+    ,.lags = 1:5
+                  ) %>% 
+  timetk::tk_augment_timeseries_signature(date)
+
+
+
+augment_daily_sales_tbl %>%
+  timetk::tk_augment_holiday_signature(.date_var = date
+                                        ,.holiday_pattern = "US_"
+                                       ,.locale_set = "US",
+                                       .exchange_set="none")
+
+
+
+
+augment_daily_sales_tbl %>% 
+  bind_rows(
+    future_frame(date_var=date
+      ,.length_out = 30
+
+    )
+    
+  )
+bind_rows(
+augment_daily_sales_tbl,
+augment_daily_sales_tbl %>% 
+  future_frame(.date_var = date
+               ,.length_out = 30)
+)
+
+```
+
+
+
+```{r}
+#| eval: false
+
+plot_acf <- daily_sales_tbl %>% 
+  plot_acf_diagnostics(.date_var,.value) 
+
+plot_anomaly <- daily_sales_tbl %>% 
+  plot_anomaly_diagnostics(.date_var,.value)
+
+plot_seasonal <- daily_sales_tbl %>% 
+  plot_seasonal_diagnostics(
+    .date_var
+    ,.value
+    )
+
+daily_sales_tbl %>% 
+  timetk::tk_augment_timeseries_signature(.date_var) %>% 
+  mutate(across(where(is.ordered),as.character)) %>%
+  timetk::mutate_by_time(.date_var = .date_var
+                         ,.by ="week"
+                         ,.type = "round"
+                         ,weekly_rev=sum(.value)
+                         ,weekly_mean=mean(.value)
+                         ,weekly_median=median(.value)
+                         ) %>% 
+  relocate(last_col()) %>% 
+  mutate(across(contains("weekly_")
+                ,standardize_vec)) %>% 
+  
+  mutate(.value=log(.value+1),
+         
+  ) %>% view()
+  lm(.value ~.-.date_var
+     ,data=.) %>% 
+  summary()
+  broom::tidy() %>% 
+  filter(p.value<.05)
+  timetk::plot_time_series_regression(.date_var,
+                                      .value~.)
+
+
+```
+
+```{r}
+install.packages("randomForest")
+```
+
