@@ -449,6 +449,7 @@ fit()
 ## modeltime
 
 - how you compare and forecast models
+- modeltime only works with fitted models that have parsnip and workflow
 - basically add to to modetime so you acollection of workflows
 -   then caolbirate against a dataset (testing)
     
@@ -465,19 +466,39 @@ you can rename model IDs with update_model_description()
 modeltime_calibrate(new_data=testing(split))
 
 
--   use modeltime_forecast to apply model to a forecast (pass calibration table)
+-   use modeltime_forecast to apply model to a forecast (pass calibration table\)
+-   Need to be mindful that external regressors have column in the forecast table for models
 modeltime_forecast(
 new_data=testing(splits)
-,actual_date=
-)
+,actual_date=actual_data
+,conf_interval=0.0
+h= "8 weeks"is horizon can only be used if no external regressors
+) %>% 
+table_modeltime_accuracy(.interactive=FALSE % GT table) # prints to table
 
 - to get accuracy use modeltime_accuracy() (pass calibration data through to it)
+modeltime_acurracy(
+metric_set=default_forecast_accuracy_metric_set() for defaul metrics or
+metrict_set=yardstick::metric_set(list metrics)
+)
+
+- plot model time forecast
+plot_modeltime_forecast(
+.lengend_max_width=25
+)
+
+
 
 ### refit
 -     use to pass model specs to new data source like your future forecasted dataset
+-     can use to train data on full dataset
 -   pass calibration table to modeltime_refit
 calibration_tbl %>% 
 modeltime_refit(data=originaltbl)
+
+### residuals
+
+modeltime_residuals() lets you look at the residaual sof the moel
 
 
 ## transfer and revert back
@@ -497,6 +518,15 @@ log_interval_inv_vec() to undo log
 
 ## compare models
 -   add wor
+
+
+
+
+## model types
+
+### arima Regression
+arima_reg() %>% 
+seg_enging("auto_arima")
 
 ```{r}
 
@@ -621,7 +651,50 @@ daily_sales_tbl %>%
 
 ```
 
+
 ```{r}
-install.packages("randomForest")
+library(tidymodels)
+split <- daily_sales_tbl %>% 
+  timetk::time_series_split(
+    date_var =date
+    ,assess = 56
+    ,cumulative = TRUE
+    )
+
+train <- rsample::training(split)
+test <- rsample::testing(split)
+
+
+
+lm_mod <- parsnip::linear_reg()
+ph_mod <- modeltime::prophet_reg()
+
+
+rec_basic <- recipes::recipe(revenue~.,data=train) %>% 
+  timetk::step_timeseries_signature(date) %>% 
+  timetk::step_fourier(date,period =c(1,3,7),K = 2)
+
+
+rec_basic 
+
+
+lm_basic <- workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(rec_basic) %>% 
+  fit(train)
+
+ph_basic <-  workflow() %>% 
+  add_model(ph_mod) %>% 
+  add_recipe(rec_basic) %>% 
+  fit(test)
+
+modeltime::modeltime_table(
+  lm_basic
+  ,ph_basic
+) %>% 
+  modeltime::modeltime_calibrate(new_data = train)
+
+
+
 ```
 

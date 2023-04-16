@@ -843,3 +843,13 @@ iris %>%
 
 
 
+```{r}
+iris %>%
+  transmute(across2(ends_with("Length"),
+                    ends_with("Width"),
+                    .fns = list(delta = ~ .x - .y,
+                                sum = ~ .x + .y),
+                   .names = "{pre}_{fn}",
+                   .names_fn = tolower))
+```
+
