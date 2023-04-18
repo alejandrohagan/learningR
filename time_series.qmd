@@ -698,4 +698,18 @@ modeltime::modeltime_table(
 
 
 
+```{r}
+library(tidyverse)
+diamonds %>% 
+  select(where(is.numeric)) %>% cor %>% as.tibble()
+apply(
+  X = .
+  ,MARGIN = 2
+  ,FUN = cor
+  )
 
+cor(cars$speed,cars$dist,method = "")
+
+```
+
+    

@@ -3,60 +3,29 @@ title: "Readme"
 format: gfm
 ---
 
-## Quarto
+This is a draft of my book "Bridging the Gap: Learn R Alongside Excel - a Survival Guide for Corporate Environments" which documents my 10 year learning journey of business intelligence.
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+Why do we need another book about R or Excel?
 
-## Running Code
+While there are amazing books about R, specifically in the [www.bigbookofR.com](www.bigbookofR.com) I have found that they either
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+-   Tend to be overly focused on statistics or theory where the application to the Corporate environment may not always be immediately understood
+-   Are too beginner focused that do not take into account the challenges of data reporting in a Corporate environment
 
 
+# Mission and Vision:
 
-This are my draft study notes on how I use R.
+After reading this book you will:
 
-I plan to turn this into a book eventually afer it is all complete with focused chapters written by guest writers
+-   You will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness and not theory (as defined by your team & maintenance of the reports you build)
 
-framework below
+-   We will cover some introductory concepts however, the focus is mainly on application but we will direct you to resources for additional learning
 
-Book Name:
+-   There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be ready for
 
-Everything you need to know about effective data analytics skills
+# Introduction
 
-Learn and practice analysis now
-
-The last book you will read on data analysis
-
-Learn data analysis skills quickly and easily
-
-Excel, Pivot Tables, Power Pivot
-
-Excel to R: A Pragmatic Guide for Corporate Environment
-
-Books purpose
-
-You read this and 1) will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness (as defined by your team & maintenance of the reports you build)
-
-We will cover some introductory concepts however, the focus is mainly on application but we will direct you to resources for additional learning
-
-There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be ready for
-
-Book intro
-
-I've scoured every tip, every yahoo message board, every stackoverflow/ mr. excel, . I've read all the XX for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. XXX I know it. I've reached all the dead ends. I've stared at the screen frustrated. I've been in your shoes as we data increases yet tools get more complicated. Promises made and promises broken. …………….
+I've scoured every tip, every yahoo message board, every stackoverflow/ mr. excel, . I've read all the XX for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. XXX I know it. I've reached all the dead ends. I've stared at the screen frustrated. I've been in your shoes as we data increases yet tools get more complicated. Promises made and promises broken.
 
 But I've cried, I've sweat blood and cried tears so that you don't have to. After working years in financail plannning, budeging , analysis, manipulating, system data, external data, data meant to help that hurts, non standard data, excedl models that are so large you pray that they
 
@@ -70,49 +39,31 @@ It also means you will be able to do a typical problem in an defined amoutn of t
 
 By the time you are done, you will gladly look forward to data. It will not intimidate you. You will be excited to quickly semi automate many of your processes. You will be confident. You will be focus on value and process.
 
-Ebook
+# My assumption about you
 
-Content
+-   You regularly use excel for most of your reporting, visualizations and presentations
+-   You regularly inherit other people's spreadsheets that are challenging to maintain, update or change
+-   Requests for additional information are me with 
 
-Introduction
+# Book structure
 
-What have I done?
+## Vocabulary that is helpful to learn
 
-Ive scoured the forums, xxxx books to summarize and provide the best of what you need to know in order to be Excel Nina.
+File Type 
 
-No 500 pages, only real life examples, real life data sets, real life questions, real life frustrations and the tips, and techniques to solve
+(excel, datasource, txt, csv)
 
-This is a must read if you have been handling reports, reference reports, in a planning and budgeting role, stwd role, pricing or handle routine and multiple data reports
-
-Why choose this over the 100s of other courses, training, packages
-
-Look, I've taken almost everything conventional course, I've searched high andl ow on the web for in chats, forums, ask jeeves, asdfadf so that you don't hav eto
-
-I've combined only the most useful information across tools to get to the most effective and efficent answer
-
-Other blogs are too tool specific, eg. Only teach power pivot or excel or pivot tables when the reality it’s the combination of these tools for each type of pattern that will benefit you
-
-I am a rela life practionar!!! I deal with all sorts of issues every day. I see the worst of the worst and understand everyons frustratoin
-
-List frustration
-
-Listen, no more crying. No more long nights, no more ergonmics issues… just easy and automation effectivfe and efficeint
-
-Notice focus on effective and efficent,t his might be different perfect and optimal
-
-Key frameworks before analyzing, building, designing
-
-File Type (excel, datasource, txt, csv)
-
-Data Structure:
-
-Pivoted vs. unpivoted
 
 Tables vs. Not Tables
 
 Basically, you need ito start thinking of your data in tables, this will seriously unlock your potentials and make your data much easier to work with
 
-Consistency of data
+Data Structure:
+
+Pivoted vs. unpivoted
+
+
+Consistency of data?
 
 Are you new columns added? Will new categories be added? Will categories be split open
 
@@ -130,17 +81,19 @@ Does your data have inputs or sensitivities? Do you need
 
 Size
 
-Data is big and canquicky overwhelm. This will become painful true if your orgnaization is using excel for everything. Get ready for megasize files, that link to megsize files that link further to megasize files. No joke. Excel files get currupted, links are broken. Your life will suffer. Sometimes thee isn't a way out of that but sometimes there is.
+Data is big and can quicky overwhelm. This will become painful true if your orgnaization is using excel for everything. Get ready for megasize files, that link to megsize files that link further to megasize files. No joke. Excel files get currupted, links are broken. Your life will suffer. Sometimes thee isn't a way out of that but sometimes there is.
 
 Convention: Naming, colors, fonts
 
 Color convention
 
+# High level framework to think about data
+
 ETL+C+V
 
-This part is pretty crucial for you to start to understand as you will think through your process better. It will help you to manage others that send you data or that you send data too. Many of your data will have cross functions inputs. You will need to sned out inputs, receive inputs, plug those, document those, have a way to track changes, etc
+This part is pretty crucial for you to start to understand as you will think through your process better. It will help you to manage others that send you data or that you send data too. Many of your data will have cross functions inputs. You will need to send out inputs, receive inputs, plug those, document those, have a way to track changes, etc
 
-Extract:
+## Extract:
 
 This is often the most critical part. It’s the part that can make your life incredible easy and incredibly simple
 
@@ -150,19 +103,19 @@ Structure of data
 
 Variability of data
 
-Transform
+## Transform
 
 The more you get E right the less you need to do with T, but that being said, there is some you may need to do, adding columns, unpivot / pivoting, changing data types, grouping,
 
-Load
+## Load
 
 In this context, it will be either excel, connection only or data model but it could mean loading it into a cloud system or other input files
 
-Calculate
+## Calculate
 
 Now you do your actual calculations on your data, this can be in a structured template, or custom formulas, but this is when you will use either basic or advanced formulas
 
-Visual
+## Visual
 
 This is how you take complex, confusing, granular information and make it understandable and easy to understand. This is where your learnings are applied
 
