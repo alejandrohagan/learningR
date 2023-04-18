@@ -6,62 +6,60 @@ title: "time series"
 framework
 
 1. summarize by date column
-2. add dimensions that you want in learning
-3. add corelations
+2. add dimensions that you want in as input or to frame by learning
+3. add correlations such as lag or other dimensions
 4. scale and normalize data, including log
-5. add time related dimensinos
+5. add time related signatures
 
 
 
 
 
 
-# how to create aggreation fucntion
+## how to create aggreation fucntion
+-   Similar to group_by()+summarize() but focused on time related
 
 timetk::summarize_by_time(
 .date_var=date column
-.by= aggregation level
-col_name=aggregation step (n())
-across()
-,.type=c("cieling,round,floor)
+.by= (days,week,month)
+col_name=aggregation step (n=n()) or across()
+,.type=c("ceiling,round,floor) # regarding aggregation level
 )
-
-
-
-%
 
 
 ## how to create diagomics
 
- tk_summary_diagnostics()  gives summary satistics of how much difference betweeen the time series
+ tk_summary_diagnostics()  gives summary statistics of how much difference between the time series
  
 ##  how to pad time when there gaps in data series
 -   use to fill gaps with values in your time series
 
 pad_by_time(
-.date_var=data colum
+.date_var=data column
 .by="day"
-.pad_value=0
-
-
+.pad_value=0 # what to pad it with
 )
 
+```{r}
+timetk::plot_time_series()
+```
 
 
 ## plot times series
-group_by() %>% ## how to facet
+
+-   plots time series either in plotly, ggplot, or trelliscope
+-   Can add groups by passed in a grouped dataframe
+
+group_by() %>% # how to facet
 plot_time_series(
-.data_Var
-,value
-,.color_bar=group_name # puts groups in color
-,.facet_Vars=name ## also how to facet
+.data_var=date column
+,value = the value you want to plot
+,.color_bar=group_name # puts groups in color (or you can put this group_by)
+,.facet_Vars=name # also how to facet
 ,.smooth=TRUE (adds in polynominal regression)
 ,..smooth_period="30 days"
 ,.smooth_span= prop of data
 ,.interactive=FALSE # to create ggplot object
-
-
-
 )
 
 
@@ -75,7 +73,7 @@ end_date="end"  or date
 
 ## split into training and test set
 
-you assign the split data to an object
+- you assign the split data to an object similiar to tidymodels
 
  time_series_split(
  date_var=date colomns
@@ -89,7 +87,6 @@ then you use the tk_time_series_cv_plan()  and plot_time_Series_cv_plan() to see
 ## create different time series models
 
 linear_reg(
-
 )
 
 prophet_reg(
@@ -529,7 +526,7 @@ arima_reg() %>%
 seg_enging("auto_arima")
 
 ```{r}
-
+#| eval: false
 
 library(tidyverse)
 library(timetk)
@@ -653,6 +650,8 @@ daily_sales_tbl %>%
 
 
 ```{r}
+#| eval: false
+
 library(tidymodels)
 split <- daily_sales_tbl %>% 
   timetk::time_series_split(
@@ -697,4 +696,8 @@ modeltime::modeltime_table(
 
 
 ```
+
+
+
+
 
