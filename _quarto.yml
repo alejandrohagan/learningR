@@ -21,8 +21,11 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
+    output_dir: files
   pdf:
     documentclass: scrreprt
 
 editor: source
+
+
 
