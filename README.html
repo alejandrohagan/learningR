@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.2.475">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,69 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -117,76 +54,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
 
 </header>
 
-<section id="quarto" class="level2">
-<h2 class="anchored" data-anchor-id="quarto">Quarto</h2>
-<p>Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <a href="https://quarto.org" class="uri">https://quarto.org</a>.</p>
+<p>This is a draft of my book “Bridging the Gap: Learn R Alongside Excel - a Survival Guide for Corporate Environments” which documents my 10 year learning journey of business intelligence.</p>
+<p>Why do we need another book about R or Excel?</p>
+<p>While there are amazing books about R, specifically in the <a href="www.bigbookofR.com">www.bigbookofR.com</a> I have found that they either</p>
+<ul>
+<li>Tend to be overly focused on statistics or theory where the application to the Corporate environment may not always be immediately understood</li>
+<li>Are too beginner focused that do not take into account the challenges of data reporting in a Corporate environment</li>
+</ul>
+<section id="mission-and-vision" class="level1">
+<h1>Mission and Vision:</h1>
+<p>After reading this book you will:</p>
+<ul>
+<li><p>You will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness and not theory (as defined by your team &amp; maintenance of the reports you build)</p></li>
+<li><p>We will cover some introductory concepts however, the focus is mainly on application but we will direct you to resources for additional learning</p></li>
+<li><p>There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be ready for</p></li>
+</ul>
 </section>
-<section id="running-code" class="level2">
-<h2 class="anchored" data-anchor-id="running-code">Running Code</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
-<p>You can add options to executable code like this</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
-<p>The <code>echo: false</code> option disables the printing of code (only output is displayed).</p>
-<p>This are my draft study notes on how I use R.</p>
-<p>I plan to turn this into a book eventually afer it is all complete with focused chapters written by guest writers</p>
-<p>framework below</p>
-<p>Book Name:</p>
-<p>Everything you need to know about effective data analytics skills</p>
-<p>Learn and practice analysis now</p>
-<p>The last book you will read on data analysis</p>
-<p>Learn data analysis skills quickly and easily</p>
-<p>Excel, Pivot Tables, Power Pivot</p>
-<p>Excel to R: A Pragmatic Guide for Corporate Environment</p>
-<p>Books purpose</p>
-<p>You read this and 1) will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness (as defined by your team &amp; maintenance of the reports you build)</p>
-<p>We will cover some introductory concepts however, the focus is mainly on application but we will direct you to resources for additional learning</p>
-<p>There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be ready for</p>
-<p>Book intro</p>
-<p>I’ve scoured every tip, every yahoo message board, every stackoverflow/ mr. excel, . I’ve read all the XX for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. XXX I know it. I’ve reached all the dead ends. I’ve stared at the screen frustrated. I’ve been in your shoes as we data increases yet tools get more complicated. Promises made and promises broken. …………….</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>I’ve scoured every tip, every yahoo message board, every stackoverflow/ mr. excel, . I’ve read all the XX for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. XXX I know it. I’ve reached all the dead ends. I’ve stared at the screen frustrated. I’ve been in your shoes as we data increases yet tools get more complicated. Promises made and promises broken.</p>
 <p>But I’ve cried, I’ve sweat blood and cried tears so that you don’t have to. After working years in financail plannning, budeging , analysis, manipulating, system data, external data, data meant to help that hurts, non standard data, excedl models that are so large you pray that they</p>
 <p>But there is a solution. If you are dreading your monthly report, your weekly stewardship and KPIs, I am here to tell you that this book will get you answers. Answers that you can use today to fix your problems. No complex macros to learn, no advanced languages. This will solve 80% of your problems, and will point you towards resources to solve the remaining.</p>
 <p>This is meant to quickly refrence guide. I will teach you patterns techniques so that you can quickly and efectively get to solutions to yoru prblems. This means building up your analysis frameowrks and tool kits.</p>
 <p>If you’ve been coutning, you’ve noticed I’ve used “effective” almst 15 times. What do I mean by that, I’m balancing your time, With all the skills, you can (and some of you should) signficantly advanced your knowledge but what happens? For many of you, you’ll build a tool only you can use, you will need to spend signficantly amoutn of your time learning these skills and testing these skills. Things will go wrong. You will be frustrated, eventually you’ll get it right, you will be better for it. But then you will move, the person replacing you will have no clue what you are doing and will quickly undo it, and sure you’ve learnt an advance skill, but unless your organization is build around that level of skill standard - you may not intend it but you will do more harm than good.</p>
 <p>It also means you will be able to do a typical problem in an defined amoutn of time. Trust me, there is no point reading this if you can’t do a simple analysis in 15 minutes. Why? Because you spent time training on to have any benefit with your work.</p>
 <p>By the time you are done, you will gladly look forward to data. It will not intimidate you. You will be excited to quickly semi automate many of your processes. You will be confident. You will be focus on value and process.</p>
-<p>Ebook</p>
-<p>Content</p>
-<p>Introduction</p>
-<p>What have I done?</p>
-<p>Ive scoured the forums, xxxx books to summarize and provide the best of what you need to know in order to be Excel Nina.</p>
-<p>No 500 pages, only real life examples, real life data sets, real life questions, real life frustrations and the tips, and techniques to solve</p>
-<p>This is a must read if you have been handling reports, reference reports, in a planning and budgeting role, stwd role, pricing or handle routine and multiple data reports</p>
-<p>Why choose this over the 100s of other courses, training, packages</p>
-<p>Look, I’ve taken almost everything conventional course, I’ve searched high andl ow on the web for in chats, forums, ask jeeves, asdfadf so that you don’t hav eto</p>
-<p>I’ve combined only the most useful information across tools to get to the most effective and efficent answer</p>
-<p>Other blogs are too tool specific, eg. Only teach power pivot or excel or pivot tables when the reality it’s the combination of these tools for each type of pattern that will benefit you</p>
-<p>I am a rela life practionar!!! I deal with all sorts of issues every day. I see the worst of the worst and understand everyons frustratoin</p>
-<p>List frustration</p>
-<p>Listen, no more crying. No more long nights, no more ergonmics issues… just easy and automation effectivfe and efficeint</p>
-<p>Notice focus on effective and efficent,t his might be different perfect and optimal</p>
-<p>Key frameworks before analyzing, building, designing</p>
-<p>File Type (excel, datasource, txt, csv)</p>
-<p>Data Structure:</p>
-<p>Pivoted vs.&nbsp;unpivoted</p>
+</section>
+<section id="my-assumption-about-you" class="level1">
+<h1>My assumption about you</h1>
+<ul>
+<li>You regularly use excel for most of your reporting, visualizations and presentations</li>
+<li>You regularly inherit other people’s spreadsheets that are challenging to maintain, update or change</li>
+<li>Requests for additional information are me with</li>
+</ul>
+</section>
+<section id="book-structure" class="level1">
+<h1>Book structure</h1>
+<section id="vocabulary-that-is-helpful-to-learn" class="level2">
+<h2 class="anchored" data-anchor-id="vocabulary-that-is-helpful-to-learn">Vocabulary that is helpful to learn</h2>
+<p>File Type</p>
+<p>(excel, datasource, txt, csv)</p>
 <p>Tables vs.&nbsp;Not Tables</p>
 <p>Basically, you need ito start thinking of your data in tables, this will seriously unlock your potentials and make your data much easier to work with</p>
-<p>Consistency of data</p>
+<p>Data Structure:</p>
+<p>Pivoted vs.&nbsp;unpivoted</p>
+<p>Consistency of data?</p>
 <p>Are you new columns added? Will new categories be added? Will categories be split open</p>
 <p>Granularity of inputs/outputs</p>
 <p>You are going to quickly learn how confusing data can be with granularity, even simple questions of</p>
@@ -195,23 +114,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Variability of inputs / outputs</p>
 <p>Does your data have inputs or sensitivities? Do you need</p>
 <p>Size</p>
-<p>Data is big and canquicky overwhelm. This will become painful true if your orgnaization is using excel for everything. Get ready for megasize files, that link to megsize files that link further to megasize files. No joke. Excel files get currupted, links are broken. Your life will suffer. Sometimes thee isn’t a way out of that but sometimes there is.</p>
+<p>Data is big and can quicky overwhelm. This will become painful true if your orgnaization is using excel for everything. Get ready for megasize files, that link to megsize files that link further to megasize files. No joke. Excel files get currupted, links are broken. Your life will suffer. Sometimes thee isn’t a way out of that but sometimes there is.</p>
 <p>Convention: Naming, colors, fonts</p>
 <p>Color convention</p>
+</section>
+</section>
+<section id="high-level-framework-to-think-about-data" class="level1">
+<h1>High level framework to think about data</h1>
 <p>ETL+C+V</p>
-<p>This part is pretty crucial for you to start to understand as you will think through your process better. It will help you to manage others that send you data or that you send data too. Many of your data will have cross functions inputs. You will need to sned out inputs, receive inputs, plug those, document those, have a way to track changes, etc</p>
-<p>Extract:</p>
+<p>This part is pretty crucial for you to start to understand as you will think through your process better. It will help you to manage others that send you data or that you send data too. Many of your data will have cross functions inputs. You will need to send out inputs, receive inputs, plug those, document those, have a way to track changes, etc</p>
+<section id="extract" class="level2">
+<h2 class="anchored" data-anchor-id="extract">Extract:</h2>
 <p>This is often the most critical part. It’s the part that can make your life incredible easy and incredibly simple</p>
 <p>Consistency of data</p>
 <p>Structure of data</p>
 <p>Variability of data</p>
-<p>Transform</p>
+</section>
+<section id="transform" class="level2">
+<h2 class="anchored" data-anchor-id="transform">Transform</h2>
 <p>The more you get E right the less you need to do with T, but that being said, there is some you may need to do, adding columns, unpivot / pivoting, changing data types, grouping,</p>
-<p>Load</p>
+</section>
+<section id="load" class="level2">
+<h2 class="anchored" data-anchor-id="load">Load</h2>
 <p>In this context, it will be either excel, connection only or data model but it could mean loading it into a cloud system or other input files</p>
-<p>Calculate</p>
+</section>
+<section id="calculate" class="level2">
+<h2 class="anchored" data-anchor-id="calculate">Calculate</h2>
 <p>Now you do your actual calculations on your data, this can be in a structured template, or custom formulas, but this is when you will use either basic or advanced formulas</p>
-<p>Visual</p>
+</section>
+<section id="visual" class="level2">
+<h2 class="anchored" data-anchor-id="visual">Visual</h2>
 <p>This is how you take complex, confusing, granular information and make it understandable and easy to understand. This is where your learnings are applied</p>
 <p>Application</p>
 <p>Data Structure: Pivot vs.&nbsp;Unpivot</p>
@@ -332,6 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>4-5-4 calendar (according to retial federation standards for leap year treatment)</p>
 <p>4-4-5 calendar</p>
 </section>
+</section>
 
 </main>
 <!-- /main column -->
@@ -376,7 +309,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -412,24 +362,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
