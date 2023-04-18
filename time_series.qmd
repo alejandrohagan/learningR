@@ -5,7 +5,7 @@ title: "time series"
 
 framework
 
-1. summarize by date column
+1. summarize by date column, clean and diagnostics
 2. add dimensions that you want in as input or to frame by learning
 3. add correlations such as lag or other dimensions
 4. scale and normalize data, including log
@@ -17,50 +17,48 @@ framework
 
 
 ## how to create aggreation fucntion
--   Similar to group_by()+summarize() but focused on time related
+-   Use `summarize_by_time()` to aggregate data by a time dimension 
+-   Similar to group_by()+summarize() but with specialized features for time
+        
+      -   .date_var=date column
+      -   .by= "day", "week", "month", "quarter", "year", "seaon", "bimonth", "halfyear"
+      -   .type=c("ceiling","round","floor")
+      -   .week_start(1=monday, 7=sunday)
+      -   col_name=aggregation step (n=n()) or across()
+  
 
-timetk::summarize_by_time(
-.date_var=date column
-.by= (days,week,month)
-col_name=aggregation step (n=n()) or across()
-,.type=c("ceiling,round,floor) # regarding aggregation level
-)
+## create diagnostics of summarized by time model 
 
+-   Creates summary table that identifies differences between time series and any gaps as well summarize basic state
 
-## how to create diagomics
+    -   start_date
+    -   end_date
+    -   units
+    -   timezone
+    -   distribution of timer series difference in second
 
- tk_summary_diagnostics()  gives summary statistics of how much difference between the time series
- 
-##  how to pad time when there gaps in data series
--   use to fill gaps with values in your time series
+##  Clean data: how to pad time when there gaps in data series
+-   use `pad_by_time()` to fill gaps with values in your time series
 
-pad_by_time(
-.date_var=data column
-.by="day"
-.pad_value=0 # what to pad it with
-)
-
-```{r}
-timetk::plot_time_series()
-```
-
+    -   .date_var=data column
+    -   .by="day"
+    -   .pad_value=0
 
 ## plot times series
 
--   plots time series either in plotly, ggplot, or trelliscope
+-  `plot_time_series()` to  plots time series either in plotly, ggplot, or trelliscope
 -   Can add groups by passed in a grouped dataframe
+-   Useful for EDA 
 
-group_by() %>% # how to facet
-plot_time_series(
-.data_var=date column
-,value = the value you want to plot
-,.color_bar=group_name # puts groups in color (or you can put this group_by)
-,.facet_Vars=name # also how to facet
-,.smooth=TRUE (adds in polynominal regression)
-,..smooth_period="30 days"
-,.smooth_span= prop of data
-,.interactive=FALSE # to create ggplot object
-)
+    -   .data_var=date column
+    -   value = the value you want to plot
+    -   .color_bar=group_name # puts groups in color (or you can put this group_by)
+    -   .facet_vars=name # also how to facet
+    -   .smooth=TRUE (adds in polynominal regression)
+    -   .smooth_period="30 days"
+    -   .smooth_span= prop of data
+    -   .interactive=FALSE # to create ggplot object
+
 
 
 ## Filter time series 

@@ -125,32 +125,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <p>framework</p>
 <ol type="1">
-<li>summarize by date column</li>
-<li>add dimensions that you want in learning</li>
-<li>add corelations</li>
+<li>summarize by date column, clean and diagnostics</li>
+<li>add dimensions that you want in as input or to frame by learning</li>
+<li>add correlations such as lag or other dimensions</li>
 <li>scale and normalize data, including log</li>
-<li>add time related dimensinos</li>
+<li>add time related signatures</li>
 </ol>
-<section id="how-to-create-aggreation-fucntion" class="level1">
-<h1>how to create aggreation fucntion</h1>
-<p>timetk::summarize_by_time( .date_var=date column .by= aggregation level col_name=aggregation step (n()) across() ,.type=c(“cieling,round,floor) )</p>
-<p>%</p>
-<section id="how-to-create-diagomics" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-create-diagomics">how to create diagomics</h2>
-<p>tk_summary_diagnostics() gives summary satistics of how much difference betweeen the time series</p>
-</section>
-<section id="how-to-pad-time-when-there-gaps-in-data-series" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-pad-time-when-there-gaps-in-data-series">how to pad time when there gaps in data series</h2>
+<section id="how-to-create-aggreation-fucntion" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-create-aggreation-fucntion">how to create aggreation fucntion</h2>
 <ul>
-<li>use to fill gaps with values in your time series</li>
+<li><p>Use <code>summarize_by_time()</code> to aggregate data by a time dimension</p></li>
+<li><p>Similar to group_by()+summarize() but with specialized features for time</p>
+<ul>
+<li>.date_var=date column</li>
+<li>.by= “day”, “week”, “month”, “quarter”, “year”, “seaon”, “bimonth”, “halfyear”</li>
+<li>.type=c(“ceiling”,“round”,“floor”)</li>
+<li>.week_start(1=monday, 7=sunday)</li>
+<li>col_name=aggregation step (n=n()) or across()</li>
+</ul></li>
 </ul>
-<p>pad_by_time( .date_var=data colum .by=“day” .pad_value=0</p>
-<p>)</p>
+</section>
+<section id="create-diagnostics-of-summarized-by-time-model" class="level2">
+<h2 class="anchored" data-anchor-id="create-diagnostics-of-summarized-by-time-model">create diagnostics of summarized by time model</h2>
+<ul>
+<li><p>Creates summary table that identifies differences between time series and any gaps as well summarize basic state</p>
+<ul>
+<li>start_date</li>
+<li>end_date</li>
+<li>units</li>
+<li>timezone</li>
+<li>distribution of timer series difference in second</li>
+</ul></li>
+</ul>
+</section>
+<section id="clean-data-how-to-pad-time-when-there-gaps-in-data-series" class="level2">
+<h2 class="anchored" data-anchor-id="clean-data-how-to-pad-time-when-there-gaps-in-data-series">Clean data: how to pad time when there gaps in data series</h2>
+<ul>
+<li><p>use <code>pad_by_time()</code> to fill gaps with values in your time series</p>
+<ul>
+<li>.date_var=data column</li>
+<li>.by=“day”</li>
+<li>.pad_value=0</li>
+</ul></li>
+</ul>
 </section>
 <section id="plot-times-series" class="level2">
 <h2 class="anchored" data-anchor-id="plot-times-series">plot times series</h2>
-<p>group_by() %&gt;% ## how to facet plot_time_series( .data_Var ,value ,.color_bar=group_name # puts groups in color ,.facet_Vars=name ## also how to facet ,.smooth=TRUE (adds in polynominal regression) ,..smooth_period=“30 days” ,.smooth_span= prop of data ,.interactive=FALSE # to create ggplot object</p>
-<p>)</p>
+<ul>
+<li><p><code>plot_time_series()</code> to plots time series either in plotly, ggplot, or trelliscope</p></li>
+<li><p>Can add groups by passed in a grouped dataframe</p></li>
+<li><p>Useful for EDA</p>
+<ul>
+<li>.data_var=date column</li>
+<li>value = the value you want to plot</li>
+<li>.color_bar=group_name # puts groups in color (or you can put this group_by)</li>
+<li>.facet_vars=name # also how to facet</li>
+<li>.smooth=TRUE (adds in polynominal regression)</li>
+<li>.smooth_period=“30 days”</li>
+<li>.smooth_span= prop of data</li>
+<li>.interactive=FALSE # to create ggplot object</li>
+</ul></li>
+</ul>
 </section>
 <section id="filter-time-series" class="level2">
 <h2 class="anchored" data-anchor-id="filter-time-series">Filter time series</h2>
@@ -158,14 +193,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="split-into-training-and-test-set" class="level2">
 <h2 class="anchored" data-anchor-id="split-into-training-and-test-set">split into training and test set</h2>
-<p>you assign the split data to an object</p>
+<ul>
+<li>you assign the split data to an object similiar to tidymodels</li>
+</ul>
 <p>time_series_split( date_var=date colomns assess= “8 weeks” cumulaitve = TRUE sets the previous as training, false means you need to select training set )</p>
 <p>then you use the tk_time_series_cv_plan() and plot_time_Series_cv_plan() to see the training and test data</p>
 </section>
 <section id="create-different-time-series-models" class="level2">
 <h2 class="anchored" data-anchor-id="create-different-time-series-models">create different time series models</h2>
-<p>linear_reg(</p>
-<p>)</p>
+<p>linear_reg( )</p>
 <p>prophet_reg( ) %&gt;% set_engine(“prophet”)</p>
 <p>how to use?</p>
 <p>prophet_reg %&gt;% set_engine(“prophet”) %&gt;% fit(predition_Value ~ data_col ,new_data=training(splits))</p>
@@ -202,7 +238,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>calibration_obj %&gt;% modeltime_accuracy</p>
 <p>calibration_obj %&gt;% modeltime_forecast( new_Data=testing(splits) actual_Data=origional_ttbl) %&gt;% plot_modeltime_forecast()</p>
 <p>)</p>
-</section>
 </section>
 <section id="overview-of-functions" class="level1">
 <h1>overview of functions</h1>
