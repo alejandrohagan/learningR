@@ -197,6 +197,7 @@ More content.
 
 
 
+<<<<<<< HEAD
 #tidymodels
 
 Split data & sample folds
@@ -415,6 +416,9 @@ orkflow
 workflow() %\>% add_recipe(rec) %\>% add_model(mod)
 
 
+=======
+`tibble::enframe()` takes a named list and turns into a tibble
+>>>>>>> a548534aa2ba9c3ce865bab0e837a2867fc5c783
 
 
 I(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42

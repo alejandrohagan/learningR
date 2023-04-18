@@ -1,8 +1,9 @@
 ---
 title: "tidymodel_practice"
 format: html
-editor: visual
----
+--- 
+
+
 
 ## Required packages
 
@@ -24,13 +25,18 @@ pacman::p_load(tidyverse,scales,tidymodels,janitor,lubridate,vip)
 
 ### rsample
 
--   first rsample::initial_split(df,strata=x) to split your data set into training and testing
+-   First rsample::initial_split(df,strata=x,prop=y) to split your data set into training and testing and assign it to an object
+    
     -   `strata` ensures the predicated variable is kept constant in both samples
--   from here, you need use that split object with `training_split()` and `testing_split()`
--   this will create a training data set and testing data set (respectively)
+    -   'prop' determins the proportion of of initial vs. split   
+-   From here, you need use that split object with `training_split()` and `testing_split()` and also assign to new objects
+-   This will create a training data set and testing data set (respectively)
+
     -   its possible to further break up your training data set into a validation set
+
 -   you can further "split" your training data into either folds or bootstrap
 -   `rsample::vfold_cv()` is fold your data into sub samples
+
     -   `strata` arguments makes sure the outcome variables is equally represented in each sample
     -   `v` is the number of times "fold" the data, default is 10
     -   `repeats` will repeat the folding patterns x times, default is 1
@@ -58,7 +64,18 @@ diamonds_fold <- rsample::vfold_cv(training_split,strata=high_price_indicator)
 
 ## Parsnip
 
--This is package where you choose the model and configure it (set its engine and mode) -most models start with their modeling name (eg.`logistic_reg()`, `rand_forest()`, `linear_reg()`) - following selection the model you need select their engine (typical - name of the underlying package) and their mode (not always applicable; eg classification or regression) - most models have default modes and engine
+- This is package where you choose the model, engeine and mode and configure it (set its engine and mode)
+-   most models start with their modeling name (eg.`logistic_reg()`, `rand_forest()`, `linear_reg()`) 
+- Following selection the model you need select their engine (typical - name of the underlying package) and their mode (not always applicable; eg classification or regression) - most models have default modes and engine
+-   First start with the model eg. linear_reg
+
+    -   Then choose the mode arugment in the model(mode="regression"), for some there is an option (regression or classification), for others it can only be one so you can't change it
+-   Then set the engine (set_egine()) which determines which underlying package you want to use (eg. stats::lm, spark, etc)
+-   optional: At this point, you have the option of just directly appliying parsnip::fit() into the model by directly entering recipe and then data
+    
+    -   fit(model,price ~ category, data=train_tbl) and this will directly  output results
+    -   if you do this you cna directly put in `predict(model_fit, new_data=test_data)` 
+
 
 ```{r choose-model}
 #| echo: true
@@ -75,32 +92,44 @@ rf_spec <- parsnip::rand_forest(trees = 1000) %>%
   set_mode("classification") %>% 
   set_engine("ranger")
 
+
+rf_glmnet <- parsnip::linear_reg(penalty = 10,mixture = 0.5) %>% 
+  parnship::set_mod("regression") %>% 
+  parsnip::set_engine("glmnet")
+
+
+rf_decision <- decision_tree(cost_complexity = 0.01,min_n=10) %>% 
+  set_mode("regression") %>% 
+  set_engine("rpart")
+
+
 ```
 
 ### Recipes
 
 -   this is where you put the formula and transformation steps that you want your model
+
 -   typical to start with recipes::recipe(outcome \~ predictor1+ predictor2, data=df_training)
+
 -   you can then transform data with `step_?` using tidy select principles
+
     -   for the dataset you should put your training set (not your folded data set or testing set)
     -   `step_other()` takes high variable data and categories minor categories into other
     -   `step_normalize()` takes data and scales and center its - either directly reference or use `all_numeric()` as a shortcut
     -   `step_dummy()` which transform categorical variable into columns, use `one_hot=TRUE` ; variables should all be factors
     -   `step_zv()` to remove variables with zero variation (can use with `all_predictors()`)
+
 -   while you may have many models and parameters, you would typically have one receipe that can be leverage many times
 
+-   the dataset only gets used to help recipes determine the column types
 
-- the dataset only gets used to help recipes determine the column types
-- [recipes links](https://www.tmwr.org/recipes.html)   
-
+-   [recipes links](https://www.tmwr.org/recipes.html)
 
 ### prep & bake
 
--applies recipes steps to a dataset
-- prep(rec,new_data=null)
+-applies recipes steps to a dataset - prep(rec,new_data=null)
 
 [prep_and_bake](https://www.tmwr.org/dimensionality.html)
-
 
 ```{r}
 rec <- recipes::recipe(high_price_indicator ~., data=training_split) %>%
@@ -178,6 +207,16 @@ fit_folds <- tune::fit_resamples(workflow,
 
 ```
 
+
+## Yardsticks
+
+- once you ahve a tbl with test results and prediction columns
+- easiest way is to use `yardstricks::metrics()` or `yardstick::calc_metrics()`
+  -   truth= what you are testing for
+  -   estimate= what you predicted
+- this will product standard metrics like mae,rmse and rsq
+
+
 Validate model - if you want to see your samples you can do the `collect_metrics(rs_data)`
 
 ```{r}
@@ -254,10 +293,6 @@ Great shortcut to set up your model so that you don't have to remember everythin
 
 ##### Usemodels
 
-
-
-
-
 ```{r}
 
 
@@ -270,3 +305,182 @@ rec_2 <- recipes::recipe(x~.,data=df) %>%
 
 rec_2 %>% prep() %>% juice()
 ```
+<<<<<<< HEAD
+=======
+
+
+## ploting reuslts
+
+-    take the fit object and broom::tidy()
+-   
+
+
+## To be classified lateR:
+
+
+#tidymodels
+
+Split data & sample folds
+
+1.  rsample::initial_sample(dataframe,strata=variable)
+
+2.  rsample::training(split_data)
+
+3.  rsample::testing(split_data)
+
+4.  vfold_cv(df_testing, strata = type)
+
+#### recipe to create formula and transform daata
+
+1.  recipes::recpe(outcome \~ predictor,data=train_df)
+
+#### select the ml model and type
+
+parsnip::logistic_reg() %\>% set_mode() %\>% set_engine()
+
+###workflow
+
+workflow() %\>% add_recipe(rec) %\>% add_model(mod)
+
+
+
+
+
+## kmeans
+
+
+
+- step 1: 
+organize  data into normalied format
+
+whatever we tryign to study (eg. product purchases) then you fill in the percent of that produc tby the dimenion you want (customer), eg customer by product
+
+- step 2:
+use kmeans function with table and initial group selection
+
+-only can have numeric input (so create with explantory varibale then deselect variable (eg. customers))
+
+kmeans_obj = kmeans(nomarlized_tbl,
+centers=num__of_groups,
+iter.max=something,
+nstarts= higher is better (say 100))
+
+
+
+kmeans_obj$center = all various centers
+
+kmeans_obj$cluster=classify each obs to a clsuter
+
+step 3: apply kmeans_obj to data
+
+broom::augment(kmeans_obj,normalized_tbl)
+
+step4: how to intrpret
+tot.withinss is metric of total squared varition (lower is better), 
+
+broom::glance(kmeans_obj)]
+g
+
+-   step5 optimze by setting up a grid
+
+create function that calcules kmeans with cneters (and nstarts if you want) to be iterated with an input table and pipe this into glance
+
+- plot tot.withinss and cneters to see which centers is optimized
+
+# kmeans example
+
+```{r}
+devtools::load_all("/home/hagan/R/fpaR")
+sales_by_store_product <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(sales_amount=unit_price*sales_quantity) %>% 
+  group_by(store_key,product_key) %>% 
+  summarise(sum_usd=sum(sales_amount),.groups = "drop") %>% 
+  arrange(product_key) %>% 
+  group_by(store_key) %>% 
+  mutate(prop_usd=sum_usd/sum(sum_usd)) %>% 
+  select(store_key,product_key,prop_usd) %>% 
+  pivot_wider(names_from=product_key,values_from=prop_usd,values_fill = 0,names_repair = janitor::make_clean_names)
+
+
+kmeans_obj <- sales_by_store_product %>% 
+  select(-store_key) %>% 
+  kmeans(centers=15,nstart=100,iter.max = 100)
+
+stores_with_kmeans <- kmeans_obj %>% broom::augment(data=sales_by_store_product) 
+kmeans_obj %>% broom::glance()
+
+
+kmeans_mapper <- function(centers=3) {
+  sales_by_store_product %>% kmeans(x=.,centers=centers,nstart = 100,iter.max=100)
+  
+}
+
+grid_kmeans <- tibble(centers=1:15) %>% 
+  mutate(kmeans_obj=map(.x=centers,~kmeans_mapper(.x)),
+         kmeans_output=map_df(kmeans_obj,broom::glance)
+  )
+
+grid_kmeans %>%
+  unnest(kmeans_output) %>% 
+  select(centers,tot.withinss) %>% 
+  ggplot(aes(x=centers,y=tot.withinss))+
+  geom_point()+
+  geom_line()
+
+```
+
+## umap
+
+very simliar to kmeans just without addition arguments
+stregth is merge the kmeans output with the kmeans output so that you can mpa them together
+then manually inspect original data frame by the new clusters to see what patterns or attributes (eg. can sort by some cumsum and attributes to look for patterns)
+
+
+step1 
+- use same normalized model
+- only select numeric data
+- pass through to umeans
+
+step2
+- take hte umeans$layout covert to tibble, rename columns and bind with framing column
+
+
+
+
+```{r}
+
+library(umap)
+umap_obj <- sales_by_store_product %>% 
+  select(-store_key) %>% 
+  umap()
+
+umap_tbl <- umap_obj$layout %>%
+  as_tibble() %>% 
+  set_names(c("x","y")) %>% 
+  bind_cols(sales_by_store_product) %>% 
+  select(store_key,x,y)
+
+umap_tbl %>% 
+  ggplot(aes(x,y))+
+  geom_point()
+  
+kmeans_result_tbl <-   grid_kmeans %>%
+    filter(centers==8) %>% 
+    pull(kmeans_obj) %>% 
+    pluck(1) %>% broom::augment(sales_by_store_product) %>% 
+    relocate(last_col()) %>% 
+    select(.cluster,store_key)
+
+
+kmeans_result_tbl %>% 
+  left_join(umap_tbl,by="store_key") %>% 
+  ggplot(aes(x=x,y=y,col=.cluster))+
+  geom_point()
+
+```
+
+
+## combine umeans and kmeans
+
+>>>>>>> a548534aa2ba9c3ce865bab0e837a2867fc5c783
