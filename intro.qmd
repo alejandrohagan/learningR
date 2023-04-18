@@ -67,10 +67,3 @@ The dirty secret of popular data science languages are they are **perishable**, 
 the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting the discipline to practice R on frequently enough basis to gain confidence in proficiency in its application.
 
 
-
-
-## map & nested
-
-
-- to access a column from the nested frame, just use the column name
-- access data in an embedded dataframe use .x$var

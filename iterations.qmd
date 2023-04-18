@@ -24,6 +24,8 @@ Also know that "mapping" is a consistent function across many programming langua
 
 
 ```{r}
+#| eval: false
+
 library(loopurrr)
 library(tidyverse)
 
@@ -33,6 +35,16 @@ df=diamonds %>%
 x <- list(1, c(1:2), c(1:3))
 
 df %>% split(names(df)) %>% purrr::map(quantile,.25,na.rm=TRUE) %>% as_loop()
+# --- convert: `purrr::map(split(df, names(df)), quantile, 0....` as loop --- #
+.inp1 <- split(df, names(df))
+out <- vector("list", length = length(.inp1))
+
+for (i in seq_along(.inp1)) {
+  out[[i]] <- quantile(.inp1[[i]], 0.25, na.rm = TRUE)
+}
+
+names(out) <- names(.inp1)
+# --- end loop --- #
 # --- convert: `purrr::map(split(df, names(df)), quantile, 0....` as loop --- #
 .inp1 <- split(df, names(df))
 out <- vector("list", length = length(.inp1))
@@ -80,12 +92,24 @@ While this may seem unusually complex, it is not, its just a matter of conventio
 library(tidyverse)
 
 
-diamonds %>% 
-  select(where(is.numeric)) %>% 
-  map(.x=.,quantile,.25)
+df <- diamonds %>% 
+  select(where(is.numeric))
+  
+
+df %>%
+  map_df(.x=.,quantile,c(25:75/100),.id = "colname") %>% 
+  pivot_longer(-colname) %>% 
+  pivot_wider(names_from = colname
+              ,values_from = value) %>% 
+  select(-name) %>% cor
 
 
+reduce(.x=1:10,~(.x)+.y,.init = 100,.dir = "forward")
 
+df=map(
+  letters[1:3]
+  , ~ sample(1:10, 15, replace = T)
+  )
 
 ```
 -Takes arguments and seperates that into lists (if it comes in as data frame)
