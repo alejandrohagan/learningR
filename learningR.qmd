@@ -322,7 +322,7 @@ Examples for filter
 column:
 
 ```{r}
-
+library(tidyverse)
 starwars %>%
 
 filter(if_any(everything(), ~ !is.na(.x)))
@@ -341,11 +341,7 @@ filter(if_all(everything(), ~ !is.na(.x)))
 
 -   Find all rows where no variable has missing values:
 
-```{r}
 
-starwars %>% filter(across(everything(), ~ !is.na(.x)))
-
-```
 
 Need to investigate rename_with and and itsimpact on select as it appears to be superseded
 
@@ -861,12 +857,6 @@ library(tidyverse)
 
 
 
-library(corrr)
-
-mtcars %>% 
-  na.omit() %>% 
-  correlate() %>% 
-  network_plot(colours = c("firebrick","white","midnight blue"))
 
 
 

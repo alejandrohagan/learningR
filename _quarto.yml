@@ -11,10 +11,6 @@ book:
         - index.qmd
         - intro.qmd
         - learningR.qmd
-        - summary.qmd
-        - new_chapter.qmd
-        - machine_learning.qmd
-        - references.qmd
 
 bibliography: references.bib
 

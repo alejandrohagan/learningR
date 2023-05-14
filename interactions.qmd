@@ -1,0 +1,121 @@
+---
+title: "interactions"
+---
+
+```{r}
+library(tidyverse)
+
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  left_join(fpaR::contoso_dim_product %>% janitor::clean_names(),by = join_by(product_key))
+
+
+df_summary <- df %>% 
+  mutate(rev=unit_price.x*sales_quantity) %>% 
+  summarise(
+    rev=sum(rev)
+    ,n=n()
+    ,avg_vol=mean(sales_quantity)
+    ,distinct_col=length(unique(color_name))
+    ,.by = c(date_key,brand_name,color_name)
+  )
+
+
+df %>% count(manufacturer)
+
+m1 <- df_summary %>% 
+  lm(rev~brand_name+avg_vol
+     ,data=.
+  )
+
+m2 <- df_summary %>% 
+  lm(rev~brand_name*avg_vol
+     ,data=.
+  )
+
+emmeans::emmeans(m2, pairwise ~brand_name|avg_vol,at=list(avg_vol=c(12,15,18)))
+aov(m1,m2)
+
+daily_summary <- df_summary %>% 
+  summarise(daily_rev=sum(rev)
+            ,mean_rev=mean(rev)
+            ,prop_50=quantile(rev,.5)
+            ,avg_vol=mean(avg_vol)
+            ,n=n()
+            ,.by=c(brand_name,color_name)
+            )
+```
+
+```{r}
+
+library(scales)
+m1 <- df_summary %>% 
+  lm(rev~0+brand_name*color_name,data=.)
+
+lm_summary <- m1 %>% broom::tidy() %>%   mutate(term=str_remove(term,"brand_name|color_name"))
+rq_summary <- df_summary %>% quantreg::rq(rev~0+brand_name+avg_vol,data=.) %>% broom::tidy(se="iid") %>%   mutate(term=str_remove(term,"brand_name")) %>% select(term,median=estimate)
+
+m2 <- df_summary %>% 
+  lm(rev~brand_name*avg_vol
+     ,data=.
+  )
+
+daily_summary %>% 
+  left_join(lm_summary,by = join_by(brand_name==term)) %>% 
+  left_join(rq_summary,by = join_by(brand_name==term)) %>% 
+  select(brand_name,daily_rev,estimate,mean_rev,prop_50,n,median) %>% 
+  mutate(
+    total_rev=n*estimate
+    ,delta_mean=estimate-mean_rev
+    ,delta_rev=daily_rev-total_rev
+    )
+lm_summary 
+
+daily_summary <- daily_summary %>% 
+  mutate(vol_effect=avg_vol*502.2374)
+
+
+```
+
+
+```{r}
+lm_summary %>% 
+  filter(str_detect(term,"Contoso:color_nameGrey|Contoso")) %>% pull(estimate) %>% sum(.,na.rm=TRUE)
+```
+
+
+### linear modeling for understanding business analysis
+
+-   If want to to get the total and average revue for each brand, we can do summarize and use sum and mean
+
+```{r}
+
+daily_summary <- df_summary %>% 
+  summarise(daily_rev=sum(rev)
+            ,mean_rev=mean(rev)
+            ,prop_50=quantile(rev,.5)
+            ,avg_vol=mean(avg_vol)
+            ,n=n()
+            ,.by=brand_name)
+
+daily_summary %>% 
+  select(1:2,mean_rev)
+```
+
+
+
+-   We can replicate these results with a linear model by putting the thing we want to get the average of as y and then put the single dimension as x and forcing the intercept to be 0
+```{r}
+m1 <-   df_summary %>% lm(rev~0+brand_name,data=.)
+
+lm_summary <- m1 %>% broom::tidy() %>%   mutate(term=str_remove(term,"brand_name"))
+
+lm_summary
+```
+
+
+- the same can be replicated for median value and qr()
+
+
+- if we add in two effects `lm(rev~0+brand_name+avg_vol,data=.)` then we get new estimates but no longer do we get the average by brand_name, instead we get the averge by brand_name after removing a fixed effect of avg_vol. In other words, if we take the average of that variable, multiply it by the esitmate, we will get the get revenue contribute due to avg_vol, the brand_name estimate average is being held contanst at the level

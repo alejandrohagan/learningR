@@ -2,102 +2,229 @@
 title: "time series"
 ---
 
+```{r}
+library(tidyverse)
+library(timetk)
+library(modeltime)
+library(tidymodels)
+pkgload::load_all("/home/hagan/R/fpaR")
 
-framework
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    date_key=mdy(date_key)
+    ,rev=sales_quantity*unit_price
+    )
+```
+# Simplified framework
 
-1. summarize by date column, clean and diagnostics
-2. add dimensions that you want in as input or to frame by learning
-3. add correlations such as lag or other dimensions
-4. scale and normalize data, including log
+1. summarize by date column
+2. add dimensions that you want in learning
+3. check and add correlations
+4. feature engineer such as scaling and normalizing data, difference and logging log
 5. add time related signatures
+6. create test and train data sets for augmentation and back testing too 
+7. select models
+8. tune models
+9. create model workflows
+10. fit models
 
 
+# how to create aggreation fucntion
 
 
+-   `summarize_by_time()` works similar to group_by()+summarize
+
+timetk::summarize_by_time(
+.date_var=date column
+.by= aggregation level such as day, month, 8 weeks, quarter, year
+col_name=aggregation step (n())
+across()
+,.type=c("ceiling","round","floor")
+)
 
 
-## how to create aggreation fucntion
--   Use `summarize_by_time()` to aggregate data by a time dimension 
--   Similar to group_by()+summarize() but with specialized features for time
-        
-      -   .date_var=date column
-      -   .by= "day", "week", "month", "quarter", "year", "seaon", "bimonth", "halfyear"
-      -   .type=c("ceiling","round","floor")
-      -   .week_start(1=monday, 7=sunday)
-      -   col_name=aggregation step (n=n()) or across()
-  
+```{r}
+df_daily <- df %>%
+  summarise_by_time(
+    ,.date_var = date_key
+    ,.by = "day"
+    ,rev=sum(rev)
+    ,vol=sum(sales_quantity)
+    ,mean_up=mean(unit_price)
+    ) %>% 
+  mutate(price_realization=rev/vol)
 
-## create diagnostics of summarized by time model 
+```
 
--   Creates summary table that identifies differences between time series and any gaps as well summarize basic state
 
-    -   start_date
-    -   end_date
-    -   units
-    -   timezone
-    -   distribution of timer series difference in second
+```{r}
 
-##  Clean data: how to pad time when there gaps in data series
--   use `pad_by_time()` to fill gaps with values in your time series
+test_fun <- function(df,.date_var,.value) {
+  df %>% 
+    summarise_by_time(.,.date_var={{.date_var}},rev=sum({{.value}}),.by="day")
+}
 
-    -   .date_var=data column
-    -   .by="day"
-    -   .pad_value=0
+
+test_fun(df=df,.date_var = date_key,.value=rev)
+
+```
+
+
+##  how to pad time when there gaps in data series
+- `pad_by_time()`  use to fill gaps with values in your time series
+
+pad_by_time(
+.date_var=data column
+.by="day"
+.pad_value=0
+)
+
+
 
 ## plot times series
+-   `plot_time_series()` used to plot times series in either plotly or ggplot (set interactive to FALSE for ggplot2)
+-   You can use in combination with group_by() to facet or you can use the facet_vars argument
+-   contains additional formatting and plotly arguments
+-   date_var and value are the most critical 
 
--  `plot_time_series()` to  plots time series either in plotly, ggplot, or trelliscope
--   Can add groups by passed in a grouped dataframe
--   Useful for EDA 
+group_by() %>% ## how to facet
+plot_time_series(
+.data_var
+,value
+,.color_bar=group_name # puts groups in color
+,.facet_Vars=name ## also how to facet
+,.smooth=TRUE (adds in polynominal regression)
+,.smooth_period="30 days"
+,.smooth_span= prop of data
+,.interactive=FALSE # to create ggplot object
+)
 
-    -   .data_var=date column
-    -   value = the value you want to plot
-    -   .color_bar=group_name # puts groups in color (or you can put this group_by)
-    -   .facet_vars=name # also how to facet
-    -   .smooth=TRUE (adds in polynominal regression)
-    -   .smooth_period="30 days"
-    -   .smooth_span= prop of data
-    -   .interactive=FALSE # to create ggplot object
-
-
+```{r}
+df_daily %>% 
+  plot_time_series(
+    .date_var = date_key
+    ,.value=rev
+    ,.line_color = "red"
+    ,.line_type = "dotted"
+    ,.smooth_period = 30
+    ,.smooth_color = "green"
+    ,.plotly_slider = FALSE
+    ,.color_var = "black"
+      ,.x_lab = "test"
+    ,.y_lab = "test2"
+    ,.color_lab = "blue"
+      ,.smooth_alpha = .3
+    ,.title = "Hello"
+    )
+```
 
 ## Filter time series 
+-   Use `filter_by_time()` to filter times series with greater flexibility 
+-   you can put a start date with one granularity (2013) and end date with a different (2015-02-01) or use "start" and "end" for the min and max of the dataset
+
+
 
 filter_by_time(
 .date_var=data column
-start_date=
+start_date= "2013" "2013-01" "2013-01-5" or mix and match
 end_date="end"  or date
 )
 
+```{r}
+
+df_daily %>% 
+  filter_by_time(
+    .date_var=date_key
+    ,.start_date = "2007-06"
+    ,.end_date ='end'
+  )
+```
+
 ## split into training and test set
 
-- you assign the split data to an object similiar to tidymodels
+-   Similar to tidymodels `split()` this will split a time series 
+-   you assign the split data to an object and use it with tidymodels `train()` and `test()`
+-   need to set cumulative true if you want the training set to be historical to the assessment period
 
- time_series_split(
- date_var=date colomns
- assess= "8 weeks"
- cumulaitve = TRUE  sets the previous as training, false means you need to select training set
+time_series_split(
+ date_var=date columns
+ ,assess= "8 weeks" or 200
+ ,initial = 150 # data points
+ cumulative = TRUE  # sets the previous as training, false means you need to select training set
 )
 
-then you use the tk_time_series_cv_plan()  and plot_time_Series_cv_plan() to see the training and test data 
+```{r}
+df_split <- df_daily %>% 
+  time_series_split(
+    date_var = date_key
+    ,assess = 200
+    ,initial = 150
+    ,point_forecast = FALSE
+    ,cumulative = TRUE
+  )
 
 
+
+```
+
+- you can use the `training()` or `testing()` on the split object to get the various split elements
+
+-   To view of plot of the split object you first need to pass the split object to `tk_time_series_cv_plan()`  and then use `plot_time_Series_cv_plan()` 
+
+```{r}
+
+df_split %>% 
+  tk_time_series_cv_plan() %>% 
+  plot_time_series_cv_plan(
+    .date_var = date_key
+    ,.value = rev
+    ,.interactive=FALSE
+    ,.smooth = TRUE
+    ,.title="Trainig vs. Testing set"
+  ) +
+  scale_y_continuous(labels = label_comma())
+
+```
 ## create different time series models
 
-linear_reg(
-)
+-   Linear model 
 
+linear_reg() 
+
+-   Facbeook's prophet model
 prophet_reg(
 ) %>% 
 set_engine("prophet")
 
 
+```{r}
+lm_mod <- linear_reg()
+
+prophet_mod <- modeltime::prophet_reg() %>% 
+  set_engine("prophet")
+```
+
+
 how to use?
+
+- fit models with a recipe (formula + featuere engineering) and fit to to data set (training or testing)
 
 prophet_reg %>% 
 set_engine("prophet") %>% 
 fit(predition_Value ~ data_col
-,new_data=training(splits))
+,data=training(splits))
+
+
+```{r}
+lm_fit <- lm_mod %>% 
+  fit(rev~month(date_key)+vol*mean_up,data=training(df_split))
+
+prophet_fit <-  prophet_mod %>% 
+  fit(rev~date_key+vol,data=training(df_split))
+
+```
+
 
 
 ## model time worfklow
@@ -109,20 +236,58 @@ fitted_model_1
 - applies fitted models against testing data
 - .calabration_data has the results
 - savve as calibration data
+- Appears to work simliar to worflowsets but without the preprocessing just holds the modesl
+
+```{r}
+model_tbl <- modeltime_table(
+  lm_fit,
+  prophet_fit
+)
+
+
+
+```
+
+
+
+
 model_tbl %>% 
 modeltime_calibrate(
 new_data=testing(splits)
 
 )
 
+```{r}
+calib_tbl <- model_tbl %>% 
+  modeltime_calibrate(new_data=training(df_split))
+```
+
+
 to see this in practice
 calibration_tbl %>% 
 modeltime_forecat(actual_Date=existing_tlb) %>% 
 plot_modeltime_forecast()
 
+
+```{r}
+calib_tbl %>% 
+  modeltime_forecast(new_data=testing(df_split),
+                     actual_data = df_daily,conf_interval = 0.1) %>% 
+  plot_modeltime_forecast()
+```
+
+
+
+
 ## how to see forecasting accuracy
 
 calibration_tbl %>% modeltime_accuracy
+
+```{r}
+calib_tbl %>% 
+  modeltime_accuracy()
+```
+
 
 
 plot_seasonal_diagnotistic
@@ -130,11 +295,19 @@ plot_seasonal_diagnotistic
 
 ## recipe
 
+- you provide the transformation steps here
+-   be mindful that your training and and testing datasets need the to be converted with the training steps so that when you back test or fits everythign works
+
+    -   same transformation columns
+    -   ability to transform predictions back to untransformed output
+    -   take note of the transformation vectors
+    -   you apply the steps to the dataset with prep %>% juice
+
 recipe(formula,training(splits)) %>% 
 step_timeseries_Signature() %>%
 step_normalize(index.num,_year) %>% 
 step_dummy(all_ordinal)
-prep()
+prep() %>% 
 %>% juice (applies to the training step)
 
 
@@ -173,36 +346,66 @@ plot_modeltime_forecast()
 
 ### ACF
 
--   helpful to detect lagged functions and how many lags to use
+-   helpful to detect correlations between lagged and how many lags to use in a model
 
-plot_acf_diagnoistcs(
+plot_acf_diagnostics(
 .lags="1 year", 25:100,100
 .ccf_vars=columns:columns   
-.show_ccf_vars-only=TRUe # ony cross correlations var
+.show_ccf_vars-only=TRUE # only show cross correlations var
 ,.facet_ncol=number of column
-
 )
 
+```{r}
+df_daily %>% 
+  plot_acf_diagnostics(
+    .date_var=date_key
+    ,.value=rev
+    ,.lags = 1:30
+  )
+```
 
 ## sesaonality
 
--   Helpful to see if there are certain seasonality drivers
+-   Helpful to see if there are certain seasonality drivers (eg. weekly, monthly, day of month, etc) effect
 
-plot_seaonsal_diagnotistc(
-feasture_set=c(hour,weekday)
+plot_seasonal_diagnostics(
+feature_set=c(hour,weekday)
 .geom="violin"
 )
 
+
+```{r}
+df_daily %>% 
+  plot_seasonal_diagnostics(
+    .date_var=date_key
+    ,.value = rev
+      )
+
+```
+
+
 ### anolomy
 
--   helpful to detect anomoly detection
+-   helpful to detect and plot anomalies detection
 
-plot_anomoly_diagonsitics(
-.data_var=data_col
-.alpha= .01 #change anomoly sensitivity
-.max_anolomoies =.01 # peak anomoly
+plot_anomaly_diagnostics(
+.date_var=date_col
+.value=value_col
+.alpha= .01 #change anomaly sensitivity
+.max_anolamoies =.01 # peak anomaly
 
 )
+
+
+```{r}
+df_daily %>% 
+  plot_anomaly_diagnostics(
+    .date_var = date_key
+    ,.value=rev
+    ,.alpha=.2
+  )
+```
+
 
 -   Get underlying anomaly data
 tk::anomoly_diaogasitc(
@@ -211,6 +414,17 @@ tk::anomoly_diaogasitc(
 .max_anolomoies =.01 # peak anomoly
 )
 
+
+```{r}
+df_daily %>% 
+  timetk::tk_anomaly_diagnostics(
+    .date_var = date_key
+    ,.value=rev
+    ,.alpha = .3
+  )
+```
+
+
 ## seasons decomposition
 
 -   Useful to understand how anomoliges are being detcted
@@ -218,6 +432,16 @@ plot_stl_diagostics(
 
 
 )
+
+```{r}
+df_daily %>% 
+  plot_stl_diagnostics(
+    .date_var=date_key
+    ,.value=rev
+    ,.feature_set = c("season","trend")
+  )
+```
+
 
 
 ## linear regression plot
@@ -231,6 +455,20 @@ wday(date_col)+
 month(date_col)
 show_summary= TRUE, shows summary ouptut
 )
+
+
+
+```{r}
+df_daily %>% 
+  plot_time_series_regression(
+    .date_var = date_key
+    ,.formula = rev ~ vol+week(date_key)+mean_up+timetk::lag_vec(date_key,lag=2)+timetk::lag_vec(date_key,lag=3)
+    ,.show_summary = TRUE
+    # ,show_summary=TRUE
+  )
+
+```
+
 
 ## transformation functions
 
@@ -264,26 +502,152 @@ date_col %-time% "1 day"
 
 date_col %+time% "6 weeks"
 
+## slidify
 
+-   Creates function that does a rolling application, like mean, or correlation
+-   use anonymous function ~ as function definition and then plug in other parameters
+-   apply that function to a name
+-   now you can that function as you want normally eg fun_name()
 
-slidify(
+fun_name = slidify(
 .f= function that you want ~cor(.x,.y,use="pairwise.complete.obs")
 ,period= window length
 ,align=where is the gap
 ,partial=what to do with partial
 )
 
+```{r}
+
+roll_corr_30 <- slidify(
+  .align = "center"
+  ,.f=~cor(.x,.y)
+  ,.period=30
+)
+
+df_daily %>% 
+  mutate(
+    roll_30_cor=roll_corr_30(.x=vol,.y=mean_up)
+    ,rev_change=diff_vec(rev,lag=1)
+    ,rev_change_prop=rev_change/lag_vec(rev,lag=1)
+    ,roll_30_cor_rev=roll_corr_30(.x=rev_change_prop,.y=roll_30_cor)     
+         ) %>% 
+  ggplot(aes(x=date_key,y=roll_30_cor_rev))+
+  geom_line()+
+  # geom_line(aes(y=rev_change_prop),col="red")+
+  scale_x_date(date_breaks = "1 month") 
+  plotly::ggplotly()
+
+  
+
+```
+
+
+
+
+
 slidify_vec()
 
 - similar put to a vector
 
 
+```{r}
+slidify_vec(.x = df_daily$vol,.f=~cor(.x,df_daily$mean_up),period=10,.align = "left")
+
+
+cor(df_daily$vol,df_daily$mean_up)
+
+
+prep_df <- df_daily %>% 
+  recipe(rev~.,data=.) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors()) %>% 
+  step_rm(date_key) %>% 
+
+  prep()
+  
+juice_df =prep_df%>% 
+juice()
+
+
+tidy_df <- prep_df %>% tidy()
+
+tidy_df
+
+df_daily %>% 
+  recipe(rev~.,data=.) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors()) %>% 
+  step_rm(date_key) %>% tidy()
+
+
+df %>% 
+  group_by(store_key) %>% 
+  summarise(
+    rev=sum(rev)
+    ,vol=sum(sales_quantity)
+    ,returns=sum(return_amount)
+    ,discounts=sum(discount_amount)
+    ,.groups = "drop"        
+    )  %>% 
+  mutate(across(2:5,~.x/sum(.x))) %>% 
+  recipe(store_key~.,data=.) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors(),num_comp = 3) %>% 
+  prep() %>% juice() %>% 
+  pivot_longer(-1) %>% 
+  mutate(
+    value=value
+    ,store_key=factor(store_key)
+    ) %>% 
+  filter(store_key %in% 1:10) %>% 
+  ggplot(aes(y=store_key,x=value,fill=store_key))+
+  geom_col(show.legend = FALSE)+
+  facet_wrap(~name,nrow = 1,scales = "free")
+step_pca()
+
+
+df %>% 
+  nest_by(store_key) %>% 
+  mutate(
+    data=list(data)
+    ,n=nrow(data)
+    ,rev=sum(data$rev)
+    ,vol=sum(data$sales_quantity)
+    ,lm_mod=list(lm(rev~sales_quantity,data=data))
+  ) %>% 
+  mutate(
+    rev_prop=rev/sum(rev)
+    ,cum_rev_prop=cumsum(rev_prop)
+    ,tidy_lm=list(broom::tidy(lm_mod) %>% pull(term))
+    ) %>% 
+  unnest(tidy_lm)
+
+
+```
+
+
 -   creates differences between a log
 -   typically used with cumsum for changes in a series
+-   lag is how far you want to go back
+-   diff =1 is simple lag (period over period)
+-   diff=2 is the change in your lagged values, it is the acceleration of difference
 diff_vec(
 lag
 ,difference=1 for normal 2 for acceleration
 )
+
+```{r}
+df_daily %>% 
+  mutate(vol_diff=diff_vec(vol,lag=1,diff=1)
+         ,vol_acc=diff_vec(vol,lag=1,diff=2)
+         ,lag_one=vol-lag(vol,n=1)
+         ,lag_of_lag=lag_one-lag(lag_one,1)
+           )
+
+
+343+756
+```
+
 
 - creates forier funcitons, similiar to lag
 forier_vec(
@@ -523,8 +887,13 @@ log_interval_inv_vec() to undo log
 arima_reg() %>% 
 seg_enging("auto_arima")
 
+
+-   order max tells you how many coefficients you want
+-   thee lags are the same as lm(var ~ lag(var,1)+lag(var,2))
+
+
 ```{r}
-#| eval: false
+
 
 library(tidyverse)
 library(timetk)
@@ -631,6 +1000,7 @@ daily_sales_tbl %>%
   relocate(last_col()) %>% 
   mutate(across(contains("weekly_")
                 ,standardize_vec)) %>% 
+
   
   mutate(.value=log(.value+1),
          
@@ -648,13 +1018,11 @@ daily_sales_tbl %>%
 
 
 ```{r}
-#| eval: false
-
 library(tidymodels)
 split <- daily_sales_tbl %>% 
   timetk::time_series_split(
     date_var =date
-    ,assess = 56
+    ,assess = 8
     ,cumulative = TRUE
     )
 
@@ -664,7 +1032,7 @@ test <- rsample::testing(split)
 
 
 lm_mod <- parsnip::linear_reg()
-ph_mod <- modeltime::prophet_reg()
+ph_mod <- modeltime::arima_boost()
 
 
 rec_basic <- recipes::recipe(revenue~.,data=train) %>% 
@@ -683,33 +1051,16 @@ lm_basic <- workflow() %>%
 ph_basic <-  workflow() %>% 
   add_model(ph_mod) %>% 
   add_recipe(rec_basic) %>% 
-  fit(test)
+  fit(train)
 
 modeltime::modeltime_table(
   lm_basic
   ,ph_basic
 ) %>% 
-  modeltime::modeltime_calibrate(new_data = train)
+  modeltime::modeltime_calibrate(new_data = train) %>% 
+  modeltime::modeltime_accuracy()
 
 
 
 ```
 
-
-
-
-```{r}
-library(tidyverse)
-diamonds %>% 
-  select(where(is.numeric)) %>% cor %>% as.tibble()
-apply(
-  X = .
-  ,MARGIN = 2
-  ,FUN = cor
-  )
-
-cor(cars$speed,cars$dist,method = "")
-
-```
-
-    

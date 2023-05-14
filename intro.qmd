@@ -67,3 +67,25 @@ The dirty secret of popular data science languages are they are **perishable**, 
 the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting the discipline to practice R on frequently enough basis to gain confidence in proficiency in its application.
 
 
+```{r}
+
+```
+
+```{r}
+#| eval: false
+=C6*C7
+```
+use an not evaluated commdline to replicate the formula bar and then use either a picture or gt::gt table()
+
+
+```{r}
+
+x=c(rep(10,40),41:100)
+
+plot(x,
+     type = "h",
+     col = "blue"
+       ,xlab="test"
+     )
+```
+
