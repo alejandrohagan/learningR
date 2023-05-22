@@ -757,5 +757,9 @@ kmeans_result_tbl %>%
 ```
 
 
+## assert that
+assertthat packageschecks if column names are in a dataframe
+
+
 ## combine umeans and kmeans
 

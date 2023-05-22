@@ -64,28 +64,13 @@ There will be better ways to do things that we are teaching you however, they of
 
 The dirty secret of popular data science languages are they are **perishable**, that is to say if you don't use them frequently you will forget the techniques, syntax and common patterns to solve your issues.
 
-the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting the discipline to practice R on frequently enough basis to gain confidence in proficiency in its application.
-
-
+the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting
 ```{r}
-
+R.home()
 ```
 
-```{r}
-#| eval: false
-=C6*C7
-```
-use an not evaluated commdline to replicate the formula bar and then use either a picture or gt::gt table()
 
 
-```{r}
 
-x=c(rep(10,40),41:100)
 
-plot(x,
-     type = "h",
-     col = "blue"
-       ,xlab="test"
-     )
-```
 

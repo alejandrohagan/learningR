@@ -22,6 +22,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -130,10 +193,13 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#index" id="toc-index" class="nav-link active" data-scroll-target="#index">Index</a>
   <ul class="collapse">
-  <li><a href="#excel-to-r-a-survivors-guide-for-the-corporate-environment" id="toc-excel-to-r-a-survivors-guide-for-the-corporate-environment" class="nav-link" data-scroll-target="#excel-to-r-a-survivors-guide-for-the-corporate-environment">Excel to R: A Survivor’s Guide for the Corporate Environment</a>
-  <ul class="collapse">
-  <li><a href="#what-does-this-do" id="toc-what-does-this-do" class="nav-link" data-scroll-target="#what-does-this-do">what does this do</a></li>
-  </ul></li>
+  <li><a href="#excel-to-r-a-survivors-guide-for-the-corporate-environment" id="toc-excel-to-r-a-survivors-guide-for-the-corporate-environment" class="nav-link" data-scroll-target="#excel-to-r-a-survivors-guide-for-the-corporate-environment">Excel to R: A Survivor’s Guide for the Corporate Environment</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#set-up-configuration" id="toc-set-up-configuration" class="nav-link" data-scroll-target="#set-up-configuration">Set Up &amp; Configuration</a></li>
+  <li><a href="#data-in-a-table-format" id="toc-data-in-a-table-format" class="nav-link" data-scroll-target="#data-in-a-table-format">data in a table format</a></li>
+  <li><a href="#augmenting-and-creating-calculation" id="toc-augmenting-and-creating-calculation" class="nav-link" data-scroll-target="#augmenting-and-creating-calculation">Augmenting and creating calculation</a></li>
+  <li><a href="#grouping-and-summzaring" id="toc-grouping-and-summzaring" class="nav-link" data-scroll-target="#grouping-and-summzaring">grouping and summzaring</a></li>
+  <li><a href="#table" id="toc-table" class="nav-link" data-scroll-target="#table">Table</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -174,17 +240,1165 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="unnumbered">Index</h1>
 <section id="excel-to-r-a-survivors-guide-for-the-corporate-environment" class="level2">
 <h2 class="anchored" data-anchor-id="excel-to-r-a-survivors-guide-for-the-corporate-environment">Excel to R: A Survivor’s Guide for the Corporate Environment</h2>
-<section id="what-does-this-do" class="level3">
-<h3 class="anchored" data-anchor-id="what-does-this-do">what does this do</h3>
-<section id="what-does-this-do-1" class="level4">
-<h4 class="anchored" data-anchor-id="what-does-this-do-1">what does this do?</h4>
-<section id="what-does-this-do-2" class="level5">
-<h5 class="anchored" data-anchor-id="what-does-this-do-2">what does this do?</h5>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+</section>
+<section id="set-up-configuration" class="level2">
+<h2 class="anchored" data-anchor-id="set-up-configuration">Set Up &amp; Configuration</h2>
+</section>
+<section id="data-in-a-table-format" class="level2">
+<h2 class="anchored" data-anchor-id="data-in-a-table-format">data in a table format</h2>
+</section>
+<section id="augmenting-and-creating-calculation" class="level2">
+<h2 class="anchored" data-anchor-id="augmenting-and-creating-calculation">Augmenting and creating calculation</h2>
+</section>
+<section id="grouping-and-summzaring" class="level2">
+<h2 class="anchored" data-anchor-id="grouping-and-summzaring">grouping and summzaring</h2>
+</section>
+<section id="table" class="level2">
+<h2 class="anchored" data-anchor-id="table">Table</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>readODS<span class="sc">::</span><span class="fu">read_ods</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"learningR_framework.ods"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  ,<span class="at">skip =</span> <span class="dv">1</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(chapter<span class="sc">:</span>comment) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(chapter,<span class="at">.direction =</span> <span class="st">"down"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">fmt_missing</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_text=</span><span class="st">"-"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Since gt v0.6.0 the `fmt_missing()` function is deprecated and will soon be
+removed.
+• Use the `sub_missing()` function instead.
+This warning is displayed once every 8 hours.</code></pre>
+</div>
+<div class="cell-output-display">
+
+<div id="brjwyfeldz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#brjwyfeldz table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#brjwyfeldz thead, #brjwyfeldz tbody, #brjwyfeldz tfoot, #brjwyfeldz tr, #brjwyfeldz td, #brjwyfeldz th {
+  border-style: none;
+}
+
+#brjwyfeldz p {
+  margin: 0;
+  padding: 0;
+}
+
+#brjwyfeldz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#brjwyfeldz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#brjwyfeldz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#brjwyfeldz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#brjwyfeldz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#brjwyfeldz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#brjwyfeldz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#brjwyfeldz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#brjwyfeldz .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#brjwyfeldz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#brjwyfeldz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#brjwyfeldz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#brjwyfeldz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#brjwyfeldz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#brjwyfeldz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#brjwyfeldz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#brjwyfeldz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#brjwyfeldz .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#brjwyfeldz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#brjwyfeldz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#brjwyfeldz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#brjwyfeldz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#brjwyfeldz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#brjwyfeldz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#brjwyfeldz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#brjwyfeldz .gt_left {
+  text-align: left;
+}
+
+#brjwyfeldz .gt_center {
+  text-align: center;
+}
+
+#brjwyfeldz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#brjwyfeldz .gt_font_normal {
+  font-weight: normal;
+}
+
+#brjwyfeldz .gt_font_bold {
+  font-weight: bold;
+}
+
+#brjwyfeldz .gt_font_italic {
+  font-style: italic;
+}
+
+#brjwyfeldz .gt_super {
+  font-size: 65%;
+}
+
+#brjwyfeldz .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#brjwyfeldz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#brjwyfeldz .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#brjwyfeldz .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#brjwyfeldz .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#brjwyfeldz .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#brjwyfeldz .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="chapter">chapter</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="concept">concept</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="excel">excel</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="r">r</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="comment">comment</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">IDE&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Ribbon vs. main vs. power pivot vs. power query&nbsp;
+Customize ribbon&nbsp;
+&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Rmarkdown&nbsp;
+Code chunks vs. text&nbsp;
+kniting&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">Named objects; how to create objects, label and reference, and add columns or rows to the object&nbsp;
+How to create series from existing functions including, numbers, dates and repeating strings&nbsp;
+&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">-</td>
+<td headers="r" class="gt_row gt_left">Tibbles&nbsp;
+Lists&nbsp;
+Vectors&nbsp;
+dataeditR&nbsp;
+Arrange()&nbsp;
+Generating data&nbsp;
+-numbers&nbsp;
+-letters&nbsp;
+-dates&nbsp;
+-rep()&nbsp;
+-seq()&nbsp;
+-mutate&nbsp;
+&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">Emphasis on tabular data&nbsp;
+The need for quality data&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Named Cells</td>
+<td headers="r" class="gt_row gt_left">objects, lists and vectors</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Named Tables</td>
+<td headers="r" class="gt_row gt_left">tibbles</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Adding Columns to Table</td>
+<td headers="r" class="gt_row gt_left">mutate</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Adding rows to Table</td>
+<td headers="r" class="gt_row gt_left">bind_rows / bind_columns</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Referencing Named Objects</td>
+<td headers="r" class="gt_row gt_left">ls()</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Repeat last actions</td>
+<td headers="r" class="gt_row gt_left">??</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Tab References</td>
+<td headers="r" class="gt_row gt_left">??</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">edit named objects</td>
+<td headers="r" class="gt_row gt_left">??</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">creating vectors</td>
+<td headers="r" class="gt_row gt_left">vectors</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">fill series tips</td>
+<td headers="r" class="gt_row gt_left">tidyr::fill</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">existing data</td>
+<td headers="r" class="gt_row gt_left">??</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">create new series of numbers</td>
+<td headers="r" class="gt_row gt_left">seq()</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">create new series of dates</td>
+<td headers="r" class="gt_row gt_left">seq.Date()</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">creates new series of characters</td>
+<td headers="r" class="gt_row gt_left">letters</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">flash fill tips</td>
+<td headers="r" class="gt_row gt_left">??</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">adding/subtracting/dividing/ multiplying columns</td>
+<td headers="r" class="gt_row gt_left">mutate</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">one formula works against all rows in a column</td>
+<td headers="r" class="gt_row gt_left">group_by()?</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">rowwise equivalent</td>
+<td headers="r" class="gt_row gt_left">rowwise()</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">colwise equivalent</td>
+<td headers="r" class="gt_row gt_left">colwise()?</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">mean</td>
+<td headers="r" class="gt_row gt_left">mean</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">meidan</td>
+<td headers="r" class="gt_row gt_left">median</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">sum</td>
+<td headers="r" class="gt_row gt_left">sum</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">count</td>
+<td headers="r" class="gt_row gt_left">n</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">aggregate</td>
+<td headers="r" class="gt_row gt_left">-</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">error handling</td>
+<td headers="r" class="gt_row gt_left">-</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">Iferror()&nbsp;</td>
+<td headers="r" class="gt_row gt_left">-</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">NA vs. NULL vs. ref</td>
+<td headers="r" class="gt_row gt_left">-</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">1</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">array</td>
+<td headers="r" class="gt_row gt_left">-</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Visualization Exercise 1&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Basic Table&nbsp;
+Minimalist formatting&nbsp;
+Borders&nbsp;
+Alternatives to tables&nbsp;
+Visualize/ emphasize word&nbsp;
+Conditional formatting of values&nbsp;
+Picking existing themes/ pallets&nbsp;
+Picking custom colors&nbsp;
+Bold / italics&nbsp;
+Column format width / wrap&nbsp;
+Perhaps practice making executive slides&nbsp;
+Teaching how to present information in effective ways&nbsp;
+sort&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Gt()&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Reading data&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Have ten excel files, how do I read this information&nbsp;
+In truth - with base excel no good ways only terrible ways&nbsp;
+Can copy &amp;paste but that is manual and can be full&nbsp; of errors (columns out of line, paste over rows,etc) and limited to 1M rows&nbsp;
+Typically people build a summarization report and then link to various reports that will update each month&nbsp;
+Linked excel sheets (I will show you only because I know this is a reality but strongly recommend against this)&nbsp;
+Strongly suggest to use power query and the below pattern&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Readr&nbsp;
+Readxl&nbsp;
+rio&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Column types / data types&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Why format columns are important&nbsp;
+More than just visual, it enables calculations&nbsp;
+Format Numeric, dates, strings, factor equivalent (weekdays)&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Forecat package&nbsp;
+Fct_lump&nbsp;
+Fct_reorder&nbsp;
+Fct_other&nbsp;
+Fct_relevel&nbsp;
+Fct_recode&nbsp;
+Cut&nbsp;
+&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">Excel gives a lot of flexibility which might seem like a great thing (eg. You don't get show stopping errors) but it is dangerous. If you have data entry errors or bad data(which, I promise, you do) you will miss extractions (eg summing up text)&nbsp;
+Example of summing texts&nbsp;
+Because of this most people don't pay particular attention to the text type, they usually associate type with formatting which is related but not the same&nbsp;
+Again this saves you time as you can just enter any old thing and it "works" however whatever time you saved in this,I promise you loose in larger datesets when you have errors or performance issues&nbsp;
+This is why we need to learn about data types&nbsp; and why coding languags are so particular about data types - many will just not allow you to proceed further until you establish this. This is usually a barrier and source of frustration for those learning&nbsp;
+Exception is factors where the concept sort of exists in excel, try sorting the table and imagine you want to sort it by a custom order (not alphabetical)&nbsp;
+Here you can create your own levels by using the list function, this enables a custom sort&nbsp;
+Here is where you will already start to see some performance differences between excel in R when dealing with factors&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;Visualization Exercise 2&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Bar chart&nbsp;
+Dynamic reference&nbsp;
+Stacked&nbsp;
+Fill&nbsp;
+Dodge&nbsp;
+Line chart&nbsp;
+X,y chart&nbsp;
+Preset themes&nbsp;
+customization&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Geom_col()&nbsp;
+Geom_line()&nbsp;
+Aes()&nbsp;
+Color()&nbsp;
+Fill()&nbsp;
+Shape()&nbsp;
+Linetype()&nbsp;
+Label_wrap&nbsp;
+Position()&nbsp;
+Theme_sets()&nbsp;
+Theme()&nbsp;
+Xlabs, ylabs, title, subtitle, caption&nbsp;
+&nbsp;
+&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Reinforce learning&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Factors&nbsp;
+Rbloggers entry on factors&nbsp;
+Skills validationL&nbsp;
+Exercise x,y,z in different books&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Sort, filter, remove duplicates, relevel&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Number filter&nbsp;
+text filters&nbsp;
+Other filters: Color filters&nbsp;
+Cell filter&nbsp;
+Conditional filter&nbsp;
+Sort &amp; relevel&nbsp;
+Dates&nbsp;
+Numbers&nbsp;
+Text&nbsp;
+A-z&nbsp;
+custom lists&nbsp;
+Field slicer&nbsp;
+Timeline slicer&nbsp;
+Match()&nbsp;
+Find()&nbsp;
+&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Select&nbsp;
+Filter&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">More advanced aggregations running totals,&nbsp;
+Ranks,&nbsp;
+&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Now we start with dealing with grouping or categorization of our data by attributes that aren't just in labels&nbsp;
+This typically becomes necessary as we want to establish trends and insights into these group, some basic yet popular patterns are below&nbsp;
+Bigger issues when dealing with data is understanding changes, most analysis concepts, are centered around a establish a center point and understanding each points distance from that point&nbsp;
+Sometimes this is called variance analysis which can be within a group or how something has change dover time or an outlier&nbsp;
+Here are some useful techniques or formulas to help categorize disperse data&nbsp;
+Z score/ standardize&nbsp;
+Log()&nbsp;
+Running totals&nbsp;
+Percent of total&nbsp;
+ABC analysis&nbsp;
+%percentile&nbsp;
+cohort&nbsp;
+rank&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Group_by / summarize functions/conditional aggregations/advanced references&nbsp;
+&nbsp;
+Basic build out map&nbsp;
+Group_by vs. rowwise&nbsp;
+&nbsp;
+Across/if_any/if_all&nbsp;
+Rowwise&nbsp;
+Where&nbsp;
+Current_group&nbsp;
+&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Index()&nbsp;
+If()&nbsp;
+_ifs()&nbsp;
+Pivot tables&nbsp;
+Pivottablereferences&nbsp;
+&nbsp;
+&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;
+Ifelse&nbsp;
+case_when&nbsp;
+_join&nbsp;
+Group_by&nbsp;
+Summarize&nbsp;
+Rowwise&nbsp;
+Columnwise&nbsp;
+Count&nbsp;
+Base R techniques too&nbsp;
+Subset dataframes sum(df$col==x)&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Error / NAs / NULLs&nbsp;&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Iferror()&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Is.na()&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Time intelligence functions&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Dates&nbsp;
+One of the most frustating aspects of excel is that it turns your dates into numbers or xxxx&nbsp;
+Data formula&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Dates in general are a confusing concept even though we want it to be straight fowr&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">Dates in general are&nbsp; confusing concept even though we want it to be straight forward. Why because they are irregular and arbitrary. Different months have different days, different years have different days, and each year has parial days in it. We have time zones. So that opening is a bit of primer that working with dats in general can be frustrating no mater what tool or package you want to use&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Month over month&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Group_by&nbsp;
+Summarize&nbsp;
+Lead_lag&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Group_by&nbsp;
+Summarize&nbsp;
+Lead / lag&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Year over year&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">…&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Week over week&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">…&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Non_standard_calendar&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Have no idea how to do this, like most things can be done, just a done of work - easier to use R&nbsp;
+&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Create calendar&nbsp;
+Map weeks to normal weeks&nbsp;
+Group_by&nbsp;
+Use lead/lag&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Cummin,cummax,cummean&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Rolling averages&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Month to date&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Year to date ,&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Quarter to date&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Rates for days vs. aboslute amounts&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Filter dates&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Merging / joining /conditional referencing&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">_ifs()&nbsp;
+Vlookup&nbsp;
+Hlookup&nbsp;
+Index(match)&nbsp;
+Array formulas&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Filter, groupby,summarize?&nbsp;
+Left_join&nbsp;
+Full_join&nbsp;
+Rightjoin&nbsp;
+Anti_join&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Categorizing / grouping techniques&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Match()&nbsp;
+Find()&nbsp;
+Length()&nbsp;
+Right()&nbsp;
+Left()&nbsp;
+Mid()&nbsp;
+pivot table: group&nbsp;
+Link to other excel models&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Group_by&nbsp;
+Regex&nbsp;
+str_detect&nbsp;
+Fct_lump&nbsp;
+Fct_other&nbsp;
+Relevel&nbsp;
+recode&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Visualizing data&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Bar graphs&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Extract data&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Power Query&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Transform data&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Power Query&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Load data&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">Power Query&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Colors including custom colors&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">Names(colors)&lt;- factor_names&nbsp;
+&nbsp;
+Popular color packages&nbsp;
+Discrete vs. continous&nbsp;
+Manual assignment&nbsp;
+Create your own!&nbsp;
+&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Factor analysis&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Budge plan vs. plan, actuals for actuals&nbsp;
+Allocations&nbsp;
+Validation&nbsp;
+Rates vs. absolute amounts&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Tidy selection techniques&nbsp;
+Selection based on names&nbsp;
+Selection based on column criteria&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Concatenate based on data outputs&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Generate sample data&nbsp;
+Index&nbsp;
+Dates&nbsp;
+Random figures&nbsp;
+Random figures from a set or custom distribution&nbsp;
+Simulations&nbsp;
+&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Contins()==match()&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Enquo()==indirect()&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Readr&nbsp;
+Col_spec&nbsp;
+Cols()&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">map&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">OTHER&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">R in powerBi&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">R markdown&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">ETL&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">csv&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">excel&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">SQL/snowflake&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">reporting&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">quarto</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">automation&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">Bash&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">&nbsp;</td>
+<td headers="excel" class="gt_row gt_left">&nbsp;</td>
+<td headers="r" class="gt_row gt_left">&nbsp;</td>
+<td headers="comment" class="gt_row gt_left">&nbsp;</td></tr>
+    <tr><td headers="chapter" class="gt_row gt_left">&nbsp;</td>
+<td headers="concept" class="gt_row gt_left">-</td>
+<td headers="excel" class="gt_row gt_left">-</td>
+<td headers="r" class="gt_row gt_left">-</td>
+<td headers="comment" class="gt_row gt_left">-</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
 
 
-</section>
-</section>
-</section>
 </section>
 </section>
 

@@ -3,10 +3,16 @@ title: "time series"
 ---
 
 ```{r}
+#| echo: false
+#| output: false
+#| label: etl
+
 library(tidyverse)
 library(timetk)
 library(modeltime)
 library(tidymodels)
+library(sparklyr)
+
 pkgload::load_all("/home/hagan/R/fpaR")
 
 df <- fpaR::contoso_fact_sales %>% 
@@ -16,6 +22,22 @@ df <- fpaR::contoso_fact_sales %>%
     ,rev=sales_quantity*unit_price
     )
 ```
+
+
+
+```{r}
+#| echo: false
+#| label: create-spark
+#| eval: TRUE
+  
+sc <- spark_connect(master ="local")
+
+spk_df <- sparklyr::copy_to(sc,df = df,name = "df_spark")
+```
+
+
+
+
 # Simplified framework
 
 1. summarize by date column
@@ -30,92 +52,88 @@ df <- fpaR::contoso_fact_sales %>%
 10. fit models
 
 
-# how to create aggreation fucntion
+# Introduction to key functions
+
+## how to summarize a dataframe by a date dimension
 
 
 -   `summarize_by_time()` works similar to group_by()+summarize
+    
+    -   Easy way to aggregate dimenions by a time signature (daily, weekly, etc)
+    -   You can use across and any other verbs to help with the aggregation
+    -   Date column must be in date format
 
-timetk::summarize_by_time(
-.date_var=date column
-.by= aggregation level such as day, month, 8 weeks, quarter, year
-col_name=aggregation step (n())
-across()
-,.type=c("ceiling","round","floor")
-)
 
 
 ```{r}
+
 df_daily <- df %>%
   summarise_by_time(
-    ,.date_var = date_key
-    ,.by = "day"
-    ,rev=sum(rev)
+    ,.date_var = date_key # date column
+    ,.by = "day" # aggregation level such as day, month 8 weeks, quarter or year
+    ,rev=sum(rev) # aggregation columns can you across*()
     ,vol=sum(sales_quantity)
-    ,mean_up=mean(unit_price)
+    ,mean_unit_price=mean(unit_price)
+    #,.type = ("ceiling","round","floor") optional rounding column
     ) %>% 
   mutate(price_realization=rev/vol)
 
 ```
 
 
+
+
 ```{r}
-
-test_fun <- function(df,.date_var,.value) {
-  df %>% 
-    summarise_by_time(.,.date_var={{.date_var}},rev=sum({{.value}}),.by="day")
-}
-
-
-test_fun(df=df,.date_var = date_key,.value=rev)
 
 ```
 
 
 ##  how to pad time when there gaps in data series
 - `pad_by_time()`  use to fill gaps with values in your time series
+-   Useful when you have gaps in data and need complete time series signatures
 
+```{r}
+#| eval: false
+df %>% 
+  group_by(store_key) %>% 
 pad_by_time(
-.date_var=data column
-.by="day"
-.pad_value=0
-)
+    .date_var=date_key
+    ,.pad_value = 0
+    ,.by = "day"
+    ,.fill_na_direction = "down"
+    ,.start_date = ymd("2007-01-01")
+  )
+
+```
 
 
 
-## plot times series
--   `plot_time_series()` used to plot times series in either plotly or ggplot (set interactive to FALSE for ggplot2)
--   You can use in combination with group_by() to facet or you can use the facet_vars argument
+## How to visualize time series
+-   `plot_time_series()` used to plot times series in either plotly (default), ggplot (set interactive to FALSE) or trelliscope (set .trelleiscope=FALSE)
+-   If you passed a grouped dataframe you will get faceted polots or alternative you can use the facet_vars argument
 -   contains additional formatting and plotly arguments
 -   date_var and value are the most critical 
-
-group_by() %>% ## how to facet
-plot_time_series(
-.data_var
-,value
-,.color_bar=group_name # puts groups in color
-,.facet_Vars=name ## also how to facet
-,.smooth=TRUE (adds in polynominal regression)
-,.smooth_period="30 days"
-,.smooth_span= prop of data
-,.interactive=FALSE # to create ggplot object
-)
 
 ```{r}
 df_daily %>% 
   plot_time_series(
     .date_var = date_key
-    ,.value=rev
-    ,.line_color = "red"
+    ,.value=rev # the column to plot
+    ,.line_color = "red" 
     ,.line_type = "dotted"
     ,.smooth_period = 30
+    ,.smooth_span = .2 # percentage of data
     ,.smooth_color = "green"
-    ,.plotly_slider = FALSE
+    ,.trelliscope = FALSE
+    ,.plotly_slider = FALSE # add in a slider
     ,.color_var = "black"
-      ,.x_lab = "test"
-    ,.y_lab = "test2"
+      ,.x_lab = "X aixs title"
+    ,.y_lab = "Y axies title"
     ,.color_lab = "blue"
       ,.smooth_alpha = .3
-    ,.title = "Hello"
+    ,.title = "Thi is title to the plot"
+    ,.interactive = TRUE 
+#    ,.facet_vars = column_name optional to facet
     )
 ```
 
@@ -123,21 +141,14 @@ df_daily %>%
 -   Use `filter_by_time()` to filter times series with greater flexibility 
 -   you can put a start date with one granularity (2013) and end date with a different (2015-02-01) or use "start" and "end" for the min and max of the dataset
 
-
-
-filter_by_time(
-.date_var=data column
-start_date= "2013" "2013-01" "2013-01-5" or mix and match
-end_date="end"  or date
-)
-
 ```{r}
-
+#| eval: false
+#| label: "filter-ts"
 df_daily %>% 
   filter_by_time(
     .date_var=date_key
-    ,.start_date = "2007-06"
-    ,.end_date ='end'
+    ,.start_date = "2007-06" # or can put 2007 or 2007-12-05
+    ,.end_date ='end' # can use this or specific date
   )
 ```
 
@@ -146,22 +157,18 @@ df_daily %>%
 -   Similar to tidymodels `split()` this will split a time series 
 -   you assign the split data to an object and use it with tidymodels `train()` and `test()`
 -   need to set cumulative true if you want the training set to be historical to the assessment period
+-   You need to clarify where you want the training data to start (eg. at the beginning or end with the aessess and initial arguments as well cumulative)
+-   Use the `tk_time_series_cv_plan()` and  `plot_time_series_cv_plan()` to show the series
 
-time_series_split(
- date_var=date columns
- ,assess= "8 weeks" or 200
- ,initial = 150 # data points
- cumulative = TRUE  # sets the previous as training, false means you need to select training set
-)
 
 ```{r}
 df_split <- df_daily %>% 
   time_series_split(
     date_var = date_key
-    ,assess = 200
-    ,initial = 150
+    ,assess = 100 # or "8 weeks" -- this is the testing points straight on the end (when cumulative is set to FALSE)
+    # ,initial = 300 # This is the training points working back from the testing (when cumulative is set to FALSE) 
     ,point_forecast = FALSE
-    ,cumulative = TRUE
+    ,cumulative = TRUE # when set to TRUE you just need the assess
   )
 
 
@@ -180,45 +187,40 @@ df_split %>%
     .date_var = date_key
     ,.value = rev
     ,.interactive=FALSE
-    ,.smooth = TRUE
+    # ,.smooth = TRUE
     ,.title="Trainig vs. Testing set"
   ) +
-  scale_y_continuous(labels = label_comma())
+  scale_y_continuous(labels = label_comma(scale=1/1e6,suffix = "M"),limits = c(0,4e6))
 
 ```
 ## create different time series models
 
 -   Linear model 
 
-linear_reg() 
-
--   Facbeook's prophet model
-prophet_reg(
-) %>% 
-set_engine("prophet")
-
-
 ```{r}
-lm_mod <- linear_reg()
+lm_mod <- linear_reg() 
 
-prophet_mod <- modeltime::prophet_reg() %>% 
-  set_engine("prophet")
 ```
 
+-   Facbeook's prophet model
 
-how to use?
+```{r}
+prophet_mod <- prophet_reg() %>% 
+set_engine("prophet")
 
-- fit models with a recipe (formula + featuere engineering) and fit to to data set (training or testing)
+```
 
-prophet_reg %>% 
-set_engine("prophet") %>% 
-fit(predition_Value ~ data_col
-,data=training(splits))
+### How to use the training set?
+
+-   Fit models with a recipe (formula + feature engineering) and fit to to data set (training or testing)
+-   Similar to tidy models framework
+-   Set data to be training() version of the split
+
 
 
 ```{r}
 lm_fit <- lm_mod %>% 
-  fit(rev~month(date_key)+vol*mean_up,data=training(df_split))
+  fit(rev~month(date_key)+vol*mean_unit_price,data=training(df_split))
 
 prophet_fit <-  prophet_mod %>% 
   fit(rev~date_key+vol,data=training(df_split))
@@ -228,15 +230,9 @@ prophet_fit <-  prophet_mod %>%
 
 
 ## model time worfklow
-creates table to hold various fitted models
-model_time_table(
-fitted_model_1
-)
 
-- applies fitted models against testing data
-- .calabration_data has the results
-- savve as calibration data
-- Appears to work simliar to worflowsets but without the preprocessing just holds the modesl
+-   As you create models you put them together in a table with the `modeltime_table()`
+
 
 ```{r}
 model_tbl <- modeltime_table(
@@ -248,31 +244,31 @@ model_tbl <- modeltime_table(
 
 ```
 
-
-
-
-model_tbl %>% 
-modeltime_calibrate(
-new_data=testing(splits)
-
-)
+-   Use this with `modeltime_calibrate()` to calibrate the model against testing dataset
+-   Set the new_data argument to be the `testing()` argument
 
 ```{r}
 calib_tbl <- model_tbl %>% 
-  modeltime_calibrate(new_data=training(df_split))
+  modeltime_calibrate(
+    new_data=testing(df_split)
+    )
 ```
 
+### how to see model results
 
-to see this in practice
-calibration_tbl %>% 
-modeltime_forecat(actual_Date=existing_tlb) %>% 
-plot_modeltime_forecast()
+-   Use the `modetime_forecast()` to see the tables of forecast results and actual date with confidence interfaces
+Need to have actual data
+-   Need to have testing data
+-   Need to transform the xxx data to match the pre-processing steps
 
 
 ```{r}
 calib_tbl %>% 
-  modeltime_forecast(new_data=testing(df_split),
-                     actual_data = df_daily,conf_interval = 0.1) %>% 
+  modeltime_forecast(
+    new_data=testing(df_split)
+    ,actual_data = df_daily
+    ,conf_interval = .2 # as forecasting error
+    ) %>% 
   plot_modeltime_forecast()
 ```
 
@@ -281,34 +277,88 @@ calib_tbl %>%
 
 ## how to see forecasting accuracy
 
-calibration_tbl %>% modeltime_accuracy
+-   Pass the calibrated tbl to `modeltime_accuracy()` to get the common forecasting erorrs
 
 ```{r}
 calib_tbl %>% 
   modeltime_accuracy()
 ```
 
+## Feature Engineering
+
+### plot seasonal diagnostics
+
+-   Helpful to log plotting variable if there are high outliers
+-   Use the `plot_seasonal_diagnostics()` to see diagnostics
 
 
-plot_seasonal_diagnotistic
+```{r}
 
 
-## recipe
+df_store_daily <- df %>%
+  group_by(store_key) %>% 
+  pad_by_time(
+    .date_var=date_key
+    # ,.pad_value = 0
+    ,.by = "day"
+    # ,.fill_na_direction =  c("updown")
+    ,.start_date = ymd("2007-01-01")
+    ,.end_date = ymd("2008-09-30")
+  ) %>% 
+  timetk::summarise_by_time(
+    .date_var=date_key
+    ,.by = "day"
+    ,rev=sum(rev)
+  ) %>% 
+  ungroup() 
 
-- you provide the transformation steps here
+
+seasonality_plots <- df_store_daily %>% 
+  nest_by(store_key) %>% 
+  mutate(
+    data=list(data)
+    ,plots=
+      list(
+      plot_seasonal_diagnostics(
+        .date_var = date_key
+        ,.value=rev
+        ,.feature_set = c("week")
+        ,.data=data
+        ,.interactive = FALSE
+        )
+      
+      )
+    
+  )
+  
+
+
+```
+
+
+## How to create formual recipe and pre-processing steps
+-   you provide the transformation steps here
 -   be mindful that your training and and testing datasets need the to be converted with the training steps so that when you back test or fits everythign works
+-   same transformation columns
+-   ability to transform predictions back to untransformed output
+-   take note of the transformation vectors
+-   you apply the steps to the dataset with prep %>% juice
 
-    -   same transformation columns
-    -   ability to transform predictions back to untransformed output
-    -   take note of the transformation vectors
-    -   you apply the steps to the dataset with prep %>% juice
 
+
+```{r}
+#| eval: false
 recipe(formula,training(splits)) %>% 
 step_timeseries_Signature() %>%
 step_normalize(index.num,_year) %>% 
 step_dummy(all_ordinal)
 prep() %>% 
 %>% juice (applies to the training step)
+
+
+
+```
+
 
 
 ## create model element
@@ -340,7 +390,7 @@ plot_modeltime_forecast()
 
 )
 
-# overview of functions
+# overview of EDA 
 
 ## diagnostics functions
 
@@ -551,6 +601,7 @@ slidify_vec()
 
 
 ```{r}
+#| eval: false
 slidify_vec(.x = df_daily$vol,.f=~cor(.x,df_daily$mean_up),period=10,.align = "left")
 
 
@@ -893,7 +944,7 @@ seg_enging("auto_arima")
 
 
 ```{r}
-
+#| eval: false
 
 library(tidyverse)
 library(timetk)
@@ -1018,6 +1069,7 @@ daily_sales_tbl %>%
 
 
 ```{r}
+#| eval: false
 library(tidymodels)
 split <- daily_sales_tbl %>% 
   timetk::time_series_split(

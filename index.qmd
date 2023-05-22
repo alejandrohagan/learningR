@@ -2,8 +2,48 @@
 
 ## Excel to R: A Survivor's Guide for the Corporate Environment
 
-### what does this do
+## Introduction
 
-#### what does this do?
+## Set Up & Configuration
 
-##### what does this do?
+## data in a table format
+
+## Augmenting and creating calculation
+
+## grouping and summzaring (super power 1)
+
+## filter, duplicates, advanced aggregations
+
+## time intelligence functions
+
+
+## Merge and joins (super power 2)
+
+
+## pivot and unpivot (super power 3)
+
+
+
+## columnwise vs. rowwise aggregation (super power 4)
+
+
+
+```{r}
+#| echo: false
+#| label: fig-toc
+
+
+readODS::read_ods(
+  
+  here::here("learningR_framework.ods")
+  ,skip = 1
+) %>% 
+  janitor::clean_names() %>% 
+  select(chapter:comment) %>% 
+  fill(chapter,.direction = "down") %>% 
+  gt::gt() %>% 
+  gt::fmt_missing(
+    missing_text="-"
+  )
+```
+

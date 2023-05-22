@@ -1,0 +1,64 @@
+---
+title: "database"
+---
+
+
+## Resource
+https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html#
+https://r4ds.hadley.nz/databases.html
+
+
+# How to connect
+
+-   First need to configure your DSN so that you can be authenticated
+-   If done correctly you can then use DBI package to connect to the database of choice
+
+        -   create a connection string with DBI::dbConnect()
+            -   driver_name such as ODBC::ODBC()
+            -   DSN name
+        -   Enter SQL query with `sql()`
+        -   Use connection string and sql query together to create a lazy table with `tbl()`
+
+con <- DBI::dbConnect(ODBC::ODBC(),dsn="name")
+
+
+
+
+# special example to pass one db object to another
+
+```{r}
+#| echo:fenced
+#| label: db-connect example
+#| eval: false
+
+library(DBI)
+library(tidyverse)
+
+## create connection string locally
+con_db <- DBI::dbConnect(duckdb::duckdb())
+
+# loads data into your connection either in memory
+dbWriteTable(con_db,"diamonds_db",ggplot2::diamonds)
+
+#create new table to the connection
+
+dbExecute(con_db, "CREATE TABLE duckdb_table (col1 INT, col2 STRING)")
+
+#preview what is in your connection
+
+dbListTables(con_db)
+
+
+
+tbl(con_db
+    ,"diamonds_db"
+    )
+
+
+tbl(con_db
+    ,"duckdb_table"
+    )
+
+
+```
+
