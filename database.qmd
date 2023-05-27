@@ -18,9 +18,27 @@ https://r4ds.hadley.nz/databases.html
             -   DSN name
         -   Enter SQL query with `sql()`
         -   Use connection string and sql query together to create a lazy table with `tbl()`
+-   From there you can use dplyr back end queries to see everything
+-   You can see what query it will generate with `show_query()`
+-   You can finallly execute the query with `collect()`
+
+-   if you already have something as a dataframe you can upload it to a database with DBI::dbWriteTable(con,"tbl_name",df) which will write the table to the connection with the name you gave
+
+    -   dbWriteTable() can write a r dataframe or you can use sql to create a virtual table if you want
+    
+    
+
+-   dbListTables(con) can be used to see what virtual tables are in the connection
+
+- dbReadTable(con,"tbl_name") read the virtual table as a dataframe
+
+- in_schema("database","tbl") is a way to navigate a scehma in tbl(
 
 con <- DBI::dbConnect(ODBC::ODBC(),dsn="name")
 
+```{r}
+
+```
 
 
 
@@ -50,7 +68,7 @@ dbListTables(con_db)
 
 
 
-tbl(con_db
+diamonds_db <- tbl(con_db
     ,"diamonds_db"
     )
 
@@ -59,6 +77,101 @@ tbl(con_db
     ,"duckdb_table"
     )
 
+```
+
+
+
+
+
+
+```{r}
+diamonds_db %>% 
+  
+  mutate(good_indicator=if_else(cut=="Good",1,0)) %>%
+  group_by(color) %>% 
+  summarise(
+    n=n()
+    ,mean=mean(carat)
+    ,mean_price=mean(price)
+    ,mean_ind=mean(good_indicator)
+    ,mean_adj=mean(carat[good_indicator==1])
+  ) %>% 
+
+  arrange(desc(color)) %>% 
+  mutate(rolling_price=cumsum(mean_price)) %>% 
+    arrow::to_arrow() %>% 
+  ungroup() %>% 
+ filter(color=="H") %>% 
+  select(color,mean_adj) 
+  arrow::to_duckdb()
+```
+
+```{r}
+diamonds_db %>%
+  collect() %>% 
+  nest_by(cut) %>% 
+  mutate(
+    data=list(data)
+    ,mod=list(lm(price ~ carat+x,data=data))
+    ,gl_mod=list(broom::glance(mod))
+    ) %>% 
+  unnest(gl_mod)
+
+library(sparklyr)
+
+sc <- spark_connect(master="local")
+test <-  sparklyr::copy_to(sc,diamonds,"diamonds_spk",overwrite = TRUE)
+
+
+
+spark_apply(
+  test
+   ,nrow
+    ,group_by="cut"
+    )
+
+```
+
+```{r}
+library(tidyverse)
+install.packages("skimr")
+
+diamonds %>% 
+  names()
+diamonds %>% 
+  skimr::skim() %>% 
+  write_csv(.,"test.csv")
+
+
+labelled::generate_dictionary
+)
+remotes::install_github("REditorSupport/languageserver")
+languageserversetup::languageserver_startup()
+languageserversetup::languageserver_install()
+yesremotes::install_github("REditorSupport/languageserver")
+languageserversetup::languageserver_add_to_rprofile()
+install.packages("styler")
+yeslanguageserversetup::languageserver_remove_from_rprofile()
+sessionInfo()
+install.packages("languageserver")
+library(styler)
+library(languageserversetup)
+languageserver::run()
+
+
+```
+
+```{r}
+
+df <- structure(list(Pitcnt = c("12 (3-2)", "7 (0-1)", "3 (0-2)", 
+"8 (3-2)", "5 (2-2)", "7 (3-2)", "1 (0-0)", "2 (0-1)", "5 (1-2)", 
+"10 (3-2)")), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, 
+-10L))
+
+library(tidyverse)
+
+df %>% 
+  separate(col = Pitcnt, into=c("1","2","3"))
 
 ```
 
