@@ -71,6 +71,90 @@ R.home()
 
 
 
+## Resources
+
+### ggblanket package
+-   simplified ggplot alternative package
+
+[ggblanket](https://davidhodge931.github.io/ggblanket/articles/ggblanket.html)
+
+### Conditional geoms in ggplot
+
+(https://statisticsglobe.com/if-else-condition-add-extra-layer-ggplot2-plot-r)
+
+```{r}
+
+data <- data.frame(                         # Create example data
+  x = 1:10,
+  y = c(10:1),
+  category = c(rep("A", 5), rep("B", 5))
+)
+
+
+ggp <- ggplot(data, aes(x = x, y = y)) +    # Create a base plot 
+  geom_point(aes(color = category)) +
+  theme_minimal()
+
+
+threshold <- 8                                       # Set a threshold for the condition
+ 
+ggp_new <- if (max(data$y) > threshold) {            # Add an extra layer based on the condition 
+   ggp + 
+   geom_hline(yintercept = threshold, 
+              linetype = "dashed", 
+              color = "red")
+  } else {
+    ggp
+  }
+
+
+
+```
+
+
+## make a map into points
+
+https://github.com/BjnNowak/bertin
+
+## package to simplify statitsics summary and plots
+
+https://jtools.jacob-long.com/
+
+## ggpub for pulbican type polots with stats
+
+https://rpkgs.datanovia.com/ggpubr/
+
+#explanation of log odds
+
+https://rpkgs.datanovia.com/ggpubr/
+
+## web plot digitizaer
+
+https://automeris.io/WebPlotDigitizer/
+
+
+```{r}
+
+library(tidyverse)
+
+df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names)
+
+df %>% 
+  filter(
+    age<99
+    ,sex!=0
+    ) %>% 
+  ggplot(aes(y=popestimate2022,x=age,fill=factor(sex)))+
+  geom_col()+
+  geom_vline(xintercept = 18,linetype="dotted")+
+  geom_vline(xintercept = 75,linetype="dotted")+
+  scale_x_continuous(n.breaks = 30)
+  # geom_col(aes(y=popestimate2020),col="blue",alpha=.2)
+
+
+```
+
+
 
 
 
