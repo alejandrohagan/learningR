@@ -1,0 +1,66 @@
+---
+title: "spark"
+---
+
+
+-   Create a spark connection with `spark_connect()` and assign it to a variable usually "sc"
+    -   Can either use master="local" or if you are in databricks you can use master="databricks"
+-   Then you can import your data referencing your spark connection
+    - for inline data you can simply reference copy_to(sc,df,df_name) and assign to a object (typically sdf prefix)
+-   From there you can use all your standard dblyr type functions however sometimes certain functions won't work
+-   The master trick here is to use the `sparklyr::spark_apply()` function
+    -   pass the df object to as argument and then pass funciton or custom function
+    -   I don't think there are room for additoinal parameters? but I may be wrong
+-   
+    
+
+
+```{r}
+
+library(tidyverse)
+library(sparklyr)
+
+
+df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names) %>% 
+     filter(
+    sex!=0
+    ,age<99
+    )
+
+sc <- sparklyr::spark_connect(master="local")
+
+df_spk <- sparklyr::copy_to(sc,df,"df_spk",overwrite = TRUE) 
+
+
+
+extract_year_make_longer  <- function(.data,.col) {
+
+  .data %>% 
+  select(
+    age
+    ,sex
+    ,any_of(
+      c({{.col}})
+      )
+    ) %>% 
+  pivot_longer(-c(1:2))
+}
+
+df_spk %>%
+  extract_year_make_longer(.,col_names) %>% 
+  mutate(year=dplyr::%>%)
+
+gsub(pattern = ,x = "hello123",replacement = "")
+
+col_names <- c("popestimate2020","popestimate2021","popestimate2022")
+df %>% 
+  extract_year_make_longer("popestimate2021")
+
+
+df_spk %>%sparklyr::spark_apply(
+  function(df)  dplyr::mutate(tidyr::pivot_longer(dplyr::select(df,sex:age,popestimate2020),-c(sex:age)),year=readr::parse_number(name))
+)
+
+
+```
+

@@ -133,13 +133,45 @@ https://rpkgs.datanovia.com/ggpubr/
 https://automeris.io/WebPlotDigitizer/
 
 
+## rename cols based on data dictionary
+
+https://twitter.com/i/bookmarks
+
 ```{r}
 
-library(tidyverse)
+df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names) %>% 
+     filter(
+    sex!=0
+    ,age<99
+    )
+extract_year_make_longer  <- function(.data,.col) {
 
-df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names)
+  .data %>% 
+  select(
+    age
+    ,sex
+    ,any_of(
+      c({{.col}})
+      )
+    ) %>% 
+  pivot_longer(-c(1:2)) %>% 
+    muate(year=parse_number(year)) %>% 
+    select(-name)
+}
 
-df %>% 
+
+col_names <- c("popestimate2020","popestimate2021","popestimate2022")
+
+
+
+```
+df_2021_spk <- df_spk %>% 
+  select(age,sex,popestimate2021)
+df_2022_spk <- df_spk %>% 
+  select(age,sex,popestimate2022)
+
+
+df_spk %>% 
   filter(
     age<99
     ,sex!=0
@@ -151,6 +183,15 @@ df %>%
   scale_x_continuous(n.breaks = 30)
   # geom_col(aes(y=popestimate2020),col="blue",alpha=.2)
 
+
+# expand dates
+
+# Create columns for year, month and day for each date 
+# column in a data.frame
+expand_dates <- function(x, parts = c("year", "month", "day")) {
+  funs <- list(year = year, month = month, day = day)[parts]
+  mutate(x, across(where(lubridate::http://is.Date), funs))
+}
 
 ```
 
