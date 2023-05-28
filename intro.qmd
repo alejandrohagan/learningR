@@ -139,11 +139,15 @@ https://twitter.com/i/bookmarks
 
 ```{r}
 
+library(tidyverse)
+
 df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names) %>% 
      filter(
     sex!=0
     ,age<99
     )
+
+
 extract_year_make_longer  <- function(.data,.col) {
 
   .data %>% 
@@ -155,14 +159,57 @@ extract_year_make_longer  <- function(.data,.col) {
       )
     ) %>% 
   pivot_longer(-c(1:2)) %>% 
-    muate(year=parse_number(year)) %>% 
+    mutate(year=parse_number(name)) %>% 
     select(-name)
 }
 
 
+
 col_names <- c("popestimate2020","popestimate2021","popestimate2022")
 
+list_df <- map(col_names,~extract_year_make_longer(df,.x))
 
+df_20 <- list_df[[1]] %>% as_tibble() %>% rename(pop20=value) %>% select(sex,age,pop20)
+
+df_21 <- list_df[[2]] %>% 
+    as_tibble() %>% 
+  mutate(age_20=age-2) %>% 
+  filter(age_20>0) %>% 
+    select(age_20,value,sex) %>% 
+  rename(pop_21=value) 
+
+
+df_22 <- list_df[[3]] %>% 
+  as_tibble() %>% 
+  mutate(age_20=age-2) %>% 
+  filter(age_20>0) %>% 
+  select(age_20,value,sex) %>% 
+  rename(pop22=value)
+
+
+
+
+left_join(df_22,
+          df_21,
+          join_by(age_20==age_20
+                  ,sex==sex)) %>% 
+  left_join(df_20,
+           join_by( age_20==age
+            ,sex==sex)) %>% 
+  rename(cohort_22=age_20)
+
+df %>% 
+  ggplot(aes(y=popestimate2022,x=age,fill=factor(sex,labels = c("male","female"))))+
+  geom_col()+
+  geom_vline(xintercept = 18,linetype="dotted",size=1)+
+  scale_x_continuous(n.breaks=30)+
+  scale_y_continuous(labels = label_comma(scale=1/1e6,suffix="M"))+
+  scale_fill_manual(values=c(male="midnightblue",female="firebrick"))+
+  theme_classic()+
+  labs(
+    fill="Gender"
+    ,title="Distribution of US Pop. 2022"
+    )
 
 ```
 df_2021_spk <- df_spk %>% 

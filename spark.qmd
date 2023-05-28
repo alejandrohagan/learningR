@@ -58,8 +58,54 @@ df %>%
 
 
 df_spk %>%sparklyr::spark_apply(
-  function(df)  dplyr::mutate(tidyr::pivot_longer(dplyr::select(df,sex:age,popestimate2020),-c(sex:age)),year=readr::parse_number(name))
+  function(df) 
+    dplyr::mutate(tidyr::pivot_longer(dplyr::select(df,sex:age,popestimate2020),-c(sex:age)),year=readr::parse_number(name))
 )
+
+
+
+
+srk_fun <- function(e) {
+      library(magrittr)
+    
+e %>% 
+   dplyr::select(age:sex,popestimate2020) %>% 
+   tidyr::pivot_longer(-c(1:2)) %>% 
+  dplyr::mutate(year=readr::parse_number(name))
+  }
+
+ sparklyr::spark_apply(
+  x=df_spk
+  ,f=srk_fun
+) %>% collect()
+
+ df %>% srk_fun
+ 
+rowwise_fun <- function(e){
+
+library(magrittr)
+ e %>% 
+   dplyr::rowwise() %>% 
+   dplyr::mutate(test=sum(dplyr::c_across(x:z)))
+}
+
+diamonds_spk <- sparklyr::copy_to(sc,diamonds,"diamonds_sprk")
+
+ sparklyr::spark_apply(
+  x=small_diamonds_sdf
+  ,f=rowwise_fun
+)
+
+ small_diamonds_sdf <- diamonds_spk %>% head(100)
+ diamonds %>% 
+   rowwise_fun
+ 
+ 
+ 
+diamonds
+ 
+ 
+ 
 
 
 ```
