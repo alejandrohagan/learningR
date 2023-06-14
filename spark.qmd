@@ -102,8 +102,7 @@ diamonds_spk <- sparklyr::copy_to(sc,diamonds,"diamonds_sprk")
  
  
  
-diamonds
- 
+install.packages("langaugeserver") 
  
  
 

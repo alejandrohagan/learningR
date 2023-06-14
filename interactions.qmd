@@ -3,7 +3,10 @@ title: "interactions"
 ---
 
 ```{r}
+
+#load libraries and summarize data to be be used in later analysis
 library(tidyverse)
+devtools::install_github("alejandrohagan/fpaR")
 
 
 df <- fpaR::contoso_fact_sales %>% 
@@ -16,25 +19,119 @@ df_summary <- df %>%
   summarise(
     rev=sum(rev)
     ,n=n()
+    ,vol=sum(sales_quantity)
     ,avg_vol=mean(sales_quantity)
     ,distinct_col=length(unique(color_name))
     ,.by = c(date_key,brand_name,color_name)
-  )
+  ) %>% 
+  mutate(vol_group=cut(vol,breaks = 5))
+
+```
 
 
-df %>% count(manufacturer)
 
-m1 <- df_summary %>% 
-  lm(rev~brand_name+avg_vol
+# First  comparison
+
+-   When you do zero coefficent regression with a category variable it is the same as doing a group by and summarize
+        
+        -   This doesn't change if you emmeans or directly pull the case weights
+        -
+        
+
+```{r}
+#| echo: false
+#| label: category-model
+#| eval: TRUE
+
+# zero intercept
+category_lm_zero <- df_summary %>% 
+  lm(rev~0+brand_name
      ,data=.
   )
+
+# classic lm
+category_lm<- df_summary %>% 
+  lm(rev~brand_name
+     ,data=.
+  )
+
+
+#extract out marginal means and weights
+
+em_cat_lm_zero_tbl<- emmeans::emmeans(category_lm_zero, pairwise ~brand_name)
+em_cat_lm_tbl<- emmeans::emmeans(category_lm, pairwise ~brand_name)
+
+#do simple mean by group
+
+cat_manual_tbl <- df_summary %>% 
+  group_by(brand_name) %>% 
+  summarize(avg_rev=mean(rev))
+
+## join results
+em_cat_lm_zero_tbl$emmeans %>% as_tibble() %>% 
+  select(
+    1
+    ,emmean_cat_lm_zero=2) %>% 
+  left_join(cat_manual_tbl,by=join_by(brand_name)) %>% 
+  left_join(em_cat_lm_tbl$emmeans %>% as_tibble() %>% select(1,cat_lm=2)
+            ,join_by(brand_name)) %>% 
+  left_join(
+    category_lm_zero %>% broom::tidy() %>% select(1,lm_weights=2,p.value) %>% mutate(term=str_remove(term,"brand_name"))
+    ,by=join_by(brand_name==term)
+  )
+
+```
+
+-emmeans and linear model and summarize are all equal when it is a single quantified model
+
+
+```{r}
 
 m2 <- df_summary %>% 
-  lm(rev~brand_name*avg_vol
+  lm(rev~brand_name*color_name
+     ,na.action = NULL
+     ,model = TRUE
+     ,
      ,data=.
   )
 
-emmeans::emmeans(m2, pairwise ~brand_name|avg_vol,at=list(avg_vol=c(12,15,18)))
+em_tbl_2 <- emmeans::emmeans(m2, pairwise ~brand_name|color_name)
+
+em_tbl <- em_tbl_2$emmeans %>% 
+  as_tibble() %>% 
+    mutate(term_name=paste0("brand_name",brand_name,":","color_name",color_name))
+  
+
+df_summary %>% 
+  group_by(brand_name,color_name) %>% 
+  summarize(avg_rev=mean(rev)
+            ,n=n()) %>% 
+  mutate(term_name=paste0("brand_name",brand_name,":","color_name",color_name)) %>% 
+  left_join(em_tbl %>% select(term_name,emmean),
+            by=join_by(term_name)) %>% 
+  left_join(
+    m2 %>% broom::tidy() %>% arrange(desc(p.value)) %>% select(term_name=term,estimate,p.value)
+            ,by=join_by(term_name)
+    )
+
+ df_summary %>% 
+  lm(rev~0+brand_name*color_name
+     ,data=.
+  ) %>% broom::tidy()
+
+ 
+ df_summary$color_name %>% as_factor() %>% levels()
+ 
+ 37622.1988
+ brand_nameContoso:color_nameWhite
+ 
+ 77251.5681
+```
+
+Interacting two variables is the same as grouping by these two variables and finding the average of that variable by that group. It's showing for that effect all else held equal (in the above case nothing is is needed) at least when passed thorugh emmeans -- when just passed as a linear model the estimates are different. Need to understand how emmeans vs. estimate are different
+
+```{r}
+emmeans::emmeans(m4, pairwise ~avg_vol,at=list(avg_vol=c(8,12,13.2,11,15,18,24)))
 aov(m1,m2)
 
 daily_summary <- df_summary %>% 
@@ -46,6 +143,17 @@ daily_summary <- df_summary %>%
             ,.by=c(brand_name,color_name)
             )
 ```
+
+- do  a simple model just vol
+
+- now do a vol by interaction with a brand
+
+- compare against summary and see what comes up 
+
+- compare with zero constraint and without zero constraint
+
+
+
 
 ```{r}
 

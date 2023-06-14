@@ -763,3 +763,35 @@ assertthat packageschecks if column names are in a dataframe
 
 ## combine umeans and kmeans
 
+
+
+### data masking
+
+sym() is used to take a quoted input "x" and use it in a context without quotes. Need !!sym("x") to be used
+
+
+
+```{r}
+library(tidyverse)
+
+
+col_numbers <- 1:ncol(diamonds)
+
+  map(
+    .x=col_numbers
+      ,.f=~diamonds[.x:10]
+  )
+
+  split(diamonds, ~ cut) %>% 
+    map(
+      .x=.
+      ,~.x %>% pull(price) %>% sum) %>% 
+    stack()
+
+ 
+    map(
+      .x=col_numbers
+      ,.f = ~mtcars[.x] %>% table()
+      )
+```
+

@@ -173,8 +173,8 @@ df_20 <- list_df[[1]] %>% as_tibble() %>% rename(pop20=value) %>% select(sex,age
 
 df_21 <- list_df[[2]] %>% 
     as_tibble() %>% 
-  mutate(age_20=age-2) %>% 
-  filter(age_20>0) %>% 
+  mutate(age_20=age-1) %>% 
+  filter(age_20>-1) %>% 
     select(age_20,value,sex) %>% 
   rename(pop_21=value) 
 
@@ -182,33 +182,35 @@ df_21 <- list_df[[2]] %>%
 df_22 <- list_df[[3]] %>% 
   as_tibble() %>% 
   mutate(age_20=age-2) %>% 
-  filter(age_20>0) %>% 
+  filter(age_20>-1) %>% 
   select(age_20,value,sex) %>% 
   rename(pop22=value)
 
 
 
 
-left_join(df_22,
+left_join(df_20,
           df_21,
-          join_by(age_20==age_20
+          join_by(age==age_20
                   ,sex==sex)) %>% 
-  left_join(df_20,
-           join_by( age_20==age
+  left_join(df_22,
+           join_by( age==age_20
             ,sex==sex)) %>% 
-  rename(cohort_22=age_20)
-
-df %>% 
-  ggplot(aes(y=popestimate2022,x=age,fill=factor(sex,labels = c("male","female"))))+
+  mutate(
+    one_year_delta=pop_21-pop20
+    ,two_year_delta=pop22-pop20
+  ) %>% 
+  ggplot(aes(y=two_year_delta,x=age,fill=factor(sex,labels = c("male","female"))))+
   geom_col()+
-  geom_vline(xintercept = 18,linetype="dotted",size=1)+
+  geom_vline(xintercept = 18,linetype="dotted",size=1, color="grey")+
+  geom_vline(xintercept = 65, size=1, color="grey")+
   scale_x_continuous(n.breaks=30)+
-  scale_y_continuous(labels = label_comma(scale=1/1e6,suffix="M"))+
+  scale_y_continuous(labels = scales::label_comma(scale=1/1e6,suffix="M"))+
   scale_fill_manual(values=c(male="midnightblue",female="firebrick"))+
   theme_classic()+
   labs(
     fill="Gender"
-    ,title="Distribution of US Pop. 2022"
+    ,title="Two year change in population by age group"
     )
 
 ```
