@@ -83,7 +83,7 @@ R.home()
 (https://statisticsglobe.com/if-else-condition-add-extra-layer-ggplot2-plot-r)
 
 ```{r}
-
+library(tidyverse)
 data <- data.frame(                         # Create example data
   x = 1:10,
   y = c(10:1),

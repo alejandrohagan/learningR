@@ -16,22 +16,18 @@
 
 ## time intelligence functions
 
-
 ## Merge and joins (super power 2)
-
 
 ## pivot and unpivot (super power 3)
 
-
-
 ## columnwise vs. rowwise aggregation (super power 4)
-
 
 
 ```{r}
 #| echo: false
 #| label: fig-toc
 
+library(tidyverse)
 
 readODS::read_ods(
   
@@ -44,6 +40,10 @@ readODS::read_ods(
   gt::gt() %>% 
   gt::fmt_missing(
     missing_text="-"
+  ) %>% 
+  gt::tab_options(
+    ihtml.active = TRUE
+    ,ihtml.use_pagination = TRUE
   )
 ```
 

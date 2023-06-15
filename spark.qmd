@@ -2,85 +2,46 @@
 title: "spark"
 ---
 
-
+-   There are two ways to manipulate data in spark, sparklyr and SparkR
+-   Sparklyr uses dblyr backend so many of your dplyr calls can be used
+-   Furthermore you can use any R package if you use `spark_apply()`
+-   Using spark is pretty consistent any of database backends
 -   Create a spark connection with `spark_connect()` and assign it to a variable usually "sc"
     -   Can either use master="local" or if you are in databricks you can use master="databricks"
 -   Then you can import your data referencing your spark connection
     - for inline data you can simply reference copy_to(sc,df,df_name) and assign to a object (typically sdf prefix)
 -   From there you can use all your standard dblyr type functions however sometimes certain functions won't work
 -   The master trick here is to use the `sparklyr::spark_apply()` function
-    -   pass the df object to as argument and then pass funciton or custom function
-    -   I don't think there are room for additoinal parameters? but I may be wrong
--   
-    
+    -   pass the df object to as argument and then pass function or custom function
+    -   I don't think there are room for additional parameters? but I may be wrong
+    -   If you use %>% then you usually need to call the library(magrittr) in your function
 
 
 ```{r}
+#| echo: true
+#| label: examples spark
+#| eval: true
+#| warning: false
+#| error: false
 
+
+# load libraries
 library(tidyverse)
 library(sparklyr)
 
 
-df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names) %>% 
-     filter(
-    sex!=0
-    ,age<99
-    )
-
+#Create spark connection
 sc <- sparklyr::spark_connect(master="local")
 
-df_spk <- sparklyr::copy_to(sc,df,"df_spk",overwrite = TRUE) 
+# take a data object and copy it too a spark object
+
+diamonds_sdf <- sparklyr::copy_to(sc,diamonds,"diamonds_sprk")
+
+# filter the object down to smaller size
+ small_diamonds_sdf <- diamonds_sdf %>% head(100)
 
 
-
-extract_year_make_longer  <- function(.data,.col) {
-
-  .data %>% 
-  select(
-    age
-    ,sex
-    ,any_of(
-      c({{.col}})
-      )
-    ) %>% 
-  pivot_longer(-c(1:2))
-}
-
-df_spk %>%
-  extract_year_make_longer(.,col_names) %>% 
-  mutate(year=dplyr::%>%)
-
-gsub(pattern = ,x = "hello123",replacement = "")
-
-col_names <- c("popestimate2020","popestimate2021","popestimate2022")
-df %>% 
-  extract_year_make_longer("popestimate2021")
-
-
-df_spk %>%sparklyr::spark_apply(
-  function(df) 
-    dplyr::mutate(tidyr::pivot_longer(dplyr::select(df,sex:age,popestimate2020),-c(sex:age)),year=readr::parse_number(name))
-)
-
-
-
-
-srk_fun <- function(e) {
-      library(magrittr)
-    
-e %>% 
-   dplyr::select(age:sex,popestimate2020) %>% 
-   tidyr::pivot_longer(-c(1:2)) %>% 
-  dplyr::mutate(year=readr::parse_number(name))
-  }
-
- sparklyr::spark_apply(
-  x=df_spk
-  ,f=srk_fun
-) %>% collect()
-
- df %>% srk_fun
- 
+#  create custom rowwise function
 rowwise_fun <- function(e){
 
 library(magrittr)
@@ -89,20 +50,14 @@ library(magrittr)
    dplyr::mutate(test=sum(dplyr::c_across(x:z)))
 }
 
-diamonds_spk <- sparklyr::copy_to(sc,diamonds,"diamonds_sprk")
+# use function on the dataset 
+
 
  sparklyr::spark_apply(
   x=small_diamonds_sdf
   ,f=rowwise_fun
-)
+) 
 
- small_diamonds_sdf <- diamonds_spk %>% head(100)
- diamonds %>% 
-   rowwise_fun
- 
- 
- 
-install.packages("langaugeserver") 
  
  
 

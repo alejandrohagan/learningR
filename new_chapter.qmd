@@ -404,7 +404,6 @@ missing_data %>%
   count(manufacturer,year) %>% 
   complete(manufacturer,year,fill = list(n=0))
 
-roxygen2::
 ```
 
 Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
@@ -600,7 +599,6 @@ missing_data %>%
   count(manufacturer,year) %>% 
   complete(manufacturer,year,fill = list(n=0))
 
-roxygen2::
 ```
 
 Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)

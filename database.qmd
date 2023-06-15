@@ -14,77 +14,83 @@ https://r4ds.hadley.nz/databases.html
 -   If done correctly you can then use DBI package to connect to the database of choice
 
         -   create a connection string with DBI::dbConnect()
-            -   driver_name such as ODBC::ODBC()
-            -   DSN name
+            -   driver_name such as ODBC::ODBC() or duckdb::duckdb()
+            -   DSN name (if applicable)
         -   Enter SQL query with `sql()`
         -   Use connection string and sql query together to create a lazy table with `tbl()`
 -   From there you can use dplyr back end queries to see everything
+-   You are limited to queries that can be translated to 
 -   You can see what query it will generate with `show_query()`
 -   You can finallly execute the query with `collect()`
 
 -   if you already have something as a dataframe you can upload it to a database with DBI::dbWriteTable(con,"tbl_name",df) which will write the table to the connection with the name you gave
 
     -   dbWriteTable() can write a r dataframe or you can use sql to create a virtual table if you want
+    -   dbplyr::copy_inline(con_db,df = df) is alternative method
     
-    
-
 -   dbListTables(con) can be used to see what virtual tables are in the connection
 
 - dbReadTable(con,"tbl_name") read the virtual table as a dataframe
 
-- in_schema("database","tbl") is a way to navigate a scehma in tbl(
+- in_schema("database","tbl") is a way to navigate a scehma in tbl()
 
 con <- DBI::dbConnect(ODBC::ODBC(),dsn="name")
 
-```{r}
+con_db <- DBI::dbConnect(duckdb::duckdb())
 
-```
+
+
 
 
 
 # special example to pass one db object to another
 
 ```{r}
-#| echo:fenced
+#| echo: fenced
 #| label: db-connect example
-#| eval: false
+#| eval: true
 
-library(DBI)
 library(tidyverse)
 
 ## create connection string locally
 con_db <- DBI::dbConnect(duckdb::duckdb())
 
 # loads data into your connection either in memory
-dbWriteTable(con_db,"diamonds_db",ggplot2::diamonds)
+DBI::dbWriteTable(con_db,"diamonds_db",ggplot2::diamonds)
 
 #create new table to the connection
 
-dbExecute(con_db, "CREATE TABLE duckdb_table (col1 INT, col2 STRING)")
+DBI::dbExecute(con_db, "CREATE TABLE duckdb_table (col1 INT, col2 STRING)")
 
 #preview what is in your connection
 
-dbListTables(con_db)
+DBI::dbListTables(con_db)
+
+dbplyr::copy_inline(con_db,df = diamonds)
 
 
-
-diamonds_db <- tbl(con_db
+diamonds_db <- dplyr::tbl(con_db
     ,"diamonds_db"
     )
 
 
-tbl(con_db
-    ,"duckdb_table"
-    )
+print(diamonds_db)
 
 ```
 
 
 
-
+# Example of passing one database object to arrow
 
 
 ```{r}
+#| echo: true
+#| label: query-example
+#| eval: true
+#| error: false
+#| warning: false
+
+
 diamonds_db %>% 
   
   mutate(good_indicator=if_else(cut=="Good",1,0)) %>%
@@ -102,76 +108,9 @@ diamonds_db %>%
     arrow::to_arrow() %>% 
   ungroup() %>% 
  filter(color=="H") %>% 
-  select(color,mean_adj) 
-  arrow::to_duckdb()
+  select(color,mean_adj) %>% 
+  collect()
 ```
 
-```{r}
-diamonds_db %>%
-  collect() %>% 
-  nest_by(cut) %>% 
-  mutate(
-    data=list(data)
-    ,mod=list(lm(price ~ carat+x,data=data))
-    ,gl_mod=list(broom::glance(mod))
-    ) %>% 
-  unnest(gl_mod)
 
-library(sparklyr)
-
-sc <- spark_connect(master="local")
-test <-  sparklyr::copy_to(sc,diamonds,"diamonds_spk",overwrite = TRUE)
-
-
-
-spark_apply(
-  test
-   ,nrow
-    ,group_by="cut"
-    )
-
-```
-
-```{r}
-library(tidyverse)
-install.packages("skimr")
-
-diamonds %>% 
-  names()
-diamonds %>% 
-  skimr::skim() %>% 
-  write_csv(.,"test.csv")
-
-
-labelled::generate_dictionary
-)
-remotes::install_github("REditorSupport/languageserver")
-languageserversetup::languageserver_startup()
-languageserversetup::languageserver_install()
-yesremotes::install_github("REditorSupport/languageserver")
-languageserversetup::languageserver_add_to_rprofile()
-install.packages("styler")
-yeslanguageserversetup::languageserver_remove_from_rprofile()
-sessionInfo()
-install.packages("languageserver")
-library(styler)
-library(languageserversetup)
-languageserver::run()
-
-
-```
-
-```{r}
-
-df <- structure(list(Pitcnt = c("12 (3-2)", "7 (0-1)", "3 (0-2)", 
-"8 (3-2)", "5 (2-2)", "7 (3-2)", "1 (0-0)", "2 (0-1)", "5 (1-2)", 
-"10 (3-2)")), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, 
--10L))
-
-library(tidyverse)
-
-df %>% 
-  separate(col = Pitcnt, into=c("1","2","3"))
-
-```
 

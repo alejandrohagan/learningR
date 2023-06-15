@@ -11,12 +11,20 @@ book:
         - index.qmd
         - intro.qmd
         - learningR.qmd
+        - database.qmd
+        - spark.qmd
+        - machine_learning.qmd
+        - new_chapter.qmd
+        - time_series.qmd
+        - trelliscopejs.qmd
 
 bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme:
+     light: flatly
+     dark: darkly
     output_dir: files
   pdf:
     documentclass: scrreprt
