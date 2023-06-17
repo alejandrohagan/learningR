@@ -114,47 +114,11 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
-  \fi
-  % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
 \KOMAoption{captions}{tableheading}
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
-\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
-\definecolor{quarto-callout-color}{HTML}{909090}
-\definecolor{quarto-callout-note-color}{HTML}{0758E5}
-\definecolor{quarto-callout-important-color}{HTML}{CC1914}
-\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
-\definecolor{quarto-callout-tip-color}{HTML}{00A047}
-\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
-\definecolor{quarto-callout-color-frame}{HTML}{acacac}
-\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
-\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
-\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
-\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
-\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
-\makeatother
 \makeatletter
 \makeatother
 \makeatletter
@@ -224,11 +188,11 @@
 
 \title{Excel to R: A Survivor's Guide for the Corporate Environment}
 \author{Alejandro Hagan}
-\date{9/10/3}
+\date{9/10/03}
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, frame hidden, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, interior hidden, boxrule=0pt, frame hidden, breakable, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -240,46 +204,466 @@
 \chapter*{Index}\label{index}}
 \addcontentsline{toc}{chapter}{Index}
 
+\markboth{Index}{Index}
+
 \hypertarget{excel-to-r-a-survivors-guide-for-the-corporate-environment}{%
 \section*{Excel to R: A Survivor's Guide for the Corporate
 Environment}\label{excel-to-r-a-survivors-guide-for-the-corporate-environment}}
 \addcontentsline{toc}{section}{Excel to R: A Survivor's Guide for the
 Corporate Environment}
 
-\hypertarget{what-does-this-do}{%
-\subsection*{what does this do}\label{what-does-this-do}}
-\addcontentsline{toc}{subsection}{what does this do}
+\markright{Excel to R: A Survivor's Guide for the Corporate Environment}
 
-\hypertarget{what-does-this-do-1}{%
-\subsubsection*{what does this do?}\label{what-does-this-do-1}}
-\addcontentsline{toc}{subsubsection}{what does this do?}
+\hypertarget{introduction}{%
+\section*{Introduction}\label{introduction}}
+\addcontentsline{toc}{section}{Introduction}
 
-\hypertarget{what-does-this-do-2}{%
-\paragraph*{what does this do?}\label{what-does-this-do-2}}
-\addcontentsline{toc}{paragraph}{what does this do?}
+\markright{Introduction}
+
+\hypertarget{set-up-configuration}{%
+\section*{Set Up \& Configuration}\label{set-up-configuration}}
+\addcontentsline{toc}{section}{Set Up \& Configuration}
+
+\markright{Set Up \& Configuration}
+
+\hypertarget{data-in-a-table-format}{%
+\section*{data in a table format}\label{data-in-a-table-format}}
+\addcontentsline{toc}{section}{data in a table format}
+
+\markright{data in a table format}
+
+\hypertarget{augmenting-and-creating-calculation}{%
+\section*{Augmenting and creating
+calculation}\label{augmenting-and-creating-calculation}}
+\addcontentsline{toc}{section}{Augmenting and creating calculation}
+
+\markright{Augmenting and creating calculation}
+
+\hypertarget{grouping-and-summzaring-super-power-1}{%
+\section*{grouping and summzaring (super power
+1)}\label{grouping-and-summzaring-super-power-1}}
+\addcontentsline{toc}{section}{grouping and summzaring (super power 1)}
+
+\markright{grouping and summzaring (super power 1)}
+
+\hypertarget{filter-duplicates-advanced-aggregations}{%
+\section*{filter, duplicates, advanced
+aggregations}\label{filter-duplicates-advanced-aggregations}}
+\addcontentsline{toc}{section}{filter, duplicates, advanced
+aggregations}
+
+\markright{filter, duplicates, advanced aggregations}
+
+\hypertarget{time-intelligence-functions}{%
+\section*{time intelligence
+functions}\label{time-intelligence-functions}}
+\addcontentsline{toc}{section}{time intelligence functions}
+
+\markright{time intelligence functions}
+
+\hypertarget{merge-and-joins-super-power-2}{%
+\section*{Merge and joins (super power
+2)}\label{merge-and-joins-super-power-2}}
+\addcontentsline{toc}{section}{Merge and joins (super power 2)}
+
+\markright{Merge and joins (super power 2)}
+
+\hypertarget{pivot-and-unpivot-super-power-3}{%
+\section*{pivot and unpivot (super power
+3)}\label{pivot-and-unpivot-super-power-3}}
+\addcontentsline{toc}{section}{pivot and unpivot (super power 3)}
+
+\markright{pivot and unpivot (super power 3)}
+
+\hypertarget{columnwise-vs.-rowwise-aggregation-super-power-4}{%
+\section*{columnwise vs.~rowwise aggregation (super power
+4)}\label{columnwise-vs.-rowwise-aggregation-super-power-4}}
+\addcontentsline{toc}{section}{columnwise vs.~rowwise aggregation (super
+power 4)}
+
+\markright{columnwise vs.~rowwise aggregation (super power 4)}
+
+\begin{verbatim}
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.2     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.0
+v ggplot2   3.4.2     v tibble    3.2.1
+v lubridate 1.9.2     v tidyr     1.3.0
+v purrr     1.0.1     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{verbatim}
+Warning: Since gt v0.6.0 the `fmt_missing()` function is deprecated and will soon be
+removed.
+* Use the `sub_missing()` function instead.
+This warning is displayed once every 8 hours.
+\end{verbatim}
+
+\begin{figure}
+
+{\centering 
+
+\hypertarget{fig-toc-1}{}
+\begin{longtable}{lllll}
+\toprule
+chapter & concept & excel & r & comment \\ 
+\midrule
+  & IDE  & Ribbon vs. main vs. power pivot vs. power query 
+Customize ribbon 
+  & Rmarkdown 
+Code chunks vs. text 
+kniting  &   \\ 
+1 & Named objects; how to create objects, label and reference, and add columns or rows to the object 
+How to create series from existing functions including, numbers, dates and repeating strings 
+  & - & Tibbles 
+Lists 
+Vectors 
+dataeditR 
+Arrange() 
+Generating data 
+-numbers 
+-letters 
+-dates 
+-rep() 
+-seq() 
+-mutate 
+  & Emphasis on tabular data 
+The need for quality data  \\ 
+1 & - & Named Cells & objects, lists and vectors & - \\ 
+1 & - & Named Tables & tibbles & - \\ 
+1 & - & Adding Columns to Table & mutate & - \\ 
+1 & - & Adding rows to Table & bind\_rows / bind\_columns & - \\ 
+1 & - & Referencing Named Objects & ls() & - \\ 
+1 & - & Repeat last actions & ?? & - \\ 
+1 & - & Tab References & ?? & - \\ 
+1 & - & edit named objects & ?? & - \\ 
+1 & - & creating vectors & vectors & - \\ 
+1 & - & fill series tips & tidyr::fill & - \\ 
+1 & - & existing data & ?? & - \\ 
+1 & - & create new series of numbers & seq() & - \\ 
+1 & - & create new series of dates & seq.Date() & - \\ 
+1 & - & creates new series of characters & letters & - \\ 
+1 & - & flash fill tips & ?? & - \\ 
+1 & - & adding/subtracting/dividing/ multiplying columns & mutate & - \\ 
+1 & - & one formula works against all rows in a column & group\_by()? & - \\ 
+1 & - & rowwise equivalent & rowwise() & - \\ 
+1 & - & colwise equivalent & colwise()? & - \\ 
+1 & - & mean & mean & - \\ 
+1 & - & meidan & median & - \\ 
+1 & - & sum & sum & - \\ 
+1 & - & count & n & - \\ 
+1 & - & aggregate & - & - \\ 
+1 & - & error handling & - & - \\ 
+1 & - & Iferror()  & - & - \\ 
+1 & - & NA vs. NULL vs. ref & - & - \\ 
+1 & - & array & - & - \\ 
+  & Visualization Exercise 1  & Basic Table 
+Minimalist formatting 
+Borders 
+Alternatives to tables 
+Visualize/ emphasize word 
+Conditional formatting of values 
+Picking existing themes/ pallets 
+Picking custom colors 
+Bold / italics 
+Column format width / wrap 
+Perhaps practice making executive slides 
+Teaching how to present information in effective ways 
+sort  & Gt()  &   \\ 
+  & Reading data  & Have ten excel files, how do I read this information 
+In truth - with base excel no good ways only terrible ways 
+Can copy \&paste but that is manual and can be full  of errors (columns out of line, paste over rows,etc) and limited to 1M rows 
+Typically people build a summarization report and then link to various reports that will update each month 
+Linked excel sheets (I will show you only because I know this is a reality but strongly recommend against this) 
+Strongly suggest to use power query and the below pattern  & Readr 
+Readxl 
+rio  &   \\ 
+  &   &   &   &   \\ 
+  & Column types / data types  & Why format columns are important 
+More than just visual, it enables calculations 
+Format Numeric, dates, strings, factor equivalent (weekdays) 
+ 
+ 
+ 
+ 
+  & Forecat package 
+Fct\_lump 
+Fct\_reorder 
+Fct\_other 
+Fct\_relevel 
+Fct\_recode 
+Cut 
+  & Excel gives a lot of flexibility which might seem like a great thing (eg. You don't get show stopping errors) but it is dangerous. If you have data entry errors or bad data(which, I promise, you do) you will miss extractions (eg summing up text) 
+Example of summing texts 
+Because of this most people don't pay particular attention to the text type, they usually associate type with formatting which is related but not the same 
+Again this saves you time as you can just enter any old thing and it "works" however whatever time you saved in this,I promise you loose in larger datesets when you have errors or performance issues 
+This is why we need to learn about data types  and why coding languags are so particular about data types - many will just not allow you to proceed further until you establish this. This is usually a barrier and source of frustration for those learning 
+Exception is factors where the concept sort of exists in excel, try sorting the table and imagine you want to sort it by a custom order (not alphabetical) 
+Here you can create your own levels by using the list function, this enables a custom sort 
+Here is where you will already start to see some performance differences between excel in R when dealing with factors  \\ 
+  &  Visualization Exercise 2  & Bar chart 
+Dynamic reference 
+Stacked 
+Fill 
+Dodge 
+Line chart 
+X,y chart 
+Preset themes 
+customization  & Geom\_col() 
+Geom\_line() 
+Aes() 
+Color() 
+Fill() 
+Shape() 
+Linetype() 
+Label\_wrap 
+Position() 
+Theme\_sets() 
+Theme() 
+Xlabs, ylabs, title, subtitle, caption 
+ 
+  &   \\ 
+  & Reinforce learning  &   & Factors 
+Rbloggers entry on factors 
+Skills validationL 
+Exercise x,y,z in different books  &   \\ 
+  & Sort, filter, remove duplicates, relevel  & Number filter 
+text filters 
+Other filters: Color filters 
+Cell filter 
+Conditional filter 
+Sort \& relevel 
+Dates 
+Numbers 
+Text 
+A-z 
+custom lists 
+Field slicer 
+Timeline slicer 
+Match() 
+Find() 
+  & Select 
+Filter  &   \\ 
+  &   &   &   &   \\ 
+  & More advanced aggregations running totals, 
+Ranks, 
+  & Now we start with dealing with grouping or categorization of our data by attributes that aren't just in labels 
+This typically becomes necessary as we want to establish trends and insights into these group, some basic yet popular patterns are below 
+Bigger issues when dealing with data is understanding changes, most analysis concepts, are centered around a establish a center point and understanding each points distance from that point 
+Sometimes this is called variance analysis which can be within a group or how something has change dover time or an outlier 
+Here are some useful techniques or formulas to help categorize disperse data 
+Z score/ standardize 
+Log() 
+Running totals 
+Percent of total 
+ABC analysis 
+\%percentile 
+cohort 
+rank  &   &   \\ 
+  & Group\_by / summarize functions/conditional aggregations/advanced references 
+ 
+Basic build out map 
+Group\_by vs. rowwise 
+ 
+Across/if\_any/if\_all 
+Rowwise 
+Where 
+Current\_group 
+  & Index() 
+If() 
+\_ifs() 
+Pivot tables 
+Pivottablereferences 
+ 
+  &  
+Ifelse 
+case\_when 
+\_join 
+Group\_by 
+Summarize 
+Rowwise 
+Columnwise 
+Count 
+Base R techniques too 
+Subset dataframes sum(df\$col==x) 
+ 
+ 
+  &   \\ 
+  & Error / NAs / NULLs   & Iferror()  & Is.na()  &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  & Time intelligence functions  & Dates 
+One of the most frustating aspects of excel is that it turns your dates into numbers or xxxx 
+Data formula  & Dates in general are a confusing concept even though we want it to be straight fowr  & Dates in general are  confusing concept even though we want it to be straight forward. Why because they are irregular and arbitrary. Different months have different days, different years have different days, and each year has parial days in it. We have time zones. So that opening is a bit of primer that working with dats in general can be frustrating no mater what tool or package you want to use  \\ 
+  & Month over month  & Group\_by 
+Summarize 
+Lead\_lag  & Group\_by 
+Summarize 
+Lead / lag  &   \\ 
+  & Year over year  & …  &   &   \\ 
+  & Week over week  & …  &   &   \\ 
+  & Non\_standard\_calendar  & Have no idea how to do this, like most things can be done, just a done of work - easier to use R 
+  & Create calendar 
+Map weeks to normal weeks 
+Group\_by 
+Use lead/lag  &   \\ 
+  & Cummin,cummax,cummean  &   &   &   \\ 
+  & Rolling averages  &   &   &   \\ 
+  & Month to date  &   &   &   \\ 
+  & Year to date ,  &   &   &   \\ 
+  & Quarter to date  &   &   &   \\ 
+  & Rates for days vs. aboslute amounts  &   &   &   \\ 
+  & Filter dates  &   &   &   \\ 
+  &   &   &   &   \\ 
+  & Merging / joining /conditional referencing  & \_ifs() 
+Vlookup 
+Hlookup 
+Index(match) 
+Array formulas  & Filter, groupby,summarize? 
+Left\_join 
+Full\_join 
+Rightjoin 
+Anti\_join  &   \\ 
+  & Categorizing / grouping techniques  & Match() 
+Find() 
+Length() 
+Right() 
+Left() 
+Mid() 
+pivot table: group 
+Link to other excel models  & Group\_by 
+Regex 
+str\_detect 
+Fct\_lump 
+Fct\_other 
+Relevel 
+recode  &   \\ 
+  & Visualizing data  & Bar graphs  &   &   \\ 
+  & Extract data  & Power Query  &   &   \\ 
+  & Transform data  & Power Query  &   &   \\ 
+  & Load data  & Power Query  &   &   \\ 
+  & Colors including custom colors  &   & Names(colors)<- factor\_names 
+ 
+Popular color packages 
+Discrete vs. continous 
+Manual assignment 
+Create your own! 
+  &   \\ 
+  & Factor analysis  &   &   &   \\ 
+  & Budge plan vs. plan, actuals for actuals 
+Allocations 
+Validation 
+Rates vs. absolute amounts  &   &   &   \\ 
+  & Tidy selection techniques 
+Selection based on names 
+Selection based on column criteria  &   &   &   \\ 
+  & Concatenate based on data outputs  &   &   &   \\ 
+  & Generate sample data 
+Index 
+Dates 
+Random figures 
+Random figures from a set or custom distribution 
+Simulations 
+  &   &   &   \\ 
+  & Contins()==match()  &   &   &   \\ 
+  & Enquo()==indirect()  &   &   &   \\ 
+  & Readr 
+Col\_spec 
+Cols()  &   &   &   \\ 
+  & map  &   &   &   \\ 
+  & OTHER  &   &   &   \\ 
+  & R in powerBi  &   &   &   \\ 
+  & R markdown  &   &   &   \\ 
+ETL  & csv  &   &   &   \\ 
+  & excel  &   &   &   \\ 
+  & SQL/snowflake  &   &   &   \\ 
+  &   &   &   &   \\ 
+reporting  & quarto &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+automation  & Bash  &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  &   &   &   &   \\ 
+  & - & - & - & - \\ 
+\bottomrule
+\end{longtable}
+
+}
+
+\caption{\label{fig-toc}\textbf{?(caption)}}
+
+\end{figure}
 
 \part{Introduction}
 
-\hypertarget{introduction-1}{%
-\chapter*{Introduction}\label{introduction-1}}
+\hypertarget{introduction-2}{%
+\chapter*{Introduction}\label{introduction-2}}
 \addcontentsline{toc}{chapter}{Introduction}
 
-I've scoured every tip, every yahoo message board, every stackoverflow
-question, every \#RStats tweet, mr. excel forum. I've read all the XX
-for dummy books, blogs, secret forums. Youtube videos for days. Udemy?
-Done it. XXX I know it. I've reached all the dead ends that you will
-encounter and I've stared at the screen frustrated. I've been given all
-the last minute and impossible tasks to produce reports and faced the
-reality of ugly, inconsistent, messy data that you will find. Ive heard
-all the promises of automation and how x,y,z tool will help only to have
-the same frustration.I've been in your shoes as we data increases yet
-tools get more complicated. Promises made and promises broken.
+\markboth{Introduction}{Introduction}
+
+Listen up, fellow data wranglers and spreadsheet warriors! I have been
+to the darkest corners of the internet and beyond, searching for answers
+to the most impossible data problems. I've scoured every forum, every
+blog, every tutorial, and even ventured into the depths of the forbidden
+knowledge that mere mortals should not possess. But fear not, my
+friends, for I have returned with a solution that will save you from the
+agony and frustration of data manipulation.
+
+I'm not just talking about your everyday, run-of-the-mill data issues.
+No, no, no. I'm talking about the kind of data that would make even the
+most experienced analyst quiver in their boots. Messy, inconsistent,
+non-standard, and downright ugly data that makes you want to throw your
+computer out the window. But fear not, for I have conquered these data
+demons and emerged victorious.
+
+And now, I am here to share my knowledge with you, my dear comrades in
+data crunching. This book will solve 80\% of your data problems, with no
+complex macros or advanced languages required. It's like a data
+superhero that will swoop in and save the day, leaving you with more
+time to sip on a margarita and bask in the glory of your newfound data
+skills.
+
+So if you're tired of staring at your computer screen, tears streaming
+down your face, and feeling like you're stuck in a never-ending data
+nightmare, then this book is for you. It's time to take back control of
+your data, and with my help, you'll be a data champion in no time.
+
+This is meant to quickly reference guide. I will teach you patterns
+techniques so that you can quickly and effectively get to solutions to
+your problems. This means building up your analysis frameworks and tool
+kits.
+
+Please clean this up and make it more funny and dramatic I've scoured
+every tip, every yahoo message board, every stackoverflow question,
+every \#RStats tweet, mr. excel forum. I've read all the intro for dummy
+books, blogs, secret forums. Youtube videos for days. Udemy? Done it.
+xxx I know it. I've reached all the dead ends that you will encounter
+and I've stared at the screen frustrated. I've been given all the last
+minute and impossible tasks to produce reports and faced the reality of
+ugly, inconsistent, messy data that you will find. I've heard all the
+promises of automation and how Power Query, DAX, Tableau, Power BI,
+snowflake, databricks will help only to have the same frustration as
+before but just a different problem.I've been in your shoes as we
+somehow have more tools and data that we ever had before our data
+increases yet tools get more complicated. Promises made and promises
+broken.
 
 But this isn't about me, this is about you. I've cried, I've sweat blood
 and cried tears so that you don't have to. After working years in
-financail plannning, budeging , analysis, manipulating system data,
-external data, data meant to help that hurts, non standard data, excedl
-models that are so large you pray to the gods that they don't crash.
+financial planning, budgeting \& analysis roles, manipulating system
+data, external data, data meant to help that hurts, non standard data,
+excel models that are so large you pray to the gods that they don't
+crash.
 
 But there is a solution. If you are dreading your monthly report, your
 weekly stewardship and KPIs, I am here to tell you that this book will
@@ -287,6 +671,33 @@ get you answers. Answers that you can use today to fix your problems. No
 complex macros to learn, no advanced languages. This will solve 80\% of
 your problems, and will point you towards resources to solve the
 remaining.
+
+Listen up, fellow data wranglers and spreadsheet warriors! I have been
+to the darkest corners of the internet and beyond, searching for answers
+to the most impossible data problems. I've scoured every forum, every
+blog, every tutorial, and even ventured into the depths of the forbidden
+knowledge that mere mortals should not possess. But fear not, my
+friends, for I have returned with a solution that will save you from the
+agony and frustration of data manipulation.
+
+I'm not just talking about your everyday, run-of-the-mill data issues.
+No, no, no. I'm talking about the kind of data that would make even the
+most experienced analyst quiver in their boots. Messy, inconsistent,
+non-standard, and downright ugly data that makes you want to throw your
+computer out the window. But fear not, for I have conquered these data
+demons and emerged victorious.
+
+And now, I am here to share my knowledge with you, my dear comrades in
+data crunching. This book will solve 80\% of your data problems, with no
+complex macros or advanced languages required. It's like a data
+superhero that will swoop in and save the day, leaving you with more
+time to sip on a margarita and bask in the glory of your newfound data
+skills.
+
+So if you're tired of staring at your computer screen, tears streaming
+down your face, and feeling like you're stuck in a never-ending data
+nightmare, then this book is for you. It's time to take back control of
+your data, and with my help, you'll be a data champion in no time.
 
 This is meant to quickly reference guide. I will teach you patterns
 techniques so that you can quickly and effectively get to solutions to
@@ -330,6 +741,38 @@ Be patient, the concepts taught here are not hard or complex they are
 just \emph{different} than what you know. As you become more familiar
 with the new concepts you will learn it very quickly.
 
+Listen up, my fellow data warriors! This quick reference guide will be
+your ticket to solving data problems in a snap. I'll teach you the most
+effective patterns and techniques so that you can build up your analysis
+frameworks and tool kits like a pro.
+
+And let me tell you, I don't just throw around the word ``effective''
+lightly. I'm all about balancing your time and making sure you're not
+wasting it on skills that only you can use. Sure, you might be able to
+do some pretty advanced stuff, but what good is it if you're the only
+one who knows how to use it? The person who replaces you will undo it in
+a heartbeat, and all that time and effort will go down the drain.
+
+That's why I'm all about doing a typical problem in a defined amount of
+time. If you can't do a simple analysis in 15 minutes, then what's the
+point? You need to be able to train and benefit from your work, and that
+means being able to automate processes and semi-automate others. Trust
+me, by the time you're done with this guide, you'll be excited to tackle
+data head-on. It won't intimidate you anymore, and you'll be confident
+in your abilities.
+
+Now, I'm not going to lie to you and tell you that you'll be a data
+superstar in just two weeks. It's going to take some time to replicate
+your existing Excel skill set in R and surpass it. But trust me when I
+say that the investment is worth it. Once you can automate a report in
+10 minutes that used to take you a whole week, you'll wonder how you
+ever lived without these skills.
+
+So be patient, my friends. The concepts I'm about to teach you are not
+hard or complex, they're just different from what you're used to. But as
+you become more familiar with them, you'll learn them in no time. Get
+ready to become a data ninja, my friends. The future is yours!
+
 \hypertarget{books-purpose}{%
 \subsection*{Books purpose}\label{books-purpose}}
 \addcontentsline{toc}{subsection}{Books purpose}
@@ -372,75 +815,42 @@ issues.
 
 the real barrier and challenge to you learning R is not the language
 itself, although you won't believe it now, R is very simple to learn,
-the challenge will be in getting the discipline to practice R on
-frequently enough basis to gain confidence in proficiency in its
-application.
+the challenge will be in getting
 
-\hypertarget{working-directory-and-file-manipulation-concepts}{%
-\chapter{Working directory and file manipulation
-concepts}\label{working-directory-and-file-manipulation-concepts}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{R.home}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, rightrule=.15mm, opacitybacktitle=0.6, colframe=quarto-callout-note-color-frame, breakable, toptitle=1mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, titlerule=0mm, arc=.35mm, left=2mm, leftrule=.75mm, toprule=.15mm, colback=white, bottomrule=.15mm, opacityback=0]
-Note that there are five types of callouts, including: \texttt{note},
-\texttt{warning}, \texttt{important}, \texttt{tip}, and
-\texttt{caution}.
-\end{tcolorbox}
+\begin{verbatim}
+[1] "/usr/lib/R"
+\end{verbatim}
 
-\begin{quote}
-how to organize and reference your project files useful packages are
-\texttt{here} and \texttt{filestrings}
-\end{quote}
+\hypertarget{resources}{%
+\section*{Resources}\label{resources}}
+\addcontentsline{toc}{section}{Resources}
 
-\begin{quote}
-\texttt{getwd()} \texttt{setwd()} \texttt{list.files()}
-\end{quote}
+\markright{Resources}
 
-\begin{itemize}
-\item
-  Before you start working you need to understand the concept of a
-  workign directory and why that is importantset up the space you are
-  working in.
-\item
-  If you don't have a git or version sharing repository
-\item
-  When you save a file, data file, read inputs or otherwise, the
-  folderpath branching will generally speaking come from here
-\item
-  \texttt{getwd()} will tell you what is your current working directory
-\item
-  \texttt{setwd()} can be used to change your working directly
-\end{itemize}
-
-Other popular system funtions are
+\hypertarget{ggblanket-package}{%
+\subsection*{ggblanket package}\label{ggblanket-package}}
+\addcontentsline{toc}{subsection}{ggblanket package}
 
 \begin{itemize}
 \tightlist
 \item
-  the abilily to list files or filders in a folder path
-  list.files(pattern=\$\^{}, recursive=T)
+  simplified ggplot alternative package
 \end{itemize}
 
--the ability to check if a file exists?
+\href{https://davidhodge931.github.io/ggblanket/articles/ggblanket.html}{ggblanket}
 
-file.exists dir.exists basename(``c:/filedir/file.txt'') -\textgreater{}
-``file.txt dirname(''c:/filedir/file.txt'')-\textgreater{}
+\hypertarget{conditional-geoms-in-ggplot}{%
+\subsection*{Conditional geoms in
+ggplot}\label{conditional-geoms-in-ggplot}}
+\addcontentsline{toc}{subsection}{Conditional geoms in ggplot}
 
-\begin{itemize}
-\tightlist
-\item
-  create files create.dir(``./newdir'') file.create(``filename.txt'')
-  shell.exec(``filename.txt'')
-\end{itemize}
-
--move files
-filesstrings::move\_file(``c:home/filename.txt'',``c:newdir'')
-file.copy(``filename'', ``destination'')
-file.rename(directory,``existing file name'',``new file name'') -if
-directory is blank will assume getwd() file.choose()
-base::unlink(``filename'', recursive=T) -recursve must be T to delete
-directories
-
-Link to learn more {[}where did I have this???{]}
+(https://statisticsglobe.com/if-else-condition-add-extra-layer-ggplot2-plot-r)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -449,19 +859,258 @@ Link to learn more {[}where did I have this???{]}
 \end{Shaded}
 
 \begin{verbatim}
--- Attaching packages --------------------------------------- tidyverse 1.3.2 --
-v ggplot2 3.3.6     v purrr   0.3.4
-v tibble  3.1.8     v dplyr   1.0.9
-v tidyr   1.2.0     v stringr 1.4.0
-v readr   2.1.2     v forcats 0.5.1
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.2     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.0
+v ggplot2   3.4.2     v tibble    3.2.1
+v lubridate 1.9.2     v tidyr     1.3.0
+v purrr     1.0.1     
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 \end{verbatim}
 
-\hypertarget{how-to-save-things-on-gitgitworkflow}{%
-\chapter{How to save things on
-Git{[}gitworkflow{]}}\label{how-to-save-things-on-gitgitworkflow}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(                         }\CommentTok{\# Create example data}
+  \AttributeTok{x =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
+  \AttributeTok{y =} \FunctionTok{c}\NormalTok{(}\DecValTok{10}\SpecialCharTok{:}\DecValTok{1}\NormalTok{),}
+  \AttributeTok{category =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\DecValTok{5}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\StringTok{"B"}\NormalTok{, }\DecValTok{5}\NormalTok{))}
+\NormalTok{)}
+
+
+\NormalTok{ggp }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}    \CommentTok{\# Create a base plot }
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ category)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+
+
+\NormalTok{threshold }\OtherTok{\textless{}{-}} \DecValTok{8}                                       \CommentTok{\# Set a threshold for the condition}
+ 
+\NormalTok{ggp\_new }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{max}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{y) }\SpecialCharTok{\textgreater{}}\NormalTok{ threshold) \{            }\CommentTok{\# Add an extra layer based on the condition }
+\NormalTok{   ggp }\SpecialCharTok{+} 
+   \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =}\NormalTok{ threshold, }
+              \AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }
+              \AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    ggp}
+\NormalTok{  \}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{make-a-map-into-points}{%
+\section*{make a map into points}\label{make-a-map-into-points}}
+\addcontentsline{toc}{section}{make a map into points}
+
+\markright{make a map into points}
+
+https://github.com/BjnNowak/bertin
+
+\hypertarget{package-to-simplify-statitsics-summary-and-plots}{%
+\section*{package to simplify statitsics summary and
+plots}\label{package-to-simplify-statitsics-summary-and-plots}}
+\addcontentsline{toc}{section}{package to simplify statitsics summary
+and plots}
+
+\markright{package to simplify statitsics summary and plots}
+
+https://jtools.jacob-long.com/
+
+\hypertarget{ggpub-for-pulbican-type-polots-with-stats}{%
+\section*{ggpub for pulbican type polots with
+stats}\label{ggpub-for-pulbican-type-polots-with-stats}}
+\addcontentsline{toc}{section}{ggpub for pulbican type polots with
+stats}
+
+\markright{ggpub for pulbican type polots with stats}
+
+https://rpkgs.datanovia.com/ggpubr/
+
+\#explanation of log odds
+
+https://rpkgs.datanovia.com/ggpubr/
+
+\hypertarget{web-plot-digitizaer}{%
+\section*{web plot digitizaer}\label{web-plot-digitizaer}}
+\addcontentsline{toc}{section}{web plot digitizaer}
+
+\markright{web plot digitizaer}
+
+https://automeris.io/WebPlotDigitizer/
+
+\hypertarget{rename-cols-based-on-data-dictionary}{%
+\section*{rename cols based on data
+dictionary}\label{rename-cols-based-on-data-dictionary}}
+\addcontentsline{toc}{section}{rename cols based on data dictionary}
+
+\markright{rename cols based on data dictionary}
+
+https://twitter.com/i/bookmarks
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+
+\NormalTok{df }\OtherTok{\textless{}{-}}\NormalTok{ readr}\SpecialCharTok{::}\FunctionTok{read\_csv}\NormalTok{(}\StringTok{"/home/hagan/Downloads/pop23.csv"}\NormalTok{,}\AttributeTok{name\_repair =}\NormalTok{ janitor}\SpecialCharTok{::}\NormalTok{make\_clean\_names) }\SpecialCharTok{\%\textgreater{}\%} 
+     \FunctionTok{filter}\NormalTok{(}
+\NormalTok{    sex}\SpecialCharTok{!=}\DecValTok{0}
+\NormalTok{    ,age}\SpecialCharTok{\textless{}}\DecValTok{99}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Rows: 306 Columns: 6
+-- Column specification --------------------------------------------------------
+Delimiter: ","
+dbl (6): sex, age, estimatesbase2020, popestimate2020, popestimate2021, pope...
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{extract\_year\_make\_longer  }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(.data,.col) \{}
+
+\NormalTok{  .data }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    age}
+\NormalTok{    ,sex}
+\NormalTok{    ,}\FunctionTok{any\_of}\NormalTok{(}
+      \FunctionTok{c}\NormalTok{(\{\{.col\}\})}
+\NormalTok{      )}
+\NormalTok{    ) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{year=}\FunctionTok{parse\_number}\NormalTok{(name)) }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{name)}
+\NormalTok{\}}
+
+
+
+\NormalTok{col\_names }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"popestimate2020"}\NormalTok{,}\StringTok{"popestimate2021"}\NormalTok{,}\StringTok{"popestimate2022"}\NormalTok{)}
+
+\NormalTok{list\_df }\OtherTok{\textless{}{-}} \FunctionTok{map}\NormalTok{(col\_names,}\SpecialCharTok{\textasciitilde{}}\FunctionTok{extract\_year\_make\_longer}\NormalTok{(df,.x))}
+
+\NormalTok{df\_20 }\OtherTok{\textless{}{-}}\NormalTok{ list\_df[[}\DecValTok{1}\NormalTok{]] }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rename}\NormalTok{(}\AttributeTok{pop20=}\NormalTok{value) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(sex,age,pop20)}
+
+\NormalTok{df\_21 }\OtherTok{\textless{}{-}}\NormalTok{ list\_df[[}\DecValTok{2}\NormalTok{]] }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{age\_20=}\NormalTok{age}\DecValTok{{-}1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(age\_20}\SpecialCharTok{\textgreater{}{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{select}\NormalTok{(age\_20,value,sex) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{pop\_21=}\NormalTok{value) }
+
+
+\NormalTok{df\_22 }\OtherTok{\textless{}{-}}\NormalTok{ list\_df[[}\DecValTok{3}\NormalTok{]] }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{age\_20=}\NormalTok{age}\DecValTok{{-}2}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(age\_20}\SpecialCharTok{\textgreater{}{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(age\_20,value,sex) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{pop22=}\NormalTok{value)}
+
+
+
+
+\FunctionTok{left\_join}\NormalTok{(df\_20,}
+\NormalTok{          df\_21,}
+          \FunctionTok{join\_by}\NormalTok{(age}\SpecialCharTok{==}\NormalTok{age\_20}
+\NormalTok{                  ,sex}\SpecialCharTok{==}\NormalTok{sex)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{left\_join}\NormalTok{(df\_22,}
+           \FunctionTok{join\_by}\NormalTok{( age}\SpecialCharTok{==}\NormalTok{age\_20}
+\NormalTok{            ,sex}\SpecialCharTok{==}\NormalTok{sex)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{one\_year\_delta=}\NormalTok{pop\_21}\SpecialCharTok{{-}}\NormalTok{pop20}
+\NormalTok{    ,}\AttributeTok{two\_year\_delta=}\NormalTok{pop22}\SpecialCharTok{{-}}\NormalTok{pop20}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y=}\NormalTok{two\_year\_delta,}\AttributeTok{x=}\NormalTok{age,}\AttributeTok{fill=}\FunctionTok{factor}\NormalTok{(sex,}\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{,}\StringTok{"female"}\NormalTok{))))}\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{18}\NormalTok{,}\AttributeTok{linetype=}\StringTok{"dotted"}\NormalTok{,}\AttributeTok{size=}\DecValTok{1}\NormalTok{, }\AttributeTok{color=}\StringTok{"grey"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{65}\NormalTok{, }\AttributeTok{size=}\DecValTok{1}\NormalTok{, }\AttributeTok{color=}\StringTok{"grey"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{n.breaks=}\DecValTok{30}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_comma}\NormalTok{(}\AttributeTok{scale=}\DecValTok{1}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{,}\AttributeTok{suffix=}\StringTok{"M"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values=}\FunctionTok{c}\NormalTok{(}\AttributeTok{male=}\StringTok{"midnightblue"}\NormalTok{,}\AttributeTok{female=}\StringTok{"firebrick"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{theme\_classic}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{fill=}\StringTok{"Gender"}
+\NormalTok{    ,}\AttributeTok{title=}\StringTok{"Two year change in population by age group"}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+i Please use `linewidth` instead.
+\end{verbatim}
+
+\begin{verbatim}
+Warning: Removed 4 rows containing missing values (`position_stack()`).
+\end{verbatim}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{./intro_files/figure-pdf/unnamed-chunk-3-1.pdf}
+
+}
+
+\end{figure}
+
+df\_2021\_spk \textless- df\_spk \%\textgreater\%
+select(age,sex,popestimate2021) df\_2022\_spk \textless- df\_spk
+\%\textgreater\% select(age,sex,popestimate2022)
+
+df\_spk \%\textgreater\% filter( age\textless99 ,sex!=0 )
+\%\textgreater\% ggplot(aes(y=popestimate2022,x=age,fill=factor(sex)))+
+geom\_col()+ geom\_vline(xintercept = 18,linetype=``dotted'')+
+geom\_vline(xintercept = 75,linetype=``dotted'')+
+scale\_x\_continuous(n.breaks = 30) \#
+geom\_col(aes(y=popestimate2020),col=``blue'',alpha=.2)
+
+\hypertarget{expand-dates}{%
+\chapter*{expand dates}\label{expand-dates}}
+\addcontentsline{toc}{chapter}{expand dates}
+
+\markboth{expand dates}{expand dates}
+
+\hypertarget{create-columns-for-year-month-and-day-for-each-date}{%
+\chapter*{Create columns for year, month and day for each
+date}\label{create-columns-for-year-month-and-day-for-each-date}}
+\addcontentsline{toc}{chapter}{Create columns for year, month and day
+for each date}
+
+\markboth{Create columns for year, month and day for each date}{Create
+columns for year, month and day for each date}
+
+\hypertarget{column-in-a-data.frame}{%
+\chapter*{column in a data.frame}\label{column-in-a-data.frame}}
+\addcontentsline{toc}{chapter}{column in a data.frame}
+
+\markboth{column in a data.frame}{column in a data.frame}
+
+expand\_dates \textless- function(x, parts = c(``year'', ``month'',
+``day'')) \{ funs \textless- list(year = year, month = month, day =
+day){[}parts{]} mutate(x, across(where(lubridate::http://is.Date),
+funs)) \}
+
+\begin{verbatim}
+
+
+
+
+
+
+
+`<!-- quarto-file-metadata: eyJyZXNvdXJjZURpciI6Ii4ifQ== -->`{=html}
+
+```{=html}
+<!-- quarto-file-metadata: eyJyZXNvdXJjZURpciI6Ii4iLCJib29rSXRlbVR5cGUiOiJjaGFwdGVyIiwiYm9va0l0ZW1OdW1iZXIiOjEsImJvb2tJdGVtRmlsZSI6ImxlYXJuaW5nUi5xbWQiLCJib29rSXRlbURlcHRoIjoxfQ== -->
+\end{verbatim}
+
+\hypertarget{how-to-save-things-on-git}{%
+\chapter*{How to save things on Git}\label{how-to-save-things-on-git}}
+\addcontentsline{toc}{chapter}{How to save things on Git}
+
+\markboth{How to save things on Git}{How to save things on Git}
 
 \begin{itemize}
 \tightlist
@@ -484,6 +1133,12 @@ go to global settings (not repository settings), go to develrop settings
 and click personal access tokens
 
 generate new token, copy (consider saving as you can only see it once)
+
+save token with credentials::set\_github\_pat()
+
+check everything with gitcreds\_get()
+
+git config --global credential.helper `cache --timeout=10000000'
 
 usethis::git\_branch\_default()
 
@@ -683,7 +1338,8 @@ two iems are expected, change the vector to a list
 output
 
 \hypertarget{categorical-variables}{%
-\subsection{Categorical Variables}\label{categorical-variables}}
+\subsection*{Categorical Variables}\label{categorical-variables}}
+\addcontentsline{toc}{subsection}{Categorical Variables}
 
 In general you will need to distinguish betwen your character values as
 either straight character or categorical with levels
@@ -848,6 +1504,25 @@ column:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.2     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.0
+v ggplot2   3.4.2     v tibble    3.2.1
+v lubridate 1.9.2     v tidyr     1.3.0
+v purrr     1.0.1     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{starwars }\SpecialCharTok{\%\textgreater{}\%}
 
 \FunctionTok{filter}\NormalTok{(}\FunctionTok{if\_any}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), }\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(.x)))}
@@ -856,22 +1531,21 @@ column:
 
 \begin{verbatim}
 # A tibble: 87 x 14
-   name        height  mass hair_~1 skin_~2 eye_c~3 birth~4 sex   gender homew~5
-   <chr>        <int> <dbl> <chr>   <chr>   <chr>     <dbl> <chr> <chr>  <chr>  
- 1 Luke Skywa~    172    77 blond   fair    blue       19   male  mascu~ Tatooi~
- 2 C-3PO          167    75 <NA>    gold    yellow    112   none  mascu~ Tatooi~
- 3 R2-D2           96    32 <NA>    white,~ red        33   none  mascu~ Naboo  
- 4 Darth Vader    202   136 none    white   yellow     41.9 male  mascu~ Tatooi~
- 5 Leia Organa    150    49 brown   light   brown      19   fema~ femin~ Aldera~
- 6 Owen Lars      178   120 brown,~ light   blue       52   male  mascu~ Tatooi~
- 7 Beru White~    165    75 brown   light   blue       47   fema~ femin~ Tatooi~
- 8 R5-D4           97    32 <NA>    white,~ red        NA   none  mascu~ Tatooi~
- 9 Biggs Dark~    183    84 black   light   brown      24   male  mascu~ Tatooi~
-10 Obi-Wan Ke~    182    77 auburn~ fair    blue-g~    57   male  mascu~ Stewjon
-# ... with 77 more rows, 4 more variables: species <chr>, films <list>,
-#   vehicles <list>, starships <list>, and abbreviated variable names
-#   1: hair_color, 2: skin_color, 3: eye_color, 4: birth_year, 5: homeworld
-# i Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
+   name     height  mass hair_color skin_color eye_color birth_year sex   gender
+   <chr>     <int> <dbl> <chr>      <chr>      <chr>          <dbl> <chr> <chr> 
+ 1 Luke Sk~    172    77 blond      fair       blue            19   male  mascu~
+ 2 C-3PO       167    75 <NA>       gold       yellow         112   none  mascu~
+ 3 R2-D2        96    32 <NA>       white, bl~ red             33   none  mascu~
+ 4 Darth V~    202   136 none       white      yellow          41.9 male  mascu~
+ 5 Leia Or~    150    49 brown      light      brown           19   fema~ femin~
+ 6 Owen La~    178   120 brown, gr~ light      blue            52   male  mascu~
+ 7 Beru Wh~    165    75 brown      light      blue            47   fema~ femin~
+ 8 R5-D4        97    32 <NA>       white, red red             NA   none  mascu~
+ 9 Biggs D~    183    84 black      light      brown           24   male  mascu~
+10 Obi-Wan~    182    77 auburn, w~ fair       blue-gray       57   male  mascu~
+# i 77 more rows
+# i 5 more variables: homeworld <chr>, species <chr>, films <list>,
+#   vehicles <list>, starships <list>
 \end{verbatim}
 
 \begin{itemize}
@@ -891,22 +1565,21 @@ column:
 
 \begin{verbatim}
 # A tibble: 29 x 14
-   name        height  mass hair_~1 skin_~2 eye_c~3 birth~4 sex   gender homew~5
-   <chr>        <int> <dbl> <chr>   <chr>   <chr>     <dbl> <chr> <chr>  <chr>  
- 1 Luke Skywa~    172    77 blond   fair    blue       19   male  mascu~ Tatooi~
- 2 Darth Vader    202   136 none    white   yellow     41.9 male  mascu~ Tatooi~
- 3 Leia Organa    150    49 brown   light   brown      19   fema~ femin~ Aldera~
- 4 Owen Lars      178   120 brown,~ light   blue       52   male  mascu~ Tatooi~
- 5 Beru White~    165    75 brown   light   blue       47   fema~ femin~ Tatooi~
- 6 Biggs Dark~    183    84 black   light   brown      24   male  mascu~ Tatooi~
- 7 Obi-Wan Ke~    182    77 auburn~ fair    blue-g~    57   male  mascu~ Stewjon
- 8 Anakin Sky~    188    84 blond   fair    blue       41.9 male  mascu~ Tatooi~
- 9 Chewbacca      228   112 brown   unknown blue      200   male  mascu~ Kashyy~
-10 Han Solo       180    80 brown   fair    brown      29   male  mascu~ Corell~
-# ... with 19 more rows, 4 more variables: species <chr>, films <list>,
-#   vehicles <list>, starships <list>, and abbreviated variable names
-#   1: hair_color, 2: skin_color, 3: eye_color, 4: birth_year, 5: homeworld
-# i Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
+   name     height  mass hair_color skin_color eye_color birth_year sex   gender
+   <chr>     <int> <dbl> <chr>      <chr>      <chr>          <dbl> <chr> <chr> 
+ 1 Luke Sk~    172    77 blond      fair       blue            19   male  mascu~
+ 2 Darth V~    202   136 none       white      yellow          41.9 male  mascu~
+ 3 Leia Or~    150    49 brown      light      brown           19   fema~ femin~
+ 4 Owen La~    178   120 brown, gr~ light      blue            52   male  mascu~
+ 5 Beru Wh~    165    75 brown      light      blue            47   fema~ femin~
+ 6 Biggs D~    183    84 black      light      brown           24   male  mascu~
+ 7 Obi-Wan~    182    77 auburn, w~ fair       blue-gray       57   male  mascu~
+ 8 Anakin ~    188    84 blond      fair       blue            41.9 male  mascu~
+ 9 Chewbac~    228   112 brown      unknown    blue           200   male  mascu~
+10 Han Solo    180    80 brown      fair       brown           29   male  mascu~
+# i 19 more rows
+# i 5 more variables: homeworld <chr>, species <chr>, films <list>,
+#   vehicles <list>, starships <list>
 \end{verbatim}
 
 \begin{itemize}
@@ -914,37 +1587,6 @@ column:
 \item
   Find all rows where no variable has missing values:
 \end{itemize}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{starwars }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), }\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(.x)))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Warning: Using `across()` in `filter()` is deprecated, use `if_any()` or
-`if_all()`.
-\end{verbatim}
-
-\begin{verbatim}
-# A tibble: 29 x 14
-   name        height  mass hair_~1 skin_~2 eye_c~3 birth~4 sex   gender homew~5
-   <chr>        <int> <dbl> <chr>   <chr>   <chr>     <dbl> <chr> <chr>  <chr>  
- 1 Luke Skywa~    172    77 blond   fair    blue       19   male  mascu~ Tatooi~
- 2 Darth Vader    202   136 none    white   yellow     41.9 male  mascu~ Tatooi~
- 3 Leia Organa    150    49 brown   light   brown      19   fema~ femin~ Aldera~
- 4 Owen Lars      178   120 brown,~ light   blue       52   male  mascu~ Tatooi~
- 5 Beru White~    165    75 brown   light   blue       47   fema~ femin~ Tatooi~
- 6 Biggs Dark~    183    84 black   light   brown      24   male  mascu~ Tatooi~
- 7 Obi-Wan Ke~    182    77 auburn~ fair    blue-g~    57   male  mascu~ Stewjon
- 8 Anakin Sky~    188    84 blond   fair    blue       41.9 male  mascu~ Tatooi~
- 9 Chewbacca      228   112 brown   unknown blue      200   male  mascu~ Kashyy~
-10 Han Solo       180    80 brown   fair    brown      29   male  mascu~ Corell~
-# ... with 19 more rows, 4 more variables: species <chr>, films <list>,
-#   vehicles <list>, starships <list>, and abbreviated variable names
-#   1: hair_color, 2: skin_color, 3: eye_color, 4: birth_year, 5: homeworld
-# i Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
-\end{verbatim}
 
 Need to investigate rename\_with and and itsimpact on select as it
 appears to be superseded
@@ -1470,8 +2112,12 @@ nrow = 1) + labs(y = NULL)
 princomp with plot(pca\_mod, type=``lines'').
 
 \hypertarget{advanced-plotting-contorl-over-color-shape-or-alpha}{%
-\section{advanced plotting, contorl over color, shape or
+\section*{advanced plotting, contorl over color, shape or
 alpha------}\label{advanced-plotting-contorl-over-color-shape-or-alpha}}
+\addcontentsline{toc}{section}{advanced plotting, contorl over color,
+shape or alpha------}
+
+\markright{advanced plotting, contorl over color, shape or alpha------}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
@@ -1526,7 +2172,7 @@ alpha------}\label{advanced-plotting-contorl-over-color-shape-or-alpha}}
 
 \begin{figure}[H]
 
-{\centering \includegraphics{./learningR_files/figure-pdf/unnamed-chunk-7-1.pdf}
+{\centering \includegraphics{./learningR_files/figure-pdf/unnamed-chunk-4-1.pdf}
 
 }
 
@@ -1551,7 +2197,8 @@ pass a formula to check against each column where() -is.numeric()
 -is.factor() \textasciitilde mean(.x) \textgreater3.5
 
 \hypertarget{common-tasks}{%
-\subsection{common tasks---}\label{common-tasks}}
+\subsection*{common tasks---}\label{common-tasks}}
+\addcontentsline{toc}{subsection}{common tasks---}
 
 apply a function to multiple columns to perform action onto column or
 new columns - Across() apply a column of arguments, one by one, as input
@@ -1564,7 +2211,10 @@ apply a function to pairs of columns on a rolling basis (eg. col 1 -2,
 col 2 - 3, etc) ????
 
 \hypertarget{count}{%
-\section{count}\label{count}}
+\section*{count}\label{count}}
+\addcontentsline{toc}{section}{count}
+
+\markright{count}
 
 count very useful function to quickly tabulate data use .drop to show
 any data that has been filtered out or removed
@@ -1575,300 +2225,333 @@ any data that has been filtered out or removed
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{how-to-parse-out-words-from-a-sentence}{%
+\subsection*{how to parse out words from a
+sentence}\label{how-to-parse-out-words-from-a-sentence}}
+\addcontentsline{toc}{subsection}{how to parse out words from a
+sentence}
+
+\begin{itemize}
+\tightlist
+\item
+  fixed position and fixed seperated but whole word (seperated by
+  consistent seperator
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(corrr)}
-
-\NormalTok{mtcars }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{na.omit}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{correlate}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{network\_plot}\NormalTok{(}\AttributeTok{colours =} \FunctionTok{c}\NormalTok{(}\StringTok{"firebrick"}\NormalTok{,}\StringTok{"white"}\NormalTok{,}\StringTok{"midnight blue"}\NormalTok{))}
+\NormalTok{string }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"I only want the third word of each sentence"}\NormalTok{,}
+            \StringTok{"I only need the third word of each setence"}\NormalTok{,}
+            \StringTok{"I only use the third worsd of each sentence"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\NormalTok{stringr}\SpecialCharTok{::}\FunctionTok{word}\NormalTok{(string, }\CommentTok{\#vector of strings}
+              \AttributeTok{start=}\DecValTok{3}\NormalTok{, }\CommentTok{\#where to start extraction}
+              \AttributeTok{end=}\DecValTok{3}\NormalTok{, }\CommentTok{\#where to end extraction}
+              \AttributeTok{sep=}\StringTok{" "}\NormalTok{)}\CommentTok{\# what seperator to parse}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-Correlation computed with
-* Method: 'pearson'
-* Missing treated using: 'pairwise.complete.obs'
+[1] "want" "need" "use" 
 \end{verbatim}
 
-\begin{figure}[H]
+stringr::word(string,start=x,end=y,sep=?)
 
-{\centering \includegraphics{./learningR_files/figure-pdf/unnamed-chunk-10-1.pdf}
+\hypertarget{database}{%
+\chapter{database}\label{database}}
 
-}
+https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html\#
+https://r4ds.hadley.nz/databases.html
 
-\end{figure}
+\hypertarget{how-to-connect}{%
+\chapter{How to connect}\label{how-to-connect}}
 
-\hypertarget{chapter-1-what-are-we-doing-here}{%
-\chapter{Chapter 1: what are we doing
-here}\label{chapter-1-what-are-we-doing-here}}
+\begin{itemize}
+\item
+  First need to configure your DSN so that you can be authenticated
+\item
+  If done correctly you can then use DBI package to connect to the
+  database of choice
 
-In summary, this book has no content whatsoever.
+\begin{verbatim}
+-   create a connection string with DBI::dbConnect()
+    -   driver_name such as ODBC::ODBC() or duckdb::duckdb()
+    -   DSN name (if applicable)
+-   Enter SQL query with `sql()`
+-   Use connection string and sql query together to create a lazy table with `tbl()`
+\end{verbatim}
+\item
+  From there you can use dplyr back end queries to see everything
+\item
+  You are limited to queries that can be translated to
+\item
+  You can see what query it will generate with \texttt{show\_query()}
+\item
+  You can finallly execute the query with \texttt{collect()}
+\item
+  if you already have something as a dataframe you can upload it to a
+  database with DBI::dbWriteTable(con,``tbl\_name'',df) which will write
+  the table to the connection with the name you gave
+
+  \begin{itemize}
+  \tightlist
+  \item
+    dbWriteTable() can write a r dataframe or you can use sql to create
+    a virtual table if you want
+  \item
+    dbplyr::copy\_inline(con\_db,df = df) is alternative method
+  \end{itemize}
+\item
+  dbListTables(con) can be used to see what virtual tables are in the
+  connection
+\item
+  dbReadTable(con,``tbl\_name'') read the virtual table as a dataframe
+\item
+  in\_schema(``database'',``tbl'') is a way to navigate a scehma in
+  tbl()
+\end{itemize}
+
+con \textless- DBI::dbConnect(ODBC::ODBC(),dsn=``name'')
+
+con\_db \textless- DBI::dbConnect(duckdb::duckdb())
+
+\hypertarget{special-example-to-pass-one-db-object-to-another}{%
+\chapter{special example to pass one db object to
+another}\label{special-example-to-pass-one-db-object-to-another}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DecValTok{1} \SpecialCharTok{+} \DecValTok{1}
+\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}\{r\}}
+\CommentTok{\#| label: db{-}connect example}
+\CommentTok{\#| eval: true}
+
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-[1] 2
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.2     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.0
+v ggplot2   3.4.2     v tibble    3.2.1
+v lubridate 1.9.2     v tidyr     1.3.0
+v purrr     1.0.1     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 \end{verbatim}
-
-This is a test of how to create new content to be added later one
-
-\hypertarget{chapter-1-lets-get-started}{%
-\chapter{Chapter 1: Let's get
-started}\label{chapter-1-lets-get-started}}
-
-\hypertarget{named-objects}{%
-\chapter{Named Objects}\label{named-objects}}
-
-\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, rightrule=.15mm, opacitybacktitle=0.6, colframe=quarto-callout-note-color-frame, breakable, toptitle=1mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, titlerule=0mm, arc=.35mm, left=2mm, leftrule=.75mm, toprule=.15mm, colback=white, bottomrule=.15mm, opacityback=0]
-In this package, we will use the following libraries
-
-library(tidyverse)
-\end{tcolorbox}
-
-\hypertarget{how-to-create-and-reference-objects-and-generate-series}{%
-\subsection{how to create and reference objects and generate
-series}\label{how-to-create-and-reference-objects-and-generate-series}}
-
-Although not the most glamorous place to start, learning how to create
-named objects, reference and manipulate them as well generate data
-becomes incredibly useful down the road when combined with other
-techniques and workflows.
-
-In R this is main way you save, reference, and manipulate your data
-
-You use the \texttt{\textless{}-} (ctrl + - ) or the \texttt{=} symbol
-to assign a result to an object
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{object }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{+}\DecValTok{1}
+\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}\{r\}}
+\CommentTok{\#| label: db{-}connect example}
+\CommentTok{\#| eval: true}
+
+\DocumentationTok{\#\# create connection string locally}
+\NormalTok{con\_db }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(duckdb}\SpecialCharTok{::}\FunctionTok{duckdb}\NormalTok{())}
+
+\CommentTok{\# loads data into your connection either in memory}
+\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbWriteTable}\NormalTok{(con\_db,}\StringTok{"diamonds\_db"}\NormalTok{,ggplot2}\SpecialCharTok{::}\NormalTok{diamonds)}
+
+\CommentTok{\#create new table to the connection}
+
+\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbExecute}\NormalTok{(con\_db, }\StringTok{"CREATE TABLE duckdb\_table (col1 INT, col2 STRING)"}\NormalTok{)}
+
+\CommentTok{\#preview what is in your connection}
+
+\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbListTables}\NormalTok{(con\_db)}
+
+\NormalTok{dbplyr}\SpecialCharTok{::}\FunctionTok{copy\_inline}\NormalTok{(con\_db,}\AttributeTok{df =}\NormalTok{ diamonds)}
+
+
+\NormalTok{diamonds\_db }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{tbl}\NormalTok{(con\_db}
+\NormalTok{    ,}\StringTok{"diamonds\_db"}
+\NormalTok{    )}
+
+
+\FunctionTok{print}\NormalTok{(diamonds\_db)}
+\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}}
 \end{Highlighting}
 \end{Shaded}
 
-Whatever name type will become the object's name, if type in the object,
-it will return whatever you assigned to the name
+\begin{verbatim}
+[1] 0
+[1] "diamonds_db"  "duckdb_table"
+# Source:   SQL [?? x 10]
+# Database: DuckDB 0.7.1 [hagan@Linux 6.2.6-76060206-generic:R 4.3.0/:memory:]
+   carat cut       color clarity depth table price     x     y     z
+   <dbl> <chr>     <chr> <chr>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+ 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+ 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+ 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
+# i more rows
+# Source:   table<diamonds_db> [?? x 10]
+# Database: DuckDB 0.7.1 [hagan@Linux 6.2.6-76060206-generic:R 4.3.0/:memory:]
+   carat cut       color clarity depth table price     x     y     z
+   <dbl> <fct>     <fct> <fct>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+ 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+ 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+ 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
+# i more rows
+\end{verbatim}
 
-Although this is fairly intuitive to understand, if you are coming from
-an Excel background, it will take time to develop this habit of
-assigning names to results because in Excel, you can refer to a result
-by its cell location by physically pointing a formula to a input.
+\hypertarget{example-of-passing-one-database-object-to-arrow}{%
+\chapter{Example of passing one database object to
+arrow}\label{example-of-passing-one-database-object-to-arrow}}
 
-For quick and simple calculations, this will be quicker but if you try
-to do something even beyond a simple calculation, you will see it
-becomes very difficult to manage, easy to make mistakes and reduces your
-producivity as you have to constantly point to those input cells or have
-to remember non-intuitive names \texttt{eg\ C5} .
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diamonds\_db }\SpecialCharTok{\%\textgreater{}\%} 
+  
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{good\_indicator=}\FunctionTok{if\_else}\NormalTok{(cut}\SpecialCharTok{==}\StringTok{"Good"}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(color) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{n=}\FunctionTok{n}\NormalTok{()}
+\NormalTok{    ,}\AttributeTok{mean=}\FunctionTok{mean}\NormalTok{(carat)}
+\NormalTok{    ,}\AttributeTok{mean\_price=}\FunctionTok{mean}\NormalTok{(price)}
+\NormalTok{    ,}\AttributeTok{mean\_ind=}\FunctionTok{mean}\NormalTok{(good\_indicator)}
+\NormalTok{    ,}\AttributeTok{mean\_adj=}\FunctionTok{mean}\NormalTok{(carat[good\_indicator}\SpecialCharTok{==}\DecValTok{1}\NormalTok{])}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%} 
 
-In excel, you can also name a cell by putting your cursor over the cell
-and click on the named box in the top left.
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(color)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rolling\_price=}\FunctionTok{cumsum}\NormalTok{(mean\_price)) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{    arrow}\SpecialCharTok{::}\FunctionTok{to\_arrow}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+ \FunctionTok{filter}\NormalTok{(color}\SpecialCharTok{==}\StringTok{"H"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(color,mean\_adj) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{collect}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
 
-To keep track of all the names, you can press F5 and you will see a
-dialog box that will help you manage all of your names.
+\begin{verbatim}
+# A tibble: 1 x 2
+  color mean_adj
+  <fct>    <dbl>
+1 H        0.915
+\end{verbatim}
 
-When you want to refer to that cell, you can simply type in the cell
-name.
+\hypertarget{spark}{%
+\chapter{spark}\label{spark}}
 
-Although useful for intermediate analysis, I would say from a workflow
-perspective, it isn't ``easy'' as you have to constantly break your
-workflow but it will make your work more readable.
+\begin{itemize}
+\tightlist
+\item
+  There are two ways to manipulate data in spark, sparklyr and SparkR
+\item
+  Sparklyr uses dblyr backend so many of your dplyr calls can be used
+\item
+  Furthermore you can use any R package if you use
+  \texttt{spark\_apply()}
+\item
+  Using spark is pretty consistent any of database backends
+\item
+  Create a spark connection with \texttt{spark\_connect()} and assign it
+  to a variable usually ``sc''
 
-\hypertarget{how-to-create-and-named-tables}{%
-\subsection{how to create and named
-Tables}\label{how-to-create-and-named-tables}}
+  \begin{itemize}
+  \tightlist
+  \item
+    Can either use master=``local'' or if you are in databricks you can
+    use master=``databricks''
+  \end{itemize}
+\item
+  Then you can import your data referencing your spark connection
 
-\hypertarget{in-r}{%
-\paragraph{In R}\label{in-r}}
+  \begin{itemize}
+  \tightlist
+  \item
+    for inline data you can simply reference copy\_to(sc,df,df\_name)
+    and assign to a object (typically sdf prefix)
+  \end{itemize}
+\item
+  From there you can use all your standard dblyr type functions however
+  sometimes certain functions won't work
+\item
+  The master trick here is to use the \texttt{sparklyr::spark\_apply()}
+  function
 
-Regardless if the data object is a cell or a table (or actually any type
-of object) the naming methodology is the same.
-
-However creating a table isn't as straight forward because you don't
-have the same GUI.
-
-Data entry is not R (or any scripting languages) strong suit - which
-doesn't mean you can't do it but if you are strictly entering in data
-(of great length), use excel.
-
-However, below shows you how to create tables
-
-\hypertarget{tibble-data-frame}{%
-\subsubsection{tibble / data frame}\label{tibble-data-frame}}
+  \begin{itemize}
+  \tightlist
+  \item
+    pass the df object to as argument and then pass function or custom
+    function
+  \item
+    I don't think there are room for additional parameters? but I may be
+    wrong
+  \item
+    If you use \%\textgreater\% then you usually need to call the
+    library(magrittr) in your function
+  \end{itemize}
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(sparklyr)}
+
+
+\CommentTok{\#Create spark connection}
+\NormalTok{sc }\OtherTok{\textless{}{-}}\NormalTok{ sparklyr}\SpecialCharTok{::}\FunctionTok{spark\_connect}\NormalTok{(}\AttributeTok{master=}\StringTok{"local"}\NormalTok{)}
+
+\CommentTok{\# take a data object and copy it too a spark object}
+
+\NormalTok{diamonds\_sdf }\OtherTok{\textless{}{-}}\NormalTok{ sparklyr}\SpecialCharTok{::}\FunctionTok{copy\_to}\NormalTok{(sc,diamonds,}\StringTok{"diamonds\_sprk"}\NormalTok{)}
+
+\CommentTok{\# filter the object down to smaller size}
+\NormalTok{ small\_diamonds\_sdf }\OtherTok{\textless{}{-}}\NormalTok{ diamonds\_sdf }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{head}\NormalTok{(}\DecValTok{100}\NormalTok{)}
+
+
+\CommentTok{\#  create custom rowwise function}
+\NormalTok{rowwise\_fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(e)\{}
+
+\FunctionTok{library}\NormalTok{(magrittr)}
+\NormalTok{ e }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{   dplyr}\SpecialCharTok{::}\FunctionTok{rowwise}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{   dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{test=}\FunctionTok{sum}\NormalTok{(dplyr}\SpecialCharTok{::}\FunctionTok{c\_across}\NormalTok{(x}\SpecialCharTok{:}\NormalTok{z)))}
+\NormalTok{\}}
+
+\CommentTok{\# use function on the dataset }
+
+
+\NormalTok{ sparklyr}\SpecialCharTok{::}\FunctionTok{spark\_apply}\NormalTok{(}
+  \AttributeTok{x=}\NormalTok{small\_diamonds\_sdf}
+\NormalTok{  ,}\AttributeTok{f=}\NormalTok{rowwise\_fun}
+\NormalTok{) }
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
--- Attaching packages --------------------------------------- tidyverse 1.3.2 --
-v ggplot2 3.3.6     v purrr   0.3.4
-v tibble  3.1.8     v dplyr   1.0.9
-v tidyr   1.2.0     v stringr 1.4.0
-v readr   2.1.2     v forcats 0.5.1
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
+# Source: spark<?> [?? x 11]
+   carat cut       color clarity depth table price     x     y     z  test
+   <dbl> <chr>     <chr> <chr>   <dbl> <dbl> <int> <dbl> <dbl> <dbl> <dbl>
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43  10.4
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31  10.0
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31  10.4
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63  11.1
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75  11.4
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48  10.4
+ 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47  10.4
+ 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53  10.7
+ 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49  10.1
+10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39  10.4
+# i more rows
 \end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df\_example }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}\AttributeTok{x=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
-                     \AttributeTok{y=}\DecValTok{2}\SpecialCharTok{:}\DecValTok{11}\NormalTok{,}
-                     \AttributeTok{z=}\DecValTok{3}\SpecialCharTok{:}\DecValTok{12}
-\NormalTok{                     )}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{tribble}{%
-\subsubsection{Tribble}\label{tribble}}
-
-When trying to do data entry that you need to reference columns wise \&
-rowwise, this can challenging, so thats why there is a \texttt{tribble},
-a handy way to still see your columnwise and rowwise data together
-
-\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, rightrule=.15mm, opacitybacktitle=0.6, colframe=quarto-callout-note-color-frame, breakable, toptitle=1mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, titlerule=0mm, arc=.35mm, left=2mm, leftrule=.75mm, toprule=.15mm, colback=white, bottomrule=.15mm, opacityback=0]
-There is a concept of vectorization, which for now, we will define as
-recycling. Which is to say if I put one column with 10 elements, and
-another column with only 1 element, tibble will recycle the ``1'' until
-it length of the tibble.
-\end{tcolorbox}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df\_tribble }\OtherTok{\textless{}{-}} \FunctionTok{tribble}\NormalTok{(}
-  \SpecialCharTok{\textasciitilde{}}\NormalTok{col1,}\SpecialCharTok{\textasciitilde{}}\NormalTok{col2,}\SpecialCharTok{\textasciitilde{}}\NormalTok{col3,}
-  \DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}
-  \DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}
-  \DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}
-  
-  
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, coltitle=black, rightrule=.15mm, opacitybacktitle=0.6, colframe=quarto-callout-tip-color-frame, breakable, toptitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, titlerule=0mm, arc=.35mm, left=2mm, leftrule=.75mm, toprule=.15mm, colback=white, bottomrule=.15mm, opacityback=0]
-What naming convention should we use in R? This is where you will start
-to see namng conventions that you are not familiar with such as
-snake\_case, kebab-case, or Upper\_camel.
-
-For this book, we will use snake\_case (but you use whatever is easist
-for you).
-
-Coming up with names for variables will be challenging as you will
-either type too little or too much, over time you will get your own
-convention. It is not important what is optimal, more important to focus
-on convention (means consistency) so that when you read something you
-immediately know what it is.
-\end{tcolorbox}
-
-\hypertarget{excel-skills-to-be-covered}{%
-\subsection{Excel Skills to be
-covered}\label{excel-skills-to-be-covered}}
-
-Named cells~
-
-Named Tables~
-
-Adding columns to Tables~
-
-Adding rows to Tables~
-
-Referencing named objects~
-
-F5~
-
-Index()~
-
-Tab references~
-
-How to edit named objects~
-
-Data Entry Form add in~
-
-Creating vector~
-
-Fill Series Tips~
-
-Existing data~
-
-New series of Numbers~
-
-New series of Dates~
-
-Flash Fill tips~
-
-Adding/subtracting/dividing/multiplying columns~
-
-One formula works against all rows in a column~
-
-Rowwise equvalant~
-
-Colwise equvailant~
-
-Mean~
-
-Median~
-
-Sum~
-
-Count~
-
-Aggregate~
-
-Error handling~
-
-Iferror()~
-
-NA vs.~null vs.~ref~
-
-Array {[}what did I mean by this{]}
-
-\hypertarget{r-skills-to-be-covered}{%
-\section{R skills to be covered}\label{r-skills-to-be-covered}}
-
-Tibbles~
-
-Lists~
-
-Vectors~
-
-dataeditR~
-
-Arrange()~
-
-Generating data~
-
--numbers~
-
--letters~
-
--dates~
-
--rep()~
-
--seq()~
-
--mutate
-
-\hypertarget{special}{}
-Here is a warning.
-
-More content.
-
-\hypertarget{references}{%
-\chapter*{References}\label{references}}
-\addcontentsline{toc}{chapter}{References}
-
-\hypertarget{refs}{}
-\begin{CSLReferences}{0}{0}
-\end{CSLReferences}
 
 
 

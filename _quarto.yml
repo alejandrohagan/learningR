@@ -13,10 +13,6 @@ book:
         - learningR.qmd
         - database.qmd
         - spark.qmd
-        - machine_learning.qmd
-        - new_chapter.qmd
-        - time_series.qmd
-        - trelliscopejs.qmd
 
 bibliography: references.bib
 
