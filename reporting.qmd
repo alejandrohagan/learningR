@@ -1,0 +1,21 @@
+---
+title: "business_communication"
+---
+
+# Various standards and conventions
+
+## Convenions
+-   Title Concept
+        
+        -   title=Take away message
+        -   subtitle= What is it (dimension, units) and timeframe
+        -   plot label=sample size, missing data 
+        -   summary of what it is??
+-   Title and Structure
+-   Scenario notation
+    -   patterns (solid, fill, checkered)
+    -   colors
+    -   font style
+-   Absolute vs. relative variance
+-   Proper scaling
+-   missing data and data size

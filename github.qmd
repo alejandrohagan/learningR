@@ -1,0 +1,31 @@
+---
+title: "github"
+---
+
+
+1. first set your user name and email address
+
+
+```{bash}
+git config --global user.name 'alejandrohagan'
+git config --global user.email 'alejandro.hagan@outlook.com'
+git config --global --list
+
+
+
+
+```
+
+2. if you need a PAT  you store it below (thjs will also let you view it and run it)
+
+```{r}
+# set using this
+gitcreds::gitcreds_set()
+
+# check using this
+
+gitcreds::gitcreds_get()
+# validate who you are 
+gh::gh_whoami()
+```
+
