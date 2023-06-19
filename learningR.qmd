@@ -717,7 +717,7 @@ Chapter 2 Tokenization \| Supervised Machine Learning for Text Analysis in R (sm
 
 tidytext
 
-tidy evaluation
+## tidy evaluation
 
 resources
 
@@ -774,6 +774,15 @@ enquo() and !!
 := and !!
 
 enquos() and !!!
+
+how to use environment character vectors in a function or formula?
+-   use all_of() or any_of() (use ! to negate) [linkhere](https://dplyr.tidyverse.org/articles/programming.html)
+-   you can also suse sym or syms with !!! [link here](https://stackoverflow.com/questions/34487641/dplyr-groupby-on-multiple-columns-using-variable-names)
+
+
+how to quote a uncharacter argument into a character arugment
+-    dots <- enquos(..., .named = TRUE) will turn a unquoted input into a quosure variable
+-   nm1 <- purrr::map_chr(dots, rlang::as_label) then use this to transform into character vectors which canbe used in functions [linkhere](https://stackoverflow.com/questions/63257632/curly-curly-tidy-evaluation-programming-with-multiple-inputs-and-custom-function)
 
 #PCA
 

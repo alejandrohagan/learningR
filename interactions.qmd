@@ -3,7 +3,6 @@ title: "interactions"
 ---
 
 ```{r}
-
 #load libraries and summarize data to be be used in later analysis
 library(tidyverse)
 devtools::install_github("alejandrohagan/fpaR")
@@ -30,12 +29,63 @@ df_summary <- df %>%
 
 
 
-# First  comparison
+```{r}
+
+
+
+compare_simple_categorical_only <- function(.data,dependent,independent) {
+
+dependent=dependent
+independent=str_flatten(string = independent,collapse = " * ")
+
+remove_cols <- str_flatten(string=independent,collapse="|")
+
+
+zero_formula <- glue::glue(dependent," ~ 0 + ",independent)
+  
+
+reg_formula <- glue::glue(dependent," ~ ",independent)
+
+reg_expression <- expression(reg_formula)
+  
+  category_lm <-lm(eval(zero_formula),data=.data) %>% broom::tidy() %>% mutate(term_clean=str_remove(term,remove_cols))
+  
+  category_lm_zero <- lm(eval(reg_formula),data=.data) %>% broom::tidy() %>% mutate(term_clean=str_remove(term,remove_cols))
+
+# em_cat_lm_zero_tbl<- emmeans::emmeans(category_lm_zero, pairwise ~brand_name)
+# em_cat_lm_tbl<- emmeans::emmeans(category_lm, pairwise ~brand_name)
+
+  cat_manual_tbl <- .data %>% 
+  group_by(any_of(independent)) %>% 
+  summarize(avg_rev=mean(rev,na.rm=TRUE))
+  
+  out <- left_join(cat_manual_tbl)
+
+  
+  return(out)
+  
+}
+
+remove_me <- "brand_name|color_name"
+remove_me2 <- "color_name"
+lm(rev~brand_name*color_name,df_summary) %>% 
+  broom::tidy() %>% 
+  mutate(term_clean=str_remove(term,pattern=remove_me))
+
+df_summary %>% 
+  group_by(brand_name,color_name) %>% 
+  summarize(avg_rev=mean(rev,na.rm=TRUE)) 
+  unite(col=term_clean,"brand_name","color_name")
+
+```
+
+
+
+# one categorical variable
 
 -   When you do zero coefficent regression with a category variable it is the same as doing a group by and summarize
         
         -   This doesn't change if you emmeans or directly pull the case weights
-        -
         
 
 ```{r}
@@ -45,15 +95,11 @@ df_summary <- df %>%
 
 # zero intercept
 category_lm_zero <- df_summary %>% 
-  lm(rev~0+brand_name
-     ,data=.
-  )
+  compare_simple_categorical_only("rev","brand_name",zero = TRUE)
 
 # classic lm
 category_lm<- df_summary %>% 
-  lm(rev~brand_name
-     ,data=.
-  )
+  compare_simple_categorical_only("rev","brand_name",zero = FALSE)
 
 
 #extract out marginal means and weights
@@ -84,48 +130,36 @@ em_cat_lm_zero_tbl$emmeans %>% as_tibble() %>%
 
 -emmeans and linear model and summarize are all equal when it is a single quantified model
 
+## Two categorical variables
 
 ```{r}
 
-m2 <- df_summary %>% 
-  lm(rev~brand_name*color_name
+m1 <- df_summary %>% 
+  lm(rev~brand_name+color_name
      ,na.action = NULL
-     ,model = TRUE
-     ,
      ,data=.
   )
 
-em_tbl_2 <- emmeans::emmeans(m2, pairwise ~brand_name|color_name)
+m2 <- df_summary %>% 
+  lm(rev~0+brand_name+color_name
+     ,na.action = NULL
+     ,data=.
+  )
 
-em_tbl <- em_tbl_2$emmeans %>% 
-  as_tibble() %>% 
-    mutate(term_name=paste0("brand_name",brand_name,":","color_name",color_name))
-  
 
-df_summary %>% 
+
+m3 <- df_summary %>% 
   group_by(brand_name,color_name) %>% 
   summarize(avg_rev=mean(rev)
             ,n=n()) %>% 
   mutate(term_name=paste0("brand_name",brand_name,":","color_name",color_name)) %>% 
-  left_join(em_tbl %>% select(term_name,emmean),
+  left_join(m1 %>% broom::tidy() %>% arrange(desc(p.value)) %>% select(term_name=term,estimate,p.value),
             by=join_by(term_name)) %>% 
   left_join(
-    m2 %>% broom::tidy() %>% arrange(desc(p.value)) %>% select(term_name=term,estimate,p.value)
+    m1 %>% broom::tidy() %>% arrange(desc(p.value)) %>% select(term_name=term,estimate,p.value)
             ,by=join_by(term_name)
     )
-
- df_summary %>% 
-  lm(rev~0+brand_name*color_name
-     ,data=.
-  ) %>% broom::tidy()
-
- 
- df_summary$color_name %>% as_factor() %>% levels()
- 
- 37622.1988
- brand_nameContoso:color_nameWhite
- 
- 77251.5681
+m3
 ```
 
 Interacting two variables is the same as grouping by these two variables and finding the average of that variable by that group. It's showing for that effect all else held equal (in the above case nothing is is needed) at least when passed thorugh emmeans -- when just passed as a linear model the estimates are different. Need to understand how emmeans vs. estimate are different
