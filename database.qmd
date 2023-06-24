@@ -6,38 +6,123 @@ title: "database"
 ## Resource
 https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html#
 https://r4ds.hadley.nz/databases.html
+https://dbplyr.tidyverse.org/articles/translation-function.html
+https://bwlewis.github.io/duckdb_and_r/talk/talk.html
 
 
-# How to connect
+# What do you need?
+-   Probably the most frustrating part of database is getting access to the database and making the initial connection
+-   There are probably multiple ways to connect almost all require the following
+    -   user name
+    -   password
+    -   database driver
+    -   connection string and associated arguments
+    -   SQL query
 
+# How to connect (DSN method)
+
+## Set up ODBC Driver
 -   First need to configure your DSN so that you can be authenticated
--   If done correctly you can then use DBI package to connect to the database of choice
+-   Your database platform should have documentation on how to do this and your internal IT team should be able to articulare any proxy / security requirements
+-   Here is an example of [documetation](https://docs.snowflake.com/en/developer-guide/odbc/odbc-windows)
+
+## Create Connection String
+-   If done correctly you can then use DBI package in R to connect to the database of your choice
+
+
 
         -   create a connection string with DBI::dbConnect()
-            -   driver_name such as ODBC::ODBC() or duckdb::duckdb()
-            -   DSN name (if applicable)
-        -   Enter SQL query with `sql()`
-        -   Use connection string and sql query together to create a lazy table with `tbl()`
--   From there you can use dplyr back end queries to see everything
--   You are limited to queries that can be translated to 
--   You can see what query it will generate with `show_query()`
--   You can finallly execute the query with `collect()`
+            -   Select the DBMS wtih the driver_name such as ODBC::ODBC() to access your DSN set up connect to external database or can use DMBS package such as duckdb::duckdb() to replicate an internal instance of a database
+            -   DSN name if external database (the name used to set up ODBC driver)
+            -   Alternatively, you can directly supply the arguments in DBI::dbConnect() such as hostname,port,username, etc
 
--   if you already have something as a dataframe you can upload it to a database with DBI::dbWriteTable(con,"tbl_name",df) which will write the table to the connection with the name you gave
+```{r}
+#| echo: true
+#| label: name
+#| eval: true
+#| error: false
+#| warning: false
+
+
+con <- DBI::dbConnect(duckdb::duckdb())
+
+
+```
+
+## Option 1: Create SQL string
+
+-   If you know the database, schema and table name that you want, you can direct write an initial sql query to connect to the database
+        
+        -   Enter SQL query with `dplyr::sql()`
+        
+```{r}
+#| echo: true
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
+sql_script <- "select *  from database_name"
+```
+
+## Accessing Databse
+
+-   Use connection string and sql query together to create a lazy table with `dplyr::tbl()`
+
+```{r}
+#| echo: true
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
+
+data_db <- tbl(con,sql_script))
+```
+
+-   From there you can use dplyr back end queries to see everything
+-   You are limited to queries that can be translated to sql which are detailed below
+    -   [github of dplyr commands that can be used in dbplyr](https://github.com/tidyverse/dbplyr/blob/main/R/backend-.R)
+    -   You can also check the database specific[here]([https://github.com/tidyverse/dbplyr/blob/main/R/backend-snowflake.R)
+-   You can see what query it will generate with `show_query()`
+-   You can finally execute the query with `collect()`
+
+
+## Existing data into database
+-   if you already have something as a dataframe you can upload it to a database with DBI::dbWriteTable(con,"tbl_name",df) which will write the table to the connection with the name you gave 
 
     -   dbWriteTable() can write a r dataframe or you can use sql to create a virtual table if you want
     -   dbplyr::copy_inline(con_db,df = df) is alternative method
     
--   dbListTables(con) can be used to see what virtual tables are in the connection
+```{r}
+library(tidyverse)
 
-- dbReadTable(con,"tbl_name") read the virtual table as a dataframe
-
-- in_schema("database","tbl") is a way to navigate a scehma in tbl()
-
-con <- DBI::dbConnect(ODBC::ODBC(),dsn="name")
-
+# create connection
 con_db <- DBI::dbConnect(duckdb::duckdb())
 
+# write data into database
+DBI::dbWriteTable(con_db,name = "diamonds_db",value = ggplot2::diamonds)
+# or alternative use the database argument to regester
+duckdb::duckdb_register(con_db, "diamonds_db_2",df =  ggplot2::diamonds)
+# validate data is in database by reference connection
+DBI::dbListTables(con_db)
+
+# Pull in data in database format
+diamonds_db <- dplyr::tbl(con_db,"diamonds_db")
+
+# 
+
+```
+
+    
+## Larger than memory problems
+
+
+-   Somtimes you may not have a database to connect to and instead have a very large csv file
+-   If you have large offline files you can quickly easily load this into duckdb with `duckdb_read_csv()` very helpful to manipulate larger than memory problems
+-   similar trick exists with arrow which converts it to a parquet file
 
 
 
@@ -75,6 +160,7 @@ diamonds_db <- dplyr::tbl(con_db
 
 
 print(diamonds_db)
+
 
 ```
 

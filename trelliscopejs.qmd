@@ -46,6 +46,13 @@ return(q)
 - what should result is a column  with plotly
 
 ```{r}
+#| echo: false
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
 plot_tbl <- diamonds %>% 
   nest_by(cut) %>% 
   mutate(
@@ -61,7 +68,28 @@ plot_tbl <- diamonds %>%
 ```
 
 
+
+
 ```{r}
+diamonds %>% 
+  group_by(cut) %>% 
+  ggplot(aes(price,carat))+
+  geom_point()+
+  trelliscopejs::facet_trelliscope(
+    ~cut,scales="free",as_plotly = TRUE,path="./"
+  )
+```
+
+
+
+```{r}
+#| echo: true
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
 
 manipulateWidget::combineWidgets(ncol=2
                                  ,nrow=2
@@ -74,6 +102,12 @@ manipulateWidget::combineWidgets(ncol=2
 ```
 
 ```{r}
+#| echo: true
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
 
 plot_tbl %>% 
   trelliscopejs::as_cognostics(
