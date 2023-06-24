@@ -95,11 +95,10 @@ df_summary %>%
 
 # zero intercept
 category_lm_zero <- df_summary %>% 
-  compare_simple_categorical_only("rev","brand_name",zero = TRUE)
-
+  lm(rev ~ 0+brand_name,data=.) %>% broom::tidy()
 # classic lm
 category_lm<- df_summary %>% 
-  compare_simple_categorical_only("rev","brand_name",zero = FALSE)
+    lm(rev ~ brand_name,data=.) %>% broom::tidy()
 
 
 #extract out marginal means and weights
@@ -114,16 +113,19 @@ cat_manual_tbl <- df_summary %>%
   summarize(avg_rev=mean(rev))
 
 ## join results
-em_cat_lm_zero_tbl$emmeans %>% as_tibble() %>% 
-  select(
-    1
-    ,emmean_cat_lm_zero=2) %>% 
-  left_join(cat_manual_tbl,by=join_by(brand_name)) %>% 
-  left_join(em_cat_lm_tbl$emmeans %>% as_tibble() %>% select(1,cat_lm=2)
-            ,join_by(brand_name)) %>% 
+
+category_lm_tbl <- category_lm %>% mutate(term_clean=str_remove(term,"brand_name")) %>% select(term_clean,lm_intercept=estimate)
+category_lm_zero_tbl <- category_lm_zero %>%  mutate(term_clean=str_remove(term,"brand_name")) %>% select(term_clean,lm_zero=estimate)
+
+
+summary_results <- cat_manual_tbl %>% 
   left_join(
-    category_lm_zero %>% broom::tidy() %>% select(1,lm_weights=2,p.value) %>% mutate(term=str_remove(term,"brand_name"))
-    ,by=join_by(brand_name==term)
+    category_lm_tbl
+    ,by=join_by(brand_name==term_clean)
+  ) %>% 
+  left_join(
+    category_lm_zero_tbl
+    ,by=join_by(brand_name==term_clean)
   )
 
 ```
@@ -133,90 +135,47 @@ em_cat_lm_zero_tbl$emmeans %>% as_tibble() %>%
 ## Two categorical variables
 
 ```{r}
+#| echo: false
+#| label: category-model
+#| eval: TRUE
 
-m1 <- df_summary %>% 
-  lm(rev~brand_name+color_name
-     ,na.action = NULL
-     ,data=.
-  )
-
-m2 <- df_summary %>% 
-  lm(rev~0+brand_name+color_name
-     ,na.action = NULL
-     ,data=.
-  )
+# zero intercept
+category_lm_zero <- df_summary %>% 
+  lm(rev ~ 0+brand_name*color_name,data=.) %>% broom::tidy()
+# classic lm
+category_lm<- df_summary %>% 
+    lm(rev ~ brand_name*color_name,data=.) %>% broom::tidy()
 
 
+#extract out marginal means and weights
 
-m3 <- df_summary %>% 
+em_cat_lm_zero_tbl<- emmeans::emmeans(category_lm_zero, pairwise ~brand_name)
+em_cat_lm_tbl<- emmeans::emmeans(category_lm, pairwise ~brand_name)
+
+#do simple mean by group
+
+cat_manual_tbl <- df_summary %>% 
   group_by(brand_name,color_name) %>% 
-  summarize(avg_rev=mean(rev)
-            ,n=n()) %>% 
-  mutate(term_name=paste0("brand_name",brand_name,":","color_name",color_name)) %>% 
-  left_join(m1 %>% broom::tidy() %>% arrange(desc(p.value)) %>% select(term_name=term,estimate,p.value),
-            by=join_by(term_name)) %>% 
+  summarize(avg_rev=mean(rev)) %>% 
+  ungroup() %>% 
+  mutate(term_clean=paste0(brand_name,":","color_name",color_name)) %>% 
+  select(term_clean,avg_rev)
+
+## join results
+
+category_lm_tbl <- category_lm %>% mutate(term_clean=str_remove(term,"brand_name|color_name")) %>% select(term_clean,lm_intercept=estimate)
+category_lm_zero_tbl <- category_lm_zero %>%  mutate(term_clean=str_remove(term,"brand_name|color_name")) %>% select(term_clean,lm_zero=estimate)
+
+
+summary_results <- cat_manual_tbl %>% 
   left_join(
-    m1 %>% broom::tidy() %>% arrange(desc(p.value)) %>% select(term_name=term,estimate,p.value)
-            ,by=join_by(term_name)
-    )
-m3
-```
-
-Interacting two variables is the same as grouping by these two variables and finding the average of that variable by that group. It's showing for that effect all else held equal (in the above case nothing is is needed) at least when passed thorugh emmeans -- when just passed as a linear model the estimates are different. Need to understand how emmeans vs. estimate are different
-
-```{r}
-emmeans::emmeans(m4, pairwise ~avg_vol,at=list(avg_vol=c(8,12,13.2,11,15,18,24)))
-aov(m1,m2)
-
-daily_summary <- df_summary %>% 
-  summarise(daily_rev=sum(rev)
-            ,mean_rev=mean(rev)
-            ,prop_50=quantile(rev,.5)
-            ,avg_vol=mean(avg_vol)
-            ,n=n()
-            ,.by=c(brand_name,color_name)
-            )
-```
-
-- do  a simple model just vol
-
-- now do a vol by interaction with a brand
-
-- compare against summary and see what comes up 
-
-- compare with zero constraint and without zero constraint
-
-
-
-
-```{r}
-
-library(scales)
-m1 <- df_summary %>% 
-  lm(rev~0+brand_name*color_name,data=.)
-
-lm_summary <- m1 %>% broom::tidy() %>%   mutate(term=str_remove(term,"brand_name|color_name"))
-rq_summary <- df_summary %>% quantreg::rq(rev~0+brand_name+avg_vol,data=.) %>% broom::tidy(se="iid") %>%   mutate(term=str_remove(term,"brand_name")) %>% select(term,median=estimate)
-
-m2 <- df_summary %>% 
-  lm(rev~brand_name*avg_vol
-     ,data=.
+    category_lm_tbl
+    ,by=join_by(term_clean==term_clean)
+  ) %>% 
+  left_join(
+    category_lm_zero_tbl
+    ,by=join_by(term_clean==term_clean)
   )
-
-daily_summary %>% 
-  left_join(lm_summary,by = join_by(brand_name==term)) %>% 
-  left_join(rq_summary,by = join_by(brand_name==term)) %>% 
-  select(brand_name,daily_rev,estimate,mean_rev,prop_50,n,median) %>% 
-  mutate(
-    total_rev=n*estimate
-    ,delta_mean=estimate-mean_rev
-    ,delta_rev=daily_rev-total_rev
-    )
-lm_summary 
-
-daily_summary <- daily_summary %>% 
-  mutate(vol_effect=avg_vol*502.2374)
-
 
 ```
 
