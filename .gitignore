@@ -3,5 +3,5 @@
 .RData
 .Ruserdata
 files
-
+appfiles/*
 /.quarto/
