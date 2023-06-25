@@ -2,19 +2,23 @@
 title: "github"
 ---
 
+## Resources
+
+https://raps-with-r.dev/git.html
+https://happygitwithr.com/
+https://learngitbranching.js.org/?locale=en_US
 
 1. first set your user name and email address
-
+-   You can do this with command line interface ("cli") arguments 
+-   While intimidating, I do recommend you get comfortable with CLI arguments 
 
 ```{bash}
 git config --global user.name 'alejandrohagan'
 git config --global user.email 'alejandro.hagan@outlook.com'
 git config --global --list
-
-
-
-
 ```
+
+- Or you can use r package usethis to do this
 
 2. if you need a PAT  you store it below (thjs will also let you view it and run it)
 
@@ -28,4 +32,16 @@ gitcreds::gitcreds_get()
 # validate who you are 
 gh::gh_whoami()
 ```
+
+
+## connect to a repo
+
+
+## pull, committ and push
+
+
+## reversing / undoing
+
+## branching / merging
+
 
