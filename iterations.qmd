@@ -24,8 +24,11 @@ Also know that "mapping" is a consistent function across many programming langua
 
 
 ```{r}
+<<<<<<< HEAD
 #| eval: false
 
+=======
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 library(loopurrr)
 library(tidyverse)
 
@@ -45,6 +48,7 @@ for (i in seq_along(.inp1)) {
 
 names(out) <- names(.inp1)
 # --- end loop --- #
+<<<<<<< HEAD
 # --- convert: `purrr::map(split(df, names(df)), quantile, 0....` as loop --- #
 .inp1 <- split(df, names(df))
 out <- vector("list", length = length(.inp1))
@@ -55,6 +59,8 @@ for (i in seq_along(.inp1)) {
 
 names(out) <- names(.inp1)
 # --- end loop --- #
+=======
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 # --- convert: `purrr::map(split(df, col(df)), sum)` as loop --- #
 .inp1 <- split(df, col(df))
 out <- vector("list", length = length(.inp1))
@@ -92,6 +98,7 @@ While this may seem unusually complex, it is not, its just a matter of conventio
 library(tidyverse)
 
 
+<<<<<<< HEAD
 df <- diamonds %>% 
   select(where(is.numeric))
   
@@ -110,6 +117,14 @@ df=map(
   letters[1:3]
   , ~ sample(1:10, 15, replace = T)
   )
+=======
+diamonds %>% 
+  select(where(is.numeric)) %>% 
+  map(.x=.,quantile,.25)
+
+
+
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 
 ```
 -Takes arguments and seperates that into lists (if it comes in as data frame)
@@ -867,6 +882,7 @@ iris %>%
 
 
 
+<<<<<<< HEAD
 ```{r}
 iris %>%
   transmute(across2(ends_with("Length"),
@@ -877,3 +893,5 @@ iris %>%
                    .names_fn = tolower))
 ```
 
+=======
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)

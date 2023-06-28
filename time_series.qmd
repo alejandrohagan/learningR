@@ -2,6 +2,7 @@
 title: "time series"
 ---
 
+<<<<<<< HEAD
 ```{r}
 #| echo: false
 #| output: false
@@ -238,10 +239,22 @@ prophet_fit <-  prophet_mod %>%
 model_tbl <- modeltime_table(
   lm_fit,
   prophet_fit
+=======
+
+# how to create aggreation fucntion
+
+timetk::summarize_by_time(
+.date_var=date column
+.by= aggregation level
+col_name=aggregation step (n())
+across()
+,.type=c("cieling,round,floor)
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 )
 
 
 
+<<<<<<< HEAD
 ```
 
 -   Use this with `modeltime_calibrate()` to calibrate the model against testing dataset
@@ -348,10 +361,120 @@ seasonality_plots <- df_store_daily %>%
 
 ```{r}
 #| eval: false
+=======
+%
+
+
+## how to create diagomics
+
+ tk_summary_diagnostics()  gives summary satistics of how much difference betweeen the time series
+ 
+##  how to pad time when there gaps in data series
+-   use to fill gaps with values in your time series
+
+pad_by_time(
+.date_var=data colum
+.by="day"
+.pad_value=0
+
+
+)
+
+
+
+## plot times series
+group_by() %>% ## how to facet
+plot_time_series(
+.data_Var
+,value
+,.color_bar=group_name # puts groups in color
+,.facet_Vars=name ## also how to facet
+,.smooth=TRUE (adds in polynominal regression)
+,..smooth_period="30 days"
+,.smooth_span= prop of data
+,.interactive=FALSE # to create ggplot object
+
+
+
+)
+
+
+## Filter time series 
+
+filter_by_time(
+.date_var=data column
+start_date=
+end_date="end"  or date
+)
+
+## split into training and test set
+
+you assign the split data to an object
+
+ time_series_split(
+ date_var=date colomns
+ assess= "8 weeks"
+ cumulaitve = TRUE  sets the previous as training, false means you need to select training set
+)
+
+then you use the tk_time_series_cv_plan()  and plot_time_Series_cv_plan() to see the training and test data 
+
+
+## create different time series models
+
+linear_reg(
+
+)
+
+prophet_reg(
+) %>% 
+set_engine("prophet")
+
+
+how to use?
+
+prophet_reg %>% 
+set_engine("prophet") %>% 
+fit(predition_Value ~ data_col
+,new_data=training(splits))
+
+
+## model time worfklow
+creates table to hold various fitted models
+model_time_table(
+fitted_model_1
+)
+
+- applies fitted models against testing data
+- .calabration_data has the results
+- savve as calibration data
+model_tbl %>% 
+modeltime_calibrate(
+new_data=testing(splits)
+
+)
+
+to see this in practice
+calibration_tbl %>% 
+modeltime_forecat(actual_Date=existing_tlb) %>% 
+plot_modeltime_forecast()
+
+## how to see forecasting accuracy
+
+calibration_tbl %>% modeltime_accuracy
+
+
+plot_seasonal_diagnotistic
+
+
+## recipe
+
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 recipe(formula,training(splits)) %>% 
 step_timeseries_Signature() %>%
 step_normalize(index.num,_year) %>% 
 step_dummy(all_ordinal)
+<<<<<<< HEAD
 prep() %>% 
 %>% juice (applies to the training step)
 
@@ -361,6 +484,12 @@ prep() %>%
 
 
 
+=======
+prep()
+%>% juice (applies to the training step)
+
+
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 ## create model element
 
 linear_reg()
@@ -390,6 +519,7 @@ plot_modeltime_forecast()
 
 )
 
+<<<<<<< HEAD
 # overview of EDA 
 
 ## diagnostics functions
@@ -478,10 +608,50 @@ df_daily %>%
 ## seasons decomposition
 
 -   Useful to understand how anomoliges are being detcted
+=======
+## mode diagnosics
+detect lagged fuctions
+plot_acf_diagnoistcs(
+.lags="1 year", 25:100,100
+.ccf_vars=columns,
+.show_ccf_vars-only=TRUe # ony cross correlations var
+,.facet_ncol=number of column
+
+
+)
+
+
+## sesaonality
+
+plot_seaonsal_diagnotistc(
+feasture_set=c(hour,weekday)
+.geom="violin"
+)
+
+## anolomy
+
+plot_anomoly_diagomsitc(
+.data_var=data_col
+.alpha= .01 #change anonoly sensitivity
+.max_anolomoies =.01 # peak anaolyies
+
+)
+
+## get anoly data
+tk::anomoly_diaogasitc(
+same as plot, gets data with anolmogies in it
+)
+
+## seasons decomposition
+gives you what is seasonal vs trend vs adjjustment
+
+useful to understand how anomoliges are being detcted
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 plot_stl_diagostics(
 
 
 )
+<<<<<<< HEAD
 
 ```{r}
 df_daily %>% 
@@ -497,12 +667,18 @@ df_daily %>%
 ## linear regression plot
 
 -   shortcut function of `lm()` to help identify which features are meaningful or not
+=======
+## uses linear regression
+
+helps ot identify useful features
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 
 plot_time_series_regression(
 .date_var=data column
 .formula= value~ as.numeric(date_col)+
 wday(date_col)+
 month(date_col)
+<<<<<<< HEAD
 show_summary= TRUE, shows summary ouptut
 )
 
@@ -546,12 +722,55 @@ lag_vec( shifts a vector)
 
 tk_augment_lag(
 .lags=1:10
+=======
+show_summary=TRUE
+)
+
+
+provides time based mutate over time windows this is like group_by + mutate
+mutate_by_time(
+.by="week"
+,formula
+
+
+transofmration
+
+loglp - applies log
+standarize_vec - standardize and centers
+
+
+tk_index() creates index
+
+tk_make_timeseries makes time table
+
+tk_make_holiday_sequence(
+year_start
+year_end
+clandar
+) %>% 
+tk_get_holiday_signature( converst to grid matrix)
+
+makes future time series
+ts_make_future_time_zeries
+
+future_frame(
+lengt_out=periods
+)
+
+
+
+
+
+)
+
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 )
 
 date_col %-time% "1 day"
 
 date_col %+time% "6 weeks"
 
+<<<<<<< HEAD
 ## slidify
 
 -   Creates function that does a rolling application, like mean, or correlation
@@ -1116,3 +1335,16 @@ modeltime::modeltime_table(
 
 ```
 
+=======
+hello are you today, i am doing well but this is a significant enough change that i do need to learn how to type all all over again which is frustrating. that being said, i have gotten  used to the left space bar button sooner that i thought.''
+ hopefully this will improbe some of the ergonomiv issues that i have and make type muvh quivker and faaster than bebefore.i
+ 
+ 
+ hello hwo are you today i am doing so well, now that ia  have typing with myleft
+ 
+ 
+
+
+
+library(fpaR)
+>>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
