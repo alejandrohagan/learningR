@@ -5,3 +5,6 @@
 files
 appfiles/*
 /.quarto/
+.quarto
+data/cash_validation/otc_not_matching*
+cash_validation_files/*

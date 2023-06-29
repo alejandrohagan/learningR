@@ -889,3 +889,5 @@ stringr::word(string, #vector of strings
 ```
 
 stringr::word(string,start=x,end=y,sep=?)
+
+is.element(input,check_strings) -- validates inputs matches at least one in a set
