@@ -207,13 +207,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#categorical-variables" id="toc-categorical-variables" class="nav-link active" data-scroll-target="#categorical-variables"><span class="toc-section-number">1.0.1</span>  Categorical Variables</a></li>
-  <li><a href="#advanced-plotting-contorl-over-color-shape-or-alpha" id="toc-advanced-plotting-contorl-over-color-shape-or-alpha" class="nav-link" data-scroll-target="#advanced-plotting-contorl-over-color-shape-or-alpha"><span class="toc-section-number">1.1</span>  advanced plotting, contorl over color, shape or alpha——</a>
+  <li><a href="#tidy-evaluation" id="toc-tidy-evaluation" class="nav-link" data-scroll-target="#tidy-evaluation"><span class="toc-section-number">1.1</span>  tidy evaluation</a></li>
+  <li><a href="#advanced-plotting-contorl-over-color-shape-or-alpha" id="toc-advanced-plotting-contorl-over-color-shape-or-alpha" class="nav-link" data-scroll-target="#advanced-plotting-contorl-over-color-shape-or-alpha"><span class="toc-section-number">1.2</span>  advanced plotting, contorl over color, shape or alpha——</a>
   <ul class="collapse">
-  <li><a href="#common-tasks" id="toc-common-tasks" class="nav-link" data-scroll-target="#common-tasks"><span class="toc-section-number">1.1.1</span>  common tasks—</a></li>
+  <li><a href="#common-tasks" id="toc-common-tasks" class="nav-link" data-scroll-target="#common-tasks"><span class="toc-section-number">1.2.1</span>  common tasks—</a></li>
   </ul></li>
-  <li><a href="#count" id="toc-count" class="nav-link" data-scroll-target="#count"><span class="toc-section-number">1.2</span>  count</a>
+  <li><a href="#count" id="toc-count" class="nav-link" data-scroll-target="#count"><span class="toc-section-number">1.3</span>  count</a>
   <ul class="collapse">
-  <li><a href="#how-to-parse-out-words-from-a-sentence" id="toc-how-to-parse-out-words-from-a-sentence" class="nav-link" data-scroll-target="#how-to-parse-out-words-from-a-sentence"><span class="toc-section-number">1.2.1</span>  how to parse out words from a sentence</a></li>
+  <li><a href="#how-to-parse-out-words-from-a-sentence" id="toc-how-to-parse-out-words-from-a-sentence" class="nav-link" data-scroll-target="#how-to-parse-out-words-from-a-sentence"><span class="toc-section-number">1.3.1</span>  how to parse out words from a sentence</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -407,7 +408,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.1     ✔ readr     2.1.4
+✔ dplyr     1.1.2     ✔ readr     2.1.4
 ✔ forcats   1.0.0     ✔ stringr   1.5.0
 ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
 ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
@@ -655,7 +656,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>more resources</p>
 <p>Chapter 2 Tokenization | Supervised Machine Learning for Text Analysis in R (smltar.com)</p>
 <p>tidytext</p>
-<p>tidy evaluation</p>
+</section>
+<section id="tidy-evaluation" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="tidy-evaluation"><span class="header-section-number">1.1</span> tidy evaluation</h2>
 <p>resources</p>
 <p>2 Why and how | Tidy evaluation (tidyverse.org)</p>
 <p>Programming with dplyr • dplyr (tidyverse.org)</p>
@@ -684,6 +687,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>enquo() and !!</p>
 <p>:= and !!</p>
 <p>enquos() and !!!</p>
+<p>how to use environment character vectors in a function or formula? - use all_of() or any_of() (use ! to negate) <a href="https://dplyr.tidyverse.org/articles/programming.html">linkhere</a> - you can also suse sym or syms with !!! <a href="https://stackoverflow.com/questions/34487641/dplyr-groupby-on-multiple-columns-using-variable-names">link here</a></p>
+<p>how to quote a uncharacter argument into a character arugment - dots &lt;- enquos(…, .named = TRUE) will turn a unquoted input into a quosure variable - nm1 &lt;- purrr::map_chr(dots, rlang::as_label) then use this to transform into character vectors which canbe used in functions <a href="https://stackoverflow.com/questions/63257632/curly-curly-tidy-evaluation-programming-with-multiple-inputs-and-custom-function">linkhere</a></p>
 <p>#PCA</p>
 <p>pca_rec &lt;- recipe(~., data = sample_df) %&gt;% update_role(daily_miss, new_role = “id”) %&gt;% step_normalize(all_predictors()) %&gt;% step_pca(all_predictors())</p>
 <p>pca_prep &lt;- prep(pca_rec)</p>
@@ -692,8 +697,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>tidied_pca %&gt;% filter(component %in% paste0(“PC”, 1:5)) %&gt;% mutate(component = fct_inorder(component)) %&gt;% ggplot(aes(value, terms, fill = terms)) + geom_col(show.legend = FALSE) + facet_wrap(~component, nrow = 1) + labs(y = NULL)</p>
 <p>princomp with plot(pca_mod, type=“lines”).</p>
 </section>
-<section id="advanced-plotting-contorl-over-color-shape-or-alpha" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="advanced-plotting-contorl-over-color-shape-or-alpha"><span class="header-section-number">1.1</span> advanced plotting, contorl over color, shape or alpha——</h2>
+<section id="advanced-plotting-contorl-over-color-shape-or-alpha" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="advanced-plotting-contorl-over-color-shape-or-alpha"><span class="header-section-number">1.2</span> advanced plotting, contorl over color, shape or alpha——</h2>
 <ol type="1">
 <li>add column that by attribution (eg. color, shape,alpha)</li>
 <li>use case_when that identifies row attributes and gives the custom formatting</li>
@@ -735,8 +740,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>contains() starts_with() ends_with() 1:10 a:b last_col() -offset=X –offset argument matches() num_range() -needs arguments</p>
 <p>based on character names all_of() any_of()</p>
 <p>pass a formula to check against each column where() -is.numeric() -is.factor() ~mean(.x) &gt;3.5</p>
-<section id="common-tasks" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="common-tasks"><span class="header-section-number">1.1.1</span> common tasks—</h3>
+<section id="common-tasks" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="common-tasks"><span class="header-section-number">1.2.1</span> common tasks—</h3>
 <p>apply a function to multiple columns to perform action onto column or new columns - Across() apply a column of arguments, one by one, as input into a function - map() apply two or more column of arguments as simulataneous inputs into a function - map2() apply one column of arguments as input to function, then combine output with new argument - purrr::reduce()</p>
 <p>apply a function to pairs of columns on a rolling basis (eg. col 1 -2, col 2 - 3, etc) ????</p>
 <div class="cell">
@@ -744,8 +749,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 </section>
-<section id="count" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="count"><span class="header-section-number">1.2</span> count</h2>
+<section id="count" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="count"><span class="header-section-number">1.3</span> count</h2>
 <p>count very useful function to quickly tabulate data use .drop to show any data that has been filtered out or removed</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -753,8 +758,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 
 </div>
-<section id="how-to-parse-out-words-from-a-sentence" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="how-to-parse-out-words-from-a-sentence"><span class="header-section-number">1.2.1</span> how to parse out words from a sentence</h3>
+<section id="how-to-parse-out-words-from-a-sentence" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="how-to-parse-out-words-from-a-sentence"><span class="header-section-number">1.3.1</span> how to parse out words from a sentence</h3>
 <ul>
 <li>fixed position and fixed seperated but whole word (seperated by consistent seperator</li>
 </ul>
@@ -772,6 +777,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>stringr::word(string,start=x,end=y,sep=?)</p>
+<p>is.element(input,check_strings) – validates inputs matches at least one in a set</p>
 
 
 </section>
