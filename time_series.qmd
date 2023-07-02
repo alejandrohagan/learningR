@@ -2,7 +2,6 @@
 title: "time series"
 ---
 
-<<<<<<< HEAD
 ```{r}
 #| echo: false
 #| output: false
@@ -64,13 +63,17 @@ spk_df <- sparklyr::copy_to(sc,df = df,name = "df_spark")
     -   You can use across and any other verbs to help with the aggregation
     -   Date column must be in date format
 
-
-
 ```{r}
+#| echo: false
+#| label: summarize-by-time
+#| eval: true
+#| error: false
+#| warning: false
 
-df_daily <- df %>%
+
+(df_daily <- df %>%
   summarise_by_time(
-    ,.date_var = date_key # date column
+    .date_var = date_key # date column
     ,.by = "day" # aggregation level such as day, month 8 weeks, quarter or year
     ,rev=sum(rev) # aggregation columns can you across*()
     ,vol=sum(sales_quantity)
@@ -78,15 +81,11 @@ df_daily <- df %>%
     #,.type = ("ceiling","round","floor") optional rounding column
     ) %>% 
   mutate(price_realization=rev/vol)
+)
 
 ```
 
 
-
-
-```{r}
-
-```
 
 
 ##  how to pad time when there gaps in data series
@@ -95,6 +94,7 @@ df_daily <- df %>%
 
 ```{r}
 #| eval: false
+#| label: pad-time
 df %>% 
   group_by(store_key) %>% 
 pad_by_time(
@@ -239,7 +239,7 @@ prophet_fit <-  prophet_mod %>%
 model_tbl <- modeltime_table(
   lm_fit,
   prophet_fit
-=======
+)
 
 # how to create aggreation fucntion
 
