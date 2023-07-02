@@ -337,13 +337,13 @@ Context transition
 
 Need to fully understand how this looks in Excel vs. power pivot
 
-If I wanted one variable to defined in context in which I created it vs the conext that it currently is, how would that looks like?
+If I wanted one variable to defined in context in which I created it vs the context that it currently is, how would that looks like?
 
 Probably need to duplicate the data, eg. Have one table that has the definition context (say average of category sales) and then need another area where I execute the formula
 
 Time Intelligence calculations in R | by Hamza Rafiq | Towards Data Science
 
-Time inelligenc ein r
+Time intelligence functions
 
 Library ideas
 
@@ -351,6 +351,6 @@ ABC analysis and variance with group vs. overall population
 
 Nonstandard date calendars
 
-4-5-4 calendar (according to retial federation standards for leap year treatment)
+4-5-4 calendar (according to retail federation standards for leap year treatment)
 
 4-4-5 calendar

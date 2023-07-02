@@ -191,7 +191,7 @@ diamonds_db %>%
 
 
 ## how to view schema / catalog of a database
-
+tbl(con,in_schame(schema_name,database_name))
 ## Useful tricks to  dynamically render a sql
 
 ## automating databse queries / reporting 
@@ -204,5 +204,27 @@ diamonds_db %>%
 
 ## DBI connection useful utilities
 
+https://dbi.r-dbi.org/
+https://solutions.posit.co/connections/db/
+
+### list tables in connection
+dbListTables to list tables associated with a connection
+
+### list drivers
+sort(unique(odbcListDrivers()[[1]]))
+
+### Running SQL in R
+
+```\{sql, connection=con, output.var = "mydataframe"\}
+```
+
+## Run SQL queries safely
+
+
+## visualizations
+
+dbplot_histogram
+
+(https://edgararuiz.github.io/dbplot/)
 
 
