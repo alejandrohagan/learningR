@@ -767,7 +767,12 @@ assertthat packageschecks if column names are in a dataframe
 
 sym() is used to take a quoted input "x" and use it in a context without quotes. Need !!sym("x") to be used
 
+or  rlang::englue("var) within the .data[[var]] context
 
+
+.data[[rlang::englue("var")]]
+
+.env$var to refer to grid table
 
 ```{r}
 library(tidyverse)

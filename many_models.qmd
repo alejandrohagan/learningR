@@ -111,7 +111,7 @@ csat_named_nested %>%
 
 ```
 
-## how to dynamic filter datasets based on user input  conditions
+## how to dynamic filter datasets or augmented based on user input  conditions
 
 
 -   Create a list of named arguments that would be passed on filter()
@@ -130,8 +130,10 @@ csat_named_nested %>%
 -   You can nest the formula arguments inside as well by creating a named list for the arguments and directly passing that through
 -   From there you can use `eval()` in `lm()` to execute the arguments
 
+### Add section on how to do it more dynamically with glue::glue and expr()
 
-
+-   You can use create strings use glue::glue to construct customer arguments
+-   Then use `rlang::parse_expr()`to execute that argument
 
 
 ```{r}
@@ -197,7 +199,7 @@ lm(
 
 ```
 
--   Create vector of quoted column names and use expand gride to directly put them in the framing table
+-   Create vector of quoted column names and use expand grid to directly put them in the framing table
 -   From there you can directly reference the names
 
 
@@ -323,14 +325,101 @@ diamonds %>%
     ) %>% 
   unnest(cor) %>% 
   select(color,filter_names,cor) %>% 
-  pivot_wider(names_from=filter_names,values_from=cor) %>% 
-  echarts4r::e_charts(x=color) %>% 
-  echarts4r::e_scatter(serie =med_price) %>% 
-  echarts4r::e_scatter(serie =low_price,symbol_size = 10) %>% 
-  echarts4r::e_scatter(serie =high_price,symbol_size = 10) %>% 
-  echarts4r::e_visual_map(med_price)
+  # pivot_wider(names_from=filter_names,values_from=cor) %>% 
+  echarts4r::e_charts(x=filter_names) %>% 
+  echarts4r::e_scatter(serie =cor,legend = TRUE) %>% 
+  # echarts4r::e_scatter(serie =low_price,symbol_size = 10) %>% 
+  # echarts4r::e_scatter(serie =high_price,symbol_size = 10) %>% 
+  echarts4r::e_visual_map(cor)
 
 
 
     ```
+
+
+
+
+
+```{r}
+library(tidyverse)
+cum_sum_vec<- c("price","x","y","z","carat")
+
+ input <- "sum(1:10)"
+ str(expr(input))
+ eval(parse_expr(input))
+ 
+args_lst <- rlang::list2(
+
+rlang::call2('cumsum',expr(price))
+
+  
+  )
+
+
+diamonds %>% 
+  nest_by(cut) %>%
+  mutate(data=list(data)) %>% 
+  expand_grid(input_args=cum_sum_vec) %>% 
+  mutate(args=glue::glue("cumsum({input_args})")) %>% 
+  rowwise() %>% 
+  mutate(
+    data_mod=list(
+      mutate(data
+           ,"{input_args}_cumsum":=eval(parse_expr(args))
+             )
+      )
+  ) %>% 
+
+pull(data_mod) %>% .[[1]]
+
+fixed$data_mod[1]
+  
+
+params <- "list(na.rm = TRUE, trim = 0.1)"
+exec("mean", x = 1:10, !!!ensym(params))
+  
+```
+
+## Reproduce Stackoverflow posts
+
+```{r}
+
+make_data_fixed <- function(df) {
+
+  df %>% 
+    mutate(price_cumsum=cumsum(price),
+           max_price_cumsum=max(price_cumsum))
+}
+
+make_data_input <- function(df,x) {
+  df %>% 
+    mutate("{{x}}_cumsum":=cumsum({{x}}),
+           "max_{{x}}_cumsum":=max("{{x}}_cumsum")
+           )
+}
+
+selected_cols <- c("clarity","depth")
+   
+
+```
+
+
+
+
+```{r}
+vol <- 100:199
+unit_price=sample(1:10,100,replace=TRUE)
+
+df <- tibble(vol=vol
+       ,price=unit_price
+       ,rev=vol*unit_price
+       )
+
+sum(df$vol)*wtd_price_realization
+
+
+
+
+wtd_price_realization <- sum(df$rev)/sum(df$vol)
+```
 
