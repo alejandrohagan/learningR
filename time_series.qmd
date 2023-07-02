@@ -502,7 +502,6 @@ df_daily %>%
 ## seasons decomposition
 
 -   Useful to understand how anomoliges are being detcted
-=======
 ## mode diagnosics
 detect lagged fuctions
 plot_acf_diagnoistcs(
@@ -540,12 +539,10 @@ same as plot, gets data with anolmogies in it
 gives you what is seasonal vs trend vs adjjustment
 
 useful to understand how anomoliges are being detcted
->>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 plot_stl_diagostics(
 
 
 )
-<<<<<<< HEAD
 
 ```{r}
 df_daily %>% 
@@ -565,14 +562,12 @@ df_daily %>%
 ## uses linear regression
 
 helps ot identify useful features
->>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 
 plot_time_series_regression(
 .date_var=data column
 .formula= value~ as.numeric(date_col)+
 wday(date_col)+
 month(date_col)
-<<<<<<< HEAD
 show_summary= TRUE, shows summary ouptut
 )
 
@@ -657,14 +652,12 @@ lengt_out=periods
 
 )
 
->>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 )
 
 date_col %-time% "1 day"
 
 date_col %+time% "6 weeks"
 
-<<<<<<< HEAD
 ## slidify
 
 -   Creates function that does a rolling application, like mean, or correlation
