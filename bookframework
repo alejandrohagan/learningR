@@ -1,0 +1,77 @@
+# Core concepts and Principles
+
+You are a low code professional, what does this mean? it means that you are use R Studio for your workflows, ocassionally excel and other microsoft products. You've been learning tidyverse and sprinkling in some key base R functions. Concepts such as evaluation order, environments and xxx are foreign to you. 
+
+You may using R for business reports, analysis, or research. 
+
+This book isn't giong to teach you how to code, it won't teach you stats it won't teach you what the difference between object orient programming and functional programming. I don't care if R or python is  TRUE x0. I don't care if one language starts indexing at 0 and another starts at 1. 
+I'm here to improve your productivity. I'm here to teach you patterns. I will try to teach the underlying concepts of why this happens. 
+
+You try to code every day but you often don't have time. I want to pass on what was most effective for me and how I improved my productivity.
+
+You are constrained by your work environment in what you can install and do
+You are constrained by your work team, their skill sets, work flow and deliverables
+You are constrained by managers, their understanding and fluency of the data
+You are contained by your systems, data engineering, and information flows
+
+In short this has two frameworks 
+
+-   tidyverse related productivity
+
+        -       import data, data columns and names
+            -       column types
+            -       column selection
+            -       column names
+            -       read multiple files (repeating action)
+            -       big data
+            -       csv vs. excel vs. database
+            -       Querying best practices
+                    -       naming convention
+                    -       setting / navigating working directories
+                    -       accessing data via github
+                    -       writing data
+            -       how to create metadata
+            -       how to reference data vs. metadata 
+                    -       column values
+                    -       column names
+                    -       object type
+            -       How to rename columns (rename_with)
+            -       
+        -       group_by() and summarize()
+            -       simple
+            -       across()
+            -       conditional subset
+            -       
+        -       pivot_longer() and pivot_wider()
+        -       functional programming
+        -       group_by(), nest() and functions()
+                -       how to nest a dataframe
+                -       how to reference columns in that dataframe in a formula
+                        - NSE vs. non NSE
+                -       how to reference columns in the list vs. columns in the dataframe
+                        -       regular ( a number in a column) 
+                        -       the name of a column to select in list vs. in the nested dataframe
+                        -       a list of arguments
+                        -       a list of column arguments
+                -       how to create objects (ggplots vs. nested vs. results)
+                -       how to unnested objects for refernce later one
+
+        -       ggplot, colors and formatting
+        -       Quarto related
+-   vim related
+        -       Rstudio vim bindings
+            -       Motions
+            -       Action
+            -       Search and Replace
+        -       VS Studio
+            -       plugs
+            -       Additional Motions
+-   github related
+        -       Neovim config files
+        -       list of R libraries that I need
+-   Packages that I want to create
+        -       count plus
+        -       abc distribution
+        -       surivive analysis
+        -       periodic variance analysis
+        -       
