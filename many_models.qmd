@@ -407,19 +407,17 @@ selected_cols <- c("clarity","depth")
 
 
 ```{r}
-vol <- 100:199
-unit_price=sample(1:10,100,replace=TRUE)
 
-df <- tibble(vol=vol
-       ,price=unit_price
-       ,rev=vol*unit_price
-       )
+library(tidyverse)
 
-sum(df$vol)*wtd_price_realization
-
-
+diamonds %>% 
+  nest_by(cut) %>% 
+  mutate(data=list(data)) %>% 
+  mutate(mod=list(lm(price~carat,data=data)))
+  
+  
 
 
-wtd_price_realization <- sum(df$rev)/sum(df$vol)
+
 ```
 
