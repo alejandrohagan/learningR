@@ -39,6 +39,16 @@ gh::gh_whoami()
 
 ## pull, committ and push
 
+git pull to pull latest copy from the origin
+Try to do this immediately as it makes merge conflicts less (in case you edit a file that is updated in the origin )
+
+Then you `git add .` too add all changed documents are specifically specific
+
+Then use `git` commit -m "message"`
+
+-   make messages meaningful focuses on what and why -- helps with merge
+
+you can use `git status` to see status of things and `git log` to see past commands
 
 ## reversing / undoing
 
