@@ -54,4 +54,17 @@ you can use `git status` to see status of things and `git log` to see past comma
 
 ## branching / merging
 
+add branch
+-   `git checkout branch "branch name"`
+
+delete branch
+
+-   `git brand -d "branch name"`
+
+
+
+
+
+
+
 
