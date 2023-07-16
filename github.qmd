@@ -8,6 +8,7 @@ https://raps-with-r.dev/git.html
 https://happygitwithr.com/
 https://learngitbranching.js.org/?locale=en_US
 
+
 1. first set your user name and email address
 -   You can do this with command line interface ("cli") arguments 
 -   While intimidating, I do recommend you get comfortable with CLI arguments 

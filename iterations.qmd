@@ -24,11 +24,8 @@ Also know that "mapping" is a consistent function across many programming langua
 
 
 ```{r}
-<<<<<<< HEAD
 #| eval: false
 
-=======
->>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 library(loopurrr)
 library(tidyverse)
 
@@ -38,30 +35,17 @@ df=diamonds %>%
 x <- list(1, c(1:2), c(1:3))
 
 df %>% split(names(df)) %>% purrr::map(quantile,.25,na.rm=TRUE) %>% as_loop()
-# --- convert: `purrr::map(split(df, names(df)), quantile, 0....` as loop --- #
+
 .inp1 <- split(df, names(df))
 out <- vector("list", length = length(.inp1))
+
 
 for (i in seq_along(.inp1)) {
   out[[i]] <- quantile(.inp1[[i]], 0.25, na.rm = TRUE)
 }
 
 names(out) <- names(.inp1)
-# --- end loop --- #
-<<<<<<< HEAD
-# --- convert: `purrr::map(split(df, names(df)), quantile, 0....` as loop --- #
-.inp1 <- split(df, names(df))
-out <- vector("list", length = length(.inp1))
 
-for (i in seq_along(.inp1)) {
-  out[[i]] <- quantile(.inp1[[i]], 0.25, na.rm = TRUE)
-}
-
-names(out) <- names(.inp1)
-# --- end loop --- #
-=======
->>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
-# --- convert: `purrr::map(split(df, col(df)), sum)` as loop --- #
 .inp1 <- split(df, col(df))
 out <- vector("list", length = length(.inp1))
 
@@ -70,17 +54,13 @@ for (i in seq_along(.inp1)) {
 }
 
 names(out) <- names(.inp1)
-# --- end loop --- #
-x %>% %>% as_loop()
 
 
-# --- convert: `purrr::map(x, sum)` as loop --- #
 out <- vector("list", length = length(x))
 
 for (i in seq_along(x)) {
 out[[i]] <- sum(x[[i]])
 }
-# --- end loop --- #
 
 
 
@@ -98,7 +78,6 @@ While this may seem unusually complex, it is not, its just a matter of conventio
 library(tidyverse)
 
 
-<<<<<<< HEAD
 df <- diamonds %>% 
   select(where(is.numeric))
   
@@ -111,20 +90,21 @@ df %>%
   select(-name) %>% cor
 
 
-reduce(.x=1:10,~(.x)+.y,.init = 100,.dir = "forward")
+reduce(.x=1:10,~.x+.y,.init = 100,.dir = "forward")
 
 df=map(
   letters[1:3]
   , ~ sample(1:10, 15, replace = T)
   )
-=======
+
+
+
 diamonds %>% 
   select(where(is.numeric)) %>% 
   map(.x=.,quantile,.25)
 
 
 
->>>>>>> c8774fd (commit new chapters including iterations and time series and clean up new_chapter)
 
 ```
 -Takes arguments and seperates that into lists (if it comes in as data frame)
@@ -237,8 +217,16 @@ agg_fun <- function(df) {
   sum(df$hp - df$drat)
 }
 
+agg_fun2 <- function(df) {
+  sum(hp - drat)
+}
+
 nested_df %>% 
-  mutate(test=map_dbl(data,agg_fun))
+  mutate(test=map_dbl(.x=.,agg_fun2))
+
+
+
+
   
   
 ```
@@ -492,6 +480,7 @@ big <- function(x) {
   x > mean(x, na.rm = TRUE)
 }
 
+penguins %>% select(contains("bill"))
 penguins %>% 
   filter(if_all(contains("bill"), big))
 
@@ -882,7 +871,6 @@ iris %>%
 
 
 
-<<<<<<< HEAD
 ```{r}
 iris %>%
   transmute(across2(ends_with("Length"),

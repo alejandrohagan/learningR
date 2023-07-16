@@ -1,0 +1,102 @@
+---
+title: "data_masking"
+---
+
+## Resources
+
+[https://brad-cannell.github.io/r_notes/confidence-intervals.html]
+
+
+### data masking
+
+
+enquoes
+-   quotes functions eg. turns mpg into "mpg" AND declares the environment eg. global or local for the quoted return to be put in. 
+-   eg. ... or mpg needs to but into enquos(...) or enquo(mpg)
+-   you evalute unquoted objects with !! or despare
+- or combine both enquo() and !! with {}
+-   if you have a list of quoted objects you need !!! to unlist
+
+- rlang::qq_show() around your evaluated expresssion to show
+-   if input is a quoted input put it around sym (enquo for unquoted)
+
+
+
+```{r}
+library(tidyverse)
+
+my_mean <- function(data, var) {
+  
+  var <- ensym(var)
+  
+  rlang::qq_show(data %>% dplyr::summarise(mean(var)))
+}
+
+mtcars %>% my_mean(cyl)
+```
+
+
+```{r}
+
+custom <- function(.data,group,focus){
+  
+  group <- enquos(group)
+  focus <- enquo(focus)
+    
+
+  
+    .data %>% 
+    group_by(pick(!!!group)) %>% 
+      summarize(
+        mean=mean(!!focus)
+        ,.groups="drop"
+      )
+  
+  
+}
+
+diamonds %>% custom(group=c(color,cut),focus=x)
+```
+
+
+
+sym() is used to take a quoted input "x" and use it in a context without quotes. Need !!sym("x") to be used
+
+or  rlang::englue("var) within the .data[[var]] context
+
+
+.data[[rlang::englue("var")]]
+
+.env$var to refer to grid table
+
+```{r}
+library(tidyverse)
+
+
+col_numbers <- 1:ncol(diamonds)
+
+  map(
+    .x=col_numbers
+      ,.f=~diamonds[.x:10]
+  )
+
+  split(diamonds, ~ cut) %>% 
+    map(
+      .x=.
+      ,~.x %>% pull(price) %>% sum) %>% 
+    stack()
+
+ 
+    map(
+      .x=col_numbers
+      ,.f = ~mtcars[.x] %>% table()
+      )
+```
+
+
+
+```{r}
+diamonds %>% select(cut,color) %>% 
+  table()
+```
+
