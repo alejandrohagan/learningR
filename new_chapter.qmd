@@ -3,7 +3,7 @@
 # Named Objects
 
 ::: callout-note
-In this package, we will use the following libraries
+in this package, we will use the following libraries
 
 library(tidyverse)
 :::
@@ -20,9 +20,9 @@ pacman::p_load(tidyverse)
 
 Although not the most glamorous place to start, learning how to create named objects, reference and manipulate them as well generate data becomes incredibly useful down the road when combined with other techniques and workflows.
 
-In R this is main way you save, reference, and manipulate your data
+in R this is main way you save, reference, and manipulate your data
 
-You use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
+you use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
 
 ```{r}
 
@@ -31,40 +31,117 @@ You use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
 object <- 1+1
 ```
 
-Whatever name type will become the object's name, if type in the object, it will return whatever you assigned to the name
+Whatever name you type will become the object's name, if you type in the object, it will return whatever you assigned to the name
 
 Although this is fairly intuitive to understand, if you are coming from an Excel background, it will take time to develop this habit of assigning names to results because in Excel, you can refer to a result by its cell location by physically pointing a formula to a input.
 
-For quick and simple calculations, this will be quicker but if you try to do something even beyond a simple calculation, you will see it becomes very difficult to manage, easy to make mistakes and reduces your producivity as you have to constantly point to those input cells or have to remember non-intuitive names `eg C5` .
+For quick and simple calculations, this will be quicker but if you try to do something even beyond a simple calculation, you will see it becomes very difficult to manage, easy to make mistakes and reduces your productivity as you have to constantly point to those input cells or have to remember non-intuitive names `eg C5` .
 
+### In Excel
 In excel, you can also name a cell by putting your cursor over the cell and click on the named box in the top left.
+
+This is a useful technique for commonly referenced cells but the "workflow" is a bit nonstandard. You can use F5 to quickly name an object
 
 To keep track of all the names, you can press F5 and you will see a dialog box that will help you manage all of your names.
 
 When you want to refer to that cell, you can simply type in the cell name.
 
-Although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
+although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
+
+### Types of data
+
+int
+character
+date
+NA
+NULL
+
+
+```{r}
+x <- "test"
+y <- 1
+z <- as.Date("2012/2/12")
+a <- 2L
+class(z)
+class(y)
+class(x)
+class(a)
+
+
+```
+
+
+you don't pay attention to data types in Excel as much until you have problems -- it is a strength and weakness. You can throw any values together and excel doesn't care (until you try to do something with it).
+
+R (and most other languages) really care about data types -- in fact they won't make you do anything unless data types are aligned
+
+
+
+
+
+### how to generate data
+
+## In R
+
+This may seem useful but I assure its very useful
+
+list of numbers
+
+```{r}
+1:10
+
+10:1
+```
+
+alternatively you can use the function `seq()`
+
+
+```{r}
+seq(1,100,10)
+
+seq_along(1:100)
+
+seq_len(10)
+
+sequence(c(5, 5), from=1L, by=2L)
+
+seq.int(1,10,1)
+
+
+seq.Date(
+  from=as.Date("2021-01-01")
+  ,to = as.Date("2021-01-03")
+  ,by="days"
+)
+```
+
+seq
+
+
+
+
 
 ### how to create and named Tables
 
 ##### In R
 
-Regardless if the data object is a cell or a table (or actually any type of object) the naming methodology is the same.
+regardless if the data object is a cell or a table (or actually any type of object) the naming methodology is the same.
 
-However creating a table isn't as straight forward because you don't have the same GUI.
+however creating a table isn't as straight forward because you don't have the same GUI.
 
-Data entry is not R (or any scripting languages) strong suit - which doesn't mean you can't do it but if you are strictly entering in data (of great length), use excel.
+data entry is not R (or any scripting languages) strong suit - which doesn't mean you can't do it but if you are strictly entering in data (of great length), use excel.
 
-However, below shows you how to create tables
+however, below shows you how to create tables
 
 #### tibble / data frame
 
 ```{r}
 library(tidyverse)
-df_example <- tibble(x=1:10,
-                     y=2:11,
-                     z=3:12
-                     )
+df_example <- tibble(
+  x=1:10
+  ,y=2:11
+  ,z=3:12
+  )
 
 ```
 
@@ -73,7 +150,7 @@ df_example <- tibble(x=1:10,
 When trying to do data entry that you need to reference columns wise & rowwise, this can challenging, so thats why there is a `tribble`, a handy way to still see your columnwise and rowwise data together
 
 ::: callout-note
-There is a concept of vectorization, which for now, we will define as recycling. Which is to say if I put one column with 10 elements, and another column with only 1 element, tibble will recycle the "1" until it length of the tibble.
+there is a concept of vectorization, which for now, we will define as recycling. Which is to say if I put one column with 10 elements, and another column with only 1 element, tibble will recycle the "1" until it length of the tibble.
 :::
 
 ```{r}
@@ -87,93 +164,167 @@ df_tribble <- tribble(
 )
 ```
 
-Another methodology which can be useful are the `data.edit` and
+another methodology which can be useful are the `data.edit` and
 
 ```{r}
 
 ```
 
 ::: callout-tip
-What naming convention should we use in R? This is where you will start to see namng conventions that you are not familiar with such as snake_case, kebab-case, or Upper_camel.
+## Naming Convention
+what naming convention should we use in R? This is where you will start to see naming conventions that you are not familiar with such as snake_case, kebab-case, or Upper_camel.
 
-For this book, we will use snake_case (but you use whatever is easist for you).
+for this book, we will use snake_case (but you use whatever is easist for you).
 
-Coming up with names for variables will be challenging as you will either type too little or too much, over time you will get your own convention. It is not important what is optimal, more important to focus on convention (means consistency) so that when you read something you immediately know what it is.
+coming up with names for variables will be challenging as you will either type too little or too much, over time you will get your own convention. It is not important what is optimal, more important to focus on convention (means consistency) so that when you read something you immediately know what it is.
+
+for this book if its a regular R object we will append the object with `_tbl` to help keep track of objects
 :::
 
 ### Excel Skills to be covered
 
-Named cells 
+In excel, this is for more straight forward -- you simply put the data into cells. Highlight the area and then click insert>table
 
-Named Tables 
+From there, Its a good practice to name the table (this will make referencing the table much easier and straight forward).
 
-Adding columns to Tables 
+Again for quick and simple analysis and one time analysis -- not necessary
 
-Adding rows to Tables 
 
-Referencing named objects 
 
-F5 
+## adding columns to Tables
 
-Index() 
+### In R
 
-Tab references 
+In R we can add to our base table by using the dplyr function `mutate()` which basically takes two arguments, the name of the column and the content of the column.
 
-How to edit named objects 
+```{r}
+tibble(
+  x=1:10
+  ,y=letters[1:10]
+) %>% 
+  mutate(z=1)
+```
 
-Data Entry Form add in 
 
-Creating vector 
+Probably the most confusing part of this for you will be the name mutate -- it doesn't sound rational or logical but in programming languages there is a concept called mutate where you change an object. 
 
-Fill Series Tips 
+That may or not help you in remembering how to change an object but you will absolutely be using this function alot
 
-Existing data 
+Secondly, this is your first introduction to the pipe! It looks funny but soon you will be super addicted to it.
 
-New series of Numbers 
+I said there are two key parameters for `mutate()` but actually, there is three mutate(data,column_name,value). However when I used it, I didn't specificy the data object. 
 
-New series of Dates 
+That is because the %>% puts the left hand side as the first argument in the right handside function.
 
-Flash Fill tips 
+so `mutate(tbl,z=1:10)` because `tbl %>% mutate(z=1:10)`. Additionally you can do `tbl |> mutate(.,z=1:10)`.
 
-Adding/subtracting/dividing/multiplying columns 
+Ok -- now for a first point of confusion -- you will sometimes see the pipeline written as `|>` and sometimes `%>%` 
 
-One formula works against all rows in a column 
+::: callout-tip
+## history
 
-Rowwise equvalant 
 
-Colwise equvailant 
+:::
 
-Mean 
 
-Median 
+## Adding rows to a table
 
-Sum 
+### In R 
 
-Count 
+You can do the following
 
-Aggregate 
+-   Make a table of values and bind it with `bind_rows()`
+-
+-   
 
-Error handling 
+```{r}
 
-Iferror() 
+dplyr::rows_append(),dplyr::rows_insert(),dplyr::rows_update()
 
-NA vs. null vs. ref 
 
-Array \[what did I mean by this\]
+
+```
+
+### In Excel
+
+Simply add the values you want at the bottom of the table
+
+
+## Referencing named objects
+
+
+### In R
+
+use the `ls()` funciton to see all the objects you named
+
+in Excel you use F5
+
+
+index() 
+
+
+
+tab references 
+
+how to edit named objects 
+
+data Entry Form add in 
+
+existing data 
+
+new series of Numbers 
+
+new series of Dates 
+
+flash Fill tips 
+
+adding/subtracting/dividing/multiplying columns 
+
+
+```{r}
+diamonds |> 
+  mutate(ratio=table/depth)
+```
+
+one formula works against all rows in a column 
+
+rowwise equvalant 
+
+
+
+colwise equvailant 
+
+mean 
+
+median 
+
+sum 
+
+count 
+
+aggregate 
+
+error handling 
+
+iferror() 
+
+nA vs. null vs. ref 
+
+array \[what did I mean by this\]
 
 ## R skills to be covered
 
-Tibbles 
+tibbles 
 
-Lists 
+lists 
 
-Vectors 
+vectors 
 
 dataeditR 
 
-Arrange() 
+arrange() 
 
-Generating data 
+generating data 
 
 -numbers 
 
@@ -189,10 +340,10 @@ Generating data 
 
 ::: {#special .sidebar}
 ::: warning
-Here is a warning.
+here is a warning.
 :::
 
-More content.
+more content.
 :::
 
 
@@ -200,7 +351,7 @@ More content.
 <<<<<<< HEAD
 #tidymodels
 
-Split data & sample folds
+split data & sample folds
 
 1.  rsample::initial_sample(dataframe,strata=variable)
 
@@ -225,7 +376,7 @@ workflow() %\>% add_recipe(rec) %\>% add_model(mod)
 
 
 
-I(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
+i(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
 
 #### Metadata for columns
 
@@ -251,7 +402,7 @@ generates a data dictionary
 
 subsittute labels for points in graph
 
-To substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
+to substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
 
     penguins_labelled <- penguins |> 
       set_variable_labels(
@@ -272,7 +423,7 @@ To substitute variable labels for variable names on your input variables, add [`
 
 #### Quarto style guides
 
-As best I can tell there are 3 ways to format presentations
+as best I can tell there are 3 ways to format presentations
 
 
 `:::{.args input1="..." input2="...}`
@@ -286,7 +437,7 @@ impact text
 - this appears to reference CSS style arguments
 
 ##### Change changing style within string
-If you want to edit a single word or string of  words **within a string** 
+if you want to edit a single word or string of  words **within a string** 
 
 
 [existing text]{style="args:..."}
@@ -326,15 +477,39 @@ position: (absolute, static,relative);
 ##### Section heads
 .sectionhead {
   font-size: 1em;
-  text-align: center;
-  color: $presentation-heading-color;
-  font-family: $presentation-heading-font;
-  background-color: $body-bg;
-  margin: 1px;
-  padding: 2px 2px 2px 2px;
-  width: 120px;
-  border-left: 10px solid;
-}
+text-align: center;
+color: $presentation-heading-color;
+font-family: $presentation-heading-font;
+background-color: $body-bg;
+margin: 1px;
+padding: 2px 2px 2px 2px;
+width: 120px;
+border-left: 10px solid;
+}   
+
+
+
+
+
+
+[1] "hello"
+
+a asfds
+a dog and elephant
+a list of things
+a safdfs
+aas sdf
+b dsfsfa
+cadfaa
+d adfas
+
+
+```{r}
+
+
+
+```
+
 
 
 
@@ -343,7 +518,7 @@ position: (absolute, static,relative);
 
 ###### Set group_by() .drop to FALSE
 
-If data is a factor and you have filtered out the data 
+  If  data is a factor and you have filtered out the data 
 (but its listed as level), then you can set the `.drops` argument to `FALSE` in the `group_by()` and `summarize()` pattern and levels that have been filtered or do not have values will show up (by default these are droped `.drop=TRUE`)
 
 ```{r}
@@ -406,7 +581,7 @@ missing_data %>%
 
 ```
 
-Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
+original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
 
 
 
@@ -420,7 +595,7 @@ workflow() %\>% add_recipe(rec) %\>% add_model(mod)
 >>>>>>> a548534aa2ba9c3ce865bab0e837a2867fc5c783
 
 
-I(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
+i(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
 
 #### Metadata for columns
 
@@ -446,7 +621,7 @@ generates a data dictionary
 
 subsittute labels for points in graph
 
-To substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
+to substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
 
     penguins_labelled <- penguins |> 
       set_variable_labels(
@@ -467,7 +642,7 @@ To substitute variable labels for variable names on your input variables, add [`
 
 #### Quarto style guides
 
-As best I can tell there are 3 ways to format presentations
+as best I can tell there are 3 ways to format presentations
 
 
 `:::{.args input1="..." input2="...}`
@@ -481,7 +656,7 @@ impact text
 - this appears to reference CSS style arguments
 
 ##### Change changing style within string
-If you want to edit a single word or string of  words **within a string** 
+if you want to edit a single word or string of  words **within a string** 
 
 
 [existing text]{style="args:..."}
@@ -538,7 +713,7 @@ position: (absolute, static,relative);
 
 ###### Set group_by() .drop to FALSE
 
-If data is a factor and you have filtered out the data 
+if data is a factor and you have filtered out the data 
 (but its listed as level), then you can set the `.drops` argument to `FALSE` in the `group_by()` and `summarize()` pattern and levels that have been filtered or do not have values will show up (by default these are droped `.drop=TRUE`)
 
 ```{r}
@@ -601,7 +776,7 @@ missing_data %>%
 
 ```
 
-Original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
+original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
 
 
 
@@ -611,7 +786,7 @@ library(devtools)
 library(usethis)
 
 
-Create packge in the workspace that you want
+create packge in the workspace that you want
 devtools::create_package("package_name")
 
 then do usethis::use_r("function_name") to create a script, put yoru function there
@@ -797,4 +972,3 @@ col_numbers <- 1:ncol(diamonds)
       ,.f = ~mtcars[.x] %>% table()
       )
 ```
-
