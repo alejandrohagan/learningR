@@ -1,0 +1,31 @@
+---
+title: "vim"
+---
+
+
+How to use vim in Rstudio and why?
+
+Vim is a keybinding that has a bit of cult following. It will look and feel very very different that your traditional key bindings (eg what is in front of your hands today) but over time, will be insanely more productive.
+
+You can use R in vim you or you can use vim in VS Studio and R or you can use Vim key bindings in Rstudio.
+
+## Vim in Rstudio
+
+So to manage expectations -- this isn't actually VIM. There are probably three distinct capabilities that make VIM popular
+
+1) keybinds
+2) custuomize keybindings
+3)modes
+
+This is probably better understood as a mimic of VIM key bindings but even this limited capabilities can signifcantly help your producively
+
+1) key navigation
+
+2) search and replace
+
+3) registers (macros)
+
+4) formating
+
+
+

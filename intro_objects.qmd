@@ -1,0 +1,407 @@
+---
+title: "vectors, objects & lists"
+---
+
+### Create objects
+
+Although not the most glamorous place to start, learning how to create named objects, reference and manipulate them as well generate data becomes incredibly useful down the road when combined with other techniques and workflows.
+
+
+
+In R this is main way you save, reference, and manipulate your data
+
+you use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
+
+```{r}
+
+
+#| echo: true
+object <- 1+1
+```
+
+Whatever name you type will become the object's name, if you type in the object, it will return whatever you assigned to the name
+
+while you type any name, you will quickly understand that naming convetions will become your friend.
+
+Speciically, if you want to have spaces in you name -- you will need to wrap hte objects nam in either "" or ''.
+
+```{r}
+
+this_is_easier_to_type <- 10
+
+"this will annoy you to type" <- 10
+
+
+
+```
+
+
+There are different naming conventions -- ultimately its stylistic choice.
+
+I'd suggest to use snake_case to start. It may take awhile for your finger to learn to use that keyboard key but after a while you will see that that it will be second nature.   
+
+
+
+### In Excel
+In excel, you can also name a cell by putting your cursor over the cell and click on the named box in the top left.
+
+This is a useful technique for commonly referenced cells but the "workflow" is a bit nonstandard. You can use F5 to quickly name an object
+
+To keep track of all the names, you can press F5 and you will see a dialog box that will help you manage all of your names.
+
+When you want to refer to that cell, you can simply type in the cell name.
+
+although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
+
+
+
+Although this is fairly intuitive to understand, if you are coming from an Excel background, it will take time to develop this habit of assigning names to results because in Excel, you can refer to a result by its cell location by physically pointing a formula to a input.
+
+For quick and simple calculations, this will be quicker but if you try to do something even beyond a simple calculation, you will see it becomes very difficult to manage, easy to make mistakes and reduces your productivity as you have to constantly point to those input cells or have to remember non-intuitive names `eg C5` .
+
+### Types of data
+  
+  If you are coming from an excel background you most likely didnt pay attention to an the datatype of a an object because excel is very forgiving with data types.   
+  4
+  In R you will need to pay more attention to datatypes otherwise you R will try to be helpful and throw an error.
+  
+The main data types are listed below.
+
+
+        
+int
+character
+date
+NA
+NULL
+
+
+```{r}
+character_example <- "test"
+numeric_example <- 1
+date_example <- as.Date("2012/2/12")
+integer_example <- 2L
+
+
+```
+
+
+you don't pay attention to data types in Excel as much until you have problems -- it is a strength and weakness. You can throw any values together and excel doesn't care (until you try to do something with it).
+
+R (and most other languages) really care about data types -- in fact they won't make you do anything unless data types are aligned
+
+
+
+## structure
+
+who actually knows but the best explanation is that this stands for concatenate -- which basically means brings things together.
+
+This is a new concept for excel users --, we can just type things in a cell and it works. 
+
+In R -- you can't do that, we need to add some structure to our data in the form either a vector or list or data frame (which is just a collection of lists)
+
+This may feel overwhelming -- in reality it will feel very intuitive -- only later on will some nuance really distinguish between these types
+
+### Vector
+
+```{r}
+a <- vector()
+
+a <- 1:10
+
+a
+
+b <- c(1:10)
+?vector()
+identical(a,b)
+```
+
+
+"logical"
+,"integer"
+, "double"
+, "complex"
+, "character"
+, "raw"
+,"list"
+, "NULL"
+
+```{r}
+a <- c(1:10)
+b <- rlang::list2(1:10)
+
+a==b[[1]]
+identical(a,b[[1]])
+```
+
+lists can be blessing and course
+
+```{r}
+li
+```
+
+
+## classes of data
+
+Checking clases of data isn't a routine action but if you have errors, its helpful in solving this
+
+we can use `class()` to check the class of object are you can be specifc with the is._ type funcitons
+
+is.numeric()
+is.character()
+is.Date()
+
+
+
+```{r}
+class(character_example)
+class(numeric_example)
+class(date_example)
+class(integer_example)
+
+base::is.character()
+base::is.integer()
+base::is.numeric()
+lubridate::is.Date(date_example)
+
+typeof(character_example)
+
+```
+
+
+### Excel
+
+
+
+## Type conversions --
+
+
+So what happens if you combine a character with interger?
+
+You get what is called a type conversin -- eg. R will automatically convert one character type to another
+
+```{r}
+
+
+c(1:10,"a")
+```
+
+
+
+### how to generate data
+
+## In R
+
+This may seem useful but I assure its very useful
+
+list of numbers
+
+```{r}
+1:10
+
+10:1
+```
+
+alternatively you can use the function `seq()`
+
+
+```{r}
+seq(1,100,10)
+
+seq_along(1:100)
+
+seq_len(10)
+
+sequence(c(5, 5), from=1L, by=2L)
+
+seq.int(1,10,1)
+
+
+seq.Date(
+  from=as.Date("2021-01-01")
+  ,to = as.Date("2021-01-03")
+  ,by="days"
+)
+
+
+sample(1:100,size=30,replace = TRUE)
+## rep
+
+rep_named(words[1:100],1:100) %>% stack()
+
+words
+
+
+## runif
+n=100
+dunif(.2, min = 0, max = 1, log = FALSE)
+punif(q, min = 0, max = 1, lower.tail = TRUE, log.p = FALSE)
+qunif(p, min = 0, max = 1, lower.tail = TRUE, log.p = FALSE)
+runif(n, min = 0, max = 1)
+## distributions
+
+#build in dataaets
+letters
+
+LETTERS
+
+state.abb
+
+
+## sample
+
+test <- rlang::list2(a=1:10
+             ,b=1
+             ,c=1:4)
+
+test$c
+
+test[[1]] - test[[3]]
+
+test[["c"]] - test[["a"]]
+
+
+
+```
+
+###
+
+```{r}
+library(rlang)
+a<- list2()
+
+a <- list(b=1:10,c=1)
+
+a <- list(c=2:10)
+
+append(a,values=list2(a=1:2,z=1:10),after = 2)
+```
+
+when we create lists or vectors, sometimes you want to add to it- in reality not really but we want to get you more comfortable with lists and vectors and introduce some simple functions that can be helpful later in your journey
+
+`append()` is a great function that adds to an existing function
+
+append(
+vector or list
+,new entry
+,after= number of list
+)
+
+In practice you won't use this much in your beginning analysis -- it can be helpful later on when you start to write functions but for now its just to get you use to the command line and scripting and take away some of the angst
+
+## subsetting
+
+how do we extract from vectors
+
+well this is where these bracket things come from basically you are can look inside and either call out by number or name the object you want
+
+```{r}
+
+list2(
+  a=1:10
+  ,b=words[10]
+  ,c=words[1:3]
+  ,d=10:1
+  )
+
+```
+
+
+## recyling
+
+
+```{r}
+data()
+freeny
+
+map_chr(rep(1,100),function(.x) sample(words,.x,replace = TRUE))
+```
+
+
+```{r}
+
+data()
+luv_colours %>% 
+  ggplot() +
+  geom_point(aes(x=u,y=v,col=col))+
+  scale_color_identity()+
+  theme_classic()
+
+
+table2
+```
+
+## practice!
+
+stimulate a dice roll?
+
+```{r}
+sample(1:6,1,replace=TRUE)
+
+```
+
+
+## Classes of data
+
+
+
+
+### how to create and named Tables
+
+##### In R
+
+regardless if the data object is a cell or a table (or actually any type of object) the naming methodology is the same.
+
+however creating a table isn't as straight forward because you don't have the same GUI.
+
+data entry is not R (or any scripting languages) strong suit - which doesn't mean you can't do it but if you are strictly entering in data (of great length), use excel.
+
+however, below shows you how to create tables
+
+#### tibble / data frame
+
+```{r}
+library(tidyverse)
+df_example <- tibble(
+  x=1:10
+  ,y=2:11
+  ,z=3:12
+  )
+
+```
+
+#### Tribble
+
+When trying to do data entry that you need to reference columns wise & rowwise, this can challenging, so thats why there is a `tribble`, a handy way to still see your columnwise and rowwise data together
+
+::: callout-note
+there is a concept of vectorization, which for now, we will define as recycling. Which is to say if I put one column with 10 elements, and another column with only 1 element, tibble will recycle the "1" until it length of the tibble.
+:::
+
+```{r}
+df_tribble <- tribble(
+  ~col1,~col2,~col3,
+  1,2,3,
+  5,6,7,
+  8,9,10
+  
+  
+)
+```
+
+another methodology which can be useful are the `data.edit` and
+
+```{r}
+
+```
+
+::: callout-tip
+## Naming Convention
+what naming convention should we use in R? This is where you will start to see naming conventions that you are not familiar with such as snake_case, kebab-case, or Upper_camel.
+
+for this book, we will use snake_case (but you use whatever is easist for you).
+
+coming up with names for variables will be challenging as you will either type too little or too much, over time you will get your own convention. It is not important what is optimal, more important to focus on convention (means consistency) so that when you read something you immediately know what it is.
+
+for this book if its a regular R object we will append the object with `_tbl` to help keep track of objects
+:::

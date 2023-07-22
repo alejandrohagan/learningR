@@ -1,25 +1,8 @@
 # Introduction {.unnumbered}
 
-Listen up, fellow data wranglers and spreadsheet warriors! I have been to the darkest corners of the internet and beyond, searching for answers to the most impossible data problems. I've scoured every forum, every blog, every tutorial, and even ventured into the depths of the forbidden knowledge that mere mortals should not possess. But fear not, my friends, for I have returned with a solution that will save you from the agony and frustration of data manipulation.
+I have been to the darkest corners of the internet and beyond, searching for answers to the most impossible data problems. I've scoured every forum, every blog, every tutorial, and even ventured into the depths of the forbidden knowledge that mere mortals should not possess. But fear not, my friends, for I have returned with solutions that will save you agony and frustration.
 
-I'm not just talking about your everyday, run-of-the-mill data issues. No, no, no. I'm talking about the kind of data that would make even the most experienced analyst quiver in their boots. Messy, inconsistent, non-standard, and downright ugly data that makes you want to throw your computer out the window. But fear not, for I have conquered these data demons and emerged victorious.
-
-And now, I am here to share my knowledge with you, my dear comrades in data crunching. This book will solve 80% of your data problems, with no complex macros or advanced languages required. It's like a data superhero that will swoop in and save the day, leaving you with more time to sip on a margarita and bask in the glory of your newfound data skills.
-
-So if you're tired of staring at your computer screen, tears streaming down your face, and feeling like you're stuck in a never-ending data nightmare, then this book is for you. It's time to take back control of your data, and with my help, you'll be a data champion in no time.
-
-This is meant to quickly reference guide. I will teach you patterns techniques so that you can quickly and effectively get to solutions to your problems. This means building up your analysis frameworks and tool kits.
-
-Please clean this up and make it more funny and dramatic
-I've scoured every tip, every yahoo message board, every stackoverflow question, every #RStats tweet, mr. excel forum. I've read all the intro for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. xxx   I know it. I've reached all the dead ends that you will encounter and I've stared at the screen frustrated. I've been given all the last minute and impossible tasks to produce reports and faced the reality of ugly, inconsistent, messy data that you will find. I've heard all the promises of automation and how Power Query, DAX, Tableau, Power BI, snowflake, databricks will help only to have the same frustration as before but just a different problem.I've been in your shoes as we somehow have more tools and data that we ever had before our data increases yet tools get more complicated. Promises made and promises broken.
-
-But this isn't about me, this is about you. I've cried, I've sweat blood and cried tears so that you don't have to. After working years in financial planning, budgeting & analysis roles, manipulating system data, external data, data meant to help that hurts, non standard data, excel models that are so large you pray to the gods that they don't crash.
-
-But there is a solution. If you are dreading your monthly report, your weekly stewardship and KPIs, I am here to tell you that this book will get you answers. Answers that you can use today to fix your problems. No complex macros to learn, no advanced languages. This will solve 80% of your problems, and will point you towards resources to solve the remaining.
-
-Listen up, fellow data wranglers and spreadsheet warriors! I have been to the darkest corners of the internet and beyond, searching for answers to the most impossible data problems. I've scoured every forum, every blog, every tutorial, and even ventured into the depths of the forbidden knowledge that mere mortals should not possess. But fear not, my friends, for I have returned with a solution that will save you from the agony and frustration of data manipulation.
-
-I'm not just talking about your everyday, run-of-the-mill data issues. No, no, no. I'm talking about the kind of data that would make even the most experienced analyst quiver in their boots. Messy, inconsistent, non-standard, and downright ugly data that makes you want to throw your computer out the window. But fear not, for I have conquered these data demons and emerged victorious.
+I'm not just talking about your everyday, run-of-the-mill data issues. No, no, no. I'm talking about the kind of data that would make even the most experienced analyst shake in their boots. Messy, inconsistent, non-standard, and downright ugly data that makes you want to throw your computer out the window. But fear not, for I have conquered these data demons and emerged victorious.
 
 And now, I am here to share my knowledge with you, my dear comrades in data crunching. This book will solve 80% of your data problems, with no complex macros or advanced languages required. It's like a data superhero that will swoop in and save the day, leaving you with more time to sip on a margarita and bask in the glory of your newfound data skills.
 
@@ -37,214 +20,32 @@ I want to tell you that you will be able to great in 2 weeks but I will lie to y
 
 Be patient, the concepts taught here are not hard or complex they are just *different* than what you know. As you become more familiar with the new concepts you will learn it very quickly.
 
-Listen up, my fellow data warriors! This quick reference guide will be your ticket to solving data problems in a snap. I'll teach you the most effective patterns and techniques so that you can build up your analysis frameworks and tool kits like a pro.
-
-And let me tell you, I don't just throw around the word "effective" lightly. I'm all about balancing your time and making sure you're not wasting it on skills that only you can use. Sure, you might be able to do some pretty advanced stuff, but what good is it if you're the only one who knows how to use it? The person who replaces you will undo it in a heartbeat, and all that time and effort will go down the drain.
-
-That's why I'm all about doing a typical problem in a defined amount of time. If you can't do a simple analysis in 15 minutes, then what's the point? You need to be able to train and benefit from your work, and that means being able to automate processes and semi-automate others. Trust me, by the time you're done with this guide, you'll be excited to tackle data head-on. It won't intimidate you anymore, and you'll be confident in your abilities.
-
-Now, I'm not going to lie to you and tell you that you'll be a data superstar in just two weeks. It's going to take some time to replicate your existing Excel skill set in R and surpass it. But trust me when I say that the investment is worth it. Once you can automate a report in 10 minutes that used to take you a whole week, you'll wonder how you ever lived without these skills.
-
-So be patient, my friends. The concepts I'm about to teach you are not hard or complex, they're just different from what you're used to. But as you become more familiar with them, you'll learn them in no time. Get ready to become a data ninja, my friends. The future is yours!
-
 
 ### Books purpose
 
-This book will guide you through realistic business scenarios on how to create and automate reports with an emphasis on maximizing your team'seffectiveness
+This book will guide you through realistic business scenarios on how to create and automate reports with an emphasis on maximizing your team's effectiveness
 
 You read this and 1) will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness (as defined by your team & maintenance of the reports you build)
 
-While there are some fantastic R reasources [www.bigbookofR.com](www.bigbookofR.com), the referenced example datasets rarely prepare you for the real life complexities of dealling with Corporate datasets, including challenges of dealing with messy Corporate datasets, maintaining reports when there is significant process changes, and system and offline manual data manipulation required to generate repoerts.
+While there are some fantastic R reasources [www.bigbookofR.com](www.bigbookofR.com), the referenced example datasets rarely prepare you for the real life complexities of dealing with Corporate datasets, including challenges of dealing with messy Corporate datasets, maintaining reports when there is significant process changes, and system and offline manual data manipulation required to generate reports.
 
-Additionaly, whther it is R or python, most learning resources tend to have a heavy focus on statistical techniques / applications which while useful in certain contexts in reality do not help most analyts or managers with their business reporting.
+Additionally, whether it is R or python, most learning resources tend to have a heavy focus on statistical techniques / applications which while useful in certain contexts in reality do not help most analyst or managers with their business reporting.
 
 This book is focused on developing effective analyst skills that will improve both your R and Excel skills, recognizing that he reality of using exclusively being able to use R in a corporate environment is rare. Furthermore by relating R to excel, you will gain a deeper learning into how R works.
 
 There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be able to maintain (however we will provide resources in case you are curious!)
 
-The dirty secret of popular data science languages are they are **perishable**, that is to say if you don't use them frequently you will forget the techniques, syntax and common patterns to solve your issues.
+> The dirty secret of popular data science languages are they are **perishable**, that is to say if you don't use them frequently you will forget the techniques, syntax and common patterns to solve your issues.
 
-the real barrier and challenge to you learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be in getting
-```{r}
-R.home()
-```
+the real barrier and challenge to learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be getting sufficient practice to learn the patterns in your daily life
 
+For this -- its up to you and your level of dedication / committment.
 
-
-## Resources
-
-### ggblanket package
--   simplified ggplot alternative package
-
-[ggblanket](https://davidhodge931.github.io/ggblanket/articles/ggblanket.html)
-
-### Conditional geoms in ggplot
-
-(https://statisticsglobe.com/if-else-condition-add-extra-layer-ggplot2-plot-r)
-
-```{r}
-library(tidyverse)
-data <- data.frame(                         # Create example data
-  x = 1:10,
-  y = c(10:1),
-  category = c(rep("A", 5), rep("B", 5))
-)
+I'd recommend to find 30 minutes every day to practice specific skill elements.
 
 
-ggp <- ggplot(data, aes(x = x, y = y)) +    # Create a base plot 
-  geom_point(aes(color = category)) +
-  theme_minimal()
+Excels main benefit is its visual user interface -- eg you can click buttons, drag and drop columns/rows and you can see your data responds.
 
+To help with the R journey, we will introduce (when possible / appropriate) their corresponding Excel actions.
 
-threshold <- 8                                       # Set a threshold for the condition
- 
-ggp_new <- if (max(data$y) > threshold) {            # Add an extra layer based on the condition 
-   ggp + 
-   geom_hline(yintercept = threshold, 
-              linetype = "dashed", 
-              color = "red")
-  } else {
-    ggp
-  }
-
-
-
-```
-
-
-## make a map into points
-
-https://github.com/BjnNowak/bertin
-
-## package to simplify statitsics summary and plots
-
-https://jtools.jacob-long.com/
-
-## ggpub for pulbican type polots with stats
-
-https://rpkgs.datanovia.com/ggpubr/
-
-#explanation of log odds
-
-https://rpkgs.datanovia.com/ggpubr/
-
-## web plot digitizaer
-
-https://automeris.io/WebPlotDigitizer/
-
-
-## rename cols based on data dictionary
-
-https://twitter.com/i/bookmarks
-
-```{r}
-
-library(tidyverse)
-
-df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names) %>% 
-     filter(
-    sex!=0
-    ,age<99
-    )
-
-
-extract_year_make_longer  <- function(.data,.col) {
-
-  .data %>% 
-  select(
-    age
-    ,sex
-    ,any_of(
-      c({{.col}})
-      )
-    ) %>% 
-  pivot_longer(-c(1:2)) %>% 
-    mutate(year=parse_number(name)) %>% 
-    select(-name)
-}
-
-
-
-col_names <- c("popestimate2020","popestimate2021","popestimate2022")
-
-list_df <- map(col_names,~extract_year_make_longer(df,.x))
-
-df_20 <- list_df[[1]] %>% as_tibble() %>% rename(pop20=value) %>% select(sex,age,pop20)
-
-df_21 <- list_df[[2]] %>% 
-    as_tibble() %>% 
-  mutate(age_20=age-1) %>% 
-  filter(age_20>-1) %>% 
-    select(age_20,value,sex) %>% 
-  rename(pop_21=value) 
-
-
-df_22 <- list_df[[3]] %>% 
-  as_tibble() %>% 
-  mutate(age_20=age-2) %>% 
-  filter(age_20>-1) %>% 
-  select(age_20,value,sex) %>% 
-  rename(pop22=value)
-
-
-
-
-left_join(df_20,
-          df_21,
-          join_by(age==age_20
-                  ,sex==sex)) %>% 
-  left_join(df_22,
-           join_by( age==age_20
-            ,sex==sex)) %>% 
-  mutate(
-    one_year_delta=pop_21-pop20
-    ,two_year_delta=pop22-pop20
-  ) %>% 
-  ggplot(aes(y=two_year_delta,x=age,fill=factor(sex,labels = c("male","female"))))+
-  geom_col()+
-  geom_vline(xintercept = 18,linetype="dotted",size=1, color="grey")+
-  geom_vline(xintercept = 65, size=1, color="grey")+
-  scale_x_continuous(n.breaks=30)+
-  scale_y_continuous(labels = scales::label_comma(scale=1/1e6,suffix="M"))+
-  scale_fill_manual(values=c(male="midnightblue",female="firebrick"))+
-  theme_classic()+
-  labs(
-    fill="Gender"
-    ,title="Two year change in population by age group"
-    )
-
-```
-df_2021_spk <- df_spk %>% 
-  select(age,sex,popestimate2021)
-df_2022_spk <- df_spk %>% 
-  select(age,sex,popestimate2022)
-
-
-df_spk %>% 
-  filter(
-    age<99
-    ,sex!=0
-    ) %>% 
-  ggplot(aes(y=popestimate2022,x=age,fill=factor(sex)))+
-  geom_col()+
-  geom_vline(xintercept = 18,linetype="dotted")+
-  geom_vline(xintercept = 75,linetype="dotted")+
-  scale_x_continuous(n.breaks = 30)
-  # geom_col(aes(y=popestimate2020),col="blue",alpha=.2)
-
-
-# expand dates
-
-# Create columns for year, month and day for each date 
-# column in a data.frame
-expand_dates <- function(x, parts = c("year", "month", "day")) {
-  funs <- list(year = year, month = month, day = day)[parts]
-  mutate(x, across(where(lubridate::http://is.Date), funs))
-}
-
-```
-
-
-
-
-
+It will help you understand what R is doing but help you understand the productivity benefits of R.

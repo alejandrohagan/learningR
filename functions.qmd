@@ -1,0 +1,105 @@
+---
+title: "functions"
+---
+
+```{r}
+get_symbols <- function() {
+  wheel <- c("DD", "7", "BBB", "BB", "B", "C", "0")
+  sample(wheel, size = 3, replace = TRUE, 
+    prob = c(0.03, 0.03, 0.06, 0.1, 0.25, 0.01, 0.52))
+}
+
+
+get_symbols()
+
+
+payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25, 
+  "B" = 10, "C" = 10, "0" = 0)
+
+payouts
+
+
+
+
+list <- map(
+  .x = c("2023-1-01","2022-12-02","2022-01-30")
+  ,.f= function(date) seq.Date(from=ymd("2022-01-01"),to = ymd(date),by = "days")
+  ) 
+
+
+list[[1]][[3]]
+
+
+roll <- function(){
+  
+ dice <- 1:6
+ roll <-  sample(dice,2,replace = TRUE)
+ browser()
+ sum(roll2)
+ sum(roll)excel
+  
+}
+
+
+roll()
+
+```
+
+## subsetting
+
+
+How to do lookup tables in R
+
+```{r}
+score <- function (symbols) {
+  # identify case
+  same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+  bars <- symbols %in% c("B", "BB", "BBB")
+  
+  # get prize
+  if (same) {
+    payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25, 
+      "B" = 10, "C" = 10, "0" = 0)
+    prize <- unname(payouts[symbols[1]])
+  } else if (all(bars)) {
+    prize <- 5
+  } else {
+    cherries <- sum(symbols == "C")
+    prize <- c(0, 2, 5)[cherries + 1]
+  }
+  
+  browser()
+
+  # adjust for diamonds
+  diamonds <- sum(symbols == "DD")
+  prize * 2 ^ diamonds
+}
+
+score()
+
+```
+
+
+
+```{r}
+
+
+
+df <- read_csv(here::here("gitlog"),col_names = FALSE)
+  
+
+df %>% 
+  mutate(
+    row_id=row_number()
+    ,group=if_else(row_id %% 4==0,row_id/4,NA_integer_)
+    ) %>% 
+  fill(group,.direction = "up") %>% 
+  mutate(commit_name=
+           case_when(
+             row_id %%4==0~ X1
+            ,TRUE ~ NA_character_
+           )
+         )
+  
+```
+

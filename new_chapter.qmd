@@ -58,14 +58,10 @@ NULL
 
 
 ```{r}
-x <- "test"
-y <- 1
-z <- as.Date("2012/2/12")
-a <- 2L
-class(z)
-class(y)
-class(x)
-class(a)
+character_example <- "test"
+numeric_example <- 1
+date_example <- as.Date("2012/2/12")
+integer_example <- 2L
 
 
 ```
@@ -76,6 +72,100 @@ you don't pay attention to data types in Excel as much until you have problems -
 R (and most other languages) really care about data types -- in fact they won't make you do anything unless data types are aligned
 
 
+
+## structure
+
+who actually knows but the best explanation is that this stands for concatenate -- which basically means brings things together.
+
+This is a new concept for excel users --, we can just type things in a cell and it works. 
+
+In R -- you can't do that, we need to add some structure to our data in the form either a vector or list or data frame (which is just a collection of lists)
+
+This may feel overwhelming -- in reality it will feel very intuitive -- only later on will some nuance really distinguish between these types
+
+### Vector
+
+```{r}
+a <- vector()
+
+a <- 1:10
+
+a
+
+b <- c(1:10)
+?vector()
+identical(a,b)
+```
+
+
+"logical"
+,"integer"
+, "double"
+, "complex"
+, "character"
+, "raw"
+,"list"
+, "NULL"
+
+```{r}
+a <- c(1:10)
+b <- rlang::list2(1:10)
+
+a==b[[1]]
+identical(a,b[[1]])
+```
+
+lists can be blessing and course
+
+```{r}
+li
+```
+
+
+## classes of data
+
+Checking clases of data isn't a routine action but if you have errors, its helpful in solving this
+
+we can use `class()` to check the class of object are you can be specifc with the is._ type funcitons
+
+is.numeric()
+is.character()
+is.Date()
+
+
+
+```{r}
+class(character_example)
+class(numeric_example)
+class(date_example)
+class(integer_example)
+
+base::is.character()
+base::is.integer()
+base::is.numeric()
+lubridate::is.Date(date_example)
+
+typeof(character_example)
+
+```
+
+
+### Excel
+
+
+
+## Type conversions --
+
+
+So what happens if you combine a character with interger?
+
+You get what is called a type conversin -- eg. R will automatically convert one character type to another
+
+```{r}
+
+
+c(1:10,"a")
+```
 
 
 
@@ -113,10 +203,126 @@ seq.Date(
   ,to = as.Date("2021-01-03")
   ,by="days"
 )
+
+
+sample(1:100,size=30,replace = TRUE)
+## rep
+
+rep_named(words[1:100],1:100) %>% stack()
+
+words
+
+
+## runif
+n=100
+dunif(.2, min = 0, max = 1, log = FALSE)
+punif(q, min = 0, max = 1, lower.tail = TRUE, log.p = FALSE)
+qunif(p, min = 0, max = 1, lower.tail = TRUE, log.p = FALSE)
+runif(n, min = 0, max = 1)
+## distributions
+
+#build in dataaets
+letters
+
+LETTERS
+
+state.abb
+
+
+## sample
+
+test <- rlang::list2(a=1:10
+             ,b=1
+             ,c=1:4)
+
+test$c
+
+test[[1]] - test[[3]]
+
+test[["c"]] - test[["a"]]
+
+
+
 ```
 
-seq
+###
 
+```{r}
+library(rlang)
+a<- list2()
+
+a <- list(b=1:10,c=1)
+
+a <- list(c=2:10)
+
+append(a,values=list2(a=1:2,z=1:10),after = 2)
+```
+
+when we create lists or vectors, sometimes you want to add to it- in reality not really but we want to get you more comfortable with lists and vectors and introduce some simple functions that can be helpful later in your journey
+
+`append()` is a great function that adds to an existing function
+
+append(
+vector or list
+,new entry
+,after= number of list
+)
+
+In practice you won't use this much in your beginning analysis -- it can be helpful later on when you start to write functions but for now its just to get you use to the command line and scripting and take away some of the angst
+
+## subsetting
+
+how do we extract from vectors
+
+well this is where these bracket things come from basically you are can look inside and either call out by number or name the object you want
+
+```{r}
+
+list2(
+  a=1:10
+  ,b=words[10]
+  ,c=words[1:3]
+  ,d=10:1
+  )
+
+```
+
+
+## recyling
+
+
+```{r}
+data()
+freeny
+
+map_chr(rep(1,100),function(.x) sample(words,.x,replace = TRUE))
+```
+
+
+```{r}
+
+data()
+luv_colours %>% 
+  ggplot() +
+  geom_point(aes(x=u,y=v,col=col))+
+  scale_color_identity()+
+  theme_classic()
+
+
+table2
+```
+
+## practice!
+
+stimulate a dice roll?
+
+```{r}
+sample(1:6,1,replace=TRUE)
+
+```
+
+
+## Classes of data
 
 
 
@@ -227,6 +433,14 @@ Ok -- now for a first point of confusion -- you will sometimes see the pipeline 
 :::
 
 
+
+## Tidyselect verbs -- first superpower
+
+```{r}
+
+```
+
+
 ## Adding rows to a table
 
 ### In R 
@@ -288,7 +502,8 @@ diamonds |>
 
 one formula works against all rows in a column 
 
-rowwise equvalant 
+rowwise equvalant
+
 
 
 
