@@ -130,3 +130,102 @@ df %>%
 ```
 
 
+## Select
+
+
+```{r}
+library(tidyverse)
+basic <- function(){
+  
+  mtcars %>% 
+    select(mpg)
+}
+
+basic()
+
+direct_quoted <- function(){
+  
+  name <- "mpg"
+  
+  mtcars %>% 
+    select(name)
+  
+}
+
+direct_quoted()
+
+input_quoted <- function(name){
+  
+  mtcars %>% 
+    select(name)
+}
+
+input_quoted("mpg")
+
+input_quoted_2 <- function(name){
+  
+  
+  mtcars %>% 
+    select(any_of(name))
+}
+
+
+input_quoted_2("mpg")
+
+input_unquoted <- function(name){
+  
+  
+  mtcars %>% 
+    select({{name}})
+}
+
+input_unquoted(mpg)
+
+derived_calculad <- function(name){
+  
+ mtcars2 <-  mtcars %>% 
+    mutate("{{name}}_2":={{name}})
+  
+  
+  mtcars2 %>% 
+    select(any_of(rlang::englue("{{name}}_2")))
+}
+derived_calculad(mpg)
+
+quoted_in_body <- function(){
+  
+name <-   paste0("m","p","g")
+  mtcars %>% 
+    select(name)
+  
+  
+}
+quoted_in_body()
+
+
+
+select_col_names <- function(name){
+  
+  mtcars %>% 
+    select(contains(name))
+}
+select_col_names("m")
+
+
+numeric_args <- function(args){
+  
+  args_input <- rlang::parse_expr(args)
+  mtcars %>% select(eval(args_input))
+}
+
+
+
+numeric_args("where(~sum(.x)<180)")
+```
+
+
+```{r}
+mtcars %>% 
+  select(where(~sum(.x)<180))
+
+```
