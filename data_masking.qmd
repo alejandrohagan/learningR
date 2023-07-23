@@ -100,3 +100,33 @@ diamonds %>% select(cut,color) %>%
   table()
 ```
 
+
+
+```{r}
+library(tidyverse)
+cols <- c("mpg","cyl")
+
+df <- expand.grid(cols) %>% 
+  mutate(data=list(mtcars))
+
+
+df
+global_env_unquoted <- function(data,col){
+  
+  
+  data %>% 
+    filter(eval({{col}}))
+}
+
+
+
+df %>% 
+  rowwise() %>% 
+  mutate(args=list(rlang::parse_expr(paste0(Var1,">18")))) %>% 
+  mutate(
+    fun=list(global_env_unquoted(data,args))
+  ) 
+
+```
+
+

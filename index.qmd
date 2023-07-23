@@ -26,6 +26,12 @@
 -   Data principles
         
         -https://www.ibcs.com/
+        
+        
+## lookup tables
+-   how to create them
+-   how to use them
+
 
 ## Augmenting and creating calculation
 -   adding columns and calculated columns
