@@ -229,3 +229,135 @@ mtcars %>%
   select(where(~sum(.x)<180))
 
 ```
+
+
+## unquoted in table
+
+```{r}
+library(tidyverse)
+
+test <- function(data,col_names){
+  
+  select(data,any_of(col_names))
+         }
+
+tibble(
+  col_names=c("mpg","hp")
+  ,data=list(mtcars)
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    fun=list(function(data,col_names) select(data,any_of(col_names)))
+    ,defined_fun=list(test(data,col_names))
+  ) %>% unnest(defined_fun)
+
+
+tibble(
+  col_names=list("mpg/hp"=c("mpg","hp"),"mpg"=c("mpg"))
+  ,data=list(mtcars)
+  ,names=names(col_names)
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    defined_fun=list(test(data,col_names))
+  ) %>% unnest(defined_fun)
+```
+
+
+### Mutate
+
+
+```{r}
+
+direct <- function(){
+  
+  mtcars %>% 
+    mutate(mtcars2=mtcars*2)
+  
+}
+
+direct()
+
+
+```
+
+## quoted as input directly to function header
+
+```{r}
+
+quoted_input <- function(input_name,input_col){
+  
+  input_col <- sym(input_col)
+  
+  mtcars %>% 
+    mutate(
+      "{input_name}":=!!input_col*2
+    )
+  
+  
+}
+
+quoted_input("test","mpg")
+```
+
+## Unquoted input
+
+```{r}
+
+unquoted_input <- function(name,input_col){
+  
+
+  
+  
+  mtcars %>% 
+    mutate(
+      "{{name}}":={{input_col}}
+    ) %>% 
+    relocate(last_col())
+  
+}
+
+unquoted_input(name=test,input_col=mpg)
+```
+
+## Dirived as quote in body
+
+
+```{r}
+
+derived_from_body <- function(){
+  
+  obj <- "mpg2" 
+  
+  obj2 <- sym("mpg")
+  
+  mtcars %>% 
+    mutate("{obj}":=!!obj2)
+  
+}
+
+derived_from_body()
+
+
+is(ymd("2022-01-01"),"Date")
+```
+```{r}
+
+
+yr_mo <- function(.data){
+  
+  fpaR::contoso_fact_sales %>% 
+    mutate(
+      DateKey=mdy(DateKey)
+      ,yr_mo_report_date=format.Date(DateKey,"%y%m")
+             
+             
+             ) %>% 
+    relocate(last_col())
+  
+}
+
+yr_mo()
+
+```
+
