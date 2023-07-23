@@ -65,16 +65,12 @@ For quick and simple calculations, this will be quicker but if you try to do som
   4
   In R you will need to pay more attention to datatypes otherwise you R will try to be helpful and throw an error.
   
-The main data types are listed below.
+While there are actually many types, in practice you are mainly focused on three:
 
-
-        
-int
-character
-date
-NA
-NULL
-
+-   character
+-   numeric/integer
+-   date
+-   NA
 
 ```{r}
 character_example <- "test"
@@ -82,49 +78,61 @@ numeric_example <- 1
 date_example <- as.Date("2012/2/12")
 integer_example <- 2L
 
-
 ```
 
 
 you don't pay attention to data types in Excel as much until you have problems -- it is a strength and weakness. You can throw any values together and excel doesn't care (until you try to do something with it).
 
-R (and most other languages) really care about data types -- in fact they won't make you do anything unless data types are aligned
-
-
+R (and most other languages) really care about data types -- in fact they won't make you do anything unless data types are aligned. This is mainly for you benefit / protection.
 
 ## structure
 
-who actually knows but the best explanation is that this stands for concatenate -- which basically means brings things together.
+In excel, you are used to entering in values in each cell -- in R you will use three main "strutures"
 
-This is a new concept for excel users --, we can just type things in a cell and it works. 
+-   vectors
+-   lists
+-   dataframes
 
-In R -- you can't do that, we need to add some structure to our data in the form either a vector or list or data frame (which is just a collection of lists)
 
 This may feel overwhelming -- in reality it will feel very intuitive -- only later on will some nuance really distinguish between these types
 
 ### Vector
 
 ```{r}
-a <- vector()
 
 a <- 1:10
 
-a
+b<- c(1:10)
 
-b <- c(1:10)
-?vector()
 identical(a,b)
+
+?c()
+
+
 ```
 
 
-"logical"
-,"integer"
-, "double"
-, "complex"
-, "character"
-, "raw"
-,"list"
-, "NULL"
+If you want to add more than one element you will need to use the `c()` function. What is the c function? -- no one knows. Actually, I think the concensus is that it stands for concatenate but who knows for sure
+
+```{r}
+c(1:5, 10.5, "next")
+
+```
+
+
+Notice what happens when we added a character with a numeric -- it turned evrerything into character.
+
+This is is called type coercion -- it is something your friend and sometimes a source of frustration.
+
+This works with vectors but not with all objects -- when we get to dataframes you will see that this doesn't work and R can be very strict with data types
+
+
+## Lists
+
+-   lists are embedded vectors
+-   This may seem confusing but its not
+-   insert analogy
+-   Lists are extremely flexible and once you get used to manipulating and sub-setting lists you will feel very comfortable referencing them.
 
 ```{r}
 a <- c(1:10)
@@ -136,10 +144,17 @@ identical(a,b[[1]])
 
 lists can be blessing and course
 
-```{r}
-li
-```
 
+
+## what can I do with this?
+
+Not a whole lot at this point but you are building some really great building blocks that will helpful late on
+
+```{r}
+
+c(beta=1:10,charlie=2:21,1,1,alpha=list(10:1),recursive=TRUE)
+
+```
 
 ## classes of data
 
