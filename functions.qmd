@@ -34,9 +34,7 @@ roll <- function(){
   
  dice <- 1:6
  roll <-  sample(dice,2,replace = TRUE)
- browser()
- sum(roll2)
- sum(roll)excel
+ sum(roll)
   
 }
 
@@ -68,7 +66,6 @@ score <- function (symbols) {
     prize <- c(0, 2, 5)[cherries + 1]
   }
   
-  browser()
 
   # adjust for diamonds
   diamonds <- sum(symbols == "DD")
@@ -101,5 +98,122 @@ df %>%
            )
          )
   
+```
+
+### how to pass on functions within a function
+
+call() and expr() are to simiiliar functions
+
+call is limited to one function where expr can have multiple functions
+
+```{r}
+library(rlang)
+library(tidyverse)
+
+
+# how to create a call object
+x <- call("mean",1:10)
+
+y <- expr(mean(1:10))
+
+z <- expr(mean(1:10))
+
+
+## how to excute?
+eval(x)
+
+eval(y)
+
+eval(!!!Z)
+
+
+```
+
+
+Turn an an expression back to symbol with rlang::as_string
+
+
+
+```{r}
+x <- expr(x)
+
+rlang::as_string(x)
+```
+
+### how to use expr
+
+- when you save something to expr it acts as a list
+-   first subbetting returns the call
+-   second returns the call arguments (use [[3]] or $name)
+
+
+### visualizing expression
+```{r}
+
+
+lobstr::ast(
+diamonds %>% 
+  count(cut,sort=TRUE,wt=price)
+  
+  
+)
+
+```
+
+
+```{r}
+lobstr::ast(
+f(
+  g(
+    h(1+2+3)
+    ,(x+y)
+    )
+  ,z
+  )
+)
+```
+
+
+- the below there are related:
+    
+    -   enquo
+    -   ensym -- this takes unquoted input and returns an expression. similiar to enexpr (which itself simliar to enquo) but thro errow when expressions are not symbols
+    -   expr returns a express and works when arguments are directly inter to it
+        -    however when used to caputre a formlaa arguments it wont work so you need enexpr to capture a user's arguments (vs. directly input in teh formual body)
+    -   enexprs or exprs is used for multiple inputs seperate by ; returns list
+    -ensym or ensym are like expr but checks is symbol or string
+"" and !! are opposites
+
+```{r}
+cement <- function(...) {
+  args <- ensyms(...)
+  paste(purrr::map(args, as_string), collapse = " ")
+}
+
+time <- "test"
+
+cement(!!time, hello)
+
+outer <- 1:2
+
+
+match.fun("*",outer)
+
+match.fun()
+
+match.fun("*")
+
+outer <- 1:2
+try(match.fun(outer, descend = FALSE)) #-> Error:  not a function
+call("*",outer) %>% eval()
+
+
+
+```
+```{r}
+
+
+
+
 ```
 
