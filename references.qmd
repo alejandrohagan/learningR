@@ -2,3 +2,11 @@
 
 ::: {#refs}
 :::
+
+
+Telling stories with data
+https://tellingstorieswithdata.com/
+
+
+Statistics visualization book
+https://royal-statistical-society.github.io/datavisguide/

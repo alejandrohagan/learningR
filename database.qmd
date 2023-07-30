@@ -107,7 +107,7 @@ DBI::dbListTables(con_db)
 # Pull in data in database format
 diamonds_db <- dplyr::tbl(con_db,"diamonds_db")
 
-# 
+
 
 ```
 

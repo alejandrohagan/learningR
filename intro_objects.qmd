@@ -14,22 +14,22 @@ you use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
 
 ```{r}
 
-
+library(tidyverse)
 #| echo: true
 object <- 1+1
 ```
 
 Whatever name you type will become the object's name, if you type in the object, it will return whatever you assigned to the name
 
-while you type any name, you will quickly understand that naming convetions will become your friend.
+while you type any name, you will quickly understand that naming conventions will become your friend.
 
-Speciically, if you want to have spaces in you name -- you will need to wrap hte objects nam in either "" or ''.
+Specifically, if you want to have spaces in you name -- you will need to wrap the object's name in either "" or ''.
 
 ```{r}
 
-this_is_easier_to_type <- 10
+this_is_easier_to_reference <- 10
 
-"this will annoy you to type" <- 10
+"this will annoy you to reference" <- 10
 
 
 
@@ -51,9 +51,7 @@ To keep track of all the names, you can press F5 and you will see a dialog box t
 
 When you want to refer to that cell, you can simply type in the cell name.
 
-although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
-
-
+Although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
 
 Although this is fairly intuitive to understand, if you are coming from an Excel background, it will take time to develop this habit of assigning names to results because in Excel, you can refer to a result by its cell location by physically pointing a formula to a input.
 
@@ -77,7 +75,8 @@ character_example <- "test"
 numeric_example <- 1
 date_example <- as.Date("2012/2/12")
 integer_example <- 2L
-
+not_available <- NA
+null <- NULL
 ```
 
 
@@ -93,6 +92,10 @@ In excel, you are used to entering in values in each cell -- in R you will use t
 -   lists
 -   dataframes
 
+After you are familiar with the above, you will then learn about this
+-   database objects
+-   spark objects
+
 
 This may feel overwhelming -- in reality it will feel very intuitive -- only later on will some nuance really distinguish between these types
 
@@ -106,23 +109,35 @@ b<- c(1:10)
 
 identical(a,b)
 
-?c()
-
 
 ```
 
 
-If you want to add more than one element you will need to use the `c()` function. What is the c function? -- no one knows. Actually, I think the concensus is that it stands for concatenate but who knows for sure
+If you want to add more than one element you will need to use the `c()` function. What is the c function? -- no one knows. Actually, I think the concensus is that it stands for concatenate. The documentation says combine. Who knows for sure. 
 
 ```{r}
+# simple vector of different types
 c(1:5, 10.5, "next")
+
+# you can also name vectors -- very simple look up list that we evaluate more later
+
+c(
+  months_number=1:12
+  ,years=2000:2020
+  ,month_name=month.name # our first R built in data set, the name of each month
+  )
 
 ```
 
 
-Notice what happens when we added a character with a numeric -- it turned evrerything into character.
+Notice what happens when we added a character with a numeric -- it turned everything into character.
 
-This is is called type coercion -- it is something your friend and sometimes a source of frustration.
+This is is called type coercion -- it is something your friend and sometimes a source of frustration. There may be a more technical name for this but basically, almost all day programs only allow you to "combine" same data elements. This becomes a frustration when:
+    
+    -   you load datasets that you are not as familiar with and it converts something that many appear to numeric but is actually character (typically wiht order numbers)
+    -   NA inputs sometimes need to be differentiated when between NA_character, NA_integer, NA_....
+    -   Some function only work correctly when a data is in the right type  (mostly dates) 
+
 
 This works with vectors but not with all objects -- when we get to dataframes you will see that this doesn't work and R can be very strict with data types
 
@@ -142,19 +157,29 @@ a==b[[1]]
 identical(a,b[[1]])
 ```
 
-lists can be blessing and course
 
+
+
+::: {.callout-note}
+## how to compare lists and vectors?
+
+There are many ways to simplify and reduce vectors and lists but a little known trick with `c()` which is to use the argument `recursive` argument to `TRUE`
+
+```{r}
+
+c(1:10,2:21,1,1,list(10:1))
+
+c(1:10,2:21,1,1,list(10:1),recursive=TRUE)
+
+```
+
+:::
 
 
 ## what can I do with this?
 
 Not a whole lot at this point but you are building some really great building blocks that will helpful late on
 
-```{r}
-
-c(beta=1:10,charlie=2:21,1,1,alpha=list(10:1),recursive=TRUE)
-
-```
 
 ## classes of data
 
@@ -240,12 +265,10 @@ seq.Date(
 
 
 sample(1:100,size=30,replace = TRUE)
-## rep
+## build in R datasets
 
-rep_named(words[1:100],1:100) %>% stack()
-
-words
-
+month.name
+month.abb
 
 ## runif
 n=100
@@ -278,6 +301,10 @@ test[["c"]] - test[["a"]]
 
 
 ```
+
+
+
+
 
 ###
 
@@ -330,6 +357,13 @@ data()
 freeny
 
 map_chr(rep(1,100),function(.x) sample(words,.x,replace = TRUE))
+
+
+
+
+
+# how to apply labels to values
+rlang::rep_named(words[1:100],1:100) %>% stack()
 ```
 
 

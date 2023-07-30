@@ -212,8 +212,120 @@ call("*",outer) %>% eval()
 ```
 ```{r}
 
+calculate <- function(expr){
+  
+  args <- enexprs(expr)
+  
+out <-  map(.x=args,~eval(.x))
+   unlist(out) 
+}
+calculate(c(sum=sum(1:10),mean=mean(1:10)))
 
+```
+
+```{r}
+
+
+test <- function(fn,col){
+  
+  
+  col <- sym(col)
+  mean_db <- expr(diamonds_db %>% 
+summarize(
+  mean=mean(!!col)
+))
+  
+    sum_db <- expr(diamonds_db %>% 
+summarize(
+  sum=sum(!!col)
+))
+    
+    
+median_db <- expr(
+  diamonds_db %>% 
+summarize(
+  median=median(!!col)
+)
+)
+
+
+# fn <- enexpr(fn)
+  
+  switch(fn
+         ,mean=eval(mean_db)
+         ,sum=eval(sum_db)
+         ,median=eval(median_db)
+         ) 
+
+    
+}
+
+purrr::list_cbind(
+  map2(
+  .x=c("x","y","z")
+  ,.y=c("mean","sum","median")
+  ,~test(.y,.x) %>% collect()
+  
+  )
+)
+
+
+x1 <- list(a = 1, b = 2, c = 3)
+list_c(x1)
+
+test("median","z")
+
+diamonds_db
 
 
 ```
+
+
+
+```{r}
+
+sprintf("%s is %f feet tall\n", "Sven", 7.1)      # OK
+sprintf("%s and %s are %f feet and %f inches tall", "Sven","Mike", 7.1,2)      # OK
+
+
+
+
+try(sprintf("%s is %i feet tall\n", "Sven", 7.1)) # not OK
+    sprintf("%s is %i feet tall\n", "Sven", 7  )  # OK
+
+## use a literal % :
+
+sprintf("%.0f%% said yes (out of a sample of size %.0f)", 66.666, 3)
+
+## various formats of pi :
+
+sprintf("%f", pi)
+sprintf("%.3f", pi)
+sprintf("%1.0f", pi)
+sprintf("%5.1f", pi)
+sprintf("%05.1f", pi)
+sprintf("%+f", pi)
+sprintf("% f", pi)
+sprintf("%-10f", pi) # left justified
+sprintf("%e", pi)
+sprintf("%E", pi)
+sprintf("%g", pi)
+sprintf("%g",   1e6 * pi) # -> exponential
+sprintf("%.9g", 1e6 * pi) # -> "fixed"
+sprintf("%G", 1e-6 * pi)
+
+x <- "a"
+y <- 10
+paste0("The value of x is ", x, " and y is ", y, ".")
+sprintf("The value of x is %s and y is %i.", x, y)
+
+
+```
+
+i
+
+```{r}
+
+```
+
 

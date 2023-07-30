@@ -1,0 +1,12 @@
+---
+title: "tidy_quant"
+---
+
+```{r}
+install.packages("tidyquant")
+
+ual <- tidyquant::tq_get("UAL")
+
+
+
+```
