@@ -1,31 +1,383 @@
 ---
-title: "vim"
+title: "Vim"
 ---
 
 
-How to use vim in Rstudio and why?
+## What is VIM?
 
-Vim is a keybinding that has a bit of cult following. It will look and feel very very different that your traditional key bindings (eg what is in front of your hands today) but over time, will be insanely more productive.
+Vim is a keybinding that has a bit of cult following. It will look and feel different than your traditional key bindings (eg what is in front of your hands today) but over time, you will be will be more productive and efficient. Honestly -- it will excite you.
 
-You can use R in vim you or you can use vim in VS Studio and R or you can use Vim key bindings in Rstudio.
 
-## Vim in Rstudio
+:::{.callout-note}
+## What is a keybinding?
 
-So to manage expectations -- this isn't actually VIM. There are probably three distinct capabilities that make VIM popular
+I'll use the word alot but you can think of a keybinding as a combination of keys that are pressed to do an outcome
 
-1) keybinds
-2) custuomize keybindings
-3)modes
+For example 'SHIFT + y' produces the capital letter 'Y'
+
+'Alt + =' will produce '<-' in Rstudio
+
+Pression 'Ctrl + left arrow' will skip ahead left by one whole word
+:::
+
+How will VIM do this?
+
+This will make more sense as we go along. VIM's real secret is not only how is there a tool for every general or specialized use case but also you can access the built in short cuts or quickly create your own  to use most of these tools with minimal hand movement.
+
+the ability to "move mountains" while barely lifting your fingers from your keyboards homerow is incredible.
+
+So how can I do more things, quickly, with fewer key strokes and less hand movement? 
+
+This is actually due to previous limitations in early computers where they didn't have an up,down,left,right errors or other specialized keys (eg. 'tab', caps lock) so they had to leverage the existing keys to do many things. 
+
+VIM's trick in doing this is that it is not just simple text editor but instead it is a modular editor.
+
+This means VIM has different modes (insert,normal, visual, command and replace) -- each mode has a different "interface" which you can think of as surgeon's tool kit that can be used for a focused purpose.
+
+## How to use VIM in RStudio and why?
+
+While VIM (or its alternative flavors) is its own program -- due to popularity and benefits many of VIM's key bindings are available in other editors, including Rstudio and VScode.
+
+> One limitation upfront, specifically in the case of RStudio is that only a selection of VIM's key bindings are available -- quite honestly you are missing a lot of VIM's firepower -- but for a beginner that wants to graduate to intermediate skill set -- its actually a great place to start. 
+
+Additionally, everything you learn is 100% portable to a different editor. 
+
+## Why learn VIM in RStudio?
+
+Given that you are essentially learning VIM lite -- why go through with this at all? RStudio as its own shortcuts and utilities, what makes this so special for R users?
+
+**Incremental benefits**
+
+-   "Mark" sections of a your script, rmarkdown or quarto document and instantly transport there making navigation a breeze
+
+-   Quickly record keyboard macros to do repititive edits, deletions or insertions (think captializing first word of a list or  replace '.' with  '_' in variable's name,etc)
+
+-   Search and replace letters or words without using your mouse
+
+-   Instantly jump to specific words or characters in a line  
+
+-   Navigate your document with minimal handmovement -- maximizing your ergnomic benefits
+
+-   Highlight words, lines paragarphs with precision 
+
+## How do I get started?
+
+Before we enable VIM in RStudio we need to talk about two key modes, how you switch between and interact with these modes 
+
+
+### Insert Mode
+
+This will be the most familiar to you as this mode is basically the interface you are most used to today.
+
+You press the letter "a" and you see the letter "a" printed on the screen. You want to move around, you press up arrow or left arrow,etc.
+
+There is nothing controversial or hard to learn about this mode -- this mode works as you are used to today.
+
+However, believe it or not -- you will try to spend as little time in this mode as possible. The real fun starts in what is known as normal mode -- which is the mode you will first start in
+
+
+::: {.callout-note collapse="true"}
+
+## Transfer from Insert mode to Normal mode
+
+> To get out of insert mode and switch to normal mode you need to press <esc> or <ctrl> +[. (note in real vim you can create new key mappings so that you can use any key combination to to escape mode). I recommend to start with esc but eventually you want to move towards <ctrl> + [ because it **should** be less reaching for your pinky fingers.
+:::
+
+## Normal mode 
+
+When you are in normal mode, at first glance everything will be the same -- with one exception.
+
+your cursor will look like a block rather than a slim line.
+
+That is it.
+
+However when you start typing in normal mode that is when you will start to see differences. If you were to type b,t s or q nothing happens. That is because this mode isn't intended to insert new texts instead it is meant motions and operators.
+
+To move around in this mode you can theoritically still use the arrow keys but honestly the quicker you ditch that habit the better.
+
+Instead you use hjk and l to go left, down, up and right (respecively)
+
+This is a great place for you to start your  transformation to a VIM user. Coincidently it will be the same time when you also pull out your hair in frustration 
+
+In theory you use this mode to navigate around your spread sheet, move,change or delete words and line. To insert new text you need to be in insert mode.
+
+
+::: {.callout-note collapse="true"}
+
+## Transfer from Normal mode to Insert mode
+
+To go into insert mode there are multiple options depending where in the word, paragraph or line you want the cursur to "jump" to. However in practice you will principlly be suing four letters to do so:
+
+i,a,s or o (or there are capital equivalents
+
+:::
+
+
+So lots of new information to you -- lets recap some fundamentals.
+
+## Recap
+
+1. Introduced two of four modes so far and their main pursoes
+    -   insert is to insert text into your file (this will be the most familiar)
+    -   normal mode is to navigate around and between your file, delete, copy and paste words/sentences or paragraphes
+
+2. How to switch between each mode
+    -   Press <esc> or <ctrl> +[. to get out of insert mode to normal mode
+    -   Press i,a,s or o to get out of normal mode into insert mode
+
+
+What can you do with this so far?
+-   not alot --but patience my friend -- we are establishing vocabulary and framework.
+-   now you know enough to enable VIM keybindings in Rstudio
+
+::: {.callout-note collapse="true"}
+## How to enable VIM in Rstudio? 
+
+1. Go to "Global Options"
+2. Select "Code"
+3. Under keybindings select "VIM"
+
+:::
+
+In RStudio VIM you will get a light flavor of the keybindings, no support for custom keybinds, a taste of the distinct modes, modest macro support and most search & replace functionality with no plugins from the open source community 
+
+# VIM keybindings in Rstudio
+
+
+let's explore the insert optons in more detail:
+
+'i' will *i*nsert your cursor to the left of your bloc
+'a' will *a*ppend your cursor to the right of your bloc
+'I' will *I*insert your cursor to the beginning of the line
+'A' will *A*ppend your cursor to end of the line
+'o' will *o*open a new line below the current line to the beginning
+'O' will *O*open a new line above the current line to the beginning
+
+Again once you are in insert mode -- the only way to leave insert mode is to esc
+
+
+Why all the different ways to go into insert mode?
+
+you want to change your mindset towards minimizing the amount of keystrokes required to write your document.
+
+Being precise with where exactly you want your cursor to go enables you to a avoid using arrow keys to move your cursor
+
+You want to be a surgeron --minimal, light touch and ruthless with your efficiency
+
+to improve your productivity let us go to your favorite mode 
+(you just don't know it yet) -- normal mode
+
+As stated before you will want to try and stay in normal mode because of how addicting your efficiency wil be.
+
+To move around in normal mode you need to use h,j,k and l. Probably the biggest hurdle to you learning VIM starts right here 
+
+
+but stay with it! the pain you fill now will quickly make up for itself with gloarious macros and ridiculous efficiency with VIM.
+
+## motions
+
+## counts
+
+## motions + counts 
+
+
+
+## marks
+
+
+            
+
+
+            k
+
+
+# Additional VIM bindings / Resources
+
+## Resources
+
+-   [older book but good starting materials](https://www.iopb.res.in/vimbook-OPL.pdf)
+-   [dunno](https://vimtricks.com/p/vim-jump-list)
+-   [pragmatic key strokes -- for intermediates](https://fzheng.me/2018/03/20/practical-vim-getting-around-faster/)
+
+## How to find your .vimrc file 
+
+In order to customize your vim file, you will need to have a vim configuration file, often times known as 'vimrc' file, however finding this file can be confusing at time. 
+
+The below are some helpful tips you can use run in vim to help find where your vim is sourcing your vimrc file
+
+Note, if your vimrc file doesn't exist you can just create a new one
+
+-   :version         ▶ tells you where VIM is sourcing the .vimrc file
+
+-   :echo $VIM       ▶ to see the filepath tha vim is looking for the vimrc
+
+-   :source filepath ▶ to source a different vim file
+
+## Setting up VIM first time
+
+Below are helpful commands to set up in your vimrc to help making vim sing
+
+-   :set nocompatible
+-   :set number (nu)
+-   :set relativenumber (rnu)
+-   :set hlsearch    ▶  highlight words in a search
+-   :set ruler       ▶  provides row and column index
+-   :set autoindent
+-   :set incrsearch == incremental search
+-   :set autowrite   ▶  automatic save
+-   set cursorline   ▶  highlight current row
+-   set cursorcolumn ▶  highlight current column
+-   set showcmd
+-   set backspace=indent,eol,start
+-   set backup
+-   let mapleader = "\<space>" ▶ map leader key
+-   nobell=all     == turns off visual and audio bells
+
+## Mappings
+
+### Mappings to decrease repititiveness
+
+-   imap jk <esc> ▶ custom escape key (to jk)
+-   crtl + P ▶ to auto fill from words already present in the sheet
+-   :xnoremap p pgvy ▶ paste, re-copies previous selection and yanks it again
+-   :abbreviate shortcut fullword ▶ set custom snippets
+-   :map <key> actions ▶ maps a key, simliar to a register
+-   `.`  ▶  will repeat the last action
+
+### Shortcuts
+
+-   nohl     ▶ erases current highlights
+
+-   :marks [args] ▶ lists all marks
+  
+    -   ' ▶ the last place the cursor was at
+    -   " ▶ line 1
+    -   [ ▶ start of the last insert
+    -   ] ▶ this end of the insert 
+
+-   :wnext      ▶ save current file and go to nextfile
+-   :next!      ▶ force next
+-   :first      ▶ first file
+    -   :last   ▶ last file
+    -   :Next   ▶ go to previous
+    -   :args   ▶ current file that you are on
+    -   :f      ▶  will dispaly current file
+-   :put=range(start_num,end_num,inc) ▶ put range of numbers in script
 
 This is probably better understood as a mimic of VIM key bindings but even this limited capabilities can signifcantly help your producively
 
-1) key navigation
+### Key Navigation
 
-2) search and replace
+-   J               ▶  joins lines
+-   :t [row number] ▶  copies to row number
+-   :m [row_number] ▶  moves to row number
+-   gUU             ▶  upper cases entire line
+-   g~~             ▶  inverts case of line 
+-   {               ▶ up a section
+-   }               ▶ down a section
+-   :Ex             ==  Open up file explorer
+-   gj              == navigate one visual line
+-   gk              == navigate one visual line
 
-3) registers (macros)
+## Patterns to know
 
-4) formating
+### Search 
 
+VIM has very powefful search functionality with `/`
 
+-   Use the '/' to search for a key word
+-   if multiple matches you can use 'n' to select the next option.
+-   or you can use ? to go back to a previous option    
 
+### Replace
+
+-   :[start_num,end_num]s/new_word/old_word/g ▶ replace a word
+        
+    -   start_num,end_num ▶  can be replaced with %
+    -   s       -- to substitute
+    -   g        ▶ indicates its a global so if it happens more than once to go replace it
+    -   c        ▶ confirm before change
+    -   % or 1,$ ▶ full document  
+
+### Popular regex
+-   $ and ^ around single word will only find those words
+   
+## Registers (macros)
+
+-   Start recording with q
+-   Assign a letter to the macro
+-   Do your key bindings step by step
+-   q to stop macros
+-   @letter to call macro
+-   Can add count to do it muliple times
+
+## Text blocks and multiple files
+
+-   Cutting, deleting and yanking a word puts it in the registrar
+
+### Marks
+
+-   mark  a spot with 'm' and a letter
+-   to go to a mark use ' and the letter
+    -   Useful to delete until a word d'a or to mark a frequently used section
+
+### Filtering 
+
+-   ! + abs rows + G + command
+
+     -   !10Gsort ▶ will sort the ten rows from currnet row to row 10
+     -   !10Grev  ▶ will rev the rows from point to line 10
+-   !! command ▶ to directly enter in a different comand
+
+     -   !!ls ▶ lists files and folders
+     -   !!pwd ▶ lists current directory
+     -   !!date ▶ lists the current date
+
+## Edit multiple files
+
+-   vim file1 file2
+
+-   this will open up the first file to switch you need :write and :next or :wnext
+
+-  :args ▶will display the current file that you are on 
+-   :f ▶ will display current file
+- crtl + ^ will get you
+
+##  Buffer Copy
+
+-   :[numberOfLines]split  [file] ▶ split current file or named file-
+-   :new ▶ to open up a new buffer  
+-   :bnext ▶ next buffer
+-   :bprevious ▶ previous buffer
+-   :vsplit [+/pattern]▶ for visual split to go pattern
+-   ctrl+Ww ▶ -cycle through buffers
+-   :hide ▶ hide buffer
+-   :buffers ▶ list buffers
+-   :buffer [number] ▶ go to list of buffers
+
+## Visual Basic Mode
+
+-   v starts line by line visual mode ▶ can only select line wise at a time
+-   V highlights the whole line
+-   vaw     ▶ visualize around the word
+-   ctrl + v enters visual block mode
+-   ctrl + v + I <insert text> + escape ▶ insert text across multiple lines
+    -   use `o` to toggle between start and ending of visual search
+
+## Digraph
+
+-   ctrl + k character character number 
+    
+    -   • is ctrl+k oo 
+    -   ▶ is cktrl+k RP
+
+## Misc.
+
+-   `>>` shifts left `<<` shifts right 
+-   set shiftwidth=number ▶ sets the shift command
+-   :numrange p ▶ print last lines
+-   :start_range,/search p ▶ print until a serached word ▶ also works with marks'
+-   ctrl + v :' ▶ will put range in and you can execute commands from there
+-   o ▶ to insert space beneath the line
+-   O ▶ to insert space above the current line
+-   g ctrl-g == display words, lines and bytes

@@ -32,7 +32,7 @@ df <- fpaR::contoso_fact_sales %>%
   
 sc <- spark_connect(master ="local")
 
-spk_df <- sparklyr::copy_to(sc,df = df,name = "df_spark")
+df_sdf <- sparklyr::copy_to(sc,df = df,name = "df_spark")
 ```
 
 
@@ -213,7 +213,11 @@ set_engine("prophet")
 
 ### How to use the training set?
 
--   Fit models with a recipe (formula + feature engineering) and fit to to data set (training or testing)
+-   Create recipes
+-   create modeling frameworks
+-   Fit models with a recipe (formula + feature engineering) and fit to to data set to training data 
+-   Add models to model time workflow `modeltime_table` (similiar to other workflow
+-   Use modeltime
 -   Similar to tidy models framework
 -   Set data to be training() version of the split
 
@@ -232,6 +236,8 @@ prophet_fit <-  prophet_mod %>%
 
 ## model time worfklow
 
+
+### Modeltime_table()
 -   As you create models you put them together in a table with the `modeltime_table()`
 
 
@@ -240,23 +246,17 @@ model_tbl <- modeltime_table(
   lm_fit,
   prophet_fit
 )
-
-# how to create aggregation function
-
-timetk::summarize_by_time(
-.date_var=date column
-.by= aggregation level
-col_name=aggregation step (n())
-across()
-,.type=c("cieling,round,floor")
-)
-
-
-
 ```
+
+
+
+### Model_time_calibrate()
 
 -   Use this with `modeltime_calibrate()` to calibrate the model against testing dataset
 -   Set the new_data argument to be the `testing()` argument
+-   It will label the models with genric name
+
+
 
 ```{r}
 calib_tbl <- model_tbl %>% 
@@ -265,12 +265,23 @@ calib_tbl <- model_tbl %>%
     )
 ```
 
+
+
+
+
+
+
+- key field is .calibration_data
+- 
 ### how to see model results
 
 -   Use the `modetime_forecast()` to see the tables of forecast results and actual date with confidence interfaces
 Need to have actual data
 -   Need to have testing data
 -   Need to transform the xxx data to match the pre-processing steps
+-   If you pass the calibradated model that has a data already in it you don't need to supply new data
+- Use `plot_modeltime_forecast()` to then see the forecast options
+  - option to view as trillescope.js and other visualization options
 
 
 ```{r}
@@ -284,7 +295,7 @@ calib_tbl %>%
 ```
 
 
-
+- 
 
 ## how to see forecasting accuracy
 
@@ -294,6 +305,8 @@ calib_tbl %>%
 calib_tbl %>% 
   modeltime_accuracy()
 ```
+
+- 
 
 ## Feature Engineering
 
@@ -341,7 +354,7 @@ seasonality_plots <- df_store_daily %>%
       )
     
   )
-  
+seasonality_plots  
 
 
 ```
@@ -352,100 +365,108 @@ seasonality_plots <- df_store_daily %>%
 -   be mindful that your training and and testing datasets need the to be converted with the training steps so that when you back test or fits everythign works
 -   same transformation columns
 -   ability to transform predictions back to untransformed output
+- `step_time_series_signature()`
 -   take note of the transformation vectors
--   you apply the steps to the dataset with prep %>% juice
+-   you apply the steps to the dataset with prep %>% juicemii
 
+```{r}
+df_daily:
+rec_basic_raw=recipe(rev~ . ,data=training(df_split))
+```
 
-
-
-plot_seasonal_diagnotistic
-
-
-## recipe
+## time series signaturel
+1.3.4 in video --
 
 
 recipe(formula,training(splits)) %>% 
-step_timeseries_Signature() %>%
-step_normalize(index.num,_year) %>% 
-step_dummy(all_ordinal)
+step_timeseries_Signature()
 
-prep() %>% 
-%>% juice (applies to the training step)
+```{r}
 
 
+rec_basic=rec_basic_raw %>% 
+step_timeseries_signature(date_key)
 
+```
+
+# use this to center large variables
+step_normalize(index.num,_year)
+-typically done with large variables
+
+#remove feautres
+`step_rm()`
+
+`step_rm(starts_with(".iso"),ends_with(".xts"),contains("hour"),contains("minute"),contains("second"),"contains("am.pm")`
+
+```{r}
+rec_basic=rec_basic %>%
+step_rm(starts_with(".iso"),ends_with(".xts"),contains("hour"),contains("minute"),contains("second"),contains("am.pm"))
 ```
 
 
 
+###  add dummy steps
 
-prep()
-%>% juice (applies to the training step)
+```{r}
+rec_basic <- rec_basic %>% 
+  step_dummy(all_nominal_predictors())
+```
 
+### how to see model results?
+- pass the recipe through to prep() and juice() to see the model time resutls
+    
 
-
-## create model element
-
-linear_reg()
-
-## create a workflow object
-save as worflow
-
-workflow %>% 
-add_model(model_spec) %>% 
-add_reciept(reciepe-sepc) %>% 
-fit(training(splits)) 
-
-calibration obj
-modeltime_table() %>% 
-modeltime_Calibration(testing(splits))
-
-
-calibration_obj %>% modeltime_accuracy
-
-calibration_obj %>% 
-modeltime_forecast(
-new_Data=testing(splits)
-actual_Data=origional_ttbl) %>% 
-plot_modeltime_forecast()
-
-
-
-)
+```{r}
+rec_basic %>% 
+  prep() %>% 
+  juice()
+```
 
 
 # overview of EDA 
+
+
+-   visualize time series
+-   plot acf diagnostics  (plot_acf_diagnostics)
+    -   auto correaltion
+    -   correlation between predictaors
+-   plot seasonality to get idea of time attributes (plot_seasonal_diagnostics()
+-   plot  anomaly detection to get an idea of outliers (`plot_anomaly_diagnostics()`)
+-   get linear model as quickly as you can
+
 
 ## diagnostics functions
 
 ### ACF
 
 -   helpful to detect correlations between lagged and how many lags to use in a model
+-   helps us understand if there is lagged version of variable -- 
+    -   first entry is always one because it is always one vs. one
+-   set the `.ccf_vars` options to the columns you want to correlate against ( dones't currently work)
 
-plot_acf_diagnostics(
-.lags="1 year", 25:100,100
-.ccf_vars=columns:columns   
-.show_ccf_vars-only=TRUE # only show cross correlations var
-,.facet_ncol=number of column
-)
 
 ```{r}
+
+plot_anomaly_diagnostics()
 df_daily %>% 
   plot_acf_diagnostics(
     .date_var=date_key
-    ,.value=rev
-    ,.lags = 1:30
+    ,.value=rev ## this can be logged
+    ,.lags = 1:10
+    ,.ccf_vars = c(mean_unit_price)
+    ,.interactive = TRUE
+    # ,.show_ccf_vars_only = TRUE
+    # ,.show_ccf_vars_only = TRUE
   )
 ```
+
+
 
 ## sesaonality
 
 -   Helpful to see if there are certain seasonality drivers (eg. weekly, monthly, day of month, etc) effect
 
-plot_seasonal_diagnostics(
-feature_set=c(hour,weekday)
-.geom="violin"
-)
+-   helpful to which time signures we want to include in the model or undersatnd more 
 
 
 ```{r}
@@ -461,6 +482,7 @@ df_daily %>%
 ### anolomy
 
 -   helpful to detect and plot anomalies detection
+-   
 
 plot_anomaly_diagnostics(
 .date_var=date_col
@@ -481,13 +503,6 @@ df_daily %>%
 ```
 
 
--   Get underlying anomaly data
-tk::anomoly_diaogasitc(
-.data_var=data_col
-.alpha= .01 #change anomoly sensitivity
-.max_anolomoies =.01 # peak anomoly
-)
-
 
 ```{r}
 df_daily %>% 
@@ -502,6 +517,11 @@ df_daily %>%
 ## seasons decomposition
 
 -   Useful to understand how anomoliges are being detcted
+
+-   There is a seasonal cycle
+-   There is a trend cycle
+-   
+
 ## mode diagnosics
 detect lagged fuctions
 plot_acf_diagnoistcs(
@@ -509,37 +529,6 @@ plot_acf_diagnoistcs(
 .ccf_vars=columns,
 .show_ccf_vars-only=TRUe # ony cross correlations var
 ,.facet_ncol=number of column
-
-
-)
-
-
-## sesaonality
-
-plot_seaonsal_diagnotistc(
-feasture_set=c(hour,weekday)
-.geom="violin"
-)
-
-## anolomy
-
-plot_anomoly_diagomsitc(
-.data_var=data_col
-.alpha= .01 #change anonoly sensitivity
-.max_anolomoies =.01 # peak anaolyies
-
-)
-
-## get anoly data
-tk::anomoly_diaogasitc(
-same as plot, gets data with anolmogies in it
-)
-
-## seasons decomposition
-gives you what is seasonal vs trend vs adjjustment
-
-useful to understand how anomoliges are being detcted
-plot_stl_diagostics(
 
 
 )
@@ -577,7 +566,7 @@ show_summary= TRUE, shows summary ouptut
 df_daily %>% 
   plot_time_series_regression(
     .date_var = date_key
-    ,.formula = rev ~ vol+week(date_key)+mean_up+timetk::lag_vec(date_key,lag=2)+timetk::lag_vec(date_key,lag=3)
+    ,.formula = log(rev+1) ~ vol+week(date_key)+mean_unit_price+timetk::lag_vec(date_key,lag=2)+timetk::lag_vec(date_key,lag=3)
     ,.show_summary = TRUE
     # ,show_summary=TRUE
   )

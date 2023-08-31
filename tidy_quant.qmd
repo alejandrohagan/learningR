@@ -10,3 +10,4 @@ ual <- tidyquant::tq_get("UAL")
 
 
 ```
+

@@ -8,13 +8,16 @@ format: html
 ## Required packages
 
 -   Tidymodels
-    -   `rsample` used to split your sample
+    -   `rsample` used to split your sample into training, testing, and validation set 
     -   `recipes` used to create recipe and transform data (normlize)
     -   `parsnip` used to create the model, engine and mode
     -   `workflow` puts together model (parsnip) and formula (recipe)
     -   `parsnip` also fits the everything together
+    -   `yardstick` provides metrics to evaluate your model 
 -   usemodels can help set up your workflow including tunning and grid
 -   There is no "set" pattern and these steps can be combined through other variables however below is a typical workflow
+-    `tune` will help you optimize your model 
+
 
 ### Load libraries
 
@@ -45,36 +48,36 @@ pacman::p_load(tidyverse,scales,tidymodels,janitor,lubridate,vip)
 #| echo: true
 #| eval: true
 
+library(tidyverse)
+diamonds_tbl <- diamonds %>% 
+  mutate(high_price_indicator=if_else(price>10000,"high","low")
+          ,high_price_indicator=factor(high_price_indicator)
+         ,bin_carat=cut_number(carat,n=4,labels=c("0.2 - .0.4","0.4 - 0.7","0.7 - 1.04","1.04 - 5.01"))
+         )
 
-diamonds <- diamonds %>% 
-  mutate(high_price_indicator=if_else(price>10000,"high","low"),
-         high_price_indicator=factor(high_price_indicator),
-         across(c("cut","color","clarity"),~as.factor(.)))
+data_split <- rsample::initial_split(diamonds)
+
+training_tbl <- rsample::training(data_split)
+testing_tbl <- rsample::testing(data_split)
 
 
-data_split <- rsample::initial_split(diamonds,strata = high_price_indicator)
-
-training_split <- rsample::training(data_split)
-testing_split <- rsample::testing(data_split)
-
-
-diamonds_fold <- rsample::vfold_cv(training_split,strata=high_price_indicator)
+diamonds_fold_lst <- rsample::vfold_cv(training_tbl)
 
 ```
 
 ## Parsnip
 
-- This is package where you choose the model, engeine and mode and configure it (set its engine and mode)
--   most models start with their modeling name (eg.`logistic_reg()`, `rand_forest()`, `linear_reg()`) 
+- This is package where you choose the model, engine and mode and configure it (set its engine and mode)
+-   Most models start with their modeling name (eg.`logistic_reg()`, `rand_forest()`, `linear_reg()`) 
 - Following selection the model you need select their engine (typical - name of the underlying package) and their mode (not always applicable; eg classification or regression) - most models have default modes and engine
--   First start with the model eg. linear_reg
+-   First start with the model eg. `linear_reg()`
 
     -   Then choose the mode arugment in the model(mode="regression"), for some there is an option (regression or classification), for others it can only be one so you can't change it
--   Then set the engine (set_egine()) which determines which underlying package you want to use (eg. stats::lm, spark, etc)
--   optional: At this point, you have the option of just directly appliying parsnip::fit() into the model by directly entering recipe and then data
+-   Then set the engine (`set_egine()`) which determines which underlying package you want to use (eg. stats::lm, spark, etc)
+-   optional: At this point, you have the option of just directly applying parsnip::fit() into the model by directly entering recipe and then data
     
-    -   fit(model,price ~ category, data=train_tbl) and this will directly  output results
-    -   if you do this you cna directly put in `predict(model_fit, new_data=test_data)` 
+    -   Fit(model,price ~ category, data=train_tbl) and this will directly  output results
+    -   If you do this you cna directly put in `predict(model_fit, new_data=test_data)` 
 
 
 ```{r choose-model}
@@ -82,26 +85,32 @@ diamonds_fold <- rsample::vfold_cv(training_split,strata=high_price_indicator)
 #| eval: true
 #| warning: false
 
-log_spec <- parsnip::logistic_reg() %>% 
+log_mod <- parsnip::logistic_reg() %>% 
   parsnip::set_mode("classification") %>%
   parsnip::set_engine("glm")
 
+ranger_quant_mod <- parsnip::rand_forest(trees = 1000) %>% 
+  parsnip::set_mode("regression") %>% 
+ parsnip::set_engine("ranger",quantreg = TRUE,importance = "impurity", seed = 63233)
 
 
-rf_spec <- parsnip::rand_forest(trees = 1000) %>% 
-  set_mode("classification") %>% 
+
+ranger_mod <- parsnip::rand_forest(trees = 1000) %>% 
+  set_mode("regression") %>% 
   set_engine("ranger")
 
 
-rf_glmnet <- parsnip::linear_reg(penalty = 10,mixture = 0.5) %>% 
-  parnship::set_mod("regression") %>% 
+glmnet_mod <- parsnip::linear_reg(penalty = 10,mixture = 0.5) %>% 
+  parsnip::set_mode("regression") %>% 
   parsnip::set_engine("glmnet")
 
 
-rf_decision <- decision_tree(cost_complexity = 0.01,min_n=10) %>% 
+rpart_mod <- decision_tree(cost_complexity = 0.01,min_n=10) %>% 
   set_mode("regression") %>% 
   set_engine("rpart")
 
+
+lm_mod <- parsnip::linear_reg()
 
 ```
 
@@ -109,7 +118,7 @@ rf_decision <- decision_tree(cost_complexity = 0.01,min_n=10) %>%
 
 -   this is where you put the formula and transformation steps that you want your model
 
--   typical to start with recipes::recipe(outcome \~ predictor1+ predictor2, data=df_training)
+-   typical to start with recipes::recipe(outcome \~ predictor1+ predictor2, data=training_tbl)
 
 -   you can then transform data with `step_?` using tidy select principles
 
@@ -119,55 +128,212 @@ rf_decision <- decision_tree(cost_complexity = 0.01,min_n=10) %>%
     -   `step_dummy()` which transform categorical variable into columns, use `one_hot=TRUE` ; variables should all be factors
     -   `step_zv()` to remove variables with zero variation (can use with `all_predictors()`)
 
--   while you may have many models and parameters, you would typically have one receipe that can be leverage many times
+-   while you may have many models and parameters, you would typically have one reciepe that can be leverage many times
 
--   the dataset only gets used to help recipes determine the column types
+-   the data should be the training set to avoid leakage
 
 -   [recipes links](https://www.tmwr.org/recipes.html)
 
-### prep & bake
+#### PCA / UMAP
 
--applies recipes steps to a dataset - prep(rec,new_data=null)
+[https://juliasilge.com/blog/un-voting/]
+
+-   You can also use recipes for PCA or umap analysis, the example below goes through that
+
+```{r}
+unvotes <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/unvotes.csv")
+issues <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/issues.csv")
+
+```
+
+-   When structuring PCA 
+        
+        -   the group column that you want to ID the results by in scatter plot (eg. country, customer, business scenario) is in the rows
+        -   the detail attribute you want to understand the resutls by in a bar chart it by is in the column
+                -   Typically the detail factors you want to understand things by
+                -   This can be an ID that links to other ids if you want to fill in the results eg( a grouping column)
+                -   You need to have this in a way that there are observationsin each category
+                -   So it should be a dimension where there is no missing data instead it should have 0 observations
+        -   the attribute you want to measure by -- is body
+-   All the body must be normalized with no missing data
+
+
+```{r}
+unvotes_df <- unvotes %>%
+  select(country, rcid, vote) %>%
+  mutate(
+    vote = factor(vote, levels = c("no", "abstain", "yes")),
+    vote = as.numeric(vote),
+    rcid = paste0("rcid_", rcid)
+  ) %>%
+  pivot_wider(names_from = "rcid", values_from = "vote", values_fill = 2)
+```
+
+-   Then follow the recipe steps to normalize and add `step_pca()` with predictors and number of computations
+-   Ensure to add `prep()` to apply the steps then `bake()` to see the data
+
+
+```{r}
+
+pca_rec <- recipe(~., data = unvotes_df) %>%
+  update_role(country, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors(), num_comp = 5)
+
+pca_prep <- prep(pca_rec)
+```
+
+
+-   From there you can visualize the pca results with the Id column
+
+
+```{r}
+bake(pca_prep, new_data = NULL) %>%
+  ggplot(aes(PC1, PC2, label = country)) +
+  geom_point(color = "midnightblue", alpha = 0.7, size = 2) +
+  geom_text(check_overlap = TRUE, hjust = "inward", family = "IBMPlexSans") +
+  labs(color = NULL)
+```
+
+-   alternatively you can see the traditional PCA categories by `tidy()` the results
+-   filter the components you want to see
+-   
+```{r}
+pca_comps <- tidy(pca_prep, 2) %>%
+  filter(component %in% paste0("PC", 1:4)) %>%
+  left_join(issues %>% mutate(terms = paste0("rcid_", rcid))) %>%
+  filter(!is.na(issue)) %>%
+  group_by(component) %>%
+  top_n(8, abs(value)) %>%
+  ungroup()
+
+pca_comps %>%
+  mutate(value = abs(value)) %>%
+  ggplot(aes(value, fct_reorder(terms, value), fill = issue)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~component, scales = "free_y") +
+  labs(
+    x = "Absolute value of contribution",
+    y = NULL, fill = NULL,
+    title = "What issues are most important in UN voting country differences?",
+    subtitle = "Human rights and economic development votes account for the most variation"
+  )
+```
+i
+
+
+### prep & juice & bake
+
+- applies recipes steps to a data set - prep(rec,new_data=null)
 
 [prep_and_bake](https://www.tmwr.org/dimensionality.html)
 
 ```{r}
-rec <- recipes::recipe(high_price_indicator ~., data=training_split) %>%
+rec_adv<- recipes::recipe(price ~ ., data=training_tbl) %>%
   step_string2factor(c("cut","color","clarity")) %>% 
   recipes::step_normalize(all_numeric_predictors()) %>% 
   step_zv(all_predictors()) %>% 
-  step_dummy(c("cut","color","clarity"),one_hot = TRUE) %>% 
+  step_dummy(c("cut","color","clarity","bin_carat"),one_hot = TRUE) %>% 
   step_rm(price)
 
 
-prep(rec,training_split) %>% juice()
-
 ```
+
+
+```{r}
+rec_basic <- recipes::recipe(price ~ carat, data=training_tbl) 
+  # step_string2factor(c("cut","color","clarity")) %>% 
+  # recipes::step_normalize(all_numeric_predictors()) %>% 
+  # step_zv(all_predictors()) %>% 
+   # step_rm(price)
+```
+
+
 
 ### Workflow
 
--   this stitches together your various elements (model, recipe)
--   I need to learn more about this but appears it makes it eaier to do thigns later one -add_model(model_spec) -add_recipe(recipe_spec)
--   You can pass multiple reciepes or models via a list to a workflow to `workflow_set(preproc=recipe_list,models=model_list)`
--   extract specific models `extact_workflow(workflow_set,id=workflow_id)`
--   Mainly designed to be used with resamped data
+-   This stitches together your various elements (model, recipe)
+-   I need to learn more about this but appears it makes it easier to do things later one 
+    -   add_model(model_spec) 
+    -   add_recipe(recipe_spec)
+-   You can pass multiple recipes or models via a list to a workflow to `workflow_set(preproc=recipe_list,models=model_list)`
+-   Extract specific models `extact_workflow(workflow_set,id=workflow_id)`
+-   Mainly designed to be used with re-sampled data
 
-common formulas - `workflow()` - `workflow_set()` if passing multiple formlas or models
+Common formulas - `workflow()` - `workflow_set()` if passing multiple formulas or models
 
 ::: callout-note
-from the learning site, workflows section of [tidy models book](https://www.tmwr.org/workflows.html), workflows are : if you are using multiple model types, or constantly updating various elements of the model then workflow allows to add / substrat specific elements (without rebuilding the entire model from scratch)
+From the learning site, workflows section of [tidy models book](https://www.tmwr.org/workflows.html), workflows are : if you are using multiple model types, or constantly updating various elements of the model then workflow allows to add / substract specific elements (without rebuilding the entire model from scratch)
 
 This "full model" is compared to a sequence of the same model that removes each predictor in turn. Using basic hypothesis testing methods or empirical validation, the effect of each predictor can be isolated and assessed.
 :::
 
-link:
 
 ```{r}
-workflow <- workflow() %>% 
-  add_model(rf_spec) %>% 
-  add_recipe(rec)
+wf_basic <- workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(rec_basic)
 
 ```
+
+
+
+#### Workflowset
+
+[https://workflowsets.tidymodels.org/]
+
+you can apply multiple formulas with a list
+
+```{r}
+recipes <- list(
+  longitude = rec_basic
+  ,latitude = rec_adv
+)
+```
+
+then you can applly the various formulas to various models with 'workflow_set()'
+
+```{r}
+
+
+
+
+
+workflow_sets_diamond <- workflow_set(
+  preproc = recipes
+   ,models = list(
+    lm = lm_mod
+  ,ranger=ranger_mod
+  ,ranger_quant=ranger_quant_mod
+  ,rpart=rpart_mod
+    )
+  )
+
+workflow_sets_diamond %>% 
+  mutate(fit=
+           map(
+             info
+             ,~fit(training_tbl,.x$workflow[[1]])
+             )
+         )
+
+
+
+  fit(workflow_sets_diamond$info[[1]]$workflow[[1]],training_tbl)
+
+```
+
+you fit each model with purrr
+
+```{r}
+   location_models %>%
+   mutate(fit = map(info, ~ fit(.x$workflow[[1]], ames_train)))
+location_models
+
+```
+
+
+
 
 ### Fit Model
 
@@ -186,8 +352,17 @@ workflow <- workflow() %>%
 -   `control = control_resamples(save_pred = TRUE)` -need to manually save predictions
 
 -   this can take alot of time so turn on parellel processing `doParallel::registerDoParallel()`
+-   typically fit the training data as the data argument
+
+
 
 ```{r fit}
+
+
+fit_basic <- workflow() %>% 
+  add_recipe(rec_basic) %>% 
+  add_model(lm_mod) %>% 
+  fit(training_tbl)
 
 
 doParallel::registerDoParallel()
@@ -206,6 +381,22 @@ fit_folds <- tune::fit_resamples(workflow,
 
 
 ```
+You can see the various elements of the fit with the various extract commands and you can use see use further downstream functions at this point (eg. 'summary()'
+-   'extract_fit_engine()'
+
+
+additionally you can use 'last_fit()' to fit to entire training set and evaluated against testing setj
+
+last_fit(lm_wflow, ames_split)
+
+
+
+## Apply Model to Data set
+
+-   if you have a fitted model you can use either 'predict()' or 'augment()' to apply your fitted model to the underlying data sets
+
+-   unclear what happens to preprocessings steps? I guess automatically applied?
+
 
 
 ## Yardsticks
@@ -217,10 +408,24 @@ fit_folds <- tune::fit_resamples(workflow,
 - this will product standard metrics like mae,rmse and rsq
 
 
-Validate model - if you want to see your samples you can do the `collect_metrics(rs_data)`
+Validate model - if you want to see your samples you can do the `collect_metrics(rs_data)` or metric_set() with augmented data
+
+- If regression results
+
+    -   use `predict()` or `augment()`
+    -   then list argument that you want in `metric_set()` and assign it to variable
+    -   then pass the fit model to this assigned variable -- indicating which is the truth and estimate column
+    -   
 
 ```{r}
-collect_metrics(fit_folds)
+ames_metrics <- metric_set(rmse, rsq, mae)
+  
+predict_results <- fit_basic %>% augment(new_data=training_tbl)
+
+ames_metrics(predict_results,truth=price,estimate=.pred)
+
+
+
 ```
 
 -   use the roc_curve to plot your results - if resampled group by the resampled id
@@ -281,6 +486,8 @@ rf_spec %>%
   vip(geom = "point")
 ```
 
+## Model Specific Arguments
+
 ### Random Forest
 
 -   okay to use between 500 - 1000 trees
@@ -305,44 +512,11 @@ rec_2 <- recipes::recipe(x~.,data=df) %>%
 
 rec_2 %>% prep() %>% juice()
 ```
-<<<<<<< HEAD
-=======
-
 
 ## ploting reuslts
 
 -    take the fit object and broom::tidy()
 -   
-
-
-## To be classified lateR:
-
-
-#tidymodels
-
-Split data & sample folds
-
-1.  rsample::initial_sample(dataframe,strata=variable)
-
-2.  rsample::training(split_data)
-
-3.  rsample::testing(split_data)
-
-4.  vfold_cv(df_testing, strata = type)
-
-#### recipe to create formula and transform daata
-
-1.  recipes::recpe(outcome \~ predictor,data=train_df)
-
-#### select the ml model and type
-
-parsnip::logistic_reg() %\>% set_mode() %\>% set_engine()
-
-###workflow
-
-workflow() %\>% add_recipe(rec) %\>% add_model(mod)
-
-
 
 
 
@@ -483,4 +657,3 @@ kmeans_result_tbl %>%
 
 ## combine umeans and kmeans
 
->>>>>>> a548534aa2ba9c3ce865bab0e837a2867fc5c783

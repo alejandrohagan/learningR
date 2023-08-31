@@ -1,0 +1,100 @@
+---
+title: "Factor Analysis"
+---
+
+
+
+It is common to compare period over period results with what is called a factor analysis -- essentially you are tyring to compare one to another.
+
+
+If you think about a single factor (eg.  average sales or median sales by lets say color color) --
+
+```{r}
+library(tidyverse)
+devtools::install_github("alejandrohagan/fpaR")
+
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  left_join(fpaR::contoso_dim_product %>% janitor::clean_names(),by = join_by(product_key))
+
+
+df_summary <- df %>% 
+  mutate(rev=unit_price.x*sales_quantity) %>% 
+  summarise(
+    rev=sum(rev)
+    ,n=n()
+    ,vol=sum(sales_quantity)
+    ,avg_vol=mean(sales_quantity)
+    ,distinct_col=length(unique(color_name))
+    ,.by = c(date_key,brand_name,color_name)
+  ) %>% 
+  mutate(vol_group=cut(vol,breaks = 5))
+```
+
+
+```{r}
+
+ibrary(tidyverse)
+devtools::install_github("alejandrohagan/fpaR")
+
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  left_join(fpaR::contoso_dim_product %>% janitor::clean_names(),by = join_by(product_key))
+
+
+df_summary <- df %>% 
+  mutate(rev=unit_price.x*sales_quantity) %>% 
+  summarise(
+    rev=sum(rev)
+    ,n=n()
+    ,vol=sum(sales_quantity)
+    ,avg_vol=mean(sales_quantity)
+    ,distinct_col=length(unique(color_name))
+    ,.by = c(date_key,brand_name,color_name)
+  ) %>% 
+  mutate(vol_group=cut(vol,breaks = 5))
+
+# zero intercept
+category_lm_zero <- df_summary %>% 
+  lm(rev ~ 0+brand_name,data=.) %>% broom::tidy()
+# classic lm
+category_lm<- df_summary %>% 
+    lm(rev ~ brand_name,data=.) %>% broom::tidy()
+
+
+
+#do simple mean by group
+
+cat_manual_tbl <- df_summary %>% 
+  group_by(brand_name) %>% 
+  summarize(avg_rev=mean(rev))
+
+## join results
+
+category_lm_tbl <- category_lm %>% mutate(term_clean=str_remove(term,"brand_name")) %>% select(term_clean,lm_intercept=estimate)
+category_lm_zero_tbl <- category_lm_zero %>%  mutate(term_clean=str_remove(term,"brand_name")) %>% select(term_clean,lm_zero=estimate)
+
+
+summary_results <- cat_manual_tbl %>% 
+  left_join(
+    category_lm_tbl
+    ,by=join_by(brand_name==term_clean)
+  ) %>% 
+  left_join(
+    category_lm_zero_tbl
+    ,by=join_by(brand_name==term_clean)
+  )
+  
+summary_results
+
+
+
+
+
+
+
+
+```
+
