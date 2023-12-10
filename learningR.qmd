@@ -423,59 +423,6 @@ facet_zoom(x=country=="spain")
 
 facet_zoom(y=length \<20)
 
-Tidy models
-
-data load
-
-rsamples
-
-assign to training df: split
-
-based on proportions and strata
-
-assign to training df: assign trianing
-
-assign cross validation sets (if ncessary)
-
-assign to testingdf: assign testing
-
-initial_split()
-
-training()
-
-testing()
-
-recipes
-
-prepare the data with prepeprosing
-
-assign vairables
-
-other transformation steps
-
-recipte()
-
-update_role()
-
-parsnip
-
-specify and fit the model
-
-model (decision_tree()
-
-set_engine()
-
-set_mode()
-
-workflow
-
-workflow()
-
-add_receipe()
-
-add_model()
-
-Tidy evaluation
 
 Programming with dplyr • dplyr (tidyverse.org)
 
@@ -517,7 +464,8 @@ how to use as nmaes
 
 Open questions
 
-when do you sue data and when do use .data (okay answer apparently when you use ... you start other variables with "." eg. .data to avoid conflictino (20 Dot prefix \| Tidyverse design guide
+when do you sue data and when do use .data (okay answer apparently when you use 
+... you start other variables with "." eg. .data to avoid conflictino ix \| Tidyverse design guide
 
 )
 

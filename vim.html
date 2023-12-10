@@ -63,11 +63,29 @@ ul.task-list li input[type="checkbox"] {
 <section id="what-is-vim" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-vim">What is VIM?</h2>
 <p>Vim is a keybinding that has a bit of cult following. It will look and feel different than your traditional key bindings (eg what is in front of your hands today) but over time, you will be will be more productive and efficient. Honestly – it will excite you.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+What is a keybinding?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I’ll use the word alot but you can think of a keybinding as a combination of keys that are pressed to do an outcome</p>
+<p>For example ‘SHIFT + y’ produces the capital letter ‘Y’</p>
+<p>‘Alt + =’ will produce ‘&lt;-’ in Rstudio</p>
+<p>Pression ‘Ctrl + left arrow’ will skip ahead left by one whole word</p>
+</div>
+</div>
 <p>How will VIM do this?</p>
-<p>This will make more sense as we go along. To me the real secret around VIM is not only how there is a “tool” for every general or specialized use case but also you can access either directly or your own shortcuts the ability to use most of these tools with minimal hand movement. It is mainly designed so that your fingers resifting on ‘asdf’ and ‘jkl’; are used the most.</p>
-<p>So how can I do more things, quickly, with fewer key strokes and less hand movement? This is actually due to previous limitations in early computers where they didn’t have an up,down,left,right errors or other specialized keys (eg. ‘tab’, caps lock) so they had to leverage the existing to do many things.</p>
+<p>This will make more sense as we go along. VIM’s real secret is not only how is there a tool for every general or specialized use case but also you can access the built in short cuts or quickly create your own to use most of these tools with minimal hand movement.</p>
+<p>the ability to “move mountains” while barely lifting your fingers from your keyboards homerow is incredible.</p>
+<p>So how can I do more things, quickly, with fewer key strokes and less hand movement?</p>
+<p>This is actually due to previous limitations in early computers where they didn’t have an up,down,left,right errors or other specialized keys (eg. ‘tab’, caps lock) so they had to leverage the existing keys to do many things.</p>
 <p>VIM’s trick in doing this is that it is not just simple text editor but instead it is a modular editor.</p>
-<p>This means VIM has different modes (insert,normal, visual, command and replace) – each mode has a different “interface” which you can think of as surgeon’s tool kit that is used for a specialized purpose.</p>
+<p>This means VIM has different modes (insert,normal, visual, command and replace) – each mode has a different “interface” which you can think of as surgeon’s tool kit that can be used for a focused purpose.</p>
 </section>
 <section id="how-to-use-vim-in-rstudio-and-why" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-use-vim-in-rstudio-and-why">How to use VIM in RStudio and why?</h2>
@@ -82,25 +100,27 @@ ul.task-list li input[type="checkbox"] {
 <p>Given that you are essentially learning VIM lite – why go through with this at all? RStudio as its own shortcuts and utilities, what makes this so special for R users?</p>
 <p><strong>Incremental benefits</strong></p>
 <ul>
-<li>“Mark” sections of a your script, rmarkdown or quarto document and instantly transport there</li>
-<li>Quickly record keyboard macros to do repititive edits, deletions or insertions (think captializing first word of a list or replace a replace a . with a _ in variable name,etc)</li>
-<li>Search and replace letters or words without using your mouse</li>
-<li>Instantly jump to specific words or characters in a line<br>
-</li>
-<li>Navigate your document with minimal handmovement – maximizing your ergnomic benefits</li>
+<li><p>“Mark” sections of a your script, rmarkdown or quarto document and instantly transport there making navigation a breeze</p></li>
+<li><p>Quickly record keyboard macros to do repititive edits, deletions or insertions (think captializing first word of a list or replace ‘.’ with ’_’ in variable’s name,etc)</p></li>
+<li><p>Search and replace letters or words without using your mouse</p></li>
+<li><p>Instantly jump to specific words or characters in a line</p></li>
+<li><p>Navigate your document with minimal handmovement – maximizing your ergnomic benefits</p></li>
+<li><p>Highlight words, lines paragarphs with precision</p></li>
 </ul>
 </section>
 <section id="how-do-i-get-started" class="level2">
 <h2 class="anchored" data-anchor-id="how-do-i-get-started">How do I get started?</h2>
-<p>Before we enable VIM in RStudio we need to talk about two different modes, how you switch between these modes and how you interact with these modes</p>
+<p>Before we enable VIM in RStudio we need to talk about two key modes, how you switch between and interact with these modes</p>
 <section id="insert-mode" class="level3">
 <h3 class="anchored" data-anchor-id="insert-mode">Insert Mode</h3>
 <p>This will be the most familiar to you as this mode is basically the interface you are most used to today.</p>
 <p>You press the letter “a” and you see the letter “a” printed on the screen. You want to move around, you press up arrow or left arrow,etc.</p>
 <p>There is nothing controversial or hard to learn about this mode – this mode works as you are used to today.</p>
-<p>However, believe it or not – you will try to spend as little time in this mode as possible. The real fun starts in what is known as normal mode – which is the mode you will first start in</p>
+<p>However, believe it or not – you will try to spend as little time in this mode as possible. That is because this mode should only be used to enter in text – not for navigation around your document or between paragraphas, not for highlighting words or sections, not for editing or deleting texts – you get the point.</p>
+<p>Getting out of the habit of using insert mode for nothing more than just inserting text will be an initial source of frustration</p>
+<p>The real fun starts in what is known as ‘normal mode’ – which is the mode you will first start in which is used mainly for navigating around your document, neutral mode that you will transition to other modes from,</p>
 <div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -109,7 +129,7 @@ Transfer from Insert mode to Normal mode
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <blockquote class="blockquote">
 <p>To get out of insert mode and switch to normal mode you need to press <esc> or <ctrl> +[. (note in real vim you can create new key mappings so that you can use any key combination to to escape mode). I recommend to start with esc but eventually you want to move towards <ctrl> + [ because it <strong>should</strong> be less reaching for your pinky fingers.</ctrl></ctrl></esc></p>
@@ -117,10 +137,6 @@ Transfer from Insert mode to Normal mode
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="normal-mode" class="level2">
-<h2 class="anchored" data-anchor-id="normal-mode">Normal mode</h2>
 <p>When you are in normal mode, at first glance everything will be the same – with one exception.</p>
 <p>your cursor will look like a block rather than a slim line.</p>
 <p>That is it.</p>
@@ -130,7 +146,7 @@ Transfer from Insert mode to Normal mode
 <p>This is a great place for you to start your transformation to a VIM user. Coincidently it will be the same time when you also pull out your hair in frustration</p>
 <p>In theory you use this mode to navigate around your spread sheet, move,change or delete words and line. To insert new text you need to be in insert mode.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -139,14 +155,15 @@ Transfer from Normal mode to Insert mode
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To go into insert mode there are multiple options depending where in the word, paragraph or line you want the cursur to “jump” to. However in practice you will principlly be suing four letters to do so:</p>
-<p>i,a,s or o (or there are capital equivalents</p>
+<p>i,a,s or o (or there are capital equivalents)</p>
 </div>
 </div>
 </div>
 <p>So lots of new information to you – lets recap some fundamentals.</p>
+</section>
 </section>
 <section id="recap" class="level2">
 <h2 class="anchored" data-anchor-id="recap">Recap</h2>
@@ -164,7 +181,7 @@ Transfer from Normal mode to Insert mode
 </ol>
 <p>What can you do with this so far? - not alot –but patience my friend – we are establishing vocabulary and framework. - now you know enough to enable VIM keybindings in Rstudio</p>
 <div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -173,7 +190,7 @@ How to enable VIM in Rstudio?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>Go to “Global Options”</li>
@@ -198,18 +215,20 @@ How to enable VIM in Rstudio?
 <p>As stated before you will want to try and stay in normal mode because of how addicting your efficiency wil be.</p>
 <p>To move around in normal mode you need to use h,j,k and l. Probably the biggest hurdle to you learning VIM starts right here</p>
 <p>but stay with it! the pain you fill now will quickly make up for itself with gloarious macros and ridiculous efficiency with VIM.</p>
-<section id="motions" class="level2">
-<h2 class="anchored" data-anchor-id="motions">motions</h2>
+<section id="motions" class="level3">
+<h3 class="anchored" data-anchor-id="motions">motions</h3>
 </section>
-<section id="counts" class="level2">
-<h2 class="anchored" data-anchor-id="counts">counts</h2>
+<section id="counts" class="level3">
+<h3 class="anchored" data-anchor-id="counts">counts</h3>
 </section>
-<section id="motions-counts" class="level2">
-<h2 class="anchored" data-anchor-id="motions-counts">motions + counts</h2>
+<section id="motions-counts" class="level3">
+<h3 class="anchored" data-anchor-id="motions-counts">motions + counts</h3>
 </section>
-<section id="marks" class="level2">
-<h2 class="anchored" data-anchor-id="marks">marks</h2>
-<pre><code>        k</code></pre>
+<section id="marks" class="level3">
+<h3 class="anchored" data-anchor-id="marks">marks</h3>
+</section>
+<section id="registry" class="level3">
+<h3 class="anchored" data-anchor-id="registry">Registry</h3>
 </section>
 </section>
 <section id="additional-vim-bindings-resources" class="level1">
@@ -220,6 +239,17 @@ How to enable VIM in Rstudio?
 <li><a href="https://www.iopb.res.in/vimbook-OPL.pdf">older book but good starting materials</a></li>
 <li><a href="https://vimtricks.com/p/vim-jump-list">dunno</a></li>
 <li><a href="https://fzheng.me/2018/03/20/practical-vim-getting-around-faster/">pragmatic key strokes – for intermediates</a></li>
+</ul>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="actual-vim" class="level1">
+<h1>Actual VIM</h1>
+<section id="how-to-use-vim-if-you-are-in-a-windows-environment" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-vim-if-you-are-in-a-windows-environment">How to use VIM if you are in a windows environment</h2>
+<ul>
+<li><p>Your corporate enviorment may have allow you to have ‘Git BASH’ which is really helpful! because if you have that you have VIM!</p></li>
+<li><p>Alternatively your corporate environmetn may have Mysys</p></li>
 </ul>
 </section>
 <section id="how-to-find-your-.vimrc-file" class="level2">
@@ -236,26 +266,47 @@ How to enable VIM in Rstudio?
 <section id="setting-up-vim-first-time" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-vim-first-time">Setting up VIM first time</h2>
 <p>Below are helpful commands to set up in your vimrc to help making vim sing</p>
+<p><span style="color: grey">Set’s VIM so that it won’t be capitible with Vi</span></p>
 <ul>
 <li>:set nocompatible</li>
-<li>:set number (nu)</li>
-<li>:set relativenumber (rnu)</li>
-<li>:set hlsearch ▶ highlight words in a search</li>
-<li>:set ruler ▶ provides row and column index</li>
-<li>:set autoindent</li>
-<li>:set incrsearch == incremental search</li>
-<li>:set autowrite ▶ automatic save</li>
-<li>set cursorline ▶ highlight current row</li>
-<li>set cursorcolumn ▶ highlight current column</li>
-<li>set showcmd</li>
-<li>set backspace=indent,eol,start</li>
-<li>set backup</li>
-<li>let mapleader = “&lt;space&gt;” ▶ map leader key</li>
-<li>nobell=all == turns off visual and audio bells</li>
 </ul>
+<p>[Gives each line a number]</p>
+<ul>
+<li>:set number (nu) [Gives each line a number]</li>
+<li>:set relativenumber (rnu) [Gives each line a number]</li>
+<li>:set hlsearch ▶ highlight words in a search [Gives each line a number]</li>
+<li>:set ruler ▶ provides row and column index [Gives each line a number]</li>
+<li>:set autoindent [Gives each line a number]</li>
+<li>:set incrsearch == incremental search [Gives each line a number]</li>
+<li>:set autowrite ▶ automatic save [Gives each line a number]</li>
+<li>set cursorline ▶ highlight current row [Gives each line a number]</li>
+<li>set cursorcolumn ▶ highlight current column [Gives each line a number]</li>
+<li>set showcmd [Gives each line a number]</li>
+<li>set backspace=indent,eol,start [Gives each line a number]</li>
+<li>set backup [Gives each line a number]</li>
+<li>let mapleader = “&lt;space&gt;” ▶ map leader key [Gives each line a number]</li>
+<li>nobell=all == turns off visual and audio bells [Gives each line a number]</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Leaderkey concept
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Leaderkey is a</p>
+</div>
+</div>
 </section>
-<section id="mappings" class="level2">
-<h2 class="anchored" data-anchor-id="mappings">Mappings</h2>
+<section id="additional-set-ups" class="level2">
+<h2 class="anchored" data-anchor-id="additional-set-ups">Additional set ups</h2>
+<ul>
+<li>This will depend on your linux set up</li>
+<li>If you are using a barebones linux setup you may require more set up lets go ## Mappings</li>
+</ul>
 <section id="mappings-to-decrease-repititiveness" class="level3">
 <h3 class="anchored" data-anchor-id="mappings-to-decrease-repititiveness">Mappings to decrease repititiveness</h3>
 <ul>
@@ -311,7 +362,7 @@ How to enable VIM in Rstudio?
 <h2 class="anchored" data-anchor-id="patterns-to-know">Patterns to know</h2>
 <section id="search" class="level3">
 <h3 class="anchored" data-anchor-id="search">Search</h3>
-<p>VIM has very powerful search functionality with <code>/</code></p>
+<p>VIM has very powefful search functionality with <code>/</code></p>
 <ul>
 <li>Use the ‘/’ to search for a key word</li>
 <li>if multiple matches you can use ‘n’ to select the next option.</li>

@@ -7,6 +7,8 @@ title: "Vim"
 
 Vim is a keybinding that has a bit of cult following. It will look and feel different than your traditional key bindings (eg what is in front of your hands today) but over time, you will be will be more productive and efficient. Honestly -- it will excite you.
 
+> Getting started is the hardest because its new -- The Primeagen
+
 
 :::{.callout-note}
 ## What is a keybinding?
@@ -64,7 +66,6 @@ Given that you are essentially learning VIM lite -- why go through with this at 
 
 Before we enable VIM in RStudio we need to talk about two key modes, how you switch between and interact with these modes 
 
-
 ### Insert Mode
 
 This will be the most familiar to you as this mode is basically the interface you are most used to today.
@@ -73,8 +74,12 @@ You press the letter "a" and you see the letter "a" printed on the screen. You w
 
 There is nothing controversial or hard to learn about this mode -- this mode works as you are used to today.
 
-However, believe it or not -- you will try to spend as little time in this mode as possible. The real fun starts in what is known as normal mode -- which is the mode you will first start in
+However, believe it or not -- you will try to spend as little time in this mode as possible. That is because this mode should only be used to enter in text -- not for navigation around your document or between paragraphas, not for highlighting words or sections, not for editing or deleting texts -- you get the point. 
 
+Getting out of the habit of using insert mode for nothing more than just inserting text will be an initial source of frustration
+
+
+The real fun starts in what is known as 'normal mode' -- which is the mode you will first start in which is used mainly for navigating around your document, neutral mode that you will transition to other modes from, 
 
 ::: {.callout-note collapse="true"}
 
@@ -82,8 +87,6 @@ However, believe it or not -- you will try to spend as little time in this mode 
 
 > To get out of insert mode and switch to normal mode you need to press <esc> or <ctrl> +[. (note in real vim you can create new key mappings so that you can use any key combination to to escape mode). I recommend to start with esc but eventually you want to move towards <ctrl> + [ because it **should** be less reaching for your pinky fingers.
 :::
-
-## Normal mode 
 
 When you are in normal mode, at first glance everything will be the same -- with one exception.
 
@@ -95,12 +98,11 @@ However when you start typing in normal mode that is when you will start to see 
 
 To move around in this mode you can theoritically still use the arrow keys but honestly the quicker you ditch that habit the better.
 
-Instead you use hjk and l to go left, down, up and right (respecively)
+Instead you use 'hjk' and 'l' to go 'left', 'down', 'up' and 'right' (respecively)
 
-This is a great place for you to start your  transformation to a VIM user. Coincidently it will be the same time when you also pull out your hair in frustration 
+This is a great place for you to start your  transformation to a VIM user. Coincidently it will be the same time when you also pull out your hair in frustration. 
 
-In theory you use this mode to navigate around your spread sheet, move,change or delete words and line. To insert new text you need to be in insert mode.
-
+You use this mode to navigate around your spread sheet, move,change or delete words and line. To insert new text you need to be in insert mode.
 
 ::: {.callout-note collapse="true"}
 
@@ -108,8 +110,7 @@ In theory you use this mode to navigate around your spread sheet, move,change or
 
 To go into insert mode there are multiple options depending where in the word, paragraph or line you want the cursur to "jump" to. However in practice you will principlly be suing four letters to do so:
 
-i,a,s or o (or there are capital equivalents
-
+i,a,s or o (or there are capital equivalents)
 :::
 
 
@@ -143,7 +144,6 @@ In RStudio VIM you will get a light flavor of the keybindings, no support for cu
 
 # VIM keybindings in Rstudio
 
-
 let's explore the insert optons in more detail:
 
 'i' will *i*nsert your cursor to the left of your bloc
@@ -155,7 +155,6 @@ let's explore the insert optons in more detail:
 
 Again once you are in insert mode -- the only way to leave insert mode is to esc
 
-
 Why all the different ways to go into insert mode?
 
 you want to change your mindset towards minimizing the amount of keystrokes required to write your document.
@@ -164,7 +163,7 @@ Being precise with where exactly you want your cursor to go enables you to a avo
 
 You want to be a surgeron --minimal, light touch and ruthless with your efficiency
 
-to improve your productivity let us go to your favorite mode 
+To improve your productivity let us go to your favorite mode 
 (you just don't know it yet) -- normal mode
 
 As stated before you will want to try and stay in normal mode because of how addicting your efficiency wil be.
@@ -174,21 +173,63 @@ To move around in normal mode you need to use h,j,k and l. Probably the biggest 
 
 but stay with it! the pain you fill now will quickly make up for itself with gloarious macros and ridiculous efficiency with VIM.
 
-## motions
+### motions
 
-## counts
+These are the keybindings that help you move across your document, you can move move by character, word, line or  paragraph (or multiples of them).
 
-## motions + counts 
+We have already covered how to move your line one character at a time with h,j,k and l. However that will be really inefficient. 
+
+If you want sail through your line a useful keybinding is 'w','e', 'b' and 'ge' 
+
+This will enable to move you forward one "word" at a time.
+
+Whats the differnce between w and e? w will move you to the beginning of a word whereas e will move you to the end of the word.
+
+At this point -- you won't care about this distinction
+
+Want to move two words you can add a count to it -- eg. '2w' will move you two "words". 5w will move you five words.
+
+Additional include '0' and '$' to move you to the beginning or the end of the sentence (still in normal mode)
 
 
 
-## marks
+
+#### vertical motions
+
+so how to move down a paragraph
+
+who do move down a a screen
 
 
-            
+#### horizonal motions
 
 
-            k
+
+
+
+### counts
+
+1,2,3 or 4 are all examples of counts
+
+
+### motions + counts 
+
+
+### actions
+
+
+d -- delete
+x -- delete character
+y -- copy
+c -- change
+p -- paste
+
+
+### marks
+
+
+### Registry
+
 
 
 # Additional VIM bindings / Resources
@@ -198,6 +239,18 @@ but stay with it! the pain you fill now will quickly make up for itself with glo
 -   [older book but good starting materials](https://www.iopb.res.in/vimbook-OPL.pdf)
 -   [dunno](https://vimtricks.com/p/vim-jump-list)
 -   [pragmatic key strokes -- for intermediates](https://fzheng.me/2018/03/20/practical-vim-getting-around-faster/)
+
+{{< pagebreak >}}
+
+# Actual VIM
+
+## How to use VIM if you are in a windows environment
+
+-   Your corporate enviorment may have allow you to have 'Git BASH' which is really helpful! because if you have that you have VIM!
+
+-   Alternatively your corporate environmetn may have Mysys 
+
+
 
 ## How to find your .vimrc file 
 
@@ -217,22 +270,58 @@ Note, if your vimrc file doesn't exist you can just create a new one
 
 Below are helpful commands to set up in your vimrc to help making vim sing
 
--   :set nocompatible
--   :set number (nu)
--   :set relativenumber (rnu)
--   :set hlsearch    ▶  highlight words in a search
--   :set ruler       ▶  provides row and column index
--   :set autoindent
--   :set incrsearch == incremental search
--   :set autowrite   ▶  automatic save
--   set cursorline   ▶  highlight current row
--   set cursorcolumn ▶  highlight current column
--   set showcmd
--   set backspace=indent,eol,start
--   set backup
--   let mapleader = "\<space>" ▶ map leader key
--   nobell=all     == turns off visual and audio bells
+[Set's VIM so that it won't be capitible with Vi]{style="color: grey"}
 
+-   :set nocompatible
+
+[Gives each line a number]
+
+-   :set number (nu)
+
+[Gives each line a number]
+
+-   :set relativenumber (rnu)
+
+[Gives each line a number]
+
+-   :set hlsearch    ▶  highlight words in a search
+
+[Gives each line a number]
+-   :set ruler       ▶  provides row and column index
+[Gives each line a number]
+-   :set autoindent
+[Gives each line a number]
+-   :set incrsearch == incremental search
+[Gives each line a number]
+-   :set autowrite   ▶  automatic save
+[Gives each line a number]
+-   set cursorline   ▶  highlight current row
+[Gives each line a number]
+-   set cursorcolumn ▶  highlight current column
+[Gives each line a number]
+-   set showcmd
+[Gives each line a number]
+-   set backspace=indent,eol,start
+[Gives each line a number]
+-   set backup
+[Gives each line a number]
+-   let mapleader = "\<space>" ▶ map leader key
+[Gives each line a number]
+-   nobell=all     == turns off visual and audio bells
+[Gives each line a number]
+
+
+:::{.callout-note}
+## Leaderkey concept
+
+Leaderkey is a
+
+:::
+
+## Additional set ups
+
+-   This will depend on your linux set up
+-   If  you are using a barebones linux setup you may require more set up lets go 
 ## Mappings
 
 ### Mappings to decrease repititiveness
@@ -381,3 +470,32 @@ VIM has very powefful search functionality with `/`
 -   o ▶ to insert space beneath the line
 -   O ▶ to insert space above the current line
 -   g ctrl-g == display words, lines and bytes
+
+:25t. -- copies line 25 and pastes it below
+:t20 -- copies current line and pastes it below line 20
+
+in insert mode ctrl+r+= and arthemtic operation to add calculator to vim
+[copy, move, delete in norm mode](https://jovica.org/posts/vim_advanced_copy/)
+
+
+t or co = copy
+m = move
+d = delete
+. = current line
+
+start_range,end_rate,motion,line
+
+gi == last insert
+gv -- last visual
+
+shift+k over bash command will open man pages
+
+gx -- to open url (must have https://)
+
+g+ ctrl+g =count words, lines,etc
+
+ctrl + a == incremental number
+ctrl+ x == decrease number
+
+
+

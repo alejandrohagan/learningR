@@ -19,8 +19,6 @@ payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
 payouts
 
 
-
-
 list <- map(
   .x = c("2023-1-01","2022-12-02","2022-01-30")
   ,.f= function(date) seq.Date(from=ymd("2022-01-01"),to = ymd(date),by = "days")
@@ -75,7 +73,6 @@ score <- function (symbols) {
 score()
 
 ```
-
 
 
 ```{r}
@@ -208,8 +205,11 @@ try(match.fun(outer, descend = FALSE)) #-> Error:  not a function
 call("*",outer) %>% eval()
 
 
-
 ```
+
+
+
+
 ```{r}
 
 calculate <- function(expr){
@@ -230,22 +230,27 @@ test <- function(fn,col){
   
   
   col <- sym(col)
-  mean_db <- expr(diamonds_db %>% 
-summarize(
-  mean=mean(!!col)
-))
-  
-    sum_db <- expr(diamonds_db %>% 
+
+ mean_db <- expr(diamonds_db %>% 
+    summarize(
+         mean=mean(!!col)
+         )
+    )
+
+sum_db <- expr(diamonds_db %>% 
 summarize(
   sum=sum(!!col)
-))
+  )
+)
     
     
 median_db <- expr(
+
   diamonds_db %>% 
+
 summarize(
   median=median(!!col)
-)
+  )
 )
 
 
@@ -319,13 +324,4 @@ y <- 10
 paste0("The value of x is ", x, " and y is ", y, ".")
 sprintf("The value of x is %s and y is %i.", x, y)
 
-
 ```
-
-i
-
-```{r}
-
-```
-
-

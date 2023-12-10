@@ -266,20 +266,19 @@ calib_tbl <- model_tbl %>%
 ```
 
 
+- key field is .calibration_data which will have the actual, forecasted and 
+residuals columns
 
 
 
-
-
-- key field is .calibration_data
-- 
 ### how to see model results
 
 -   Use the `modetime_forecast()` to see the tables of forecast results and actual date with confidence interfaces
-Need to have actual data
+-   Need to have actual data (pass it to actual argument)
 -   Need to have testing data
 -   Need to transform the xxx data to match the pre-processing steps
 -   If you pass the calibradated model that has a data already in it you don't need to supply new data
+
 - Use `plot_modeltime_forecast()` to then see the forecast options
   - option to view as trillescope.js and other visualization options
 
@@ -317,7 +316,6 @@ calib_tbl %>%
 
 
 ```{r}
-
 
 df_store_daily <- df %>%
   group_by(store_key) %>% 
@@ -374,19 +372,12 @@ df_daily:
 rec_basic_raw=recipe(rev~ . ,data=training(df_split))
 ```
 
-## time series signaturel
+## time series signature
 1.3.4 in video --
 
-
-recipe(formula,training(splits)) %>% 
-step_timeseries_Signature()
-
 ```{r}
-
-
 rec_basic=rec_basic_raw %>% 
 step_timeseries_signature(date_key)
-
 ```
 
 # use this to center large variables
@@ -400,10 +391,15 @@ step_normalize(index.num,_year)
 
 ```{r}
 rec_basic=rec_basic %>%
-step_rm(starts_with(".iso"),ends_with(".xts"),contains("hour"),contains("minute"),contains("second"),contains("am.pm"))
+step_rm(
+starts_with(".iso")
+,ends_with(".xts")
+,contains("hour")
+,contains("minute")
+,contains("second")
+,contains("am.pm")
+)
 ```
-
-
 
 ###  add dummy steps
 
@@ -417,20 +413,21 @@ rec_basic <- rec_basic %>%
     
 
 ```{r}
+
 rec_basic %>% 
   prep() %>% 
   juice()
+
 ```
 
 
 # overview of EDA 
 
-
 -   visualize time series
 -   plot acf diagnostics  (plot_acf_diagnostics)
     -   auto correaltion
     -   correlation between predictaors
--   plot seasonality to get idea of time attributes (plot_seasonal_diagnostics()
+-   plot seasonality to get idea of time attributes (`plot_seasonal_diagnostics()`)
 -   plot  anomaly detection to get an idea of outliers (`plot_anomaly_diagnostics()`)
 -   get linear model as quickly as you can
 
@@ -459,8 +456,6 @@ df_daily %>%
     # ,.show_ccf_vars_only = TRUE
   )
 ```
-
-
 
 ## sesaonality
 

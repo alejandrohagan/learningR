@@ -57,10 +57,5 @@ library(magrittr)
   x=small_diamonds_sdf
   ,f=rowwise_fun
 ) 
-
- 
- 
-
-
 ```
 
