@@ -1,0 +1,200 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "",
+    "text": "Index",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#excel-to-r-a-survivors-guide-for-the-corporate-environment",
+    "href": "index.html#excel-to-r-a-survivors-guide-for-the-corporate-environment",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "text": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Introduction",
+    "text": "Introduction",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#set-up-configuration",
+    "href": "index.html#set-up-configuration",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Set Up & Configuration",
+    "text": "Set Up & Configuration\n\nRstudio\nVisual Studio\nVim",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#the-whole-game",
+    "href": "index.html#the-whole-game",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "The Whole Game",
+    "text": "The Whole Game\n\nReproducible research\nVersion Control\nImporting data from different systems and environments\nUsing statistical to shortcut business intelligence functions",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#rethinking-data",
+    "href": "index.html#rethinking-data",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Rethinking data",
+    "text": "Rethinking data\n\nLearning about tabular data vs. report data and why it is important\nColumn naming convention and best practices\ndata dictionary\nData principles\n-https://www.ibcs.com/",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#lookup-tables",
+    "href": "index.html#lookup-tables",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "lookup tables",
+    "text": "lookup tables\n\nhow to create them\nhow to use them",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#augmenting-and-creating-calculation",
+    "href": "index.html#augmenting-and-creating-calculation",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Augmenting and creating calculation",
+    "text": "Augmenting and creating calculation\n\nadding columns and calculated columns",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#grouping-and-summzaring-super-power-1",
+    "href": "index.html#grouping-and-summzaring-super-power-1",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "## grouping and summzaring (super power 1)",
+    "text": "## grouping and summzaring (super power 1)",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#filter-duplicates-advanced-aggregations",
+    "href": "index.html#filter-duplicates-advanced-aggregations",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "## filter, duplicates, advanced aggregations",
+    "text": "## filter, duplicates, advanced aggregations",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#time-intelligence-functions",
+    "href": "index.html#time-intelligence-functions",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Time Intelligence Functions",
+    "text": "Time Intelligence Functions\n\nPower BI type intelligence functions",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#merge-and-joins-super-power-2",
+    "href": "index.html#merge-and-joins-super-power-2",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Merge and joins (super power 2)",
+    "text": "Merge and joins (super power 2)",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#pivot-and-unpivot-super-power-3",
+    "href": "index.html#pivot-and-unpivot-super-power-3",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "pivot and unpivot (super power 3)",
+    "text": "pivot and unpivot (super power 3)",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#columnwise-vs.-rowwise-aggregation-super-power-4",
+    "href": "index.html#columnwise-vs.-rowwise-aggregation-super-power-4",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "columnwise vs. rowwise aggregation (super power 4)",
+    "text": "columnwise vs. rowwise aggregation (super power 4)",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#importing-data",
+    "href": "index.html#importing-data",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Importing Data",
+    "text": "Importing Data",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#spark-database",
+    "href": "index.html#spark-database",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Spark & Database",
+    "text": "Spark & Database",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#statistical-applications-for-buinsess-intelligence",
+    "href": "index.html#statistical-applications-for-buinsess-intelligence",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Statistical Applications for Buinsess Intelligence",
+    "text": "Statistical Applications for Buinsess Intelligence\n\nlm+ simple= group_by()+ summarize(mean)\nrq+ simple =group_by()+summarize(median)\nlm+ interaction",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  },
+  {
+    "objectID": "index.html#visualization-packages",
+    "href": "index.html#visualization-packages",
+    "title": "Excel to R: A Survivor’s Guide for the Corporate Environment",
+    "section": "Visualization packages",
+    "text": "Visualization packages\n-   ggplot()\n    -ggiraph\n    -gganimate\n-   gt()\n-   observablejs\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.0     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nWarning: Since gt v0.6.0 the `fmt_missing()` function is deprecated and will soon be\nremoved.\n• Use the `sub_missing()` function instead.\nThis warning is displayed once every 8 hours.\n\n\n\n\n\n\n\n\n\n\n\nFigure 1",
+    "crumbs": [
+      "Introduction",
+      "Index"
+    ]
+  }
+]

@@ -1,6 +1,7 @@
 project:
   type: book
-
+  output-dir: docs
+  
 book:
   title: "Excel to R: A Survivor's Guide for the Corporate Environment"
   author: "Alejandro Hagan"
@@ -20,11 +21,8 @@ format:
     theme:
      light: flatly
      dark: darkly
-    output_dir: docs
   pdf:
     documentclass: scrreprt
-
-editor: source
 
 
 
