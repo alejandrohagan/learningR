@@ -1,0 +1,16 @@
+{
+  "hash": "856fd50829516f2b0dda106744802ce1",
+  "result": {
+    "markdown": "---\ntitle: \"spark\"\n---\n\n\n-   There are two ways to manipulate data in spark, sparklyr and SparkR\n-   Sparklyr uses dblyr backend so many of your dplyr calls can be used\n-   Furthermore you can use any R package if you use `spark_apply()`\n-   Using spark is pretty consistent any of database backends\n-   Create a spark connection with `spark_connect()` and assign it to a variable usually \"sc\"\n    -   Can either use master=\"local\" or if you are in databricks you can use master=\"databricks\"\n-   Then you can import your data referencing your spark connection\n    - for inline data you can simply reference copy_to(sc,df,df_name) and assign to a object (typically sdf prefix)\n-   From there you can use all your standard dblyr type functions however sometimes certain functions won't work\n-   The master trick here is to use the `sparklyr::spark_apply()` function\n    -   pass the df object to as argument and then pass function or custom function\n    -   I don't think there are room for additional parameters? but I may be wrong\n    -   If you use %>% then you usually need to call the library(magrittr) in your function\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# load libraries\nlibrary(tidyverse)\nlibrary(sparklyr)\n\n\n#Create spark connection\nsc <- sparklyr::spark_connect(master=\"local\")\n\n# take a data object and copy it too a spark object\n\ndiamonds_sdf <- sparklyr::copy_to(sc,diamonds,\"diamonds_sprk\")\n\n# filter the object down to smaller size\n small_diamonds_sdf <- diamonds_sdf %>% head(100)\n\n\n#  create custom rowwise function\nrowwise_fun <- function(e){\n\nlibrary(magrittr)\n e %>% \n   dplyr::rowwise() %>% \n   dplyr::mutate(test=sum(dplyr::c_across(x:z)))\n}\n\n# use function on the dataset \n\n\n sparklyr::spark_apply(\n  x=small_diamonds_sdf\n  ,f=rowwise_fun\n) \n```\n\n::: {.cell-output .cell-output-stdout}\n```\n# Source: spark<?> [?? x 11]\n   carat cut       color clarity depth table price     x     y     z  test\n   <dbl> <chr>     <chr> <chr>   <dbl> <dbl> <int> <dbl> <dbl> <dbl> <dbl>\n 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43  10.4\n 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31  10.0\n 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31  10.4\n 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63  11.1\n 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75  11.4\n 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48  10.4\n 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47  10.4\n 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53  10.7\n 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49  10.1\n10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39  10.4\n# ℹ more rows\n```\n:::\n:::\n",
+    "supporting": [
+      "spark_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

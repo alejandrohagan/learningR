@@ -118,7 +118,25 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{longtable}
+\usepackage{colortbl}
+\usepackage{array}
 \KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
 \makeatletter
 \makeatother
 \makeatletter
@@ -192,7 +210,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, interior hidden, boxrule=0pt, frame hidden, breakable, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, breakable, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -226,11 +244,68 @@ Corporate Environment}
 
 \markright{Set Up \& Configuration}
 
-\hypertarget{data-in-a-table-format}{%
-\section*{data in a table format}\label{data-in-a-table-format}}
-\addcontentsline{toc}{section}{data in a table format}
+\begin{itemize}
+\tightlist
+\item
+  Rstudio
+\item
+  Visual Studio
+\item
+  Vim
+\end{itemize}
 
-\markright{data in a table format}
+\hypertarget{the-whole-game}{%
+\section*{The Whole Game}\label{the-whole-game}}
+\addcontentsline{toc}{section}{The Whole Game}
+
+\markright{The Whole Game}
+
+\begin{itemize}
+\tightlist
+\item
+  Reproducible research
+\item
+  Version Control
+\item
+  Importing data from different systems and environments
+\item
+  Using statistical to shortcut business intelligence functions
+\end{itemize}
+
+\hypertarget{rethinking-data}{%
+\section*{Rethinking data}\label{rethinking-data}}
+\addcontentsline{toc}{section}{Rethinking data}
+
+\markright{Rethinking data}
+
+\begin{itemize}
+\item
+  Learning about tabular data vs.~report data and why it is important
+\item
+  Column naming convention and best practices
+\item
+  data dictionary
+\item
+  Data principles
+
+\begin{verbatim}
+-https://www.ibcs.com/
+\end{verbatim}
+\end{itemize}
+
+\hypertarget{lookup-tables}{%
+\section*{lookup tables}\label{lookup-tables}}
+\addcontentsline{toc}{section}{lookup tables}
+
+\markright{lookup tables}
+
+\begin{itemize}
+\tightlist
+\item
+  how to create them
+\item
+  how to use them
+\end{itemize}
 
 \hypertarget{augmenting-and-creating-calculation}{%
 \section*{Augmenting and creating
@@ -239,27 +314,40 @@ calculation}\label{augmenting-and-creating-calculation}}
 
 \markright{Augmenting and creating calculation}
 
-\hypertarget{grouping-and-summzaring-super-power-1}{%
-\section*{grouping and summzaring (super power
-1)}\label{grouping-and-summzaring-super-power-1}}
-\addcontentsline{toc}{section}{grouping and summzaring (super power 1)}
+\begin{itemize}
+\tightlist
+\item
+  adding columns and calculated columns
+\end{itemize}
 
-\markright{grouping and summzaring (super power 1)}
+\hypertarget{grouping-and-summzaring-super-power-1}{%
+\section*{\#\# grouping and summzaring (super power
+1)}\label{grouping-and-summzaring-super-power-1}}
+\addcontentsline{toc}{section}{\#\# grouping and summzaring (super power
+1)}
+
+\markright{\#\# grouping and summzaring (super power 1)}
 
 \hypertarget{filter-duplicates-advanced-aggregations}{%
-\section*{filter, duplicates, advanced
+\section*{\#\# filter, duplicates, advanced
 aggregations}\label{filter-duplicates-advanced-aggregations}}
-\addcontentsline{toc}{section}{filter, duplicates, advanced
+\addcontentsline{toc}{section}{\#\# filter, duplicates, advanced
 aggregations}
 
-\markright{filter, duplicates, advanced aggregations}
+\markright{\#\# filter, duplicates, advanced aggregations}
 
 \hypertarget{time-intelligence-functions}{%
-\section*{time intelligence
-functions}\label{time-intelligence-functions}}
-\addcontentsline{toc}{section}{time intelligence functions}
+\section*{Time Intelligence
+Functions}\label{time-intelligence-functions}}
+\addcontentsline{toc}{section}{Time Intelligence Functions}
 
-\markright{time intelligence functions}
+\markright{Time Intelligence Functions}
+
+\begin{itemize}
+\tightlist
+\item
+  Power BI type intelligence functions
+\end{itemize}
 
 \hypertarget{merge-and-joins-super-power-2}{%
 \section*{Merge and joins (super power
@@ -283,13 +371,57 @@ power 4)}
 
 \markright{columnwise vs.~rowwise aggregation (super power 4)}
 
+\hypertarget{importing-data}{%
+\section*{Importing Data}\label{importing-data}}
+\addcontentsline{toc}{section}{Importing Data}
+
+\markright{Importing Data}
+
+\hypertarget{spark-database}{%
+\section*{Spark \& Database}\label{spark-database}}
+\addcontentsline{toc}{section}{Spark \& Database}
+
+\markright{Spark \& Database}
+
+\hypertarget{statistical-applications-for-buinsess-intelligence}{%
+\section*{Statistical Applications for Buinsess
+Intelligence}\label{statistical-applications-for-buinsess-intelligence}}
+\addcontentsline{toc}{section}{Statistical Applications for Buinsess
+Intelligence}
+
+\markright{Statistical Applications for Buinsess Intelligence}
+
+\begin{itemize}
+\tightlist
+\item
+  lm+ simple= group\_by()+ summarize(mean)
+\item
+  rq+ simple =group\_by()+summarize(median)
+\item
+  lm+ interaction
+\end{itemize}
+
+\hypertarget{visualization-packages}{%
+\section*{Visualization packages}\label{visualization-packages}}
+\addcontentsline{toc}{section}{Visualization packages}
+
+\markright{Visualization packages}
+
+\begin{verbatim}
+-   ggplot()
+    -ggiraph
+    -gganimate
+-   gt()
+-   observablejs
+\end{verbatim}
+
 \begin{verbatim}
 -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.2     v readr     2.1.4
-v forcats   1.0.0     v stringr   1.5.0
-v ggplot2   3.4.2     v tibble    3.2.1
-v lubridate 1.9.2     v tidyr     1.3.0
-v purrr     1.0.1     
+v dplyr     1.1.4     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.4.4     v tibble    3.2.1
+v lubridate 1.9.3     v tidyr     1.3.0
+v purrr     1.0.2     
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
@@ -311,7 +443,7 @@ This warning is displayed once every 8 hours.
 \begin{longtable}{lllll}
 \toprule
 chapter & concept & excel & r & comment \\ 
-\midrule
+\midrule\addlinespace[2.5pt]
   & IDE  & Ribbon vs. main vs. power pivot vs. power query 
 Customize ribbon 
   & Rmarkdown 
@@ -319,44 +451,39 @@ Code chunks vs. text 
 kniting  &   \\ 
 1 & Named objects; how to create objects, label and reference, and add columns or rows to the object 
 How to create series from existing functions including, numbers, dates and repeating strings 
-  & - & Tibbles 
-Lists 
-Vectors 
-dataeditR 
-Arrange() 
-Generating data 
--numbers 
--letters 
--dates 
--rep() 
--seq() 
--mutate 
-  & Emphasis on tabular data 
+  & - & - & Emphasis on tabular data 
 The need for quality data  \\ 
-1 & - & Named Cells & objects, lists and vectors & - \\ 
+1 & - & generating data & Generating data  
+-numbers  
+-letters  
+-dates  
+-rep()  
+-seq()  
+-mutate    & - \\ 
+1 & - & Named Cells & vectors,lists & - \\ 
 1 & - & Named Tables & tibbles & - \\ 
 1 & - & Adding Columns to Table & mutate & - \\ 
-1 & - & Adding rows to Table & bind\_rows / bind\_columns & - \\ 
-1 & - & Referencing Named Objects & ls() & - \\ 
+1 & - & Adding rows to Table & update\_rows? & - \\ 
+1 & - & Referencing Named Objects & name & - \\ 
 1 & - & Repeat last actions & ?? & - \\ 
-1 & - & Tab References & ?? & - \\ 
+1 & - & Tab References &   & - \\ 
 1 & - & edit named objects & ?? & - \\ 
 1 & - & creating vectors & vectors & - \\ 
 1 & - & fill series tips & tidyr::fill & - \\ 
 1 & - & existing data & ?? & - \\ 
 1 & - & create new series of numbers & seq() & - \\ 
 1 & - & create new series of dates & seq.Date() & - \\ 
-1 & - & creates new series of characters & letters & - \\ 
+1 & - & creates new series of characters & sample() & - \\ 
 1 & - & flash fill tips & ?? & - \\ 
 1 & - & adding/subtracting/dividing/ multiplying columns & mutate & - \\ 
 1 & - & one formula works against all rows in a column & group\_by()? & - \\ 
 1 & - & rowwise equivalent & rowwise() & - \\ 
 1 & - & colwise equivalent & colwise()? & - \\ 
 1 & - & mean & mean & - \\ 
-1 & - & meidan & median & - \\ 
+1 & - & median & median & - \\ 
 1 & - & sum & sum & - \\ 
 1 & - & count & n & - \\ 
-1 & - & aggregate & - & - \\ 
+1 & - & aggregate & match.args() & - \\ 
 1 & - & error handling & - & - \\ 
 1 & - & Iferror()  & - & - \\ 
 1 & - & NA vs. NULL vs. ref & - & - \\ 
@@ -611,78 +738,16 @@ automation  & Bash  &   &   &   \\
 
 \markboth{Introduction}{Introduction}
 
-Listen up, fellow data wranglers and spreadsheet warriors! I have been
-to the darkest corners of the internet and beyond, searching for answers
-to the most impossible data problems. I've scoured every forum, every
-blog, every tutorial, and even ventured into the depths of the forbidden
-knowledge that mere mortals should not possess. But fear not, my
-friends, for I have returned with a solution that will save you from the
-agony and frustration of data manipulation.
+I have been to the darkest corners of the internet and beyond, searching
+for answers to the most impossible data problems. I've scoured every
+forum, every blog, every tutorial, and even ventured into the depths of
+the forbidden knowledge that mere mortals should not possess. But fear
+not, my friends, for I have returned with solutions that will save you
+agony and frustration.
 
 I'm not just talking about your everyday, run-of-the-mill data issues.
 No, no, no. I'm talking about the kind of data that would make even the
-most experienced analyst quiver in their boots. Messy, inconsistent,
-non-standard, and downright ugly data that makes you want to throw your
-computer out the window. But fear not, for I have conquered these data
-demons and emerged victorious.
-
-And now, I am here to share my knowledge with you, my dear comrades in
-data crunching. This book will solve 80\% of your data problems, with no
-complex macros or advanced languages required. It's like a data
-superhero that will swoop in and save the day, leaving you with more
-time to sip on a margarita and bask in the glory of your newfound data
-skills.
-
-So if you're tired of staring at your computer screen, tears streaming
-down your face, and feeling like you're stuck in a never-ending data
-nightmare, then this book is for you. It's time to take back control of
-your data, and with my help, you'll be a data champion in no time.
-
-This is meant to quickly reference guide. I will teach you patterns
-techniques so that you can quickly and effectively get to solutions to
-your problems. This means building up your analysis frameworks and tool
-kits.
-
-Please clean this up and make it more funny and dramatic I've scoured
-every tip, every yahoo message board, every stackoverflow question,
-every \#RStats tweet, mr. excel forum. I've read all the intro for dummy
-books, blogs, secret forums. Youtube videos for days. Udemy? Done it.
-xxx I know it. I've reached all the dead ends that you will encounter
-and I've stared at the screen frustrated. I've been given all the last
-minute and impossible tasks to produce reports and faced the reality of
-ugly, inconsistent, messy data that you will find. I've heard all the
-promises of automation and how Power Query, DAX, Tableau, Power BI,
-snowflake, databricks will help only to have the same frustration as
-before but just a different problem.I've been in your shoes as we
-somehow have more tools and data that we ever had before our data
-increases yet tools get more complicated. Promises made and promises
-broken.
-
-But this isn't about me, this is about you. I've cried, I've sweat blood
-and cried tears so that you don't have to. After working years in
-financial planning, budgeting \& analysis roles, manipulating system
-data, external data, data meant to help that hurts, non standard data,
-excel models that are so large you pray to the gods that they don't
-crash.
-
-But there is a solution. If you are dreading your monthly report, your
-weekly stewardship and KPIs, I am here to tell you that this book will
-get you answers. Answers that you can use today to fix your problems. No
-complex macros to learn, no advanced languages. This will solve 80\% of
-your problems, and will point you towards resources to solve the
-remaining.
-
-Listen up, fellow data wranglers and spreadsheet warriors! I have been
-to the darkest corners of the internet and beyond, searching for answers
-to the most impossible data problems. I've scoured every forum, every
-blog, every tutorial, and even ventured into the depths of the forbidden
-knowledge that mere mortals should not possess. But fear not, my
-friends, for I have returned with a solution that will save you from the
-agony and frustration of data manipulation.
-
-I'm not just talking about your everyday, run-of-the-mill data issues.
-No, no, no. I'm talking about the kind of data that would make even the
-most experienced analyst quiver in their boots. Messy, inconsistent,
+most experienced analyst shake in their boots. Messy, inconsistent,
 non-standard, and downright ugly data that makes you want to throw your
 computer out the window. But fear not, for I have conquered these data
 demons and emerged victorious.
@@ -741,45 +806,13 @@ Be patient, the concepts taught here are not hard or complex they are
 just \emph{different} than what you know. As you become more familiar
 with the new concepts you will learn it very quickly.
 
-Listen up, my fellow data warriors! This quick reference guide will be
-your ticket to solving data problems in a snap. I'll teach you the most
-effective patterns and techniques so that you can build up your analysis
-frameworks and tool kits like a pro.
-
-And let me tell you, I don't just throw around the word ``effective''
-lightly. I'm all about balancing your time and making sure you're not
-wasting it on skills that only you can use. Sure, you might be able to
-do some pretty advanced stuff, but what good is it if you're the only
-one who knows how to use it? The person who replaces you will undo it in
-a heartbeat, and all that time and effort will go down the drain.
-
-That's why I'm all about doing a typical problem in a defined amount of
-time. If you can't do a simple analysis in 15 minutes, then what's the
-point? You need to be able to train and benefit from your work, and that
-means being able to automate processes and semi-automate others. Trust
-me, by the time you're done with this guide, you'll be excited to tackle
-data head-on. It won't intimidate you anymore, and you'll be confident
-in your abilities.
-
-Now, I'm not going to lie to you and tell you that you'll be a data
-superstar in just two weeks. It's going to take some time to replicate
-your existing Excel skill set in R and surpass it. But trust me when I
-say that the investment is worth it. Once you can automate a report in
-10 minutes that used to take you a whole week, you'll wonder how you
-ever lived without these skills.
-
-So be patient, my friends. The concepts I'm about to teach you are not
-hard or complex, they're just different from what you're used to. But as
-you become more familiar with them, you'll learn them in no time. Get
-ready to become a data ninja, my friends. The future is yours!
-
 \hypertarget{books-purpose}{%
 \subsection*{Books purpose}\label{books-purpose}}
 \addcontentsline{toc}{subsection}{Books purpose}
 
 This book will guide you through realistic business scenarios on how to
-create and automate reports with an emphasis on maximizing your
-team'seffectiveness
+create and automate reports with an emphasis on maximizing your team's
+effectiveness
 
 You read this and 1) will know how to apply tools to the real life
 situations that you have faced with an emphasis of effectiveness (as
@@ -787,14 +820,14 @@ defined by your team \& maintenance of the reports you build)
 
 While there are some fantastic R reasources \url{www.bigbookofR.com},
 the referenced example datasets rarely prepare you for the real life
-complexities of dealling with Corporate datasets, including challenges
-of dealing with messy Corporate datasets, maintaining reports when there
-is significant process changes, and system and offline manual data
-manipulation required to generate repoerts.
+complexities of dealing with Corporate datasets, including challenges of
+dealing with messy Corporate datasets, maintaining reports when there is
+significant process changes, and system and offline manual data
+manipulation required to generate reports.
 
-Additionaly, whther it is R or python, most learning resources tend to
+Additionally, whether it is R or python, most learning resources tend to
 have a heavy focus on statistical techniques / applications which while
-useful in certain contexts in reality do not help most analyts or
+useful in certain contexts in reality do not help most analyst or
 managers with their business reporting.
 
 This book is focused on developing effective analyst skills that will
@@ -808,309 +841,34 @@ they often involve wider resources or time commitments that you may not
 be able to maintain (however we will provide resources in case you are
 curious!)
 
+\begin{quote}
 The dirty secret of popular data science languages are they are
 \textbf{perishable}, that is to say if you don't use them frequently you
 will forget the techniques, syntax and common patterns to solve your
 issues.
+\end{quote}
 
-the real barrier and challenge to you learning R is not the language
-itself, although you won't believe it now, R is very simple to learn,
-the challenge will be in getting
+the real barrier and challenge to learning R is not the language itself,
+although you won't believe it now, R is very simple to learn, the
+challenge will be getting sufficient practice to learn the patterns in
+your daily life
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{R.home}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
+For this -- its up to you and your level of dedication / committment.
 
-\begin{verbatim}
-[1] "/usr/lib/R"
-\end{verbatim}
+I'd recommend to find 30 minutes every day to practice specific skill
+elements.
 
-\hypertarget{resources}{%
-\section*{Resources}\label{resources}}
-\addcontentsline{toc}{section}{Resources}
+Excels main benefit is its visual user interface -- eg you can click
+buttons, drag and drop columns/rows and you can see your data responds.
 
-\markright{Resources}
+To help with the R journey, we will introduce (when possible /
+appropriate) their corresponding Excel actions.
 
-\hypertarget{ggblanket-package}{%
-\subsection*{ggblanket package}\label{ggblanket-package}}
-\addcontentsline{toc}{subsection}{ggblanket package}
-
-\begin{itemize}
-\tightlist
-\item
-  simplified ggplot alternative package
-\end{itemize}
-
-\href{https://davidhodge931.github.io/ggblanket/articles/ggblanket.html}{ggblanket}
-
-\hypertarget{conditional-geoms-in-ggplot}{%
-\subsection*{Conditional geoms in
-ggplot}\label{conditional-geoms-in-ggplot}}
-\addcontentsline{toc}{subsection}{Conditional geoms in ggplot}
-
-(https://statisticsglobe.com/if-else-condition-add-extra-layer-ggplot2-plot-r)
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
--- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.2     v readr     2.1.4
-v forcats   1.0.0     v stringr   1.5.0
-v ggplot2   3.4.2     v tibble    3.2.1
-v lubridate 1.9.2     v tidyr     1.3.0
-v purrr     1.0.1     
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
-i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(                         }\CommentTok{\# Create example data}
-  \AttributeTok{x =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
-  \AttributeTok{y =} \FunctionTok{c}\NormalTok{(}\DecValTok{10}\SpecialCharTok{:}\DecValTok{1}\NormalTok{),}
-  \AttributeTok{category =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\DecValTok{5}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\StringTok{"B"}\NormalTok{, }\DecValTok{5}\NormalTok{))}
-\NormalTok{)}
-
-
-\NormalTok{ggp }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}    \CommentTok{\# Create a base plot }
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ category)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_minimal}\NormalTok{()}
-
-
-\NormalTok{threshold }\OtherTok{\textless{}{-}} \DecValTok{8}                                       \CommentTok{\# Set a threshold for the condition}
- 
-\NormalTok{ggp\_new }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{max}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{y) }\SpecialCharTok{\textgreater{}}\NormalTok{ threshold) \{            }\CommentTok{\# Add an extra layer based on the condition }
-\NormalTok{   ggp }\SpecialCharTok{+} 
-   \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =}\NormalTok{ threshold, }
-              \AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }
-              \AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-\NormalTok{    ggp}
-\NormalTok{  \}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{make-a-map-into-points}{%
-\section*{make a map into points}\label{make-a-map-into-points}}
-\addcontentsline{toc}{section}{make a map into points}
-
-\markright{make a map into points}
-
-https://github.com/BjnNowak/bertin
-
-\hypertarget{package-to-simplify-statitsics-summary-and-plots}{%
-\section*{package to simplify statitsics summary and
-plots}\label{package-to-simplify-statitsics-summary-and-plots}}
-\addcontentsline{toc}{section}{package to simplify statitsics summary
-and plots}
-
-\markright{package to simplify statitsics summary and plots}
-
-https://jtools.jacob-long.com/
-
-\hypertarget{ggpub-for-pulbican-type-polots-with-stats}{%
-\section*{ggpub for pulbican type polots with
-stats}\label{ggpub-for-pulbican-type-polots-with-stats}}
-\addcontentsline{toc}{section}{ggpub for pulbican type polots with
-stats}
-
-\markright{ggpub for pulbican type polots with stats}
-
-https://rpkgs.datanovia.com/ggpubr/
-
-\#explanation of log odds
-
-https://rpkgs.datanovia.com/ggpubr/
-
-\hypertarget{web-plot-digitizaer}{%
-\section*{web plot digitizaer}\label{web-plot-digitizaer}}
-\addcontentsline{toc}{section}{web plot digitizaer}
-
-\markright{web plot digitizaer}
-
-https://automeris.io/WebPlotDigitizer/
-
-\hypertarget{rename-cols-based-on-data-dictionary}{%
-\section*{rename cols based on data
-dictionary}\label{rename-cols-based-on-data-dictionary}}
-\addcontentsline{toc}{section}{rename cols based on data dictionary}
-
-\markright{rename cols based on data dictionary}
-
-https://twitter.com/i/bookmarks
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyverse)}
-
-\NormalTok{df }\OtherTok{\textless{}{-}}\NormalTok{ readr}\SpecialCharTok{::}\FunctionTok{read\_csv}\NormalTok{(}\StringTok{"/home/hagan/Downloads/pop23.csv"}\NormalTok{,}\AttributeTok{name\_repair =}\NormalTok{ janitor}\SpecialCharTok{::}\NormalTok{make\_clean\_names) }\SpecialCharTok{\%\textgreater{}\%} 
-     \FunctionTok{filter}\NormalTok{(}
-\NormalTok{    sex}\SpecialCharTok{!=}\DecValTok{0}
-\NormalTok{    ,age}\SpecialCharTok{\textless{}}\DecValTok{99}
-\NormalTok{    )}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Rows: 306 Columns: 6
--- Column specification --------------------------------------------------------
-Delimiter: ","
-dbl (6): sex, age, estimatesbase2020, popestimate2020, popestimate2021, pope...
-
-i Use `spec()` to retrieve the full column specification for this data.
-i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{extract\_year\_make\_longer  }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(.data,.col) \{}
-
-\NormalTok{  .data }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{select}\NormalTok{(}
-\NormalTok{    age}
-\NormalTok{    ,sex}
-\NormalTok{    ,}\FunctionTok{any\_of}\NormalTok{(}
-      \FunctionTok{c}\NormalTok{(\{\{.col\}\})}
-\NormalTok{      )}
-\NormalTok{    ) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
-    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{year=}\FunctionTok{parse\_number}\NormalTok{(name)) }\SpecialCharTok{\%\textgreater{}\%} 
-    \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{name)}
-\NormalTok{\}}
-
-
-
-\NormalTok{col\_names }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"popestimate2020"}\NormalTok{,}\StringTok{"popestimate2021"}\NormalTok{,}\StringTok{"popestimate2022"}\NormalTok{)}
-
-\NormalTok{list\_df }\OtherTok{\textless{}{-}} \FunctionTok{map}\NormalTok{(col\_names,}\SpecialCharTok{\textasciitilde{}}\FunctionTok{extract\_year\_make\_longer}\NormalTok{(df,.x))}
-
-\NormalTok{df\_20 }\OtherTok{\textless{}{-}}\NormalTok{ list\_df[[}\DecValTok{1}\NormalTok{]] }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rename}\NormalTok{(}\AttributeTok{pop20=}\NormalTok{value) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(sex,age,pop20)}
-
-\NormalTok{df\_21 }\OtherTok{\textless{}{-}}\NormalTok{ list\_df[[}\DecValTok{2}\NormalTok{]] }\SpecialCharTok{\%\textgreater{}\%} 
-    \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{age\_20=}\NormalTok{age}\DecValTok{{-}1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{filter}\NormalTok{(age\_20}\SpecialCharTok{\textgreater{}{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
-    \FunctionTok{select}\NormalTok{(age\_20,value,sex) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{pop\_21=}\NormalTok{value) }
-
-
-\NormalTok{df\_22 }\OtherTok{\textless{}{-}}\NormalTok{ list\_df[[}\DecValTok{3}\NormalTok{]] }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{age\_20=}\NormalTok{age}\DecValTok{{-}2}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{filter}\NormalTok{(age\_20}\SpecialCharTok{\textgreater{}{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{select}\NormalTok{(age\_20,value,sex) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{pop22=}\NormalTok{value)}
-
-
-
-
-\FunctionTok{left\_join}\NormalTok{(df\_20,}
-\NormalTok{          df\_21,}
-          \FunctionTok{join\_by}\NormalTok{(age}\SpecialCharTok{==}\NormalTok{age\_20}
-\NormalTok{                  ,sex}\SpecialCharTok{==}\NormalTok{sex)) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{left\_join}\NormalTok{(df\_22,}
-           \FunctionTok{join\_by}\NormalTok{( age}\SpecialCharTok{==}\NormalTok{age\_20}
-\NormalTok{            ,sex}\SpecialCharTok{==}\NormalTok{sex)) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{mutate}\NormalTok{(}
-    \AttributeTok{one\_year\_delta=}\NormalTok{pop\_21}\SpecialCharTok{{-}}\NormalTok{pop20}
-\NormalTok{    ,}\AttributeTok{two\_year\_delta=}\NormalTok{pop22}\SpecialCharTok{{-}}\NormalTok{pop20}
-\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y=}\NormalTok{two\_year\_delta,}\AttributeTok{x=}\NormalTok{age,}\AttributeTok{fill=}\FunctionTok{factor}\NormalTok{(sex,}\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{,}\StringTok{"female"}\NormalTok{))))}\SpecialCharTok{+}
-  \FunctionTok{geom\_col}\NormalTok{()}\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{18}\NormalTok{,}\AttributeTok{linetype=}\StringTok{"dotted"}\NormalTok{,}\AttributeTok{size=}\DecValTok{1}\NormalTok{, }\AttributeTok{color=}\StringTok{"grey"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{65}\NormalTok{, }\AttributeTok{size=}\DecValTok{1}\NormalTok{, }\AttributeTok{color=}\StringTok{"grey"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{n.breaks=}\DecValTok{30}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_comma}\NormalTok{(}\AttributeTok{scale=}\DecValTok{1}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{,}\AttributeTok{suffix=}\StringTok{"M"}\NormalTok{))}\SpecialCharTok{+}
-  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values=}\FunctionTok{c}\NormalTok{(}\AttributeTok{male=}\StringTok{"midnightblue"}\NormalTok{,}\AttributeTok{female=}\StringTok{"firebrick"}\NormalTok{))}\SpecialCharTok{+}
-  \FunctionTok{theme\_classic}\NormalTok{()}\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{fill=}\StringTok{"Gender"}
-\NormalTok{    ,}\AttributeTok{title=}\StringTok{"Two year change in population by age group"}
-\NormalTok{    )}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-i Please use `linewidth` instead.
-\end{verbatim}
-
-\begin{verbatim}
-Warning: Removed 4 rows containing missing values (`position_stack()`).
-\end{verbatim}
-
-\begin{figure}[H]
-
-{\centering \includegraphics{./intro_files/figure-pdf/unnamed-chunk-3-1.pdf}
-
-}
-
-\end{figure}
-
-df\_2021\_spk \textless- df\_spk \%\textgreater\%
-select(age,sex,popestimate2021) df\_2022\_spk \textless- df\_spk
-\%\textgreater\% select(age,sex,popestimate2022)
-
-df\_spk \%\textgreater\% filter( age\textless99 ,sex!=0 )
-\%\textgreater\% ggplot(aes(y=popestimate2022,x=age,fill=factor(sex)))+
-geom\_col()+ geom\_vline(xintercept = 18,linetype=``dotted'')+
-geom\_vline(xintercept = 75,linetype=``dotted'')+
-scale\_x\_continuous(n.breaks = 30) \#
-geom\_col(aes(y=popestimate2020),col=``blue'',alpha=.2)
-
-\hypertarget{expand-dates}{%
-\chapter*{expand dates}\label{expand-dates}}
-\addcontentsline{toc}{chapter}{expand dates}
-
-\markboth{expand dates}{expand dates}
-
-\hypertarget{create-columns-for-year-month-and-day-for-each-date}{%
-\chapter*{Create columns for year, month and day for each
-date}\label{create-columns-for-year-month-and-day-for-each-date}}
-\addcontentsline{toc}{chapter}{Create columns for year, month and day
-for each date}
-
-\markboth{Create columns for year, month and day for each date}{Create
-columns for year, month and day for each date}
-
-\hypertarget{column-in-a-data.frame}{%
-\chapter*{column in a data.frame}\label{column-in-a-data.frame}}
-\addcontentsline{toc}{chapter}{column in a data.frame}
-
-\markboth{column in a data.frame}{column in a data.frame}
-
-expand\_dates \textless- function(x, parts = c(``year'', ``month'',
-``day'')) \{ funs \textless- list(year = year, month = month, day =
-day){[}parts{]} mutate(x, across(where(lubridate::http://is.Date),
-funs)) \}
-
-\begin{verbatim}
-
-
-
-
-
-
-
-`<!-- quarto-file-metadata: eyJyZXNvdXJjZURpciI6Ii4ifQ== -->`{=html}
-
-```{=html}
-<!-- quarto-file-metadata: eyJyZXNvdXJjZURpciI6Ii4iLCJib29rSXRlbVR5cGUiOiJjaGFwdGVyIiwiYm9va0l0ZW1OdW1iZXIiOjEsImJvb2tJdGVtRmlsZSI6ImxlYXJuaW5nUi5xbWQiLCJib29rSXRlbURlcHRoIjoxfQ== -->
-\end{verbatim}
+It will help you understand what R is doing but help you understand the
+productivity benefits of R.
 
 \hypertarget{how-to-save-things-on-git}{%
-\chapter*{How to save things on Git}\label{how-to-save-things-on-git}}
-\addcontentsline{toc}{chapter}{How to save things on Git}
-
-\markboth{How to save things on Git}{How to save things on Git}
+\chapter{How to save things on Git}\label{how-to-save-things-on-git}}
 
 \begin{itemize}
 \tightlist
@@ -1338,8 +1096,7 @@ two iems are expected, change the vector to a list
 output
 
 \hypertarget{categorical-variables}{%
-\subsection*{Categorical Variables}\label{categorical-variables}}
-\addcontentsline{toc}{subsection}{Categorical Variables}
+\subsection{Categorical Variables}\label{categorical-variables}}
 
 In general you will need to distinguish betwen your character values as
 either straight character or categorical with levels
@@ -1510,11 +1267,11 @@ column:
 
 \begin{verbatim}
 -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.2     v readr     2.1.4
-v forcats   1.0.0     v stringr   1.5.0
-v ggplot2   3.4.2     v tibble    3.2.1
-v lubridate 1.9.2     v tidyr     1.3.0
-v purrr     1.0.1     
+v dplyr     1.1.4     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.4.4     v tibble    3.2.1
+v lubridate 1.9.3     v tidyr     1.3.0
+v purrr     1.0.2     
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
@@ -1676,60 +1433,6 @@ facet\_zoom(x=country==``spain'')
 
 facet\_zoom(y=length \textless20)
 
-Tidy models
-
-data load
-
-rsamples
-
-assign to training df: split
-
-based on proportions and strata
-
-assign to training df: assign trianing
-
-assign cross validation sets (if ncessary)
-
-assign to testingdf: assign testing
-
-initial\_split()
-
-training()
-
-testing()
-
-recipes
-
-prepare the data with prepeprosing
-
-assign vairables
-
-other transformation steps
-
-recipte()
-
-update\_role()
-
-parsnip
-
-specify and fit the model
-
-model (decision\_tree()
-
-set\_engine()
-
-set\_mode()
-
-workflow
-
-workflow()
-
-add\_receipe()
-
-add\_model()
-
-Tidy evaluation
-
 Programming with dplyr • dplyr (tidyverse.org)
 
 Argument type: tidy-select --- dplyr\_tidy\_select • dplyr
@@ -1780,7 +1483,7 @@ Open questions
 
 when do you sue data and when do use .data (okay answer apparently when
 you use \ldots{} you start other variables with ``.'' eg. .data to avoid
-conflictino (20 Dot prefix \textbar{} Tidyverse design guide
+conflictino ix \textbar{} Tidyverse design guide
 
 )
 
@@ -2020,7 +1723,8 @@ Analysis in R (smltar.com)
 
 tidytext
 
-tidy evaluation
+\hypertarget{tidy-evaluation}{%
+\section{tidy evaluation}\label{tidy-evaluation}}
 
 resources
 
@@ -2090,6 +1794,20 @@ enquo() and !!
 
 enquos() and !!!
 
+how to use environment character vectors in a function or formula? - use
+all\_of() or any\_of() (use ! to negate)
+\href{https://dplyr.tidyverse.org/articles/programming.html}{linkhere} -
+you can also suse sym or syms with !!!
+\href{https://stackoverflow.com/questions/34487641/dplyr-groupby-on-multiple-columns-using-variable-names}{link
+here}
+
+how to quote a uncharacter argument into a character arugment - dots
+\textless- enquos(\ldots, .named = TRUE) will turn a unquoted input into
+a quosure variable - nm1 \textless- purrr::map\_chr(dots,
+rlang::as\_label) then use this to transform into character vectors
+which canbe used in functions
+\href{https://stackoverflow.com/questions/63257632/curly-curly-tidy-evaluation-programming-with-multiple-inputs-and-custom-function}{linkhere}
+
 \#PCA
 
 pca\_rec \textless- recipe(\textasciitilde., data = sample\_df)
@@ -2112,12 +1830,8 @@ nrow = 1) + labs(y = NULL)
 princomp with plot(pca\_mod, type=``lines'').
 
 \hypertarget{advanced-plotting-contorl-over-color-shape-or-alpha}{%
-\section*{advanced plotting, contorl over color, shape or
+\section{advanced plotting, contorl over color, shape or
 alpha------}\label{advanced-plotting-contorl-over-color-shape-or-alpha}}
-\addcontentsline{toc}{section}{advanced plotting, contorl over color,
-shape or alpha------}
-
-\markright{advanced plotting, contorl over color, shape or alpha------}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
@@ -2197,8 +1911,7 @@ pass a formula to check against each column where() -is.numeric()
 -is.factor() \textasciitilde mean(.x) \textgreater3.5
 
 \hypertarget{common-tasks}{%
-\subsection*{common tasks---}\label{common-tasks}}
-\addcontentsline{toc}{subsection}{common tasks---}
+\subsection{common tasks---}\label{common-tasks}}
 
 apply a function to multiple columns to perform action onto column or
 new columns - Across() apply a column of arguments, one by one, as input
@@ -2211,10 +1924,7 @@ apply a function to pairs of columns on a rolling basis (eg. col 1 -2,
 col 2 - 3, etc) ????
 
 \hypertarget{count}{%
-\section*{count}\label{count}}
-\addcontentsline{toc}{section}{count}
-
-\markright{count}
+\section{count}\label{count}}
 
 count very useful function to quickly tabulate data use .drop to show
 any data that has been filtered out or removed
@@ -2226,10 +1936,8 @@ any data that has been filtered out or removed
 \end{Shaded}
 
 \hypertarget{how-to-parse-out-words-from-a-sentence}{%
-\subsection*{how to parse out words from a
+\subsection{how to parse out words from a
 sentence}\label{how-to-parse-out-words-from-a-sentence}}
-\addcontentsline{toc}{subsection}{how to parse out words from a
-sentence}
 
 \begin{itemize}
 \tightlist
@@ -2257,86 +1965,366 @@ sentence}
 
 stringr::word(string,start=x,end=y,sep=?)
 
-\hypertarget{database}{%
-\chapter{database}\label{database}}
+is.element(input,check\_strings) -- validates inputs matches at least
+one in a set
 
-https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html\#
-https://r4ds.hadley.nz/databases.html
+\hypertarget{database-and-larger-than-memory-problems}{%
+\chapter{Database and Larger Than Memory
+Problems}\label{database-and-larger-than-memory-problems}}
 
-\hypertarget{how-to-connect}{%
-\chapter{How to connect}\label{how-to-connect}}
+\href{https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html\#}{Resource
+to understand databases} \href{https://r4ds.hadley.nz/databases.html}{r
+for datascience chapter on databse}
+https://dbplyr.tidyverse.org/articles/translation-function.html
+https://bwlewis.github.io/duckdb\_and\_r/talk/talk.html
+https://dbi.r-dbi.org/ https://solutions.posit.co/connections/db/
+
+\hypertarget{why-is-this-important}{%
+\chapter{Why is this important?}\label{why-is-this-important}}
 
 \begin{itemize}
 \item
-  First need to configure your DSN so that you can be authenticated
+  You will get to a point where the data you need is inside a database
+  and not excel sheets or csv files
 \item
-  If done correctly you can then use DBI package to connect to the
-  database of choice
+  This is a point of potential rejoice or mourning
+\item
+  While we can say goodbye excel sheets and csv files we also need to
+  say hello to poorly documented databases, overwhelmed database product
+  owners, overworked data engineers, and finally SQL and all of its
+  variations
+\item
+  I recommend you take the time to learn SQL -- the basics are very
+  similar to the dplyr commands you already know (slight tweaking of
+  evaluation order and syntax) so the beginners learning curve isn't
+  steep
+\end{itemize}
 
-\begin{verbatim}
--   create a connection string with DBI::dbConnect()
-    -   driver_name such as ODBC::ODBC() or duckdb::duckdb()
-    -   DSN name (if applicable)
--   Enter SQL query with `sql()`
--   Use connection string and sql query together to create a lazy table with `tbl()`
-\end{verbatim}
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, colback=white, breakable, opacityback=0, toptitle=1mm, leftrule=.75mm, rightrule=.15mm, toprule=.15mm, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{How much SQL should I learn?}, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, opacitybacktitle=0.6]
+
+If you're curious how much SQL you should learn, below is a framework
+that I found to be helpful:
+
+Functions - Where - Select - group by - summarization measures (eg. sum,
+count,min,max,etc) - partition - window - Having - With - Join - Like -
+Create or Replace - In - As
+
+Database frameworks - Temporary Tables - Curated tables - Materialized
+layers
+
+Database structure
+
+\begin{itemize}
+\tightlist
 \item
-  From there you can use dplyr back end queries to see everything
+  Security Model
 \item
-  You are limited to queries that can be translated to
+  Access Model
+\end{itemize}
+
+You may not need to know any of this but this mostly depends on your
+organizations data strategy, staffing levels and operating model
+
+\end{tcolorbox}
+
+\begin{itemize}
 \item
-  You can see what query it will generate with \texttt{show\_query()}
+  The reason you can survive off of a beginners knowledge base of SQL is
+  that luckily there is a life saving package called \texttt{dbplyr}
+  that translates your dplyr queries into SQL for you
 \item
-  You can finallly execute the query with \texttt{collect()}
+  It has fairly great coverage but there are limitations which is why
+  eventually it will help you to learn some intermediate SQL commands
+  and overall database frameworks
 \item
-  if you already have something as a dataframe you can upload it to a
-  database with DBI::dbWriteTable(con,``tbl\_name'',df) which will write
-  the table to the connection with the name you gave
+  This chapter will go over database essentials and provide resources to
+  learn more
+\end{itemize}
+
+\hypertarget{the-essentials}{%
+\section{The Essentials}\label{the-essentials}}
+
+\textbf{What do you need to access data in a database?}
+
+\begin{itemize}
+\tightlist
+\item
+  A database with data inside of it\\
+\item
+  Access / permission to the database
+\item
+  Location, user name and password to database (or equivalent protocols
+  as dictated by your organization's security model)
+\item
+  Database driver and related utilities
+\item
+  SQL querys
+\item
+  Patience
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, colback=white, breakable, opacityback=0, toptitle=1mm, leftrule=.75mm, rightrule=.15mm, toprule=.15mm, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, opacitybacktitle=0.6]
+
+It comes down to scale and size. At some point your organization or
+process will generate substantial data and needs a more structured
+process to store the data so that multiple parties can access the data
+at scale.
+
+When dealing with a new database some key frameworks are:
+
+\begin{itemize}
+\item
+  Cloud vs.~On-Premise
+\item
+  Security model and access
+\item
+  ``Flavor'' of database
+\item
+  Improved data management: A database centralizes data, making it
+  easier to manage and maintain
+\item
+  Enhanced data security: A database provides secure storage and
+  retrieval of sensitive data through user authentication and access
+  control mechanisms
+\item
+  Better data organization: A database \textbf{theoretically} allows for
+  better organization and structure of data through the use of tables,
+  indexes, and relationships
+\item
+  Improved query performance: Databases are optimized for query
+  performance, allowing for faster retrieval of data.
+\item
+  Scalability: Databases can handle large amounts of data and scale as
+  needed to meet growing storage demands.
+\end{itemize}
+
+Cloud vs On-Premise Database:
+
+\begin{itemize}
+\item
+  Cloud databases are hosted on remote servers, while on-premise
+  databases are hosted on local servers (when you read servers just
+  replace it with the word computers. You are either using your
+  organization's computer (on prem) or you are using someone else
+  (cloud))
+\item
+  Cloud databases offer greater flexibility in terms of scalability and
+  accessibility, as they can be accessed from any location with an
+  internet connection.
+\item
+  On-premise databases provide more control over data security and
+  privacy, as the data is stored on a local server and not transmitted
+  over the internet.
+\item
+  Cloud databases typically require less setup and maintenance than
+  on-premise databases, as they are managed by the provider.
+\item
+  Cost: Cloud databases are often subscription-based and can be more
+  cost-effective than on-premise databases, especially for small to
+  medium-sized businesses.
+\end{itemize}
+
+\emph{Security Model and Access:}
+
+\begin{itemize}
+\item
+  Security model: A database's security model determines who has access
+  to the data and how they can access it. Common security models include
+  Role-Based Access Control (RBAC), Attribute-Based Access Control
+  (ABAC), and Identity-Based Access Control (IBAC).
+\item
+  Access control: A database's access control mechanisms determine who
+  can view, edit, or delete data. This can be based on user
+  authentication, role-based access control, or attribute-based access
+  control.
+\item
+  Authentication methods: Databases support various authentication
+  methods such as username and password, single sign-on (SSO), and
+  two-factor authentication (2FA).
+\item
+  Authorization methods: Databases support various authorization methods
+  such as row-level security, column-level security, and table-level
+  security.
+\item
+  Auditing and logging: Databases can log all access attempts and
+  successful accesses to track user activity and detect potential
+  security breaches.
+\item
+  Encryption: Databases can encrypt data both in transit and at rest to
+  protect it from unauthorized access.
+\item
+  Backup and recovery: Databases provide mechanisms for backing up data
+  and recovering from failures or security incidents.
+\item
+  Identity and access management (IAM): IAM systems manage user
+  identities and access rights within the database, ensuring that only
+  authorized users can access the data.
+\item
+  Role-based access control (RBAC): RBAC allows for assigning roles to
+  users based on their job function or responsibilities, limiting the
+  data they have access to.
+\item
+  Attribute-based access control (ABAC): ABAC grants or denies access to
+  data based on attributes associated with the user or the data itself,
+  such as location or time of day.
+\end{itemize}
+
+\end{tcolorbox}
+
+** What does a database need from you?**
+
+\begin{itemize}
+\item
+  The most frustrating part of database is getting access to the
+  database, setting up the database utilities and then making the
+  initial connection
+\item
+  There are multiple ways to connect to a database however almost all
+  require the following:
 
   \begin{itemize}
   \tightlist
   \item
-    dbWriteTable() can write a r dataframe or you can use sql to create
-    a virtual table if you want
+    User name
   \item
-    dbplyr::copy\_inline(con\_db,df = df) is alternative method
+    Password
+  \item
+    Database driver
+  \item
+    Connection string and associated arguments
+  \item
+    SQL query
   \end{itemize}
 \item
-  dbListTables(con) can be used to see what virtual tables are in the
-  connection
+  We will review the DSN method for connecting to a database
 \item
-  dbReadTable(con,``tbl\_name'') read the virtual table as a dataframe
-\item
-  in\_schema(``database'',``tbl'') is a way to navigate a scehma in
-  tbl()
+  These tend to be confusing because much of this is controlled and
+  managed by your local IT department so whatever documentation or guide
+  you read on online may not translate one for one to your localized
+  experienced (this includes this guide as well :(
 \end{itemize}
 
-con \textless- DBI::dbConnect(ODBC::ODBC(),dsn=``name'')
+\hypertarget{set-up-odbc-driver}{%
+\section{Set up ODBC Driver}\label{set-up-odbc-driver}}
 
-con\_db \textless- DBI::dbConnect(duckdb::duckdb())
+\begin{itemize}
+\item
+  Download (if required) a database driver for your database -- this is
+  typically on the database company's website
 
-\hypertarget{special-example-to-pass-one-db-object-to-another}{%
-\chapter{special example to pass one db object to
-another}\label{special-example-to-pass-one-db-object-to-another}}
+  \begin{itemize}
+  \tightlist
+  \item
+    Your company may have centralized package manager system where you
+    will need to download and install all required drivers via that
+    packet manager
+  \end{itemize}
+\item
+  Configure your DSN so that you can be authenticated
+\item
+  Your database platform should have documentation on how to do this and
+  your internal IT team \textbf{should} be able to articulate any proxy
+  / security requirements
+\item
+  Here is some example
+  \href{https://docs.snowflake.com/en/developer-guide/odbc/odbc-windows}{documentation}
+\item
+  You are essentially saving the required information (listed above) to
+  your computer so that you can pass these arguments to the database
+\item
+  Pay attention to the name you setup the DSN driver, you will need this
+  later one
+\end{itemize}
+
+Example Paramaters are below
+
+\begin{itemize}
+\tightlist
+\item
+  User
+\item
+  Password
+\item
+  Server
+\item
+  Database
+\item
+  Schema
+\item
+  Warehouse\\
+\item
+  Tracing
+\item
+  Authenticator
+\end{itemize}
+
+\hypertarget{create-connection-string}{%
+\section{Create Connection String}\label{create-connection-string}}
+
+\begin{itemize}
+\item
+  If the above is done correctly you can then use DBI package in R to
+  connect to the database of your choice
+\item
+  Create a connection string with DBI::dbConnect()
+
+\begin{verbatim}
+ -   Select the DBMS wtih the driver_name such as ODBC::ODBC() 
+     to access your DSN set up connect to external database or can use
+     DMBS package such as duckdb::duckdb() to replicate an internal 
+     instance of a database
+
+-   DSN name if external database (the name used to set up ODBC driver)
+
+-   Alternatively, you can directly supply the arguments 
+     in DBI::dbConnect() such as hostname,port,username, etc
+\end{verbatim}
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}\{r\}}
-\CommentTok{\#| label: db{-}connect example}
-\CommentTok{\#| eval: true}
+\DocumentationTok{\#\# this uses duckdb example to create a connection string}
 
+\NormalTok{con }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(}\AttributeTok{drv=}\NormalTok{duckdb}\SpecialCharTok{::}\FunctionTok{duckdb}\NormalTok{())}
+
+\DocumentationTok{\#\# this is alternative example using a made up DSN name }
+
+\NormalTok{con  }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(}\AttributeTok{drv=}\NormalTok{odbc}\SpecialCharTok{:}\FunctionTok{odbc}\NormalTok{(),}\AttributeTok{dsn=}\StringTok{"your\_DSN\_name"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, colback=white, breakable, opacityback=0, toptitle=1mm, leftrule=.75mm, rightrule=.15mm, toprule=.15mm, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Additional Utilities}, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, opacitybacktitle=0.6]
+
+\begin{itemize}
+\tightlist
+\item
+  the DBI and ODBC packages are extremely useful for database related
+  utilities
+\item
+  While they have some existing overlap, they can be used to view the
+  schema in your database, list active connections and also disconnect.
+\item
+  Below are some useful utilities:
+\end{itemize}
+
+\hypertarget{list-your-drivers}{%
+\section{list your drivers}\label{list-your-drivers}}
+
+odbc::odbcListDrivers()
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(tidyverse)}
-\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.2     v readr     2.1.4
-v forcats   1.0.0     v stringr   1.5.0
-v ggplot2   3.4.2     v tibble    3.2.1
-v lubridate 1.9.2     v tidyr     1.3.0
-v purrr     1.0.1     
+v dplyr     1.1.4     v readr     2.1.4
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.4.4     v tibble    3.2.1
+v lubridate 1.9.3     v tidyr     1.3.0
+v purrr     1.0.2     
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 x dplyr::filter() masks stats::filter()
 x dplyr::lag()    masks stats::lag()
@@ -2345,9 +2333,319 @@ i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all confl
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# This will list any drivers that you have setup in your system}
+\NormalTok{odbc}\SpecialCharTok{::}\FunctionTok{odbcListDrivers}\NormalTok{()[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{unique}\NormalTok{()}\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{sort}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+character(0)
+\end{verbatim}
+
+\hypertarget{list-active-connections}{%
+\section{list active connections}\label{list-active-connections}}
+
+DBI::dbListConnections()
+
+\hypertarget{checks-if-you-can-connect}{%
+\section{Checks if you can connect}\label{checks-if-you-can-connect}}
+
+DBI::dbCanConnect()
+
+\hypertarget{list-tables-listed-under-connection}{%
+\section{List tables listed under
+connection}\label{list-tables-listed-under-connection}}
+
+DBI::dbListTables()
+
+\hypertarget{list-tables-in-connection}{%
+\subsection{list tables in connection}\label{list-tables-in-connection}}
+
+\texttt{dbListTables(con)} to list tables associated with a connection
+
+\end{tcolorbox}
+
+\begin{itemize}
+\tightlist
+\item
+  After you have created a connection string you now need to retrieve
+  information from the database
+\end{itemize}
+
+\hypertarget{option-1-create-sql-string}{%
+\section{Option 1: Create SQL string}\label{option-1-create-sql-string}}
+
+\begin{itemize}
+\item
+  If you know the database, schema and table name that you want, you can
+  write the initial sql query to connect to the database
+\item
+  You can write simple or advance query insde the \texttt{dplyr::sql()}
+  function
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sql\_query }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{SQL}\NormalTok{(}\StringTok{"select *  from database\_name"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{accessing-databse}{%
+\section{Accessing Databse}\label{accessing-databse}}
+
+\begin{itemize}
+\tightlist
+\item
+  Use connection string and sql query together to create a lazy table
+  with \texttt{dplyr::tbl()}
+\item
+  We call this a lazy table because it won't actually execute the query
+  and return the results which is good because your query might return
+  100s of results
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_db }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{tbl}\NormalTok{(con,sql\_query)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\item
+  From there you can use \emph{dplyr} back end queries to see everything
+  (notice the distinction betwee \textbf{db}pyr and dplyr
+\item
+  If you use the dbplyr package, you are limited to queries that can be
+  translated to sql which are detailed below
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \href{https://github.com/tidyverse/dbplyr/blob/main/R/backend-.R}{github
+    of dplyr commands that can be used in dbplyr}
+  \item
+    You can also check the database
+    specific\href{\%5Bhttps://github.com/tidyverse/dbplyr/blob/main/R/backend-snowflake.R}{here}
+  \end{itemize}
+\item
+  You can see what query it will generate with
+  \texttt{dbplyr::show\_query()}
+\item
+  Notice the class of the object you return, you are returning a
+  database object -- if you want to return a dataframe you need to use
+  \texttt{dplyr::collect()}
+\end{itemize}
+
+\hypertarget{option-2-push-existing-data-into-a-database}{%
+\section{Option 2: Push existing data into a
+database}\label{option-2-push-existing-data-into-a-database}}
+
+\begin{itemize}
+\item
+  First you need to have a connection string to a database (and write
+  permissions)
+\item
+  If you already have something as a dataframe you can upload it to a
+  database with DBI::dbWriteTable(con,``tbl\_name'',df) which will write
+  the table to the connection with the name you gave
+
+  \begin{itemize}
+  \tightlist
+  \item
+    DBI::dbWriteTable() can write a r dataframe or you can use sql to
+    create a virtual table if you want
+  \item
+    dbplyr::copy\_inline(con\_db,df = df) is alternative method
+  \item
+    If you have duckdb connection you can use the
+    duckdb::duckdb\_register()
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# create connection}
+\NormalTok{con\_db }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(duckdb}\SpecialCharTok{::}\FunctionTok{duckdb}\NormalTok{())}
+
+\CommentTok{\# write data into database}
+\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbWriteTable}\NormalTok{(con\_db,}\AttributeTok{name =} \StringTok{"diamonds\_db"}\NormalTok{,}\AttributeTok{value =}\NormalTok{ ggplot2}\SpecialCharTok{::}\NormalTok{diamonds)}
+
+\CommentTok{\# or alternative use the database argument to regester}
+\NormalTok{duckdb}\SpecialCharTok{::}\FunctionTok{duckdb\_register}\NormalTok{(con\_db, }\StringTok{"diamonds\_db\_2"}\NormalTok{,}\AttributeTok{df =}\NormalTok{  ggplot2}\SpecialCharTok{::}\NormalTok{diamonds)}
+
+\CommentTok{\# validate data is in database by reference connection}
+\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbListTables}\NormalTok{(con\_db)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "diamonds_db"   "diamonds_db_2"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Pull in data in database format}
+\NormalTok{diamonds\_db }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{tbl}\NormalTok{(con\_db,}\StringTok{"diamonds\_db"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{what-happens-if-dbplyr-doesnt-have-a-function-that-i-need}{%
+\section{What happens if dbplyr doesn't have a function that I
+need?}\label{what-happens-if-dbplyr-doesnt-have-a-function-that-i-need}}
+
+\hypertarget{built-in-helper-functions}{%
+\subsection{built in helper functions}\label{built-in-helper-functions}}
+
+\hypertarget{create-sql-query-and-use-it}{%
+\subsection{create sql query and use
+it}\label{create-sql-query-and-use-it}}
+
+\hypertarget{how-can-i-build-a-package-for-this}{%
+\section{how can I build a package for
+this?}\label{how-can-i-build-a-package-for-this}}
+
+\hypertarget{sprintf-and-sql}{%
+\subsection{sprintf() and SQL}\label{sprintf-and-sql}}
+
+\hypertarget{dbplyr}{%
+\subsection{dbplyr}\label{dbplyr}}
+
+\hypertarget{putting-it-all-together}{%
+\section{Putting it all together}\label{putting-it-all-together}}
+
+\begin{itemize}
+\tightlist
+\item
+  Set up your drive, get required database info and related utilities
+\item
+  Create connection to your database
+\item
+  write an inital query to select the columns that you want or need
+\item
+  Use dbplyr to translate dplyr queries to SQL
+\item
+  return results to your local machine with dplyr::collect()
+\end{itemize}
+
+\hypertarget{larger-than-memory-problems}{%
+\chapter{Larger than memory
+problems}\label{larger-than-memory-problems}}
+
+\begin{itemize}
+\item
+  Sometimes you don't have a database but have data that is larger than
+  memory
+\item
+  Luckily, you don't need a database to take advantage of the tricks we
+  have learnt to move solve your data larger than memomory problems
+\item
+  Sometimes you may not have a database to connect to and instead have a
+  very large csv file or dataframes
+\item
+  There are two packages that are exceptionally helpful here
+
+  \begin{itemize}
+  \tightlist
+  \item
+    duckdb() and arrow()
+  \end{itemize}
+\item
+  This isn't the technically correct response but duckdb() allows you to
+  build an in memory database whereas arrow compresses your information
+  into some sort of parquet type structure
+\item
+  What makes these so great is that dbplyr will translate your dplyr
+  commands to either duckdb or arrow language
+\item
+  Some dplyr functions are avaialble in one package that aren't
+  avaialble in the other
+\item
+  However you can pass an object from duckdb to arrow as much as you
+  want
+\end{itemize}
+
+\textbf{What is key difference?}
+
+\begin{itemize}
+\tightlist
+\item
+  Duckdb will return first 1000 rows of your query so you can check if
+  your query worked well, whereas arrow won't let you see it (including
+  if your query returns an error which can be annoying)
+\end{itemize}
+
+To understand how to use the packages,let us define two scenarios:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  You have a lot of csv files that you need to upload and analyze
+\item
+  As a result of simulation of some other you have multiple tables that
+  seperately are okay but together are generating you have very large
+  dataframe that you need to join together to analyze and manipulate
+\item
+  You have interim data that you want to save in workflow that is large
+\end{enumerate}
+
+\hypertarget{large-csv-files-that-you-need-to-work-with}{%
+\subsection{Large csv files that you need to work
+with:}\label{large-csv-files-that-you-need-to-work-with}}
+
+\begin{itemize}
+\tightlist
+\item
+  If you have large offline files you can quickly easily load this into
+  duckdb with \texttt{duckdb\_read\_csv()} or the collection of arrow
+  functions (eg. \texttt{arrow::read\_csv\_arrow()}).
+\end{itemize}
+
+Arrow will support json, feather, delimiter, parquet, or csv amongst
+other whereas duckdb only supports csv (if not already an object)
+
+\begin{itemize}
+\tightlist
+\item
+  This will load the csv files directly to your duck db in memory
+  database
+\item
+  You first need to create connection string
+\end{itemize}
+
+\hypertarget{existing-dataframes-however-they-got-there-that-are-either-too-large}{%
+\subsection{Existing dataframes (however they got there) that are either
+too
+large}\label{existing-dataframes-however-they-got-there-that-are-either-too-large}}
+
+or individually are okay but seperately aren't okay
+
+\begin{itemize}
+\tightlist
+\item
+  You first need to get your data into R as a dataframe
+\item
+  Then you need to register your dataframe to your in duckdb memory
+  database
+\item
+  From there you can move the datafrme from duckdb to arrow as you would
+  like
+\end{itemize}
+
+\hypertarget{special-tricks}{%
+\chapter{Special tricks}\label{special-tricks}}
+
+\hypertarget{you-can-pass-one-database-object-to-duckdb}{%
+\section{You can pass one database object to
+duckdb}\label{you-can-pass-one-database-object-to-duckdb}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}\{r\}}
 \CommentTok{\#| label: db{-}connect example}
 \CommentTok{\#| eval: true}
+
+\FunctionTok{library}\NormalTok{(tidyverse)}
 
 \DocumentationTok{\#\# create connection string locally}
 \NormalTok{con\_db }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(duckdb}\SpecialCharTok{::}\FunctionTok{duckdb}\NormalTok{())}
@@ -2358,86 +2656,50 @@ i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all confl
 \CommentTok{\#create new table to the connection}
 
 \NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbExecute}\NormalTok{(con\_db, }\StringTok{"CREATE TABLE duckdb\_table (col1 INT, col2 STRING)"}\NormalTok{)}
-
-\CommentTok{\#preview what is in your connection}
-
-\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbListTables}\NormalTok{(con\_db)}
-
-\NormalTok{dbplyr}\SpecialCharTok{::}\FunctionTok{copy\_inline}\NormalTok{(con\_db,}\AttributeTok{df =}\NormalTok{ diamonds)}
-
-
-\NormalTok{diamonds\_db }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{tbl}\NormalTok{(con\_db}
-\NormalTok{    ,}\StringTok{"diamonds\_db"}
-\NormalTok{    )}
-
-
-\FunctionTok{print}\NormalTok{(diamonds\_db)}
 \InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 [1] 0
-[1] "diamonds_db"  "duckdb_table"
-# Source:   SQL [?? x 10]
-# Database: DuckDB 0.7.1 [hagan@Linux 6.2.6-76060206-generic:R 4.3.0/:memory:]
-   carat cut       color clarity depth table price     x     y     z
-   <dbl> <chr>     <chr> <chr>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
- 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
- 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
- 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
- 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
- 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
- 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
- 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
- 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
- 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
-10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
-# i more rows
-# Source:   table<diamonds_db> [?? x 10]
-# Database: DuckDB 0.7.1 [hagan@Linux 6.2.6-76060206-generic:R 4.3.0/:memory:]
-   carat cut       color clarity depth table price     x     y     z
-   <dbl> <fct>     <fct> <fct>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
- 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
- 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
- 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
- 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
- 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
- 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
- 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
- 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
- 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
-10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
-# i more rows
 \end{verbatim}
 
-\hypertarget{example-of-passing-one-database-object-to-arrow}{%
-\chapter{Example of passing one database object to
-arrow}\label{example-of-passing-one-database-object-to-arrow}}
+\#preview what is in your connection
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{diamonds\_db }\SpecialCharTok{\%\textgreater{}\%} 
+DBI::dbListTables(con\_db)
+
+dbplyr::copy\_inline(con\_db,df = diamonds)
+
+diamonds\_db \textless- dplyr::tbl(con\_db ,``diamonds\_db'' )
+
+print(diamonds\_db)
+
+\begin{verbatim}
+# Example of passing one database object to arrow
+
+::: {.cell}
+
+```{.r .cell-code}
+diamonds_db %>% 
   
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{good\_indicator=}\FunctionTok{if\_else}\NormalTok{(cut}\SpecialCharTok{==}\StringTok{"Good"}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(color) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{summarise}\NormalTok{(}
-    \AttributeTok{n=}\FunctionTok{n}\NormalTok{()}
-\NormalTok{    ,}\AttributeTok{mean=}\FunctionTok{mean}\NormalTok{(carat)}
-\NormalTok{    ,}\AttributeTok{mean\_price=}\FunctionTok{mean}\NormalTok{(price)}
-\NormalTok{    ,}\AttributeTok{mean\_ind=}\FunctionTok{mean}\NormalTok{(good\_indicator)}
-\NormalTok{    ,}\AttributeTok{mean\_adj=}\FunctionTok{mean}\NormalTok{(carat[good\_indicator}\SpecialCharTok{==}\DecValTok{1}\NormalTok{])}
-\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%} 
+  mutate(good_indicator=if_else(cut=="Good",1,0)) %>%
+  group_by(color) %>% 
+  summarise(
+    n=n()
+    ,mean=mean(carat)
+    ,mean_price=mean(price)
+    ,mean_ind=mean(good_indicator)
+    ,mean_adj=mean(carat[good_indicator==1])
+  ) %>% 
 
-  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(color)) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rolling\_price=}\FunctionTok{cumsum}\NormalTok{(mean\_price)) }\SpecialCharTok{\%\textgreater{}\%} 
-\NormalTok{    arrow}\SpecialCharTok{::}\FunctionTok{to\_arrow}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
- \FunctionTok{filter}\NormalTok{(color}\SpecialCharTok{==}\StringTok{"H"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{select}\NormalTok{(color,mean\_adj) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{collect}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
+  arrange(desc(color)) %>% 
+  mutate(rolling_price=cumsum(mean_price)) %>% 
+    arrow::to_arrow() %>% 
+  ungroup() %>% 
+ filter(color=="H") %>% 
+  select(color,mean_adj) %>% 
+  collect()
+\end{verbatim}
 
 \begin{verbatim}
 # A tibble: 1 x 2
@@ -2446,112 +2708,81 @@ arrow}\label{example-of-passing-one-database-object-to-arrow}}
 1 H        0.915
 \end{verbatim}
 
-\hypertarget{spark}{%
-\chapter{spark}\label{spark}}
+:::
+
+\hypertarget{additional-tricks}{%
+\chapter{Additional tricks}\label{additional-tricks}}
+
+\hypertarget{running-sql-in-r}{%
+\subsection{Running SQL in R}\label{running-sql-in-r}}
 
 \begin{itemize}
 \tightlist
 \item
-  There are two ways to manipulate data in spark, sparklyr and SparkR
-\item
-  Sparklyr uses dblyr backend so many of your dplyr calls can be used
-\item
-  Furthermore you can use any R package if you use
-  \texttt{spark\_apply()}
-\item
-  Using spark is pretty consistent any of database backends
-\item
-  Create a spark connection with \texttt{spark\_connect()} and assign it
-  to a variable usually ``sc''
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Can either use master=``local'' or if you are in databricks you can
-    use master=``databricks''
-  \end{itemize}
-\item
-  Then you can import your data referencing your spark connection
-
-  \begin{itemize}
-  \tightlist
-  \item
-    for inline data you can simply reference copy\_to(sc,df,df\_name)
-    and assign to a object (typically sdf prefix)
-  \end{itemize}
-\item
-  From there you can use all your standard dblyr type functions however
-  sometimes certain functions won't work
-\item
-  The master trick here is to use the \texttt{sparklyr::spark\_apply()}
-  function
-
-  \begin{itemize}
-  \tightlist
-  \item
-    pass the df object to as argument and then pass function or custom
-    function
-  \item
-    I don't think there are room for additional parameters? but I may be
-    wrong
-  \item
-    If you use \%\textgreater\% then you usually need to call the
-    library(magrittr) in your function
-  \end{itemize}
+  If you are using rmakrdown or quarto, you can run the sql query in a
+  window and have it results saved as a datafarme
 \end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\FunctionTok{library}\NormalTok{(sparklyr)}
+\CommentTok{{-}{-}|connection: con\_db}
 
+\KeywordTok{SELECT} \OperatorTok{*} 
 
-\CommentTok{\#Create spark connection}
-\NormalTok{sc }\OtherTok{\textless{}{-}}\NormalTok{ sparklyr}\SpecialCharTok{::}\FunctionTok{spark\_connect}\NormalTok{(}\AttributeTok{master=}\StringTok{"local"}\NormalTok{)}
+\KeywordTok{FROM} \KeywordTok{table}
 
-\CommentTok{\# take a data object and copy it too a spark object}
+\KeywordTok{WHERE}\NormalTok{ cut}\OperatorTok{==}\StringTok{\textquotesingle{}Good\textquotesingle{}}
 
-\NormalTok{diamonds\_sdf }\OtherTok{\textless{}{-}}\NormalTok{ sparklyr}\SpecialCharTok{::}\FunctionTok{copy\_to}\NormalTok{(sc,diamonds,}\StringTok{"diamonds\_sprk"}\NormalTok{)}
-
-\CommentTok{\# filter the object down to smaller size}
-\NormalTok{ small\_diamonds\_sdf }\OtherTok{\textless{}{-}}\NormalTok{ diamonds\_sdf }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{head}\NormalTok{(}\DecValTok{100}\NormalTok{)}
-
-
-\CommentTok{\#  create custom rowwise function}
-\NormalTok{rowwise\_fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(e)\{}
-
-\FunctionTok{library}\NormalTok{(magrittr)}
-\NormalTok{ e }\SpecialCharTok{\%\textgreater{}\%} 
-\NormalTok{   dplyr}\SpecialCharTok{::}\FunctionTok{rowwise}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
-\NormalTok{   dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{test=}\FunctionTok{sum}\NormalTok{(dplyr}\SpecialCharTok{::}\FunctionTok{c\_across}\NormalTok{(x}\SpecialCharTok{:}\NormalTok{z)))}
-\NormalTok{\}}
-
-\CommentTok{\# use function on the dataset }
-
-
-\NormalTok{ sparklyr}\SpecialCharTok{::}\FunctionTok{spark\_apply}\NormalTok{(}
-  \AttributeTok{x=}\NormalTok{small\_diamonds\_sdf}
-\NormalTok{  ,}\AttributeTok{f=}\NormalTok{rowwise\_fun}
-\NormalTok{) }
+\KeywordTok{LIMIT} \DecValTok{100}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-# Source: spark<?> [?? x 11]
-   carat cut       color clarity depth table price     x     y     z  test
-   <dbl> <chr>     <chr> <chr>   <dbl> <dbl> <int> <dbl> <dbl> <dbl> <dbl>
- 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43  10.4
- 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31  10.0
- 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31  10.4
- 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63  11.1
- 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75  11.4
- 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48  10.4
- 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47  10.4
- 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53  10.7
- 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49  10.1
-10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39  10.4
-# i more rows
-\end{verbatim}
+\begin{itemize}
+\tightlist
+\item
+  If you want to run it in rmarkdown, you can do the following
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\KeywordTok{SELECT} \OperatorTok{*} 
+
+\KeywordTok{FROM} \KeywordTok{table}
+
+\KeywordTok{WHERE}\NormalTok{ cut}\OperatorTok{==}\StringTok{\textquotesingle{}Good\textquotesingle{}}
+
+\KeywordTok{LIMIT} \DecValTok{100}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{run-sql-queries-safely}{%
+\section{Run SQL queries safely}\label{run-sql-queries-safely}}
+
+\hypertarget{how-to-plot-a-database-object}{%
+\section{How to plot a database
+object}\label{how-to-plot-a-database-object}}
+
+dbplot\_histogram
+
+(https://edgararuiz.github.io/dbplot/)
+
+\hypertarget{how-to-build-packages-or-function-to-access-dbplyr}{%
+\section{How to build packages or function to access
+dbplyr}\label{how-to-build-packages-or-function-to-access-dbplyr}}
+
+\begin{itemize}
+\item
+  two options:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    sprintf to generate actual sql queries
+  \item
+    dbplyr / similiar to spring
+  \end{itemize}
+\end{itemize}
 
 
 

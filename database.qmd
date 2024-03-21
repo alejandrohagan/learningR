@@ -1,28 +1,140 @@
 ---
 title: "Database and Larger Than Memory Problems"
+html:
+  code-fold: "show"
 ---
 
-## Resource
+
+
+# Resource
+
 [Resource to understand databases](https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html#)
-[r for datascience chapter on databse](https://r4ds.hadley.nz/databases.html)
-https://dbplyr.tidyverse.org/articles/translation-function.html
-https://bwlewis.github.io/duckdb_and_r/talk/talk.html
-https://dbi.r-dbi.org/
-https://solutions.posit.co/connections/db/
+
+[R for datascience chapter on database](https://r4ds.hadley.nz/databases.html)
+
+[Dbplyr functions](https://dbplyr.tidyverse.org/articles/translation-function.html)
+
+[How to use duckdb](https://bwlewis.github.io/duckdb_and_r/talk/talk.html)
+
+[DBI function overivew](https://dbi.r-dbi.org/)
+
+[Posit learning materials](https://solutions.posit.co/connections/db/)
+
+[dbplot_histogram](https://edgararuiz.github.io/dbplot/)
+
 
 
 # Why is this important?
 
--   You will get to a point where the data you need is inside a database
+-   You will get to a point where the data you need is inside a database and 
+not excel sheets or csv files 
 
 -   This is a point of potential rejoice or mourning
 
--   While we can say goodbye excel sheets and csv's we also need to say hello 
-to poorly documented databases, SQL and all of its variations
+-   While we can say goodbye excel sheets and csv files we also need to say hello 
+to poorly documented databases, overwhelmed database product owners,
+overworked data engineers, and finally SQL and all of its variations
 
--   I recomend you take the time to learn SQL -- the basics are very
-simliar to the dplyr commands you already know (slight tweaking of 
+-   I recommend you take the time to learn SQL -- the basics are very
+similar to the dplyr commands you already know (slight tweaking of 
 evaluation order and syntax) so the beginners learning curve isn't steep
+
+:::{.callout-note collapse="true"}
+
+## How much SQL should I learn?
+
+If you're curious how much SQL you should learn, below is a framework that I
+found to be helpful:
+
+-   Functions
+
+
+    
+```{r}
+#| warning: false
+#| echo: false
+
+library(tidyverse)
+
+tribble(
+  ~sql,~dpylr,~comment
+  ,"where"               ,"filter()", "can be viewed as one for one replacement to filter(), you can pass arguments with AND or OR,\nSometimes the first argument is TRUE for purely formatting purposes"
+  ,"select"             ,"select()" , "Can be viewed as one for one replacement for select(), * is short cut for all columns"
+  ,"group by"           ,"group_by()", "can be viewed as one for replacement for group_by(), you need for it summarization measures as well as partition measures "
+  ,"sum"                ,"sum()","works the same as sum, na.rm is always TRUE for SQL"
+  ,"min"                ,"min()","works the same as sum, na.rm is always TRUE for SQL" 
+  ,"max"                ,"max()","works the same as sum, na.rm is always TRUE for SQL"
+  ,"count(*)"           ,"n()","works similiar to n()" 
+  ,"select distinct"    , "select() |> distinct()","works almost exactly the same"
+  ,"partition"          ,"group_by() |> mutate()","works exactly the same "
+  ,"join"               , "left_join()", "works similiar"
+  ,"like"               ,"str_detect()", "similiar"
+  ,"top"                ,"head()"      ,"works the same"
+  ,"DISTINCT"           ,"distinct()"  ,"works the same"
+  ,"DESCRIBE"           ,"glimpse()"   ,"works simliar, will display the columns and thier data types"
+  ,"SET"                ," <- "        ,"works simliar to assign single variables"
+  ,"BETWEEN"            ,"between()"   ,"simliar"
+  ,"MONTH"              ,"month()"     ,"simliar"
+  ,"YEAR"               ,"year()"      ,"simliar"
+  ,"DAY"                ,"day()"       ,"simliar"
+  ,"QUARTER"            ,"quarter()"   ,"simliar"
+  ,"DATEDIFF"           ,"difftime() "   ,"simliar"
+  ,"DATETRUC"           ,"floor_date()","similar"
+  ,"create or replace"  ,"tibble()","use this to create the final table"
+  ,'in'                 ," %in%", "similiar"
+  ,"as"                 , "rename()","simliar"
+  ,"with"               , "tibble()", "Use this to create CTE or basic mini tables that you can then reference in different steps of the query, makes readable easier"
+  ,"having"             , "filter() or '['"," similiar to where"
+) |> 
+  gt::gt() |> 
+  gt::cols_label(
+    sql="SQL"
+    ) |> 
+  gt::tab_header(
+    title="Summary of SQL commands and their dplyr counterpart"
+  )
+
+
+```
+    
+There are some nuances, in particular the evaluation order that typically trip up new SQL users and also some coding conventions that will be different than what you are used to but in general if you understand the above R commands you will quickly learn the SQL counterparts.
+
+With anything, you need to practice! luckily there are multiple SQL resources and practice studios which can help with reinforcement learning.
+
+
+**Database frameworks**
+
+
+-   Temporary Tables / CTE
+    
+    -   These are tables that only exist when you run them
+    -   Helpful as interim steps or to break code into subqueries to make it more modular
+
+-   Curated tables
+    
+    -   Often times you may have loads of raw tables (eg 100s) that you need to join together, filter or aggregrate before the data can be usable
+    -   This process of turning raw /streaming data into table that can be consumed for analysis is oftern called data curation
+    -   This is often times created as a view which can be though of as particular snapshot of a table 
+-   Materialized layers
+    
+    -   Materialized layer means the data is more persistent so when you run it its not triggering the underlying queries (which will save you alot of time)      
+    -   Typically you won't know 
+
+
+Database structure
+
+-   Security Model
+
+    -   Because data can be privildedged, without a doubt your organization has some security model that will aplly row level security and IDs to ensure when you access a table you are seeing what you should be seeing
+    -    There is way to  much to write here about it and honestly, I'm not the right person to answer it 
+  
+
+
+You may not need to know any of this but this mostly depends on your organizations
+data strategy, staffing levels and operating model
+
+:::
+
 
 -   The reason you can survive off of a beginners knowledge base of SQL is that
 luckily there is a life saving package called `dbplyr` that translates your 
@@ -44,87 +156,110 @@ learn more
 -   Location, user name and password to database (or equivalent protocols as 
 dictated by your organization's security model)
 -   Database driver and related utilities
--   SQL query
+-   SQL querys
 -   Patience
 
 
-::: {.callout-note title="What is the advantage of a database?"}
+::: {.callout-note collapse="true"}
 
-It comes down to scale and size. At some point your organziation or process
+## "What is the advantage of a database?" 
+
+It comes down to scale and size. At some point your organization or process
 will generate substantial data and needs a more structured process to store
-the data so that mutliple parties can access the data at scale.
+the data so that multiple parties can access the data at scale.
 
 When dealing with a new database some key frameworks are:
 
-1. Cloud vs. On-Premise
-2. Security model and access
-3. "Flavor" of database
+- Cloud vs. On-Premise
+- Security model and access
+- "Flavor" of database
 
 
-1. Improved data management: A database centralizes data, making it 
-easier to manage and maintain.
-2. Enhanced data security: A database provides secure storage and 
+- Improved data management: A database centralizes data, making it 
+easier to manage and maintain
+
+- Enhanced data security: A database provides secure storage and 
 retrieval of sensitive data through user authentication and access 
-control mechanisms.
-3. Better data organization: A database allows for better organization 
+control mechanisms
+
+- Better data organization: A database **theoretically** allows for better organization 
 and structure of data through the use of tables, indexes, and 
-relationships.
-4. Improved query performance: Databases are optimized for query 
+relationships
+
+- Improved query performance: Databases are optimized for query 
 performance, allowing for faster retrieval of data.
-5. Scalability: Databases can handle large amounts of data and scale as 
+
+
+- Scalability: Databases can handle large amounts of data and scale as 
 needed to meet growing storage demands.
 
 Cloud vs On-Premise Database:
 
-1. Cloud databases are hosted on remote servers, while on-premise 
-databases are hosted on local servers.
-2. Cloud databases offer greater flexibility in terms of scalability and
+- Cloud databases are hosted on remote servers, while on-premise 
+databases are hosted on local servers (when you read servers just replace it with the word computers. You are either using your organization's computer (on prem) or you are using someone else (cloud))
+
+- Cloud databases offer greater flexibility in terms of scalability and
 accessibility, as they can be accessed from any location with an 
 internet connection.
-3. On-premise databases provide more control over data security and 
+
+- On-premise databases provide more control over data security and 
 privacy, as the data is stored on a local server and not transmitted 
 over the internet.
-4. Cloud databases typically require less setup and maintenance than 
+
+- Cloud databases typically require less setup and maintenance than 
 on-premise databases, as they are managed by the provider.
-5. Cost: Cloud databases are often subscription-based and can be more 
+
+- Cost: Cloud databases are often subscription-based and can be more 
 cost-effective than on-premise databases, especially for small to 
 medium-sized businesses.
 
-Security Model and Access:
+*Security Model and Access:*
 
-1. Security model: A database's security model determines who has access
+- Security model: A database's security model determines who has access
 to the data and how they can access it. Common security models include 
 Role-Based Access Control (RBAC), Attribute-Based Access Control (ABAC),
 and Identity-Based Access Control (IBAC).
-2. Access control: A database's access control mechanisms determine who 
+
+- Access control: A database's access control mechanisms determine who 
 can view, edit, or delete data. This can be based on user 
 authentication, role-based access control, or attribute-based access 
 control.
-3. Authentication methods: Databases support various authentication 
+
+
+- Authentication methods: Databases support various authentication 
 methods such as username and password, single sign-on (SSO), and 
 two-factor authentication (2FA).
-4. Authorization methods: Databases support various authorization 
+
+- Authorization methods: Databases support various authorization 
 methods such as row-level security, column-level security, and 
 table-level security.
-5. Auditing and logging: Databases can log all access attempts and 
+
+- Auditing and logging: Databases can log all access attempts and 
 successful accesses to track user activity and detect potential security
 breaches.
-6. Encryption: Databases can encrypt data both in transit and at rest to
+
+- Encryption: Databases can encrypt data both in transit and at rest to
 protect it from unauthorized access.
-7. Backup and recovery: Databases provide mechanisms for backing up data
+
+- Backup and recovery: Databases provide mechanisms for backing up data
 and recovering from failures or security incidents.
-8. Identity and access management (IAM): IAM systems manage user 
+
+- Identity and access management (IAM): IAM systems manage user 
 identities and access rights within the database, ensuring that only 
 authorized users can access the data.
-9. Role-based access control (RBAC): RBAC allows for assigning roles to 
+
+- Role-based access control (RBAC): RBAC allows for assigning roles to 
 users based on their job function or responsibilities, limiting the data
 they have access to.
-10. Attribute-based access control (ABAC): ABAC grants or denies access 
+
+- Attribute-based access control (ABAC): ABAC grants or denies access 
 to data based on attributes associated with the user or the data itself,
 such as location or time of day.
 
 :::
-** What does a database need from you?**
+
+
+**What does a database need from you?**
 
 -   The most frustrating part of database is getting access to the database,
 setting up the database utilities and then making the initial connection
@@ -138,24 +273,25 @@ require the following:
     -   SQL query
 
 -   We will review the DSN method for connecting to a database
+
 -   These tend to be confusing because much of this is controlled and managed
-by your local IT deparment so whatever documentation or guide you read on 
+by your local IT department so whatever documentation or guide you read on 
 online may not translate one for one to your localized experienced (this 
-includes this guide as well :( )
+includes this guide as well :(
 
 ## Set up ODBC Driver
 
 -   Download (if required) a database driver for your database -- this is
 typically on the database company's website
 
-    -    your company may have centralized package manager system where you
+    -    Your company may have centralized package manager system where you
     will need to download and install all required drivers via that packet 
     manager
 
 -   Configure your DSN so that you can be authenticated
 
 -   Your database platform should have documentation on how to do this and 
-your internal IT team **should** be able to articulare any proxy / security 
+your internal IT team **should** be able to articulate any proxy / security 
 requirements
 
 -   Here is some example
@@ -166,17 +302,17 @@ to your computer so that you can pass these arguments to the database
 -   Pay attention to the name you setup the DSN driver, you will need this
 later one
 
-Example paramaters are below
+**Example Paramaters are below**
 
-User
-Password
-server
-database
-schema
-warehouse      
-tracing
-authenticator
-
+-   User
+-   Password
+-   Server
+-   Database
+-   Schema
+-   Warehouse      
+-   Tracing
+-   Authenticator
+  
 
 ## Create Connection String
 
@@ -185,24 +321,26 @@ to connect to the database of your choice
 
 -  Create a connection string with DBI::dbConnect()
 
-        -   Select the DBMS wtih the driver_name such as ODBC::ODBC() 
+      -   Select the DBMS wtih the driver_name such as ODBC::ODBC() 
             to access your DSN set up connect to external database or can use
             DMBS package such as duckdb::duckdb() to replicate an internal 
             instance of a database
 
-       -   DSN name if external database 
-            (the name used to set up ODBC driver)
+      -   DSN name if external database (the name used to set up ODBC driver)
 
-       -   Alternatively, you can directly supply the arguments 
+      -   Alternatively, you can directly supply the arguments 
             in DBI::dbConnect() such as hostname,port,username, etc
 
 
 
 ```{r}
 #| echo: true
-#| eval: false 
+#| eval: false
+#| code-fold: true
 #| error: false
 #| warning: false
+#| fig-cap: "hello"
+#| label: "fig-example"
 
 ## this uses duckdb example to create a connection string
 
@@ -210,37 +348,33 @@ con <- DBI::dbConnect(drv=duckdb::duckdb())
 
 ## this is alternative example using a made up DSN name 
 
-con  <- DBI::dbConnect(drv=odbc:odbc(),dsn="your_DSN_name" )
+con  <- DBI::dbConnect(
+  drv=odbc:odbc()
+  ,dsn="your_DSN_name" 
+  )
+
 ```
 
 
-::: {.callout-note}
+::: {.callout-note collapse="true"}
 
 ## Additional Utilities
 
 -   the DBI and ODBC packages are extremely useful for database related 
 utilities
 -   While they have some existing overlap, they can be used to view the 
-schemas in your database, list acive connections and also disconnect.
+schema in your database, list active connections and also disconnect.
 -   Below are some useful utilities:
 
 
-## list your drivers
+#### list your drivers
 odbc::odbcListDrivers()
 
 
-```{r}
-library(tidyverse)
-# List all the drivers
-odbc::odbcListDrivers()[[1]]%>% unique()%>% sort()
-
-# This will list any drivers that you have setup in your system
-
-```
 
 
 
-## list active connections
+#### list active connections
 
 DBI::dbListConnections()
 
@@ -428,7 +562,6 @@ or individually are okay but seperately aren't okay
 #| label: db-connect example
 #| eval: true
 
-library(tidyverse)
 
 ## create connection string locally
 con_db <- DBI::dbConnect(duckdb::duckdb())
@@ -441,6 +574,8 @@ DBI::dbWriteTable(con_db,"diamonds_db",ggplot2::diamonds)
 DBI::dbExecute(con_db, "CREATE TABLE duckdb_table (col1 INT, col2 STRING)")
 ```
 #preview what is in your connection
+```{r}
+#| eval: false
 
 DBI::dbListTables(con_db)
 
@@ -452,16 +587,16 @@ diamonds_db <- dplyr::tbl(con_db
     )
 
 
-print(diamonds_db)
-
 
 ```
+
+
 # Example of passing one database object to arrow
 
 ```{r}
 #| echo: true
 #| label: query-example
-#| eval: true
+#| eval: false
 #| error: false
 #| warning: false
 
@@ -495,26 +630,29 @@ diamonds_db %>%
 and have it results saved as a datafarme
 
 ```{sql}
-%%| eval=FALSE
-%%|connection=con
-%%|output.var="mydataframe"
+--| eval: false
+--| connection: con_db
+--| output.var: test.tbl
 
 SELECT * 
 
-FROM table
+FROM diamonds_db
 
 WHERE cut=='Good'
 
 LIMIT 100
+
+
+
 ```
 
 -   If you want to run it in rmarkdown, you can do the following
 
-```{sql, eval=FALSE,connection=con, output.var = "mydataframe"}
+```{sql, eval=FALSE,connection=con_db, output.var = "mydataframe"}
 
 SELECT * 
 
-FROM table
+FROM diamonds_db
 
 WHERE cut=='Good'
 
@@ -526,9 +664,6 @@ LIMIT 100
 
 ## How to plot a database object
 
-dbplot_histogram
-
-(https://edgararuiz.github.io/dbplot/)
 
 
 ## How to build packages or function to access dbplyr

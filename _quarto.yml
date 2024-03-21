@@ -12,7 +12,6 @@ book:
         - intro.qmd
         - learningR.qmd
         - database.qmd
-        - spark.qmd
 
 bibliography: references.bib
 
