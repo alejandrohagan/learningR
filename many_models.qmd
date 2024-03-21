@@ -13,7 +13,7 @@ source
 install.packages("dplyover")
 remotes::install_github("TimTeaFan/dplyover")
 
-library(dplyr)        # <- necessary
+library(tidyverse)        # <- necessary
 library(tidyr)        # <- necessary
 library(broom)        # <- necessary
 library(rlang)        # <- nice to have
@@ -52,8 +52,9 @@ csat_prod_nested_res <- csat_named_nested %>%
     mutate(
       mod = list(lm(my_formula, data = data))
       ,modstat = list(broom::glance(mod))
-      ,res =     list(broom::tidy(mod)))
+      ,res =     list(broom::tidy(mod))
       )
+      
 
 ```
 
@@ -159,6 +160,8 @@ cast_all_groups <- csat_all %>%
     )
   
 ```
+
+
 ```{r}
 
 named_formula <- list2(standard=my_formula <- csat ~ postal_rating + phone_rating + email_rating +
@@ -304,8 +307,6 @@ filter_args <- rlang::list2(All=TRUE,
                      )
 
 
-diamonds_nested 
-
 diamonds %>% 
   mutate(color="All") %>% 
   bind_rows(diamonds) %>% 
@@ -334,7 +335,7 @@ diamonds %>%
 
 
 
-    ```
+```
 
 
 
@@ -371,12 +372,6 @@ diamonds %>%
   ) %>% 
 
 pull(data_mod) %>% .[[1]]
-
-fixed$data_mod[1]
-  
-
-params <- "list(na.rm = TRUE, trim = 0.1)"
-exec("mean", x = 1:10, !!!ensym(params))
   
 ```
 

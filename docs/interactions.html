@@ -1,0 +1,2717 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Excel to R: A Survivor’s Guide for the Corporate Environment - 3&nbsp; Understanding a model outcome</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./many_models.html" rel="next">
+<link href="./database.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li><li class="breadcrumb-item"><a href="./interactions.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Understanding a model outcome</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Excel to R: A Survivor’s Guide for the Corporate Environment</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./learningR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">How to save things on Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./database.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Understanding a model outcome</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./many_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">many_models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Misc</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Vim</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">github</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">4</span> Setup</a>
+  <ul class="collapse">
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4.1</span> Summary</a></li>
+  </ul></li>
+  <li><a href="#functions-overview" id="toc-functions-overview" class="nav-link" data-scroll-target="#functions-overview"><span class="header-section-number">5</span> Functions overview</a>
+  <ul class="collapse">
+  <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions"><span class="header-section-number">5.1</span> Predictions</a></li>
+  <li><a href="#hypotheses-function" id="toc-hypotheses-function" class="nav-link" data-scroll-target="#hypotheses-function"><span class="header-section-number">5.2</span> Hypotheses function</a></li>
+  <li><a href="#how-to-understand-model-outputs" id="toc-how-to-understand-model-outputs" class="nav-link" data-scroll-target="#how-to-understand-model-outputs"><span class="header-section-number">5.3</span> how to understand model outputs</a></li>
+  <li><a href="#helper-packages" id="toc-helper-packages" class="nav-link" data-scroll-target="#helper-packages"><span class="header-section-number">5.4</span> helper packages</a></li>
+  <li><a href="#notes-for-class" id="toc-notes-for-class" class="nav-link" data-scroll-target="#notes-for-class"><span class="header-section-number">5.5</span> notes for class</a></li>
+  </ul></li>
+  <li><a href="#summary-of-functions" id="toc-summary-of-functions" class="nav-link" data-scroll-target="#summary-of-functions"><span class="header-section-number">6</span> Summary of functions</a>
+  <ul class="collapse">
+  <li><a href="#predictions-1" id="toc-predictions-1" class="nav-link" data-scroll-target="#predictions-1"><span class="header-section-number">6.1</span> Predictions</a></li>
+  <li><a href="#plot-predictions" id="toc-plot-predictions" class="nav-link" data-scroll-target="#plot-predictions"><span class="header-section-number">6.2</span> Plot predictions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li><li class="breadcrumb-item"><a href="./interactions.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Understanding a model outcome</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Understanding a model outcome</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="setup" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Setup</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load libraries and summarize data to be be used in later analysis</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#devtools::install_github("alejandrohagan/fpaR")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> fpaR<span class="sc">::</span>contoso_fact_sales <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fpaR<span class="sc">::</span>contoso_dim_product <span class="sc">%&gt;%</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>(),<span class="at">by =</span> <span class="fu">join_by</span>(product_key))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create dataset </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>df_summary <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rev=</span>unit_price.x<span class="sc">*</span>sales_quantity) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">rev=</span><span class="fu">sum</span>(rev)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">n=</span><span class="fu">n</span>()</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">vol=</span><span class="fu">sum</span>(sales_quantity)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">avg_vol=</span><span class="fu">mean</span>(sales_quantity)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">distinct_col=</span><span class="fu">length</span>(<span class="fu">unique</span>(color_name))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">.by =</span> <span class="fu">c</span>(date_key,brand_name,color_name)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">vol_group=</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cut_number</span>(</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  vol</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  ,<span class="at">n=</span> <span class="dv">5</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  ,<span class="at">labels=</span><span class="fu">c</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"0 - 638"</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  ,<span class="st">"639 - 1,207"</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  ,<span class="st">"1,208 -  1,900"</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  ,<span class="st">"1,901 - 2,544"</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  ,<span class="st">"2,544 - 3,180"</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="summary" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">4.1</span> Summary</h2>
+<ul>
+<li><p>Trying to interpret a model outcome can be complex when you have complex models</p></li>
+<li><p>Fortunately there are tools and framework that we can use to help us understand our model outcomes and how outcomes can differ between groups</p></li>
+<li><p><code>marginaleffects</code> is useful to understand a statistical model along four key metrics</p>
+<ul>
+<li><em>predicitons:</em> What is the model predicting?</li>
+<li><em>comparsion:</em> how do factors or group compare to eachother</li>
+<li><em>slopes:</em> how to estimates compare across a range of references</li>
+<li><em>hypothesis:</em> How to test a statistical question</li>
+</ul></li>
+<li><p>When doing any analysis, the below framework is useful to understand:</p>
+<ul>
+<li><p><strong>Estimate</strong></p>
+<ul>
+<li>What is the target variable you want to understand?</li>
+<li>This is traditionally the y value in a formula</li>
+<li>Important to pay attention to the units if you transform it
+<ul>
+<li>Contrast</li>
+<li>Risk ratio</li>
+<li>Oddlogs</li>
+<li>Slope</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Grid</strong></p>
+<ul>
+<li><p>What granularity do you want to understand the model results</p></li>
+<li><p>This can be equivalent to each row of the underlying dataframe or this can be scenarios that you want to understand the average affects</p></li>
+<li><p>This is specfically the granularity you want to apply the model to, it may or may not be the same granularity that you want to report the model results</p></li>
+</ul></li>
+<li><p>Do we want to produce estimates for the individuals in our dataset, or for hypothetical or represnts? - prediction of the average person? - observed units - synthic units (counter-factual)</p></li>
+<li><p><strong>Aggregation</strong></p>
+<ul>
+<li>How do you want sum and report the insights?</li>
+<li>What group do you want to average (or sometimes called marginalize the insights by)</li>
+</ul></li>
+<li><p>average fitted value</p></li>
+<li><p>average risk difference</p></li>
+<li><p>average slope for high school graduates</p></li>
+<li><p><strong>Uncertainity</strong></p>
+<ul>
+<li>How do you want to measure the uncertainity of the estimate</li>
+</ul></li>
+</ul></li>
+<li><p>How do we quantify uncertainity about our estimates</p>
+<ul>
+<li><p>Delta method</p></li>
+<li><p>Boostrap</p></li>
+<li><p>Simulaiton based inference</p></li>
+<li><p><strong>Hypothesis</strong></p>
+<ul>
+<li>What question do you want to answer</li>
+<li>Eg is the estimate signficant than zero?</li>
+</ul></li>
+<li><p>What hypotheis or equivalent test do we conduct?</p></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="functions-overview" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Functions overview</h1>
+<section id="predictions" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="predictions"><span class="header-section-number">5.1</span> Predictions</h2>
+<ul>
+<li>Able to generate three functions
+<ul>
+<li>predictions using counter-factual data (eg. controlling variable at various levels)</li>
+</ul></li>
+</ul>
+<div class=".callout-note">
+<pre><code>`predictions(mod,variables=list(am=c(0,1)))`</code></pre>
+</div>
+<pre><code>-   predictions keeping input regressors at their mean, median or mode values</code></pre>
+<div class=".callout-note">
+<pre><code>-   `predictions(mod,newdata="mean")`
+
+-   `predictions(mod,newdata=datagrid())``
+
+-   predictions(mod,
+        datagrid(
+        FUN_numeric = mean
+        ,FUN_character=unique
+        )
+)</code></pre>
+</div>
+<pre><code>-   predictions keeping input regressors at a specfic value via a 
+*structured datagrid*</code></pre>
+<div class=".callout-note">
+<pre><code>`predictions(
+mod
+,newdata=
+datagrid(
+    am=c(0,1)
+    )
+)`</code></pre>
+</div>
+<ul>
+<li><p>If no datagrid() or newdata argument is specified the predictions will return a new data</p></li>
+<li><p>You can optionally summarize the information through the:</p>
+<ul>
+<li><code>by</code> argument</li>
+<li><code>datagrid()</code>,</li>
+<li><code>avg_predictions()</code></li>
+</ul></li>
+<li><p>the uncertainty test can be changed through the <code>vcov</code> argument</p></li>
+</ul>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+
+    A[Start] --&gt; base{Predictions}
+    
+    %% counterfactual prediction
+
+    base --&gt;|Create\npredictions\nbased on\nwhat if| counterfactual["Create\ncounterfactual\ndataset\n(duplicates the data)"]
+    counterfactual --&gt; |formula| counter_formula["predictions(\nmod\n,variables=list(var=c(0,1))\n)"]
+    counterfactual --&gt; |data only| counterfactual_grid_only["datagrid(\nmodel = mod,\nhp = c(100, 110),\ngrid_type = 'counterfactual')"]
+    %% static inputs based on mean/median or mode
+
+    base --&gt;|Predict with\nthe inputs at\ntheir means| static_inputs[Controlling\ninput\nvariables at\ntheir\nmean\median\mode]
+    static_inputs --&gt;newdata["predictions(\nmod\n,newdata='mean'\n)"]
+    static_inputs --&gt;datagrid["predictions(\nmod\n,datagrid(\nFUN_numeric=mean\nFUN_factor = unique) \n ) "]
+    static_inputs--&gt;default["predictions(\nmod\n,datagrid() \n ) "]
+ 
+    %% rowlevel predictions on existing data
+    
+    base --&gt;|Predict with existing data| rowwise[Produce row level prediction]
+    rowwise --&gt;prediction_formula["prediction(mod)"]
+    
+    %% predictions based on structured grid
+
+    base --&gt;|predict based on structured scenario| structured_scenario["create scenario"]
+    
+    structured_scenario --&gt;datagrid["predictions(\nmod\n,newdata =\n datagrid(\ncyl = mtcars$cyl\n, hp = c(90,100))\n"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="hypotheses-function" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="hypotheses-function"><span class="header-section-number">5.2</span> Hypotheses function</h2>
+<ul>
+<li><p>Hypotheses() command is similiar to summary()</p></li>
+<li><p>It will show the p values of the estimates</p></li>
+<li><p>You can change the test argument with the <code>hypothesis</code> arguments can change null instead of 0 to be another value</p>
+<ul>
+<li>Can be numeric value hypotheses(mod,hypothesis=2)</li>
+<li>Can be categorical differences “distanceMedium=distanceLong”</li>
+<li>Simply put the LHS and equal and put a formala or reference value</li>
+<li>Can reference variables by b(eta), number or names(coef(mod)) eg “b4=b5”,“b4=b2”</li>
+<li>Hypothesis = “pairwise” to see pairs of arguments</li>
+<li>hypothesis = “Sequential” to see sequential comparisons of arguments</li>
+</ul></li>
+<li><p>Expand the null hypothesis to a range eg. is the effect between a,b vs.&nbsp;just 0</p></li>
+<li><p>hypotheses(mod,equivalence=c(-3,3))</p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>How to read output?
+<ul>
+<li>S value is equivalent to how many times you will toss a head in a row</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<ul>
+<li>Useful to compare modeling outcomes between groups or within factors</li>
+</ul>
+<p>comparison( mod ,variables #the thing we want to understand - variables=list(color=c(“red”,“black”) – change of red to black - variables=list(unit_price=5) – chagne of prices increase 5 - variables=list(unit_price=“sd”) – change of one standard deviatin of the price - variables=list(unit_price=“iqr”) – change of across iqr of the price - variables=list(unit_price=c(10,500)) – change of ten to 500 ,comparison #can make it into a ratio, any built in funciton or custom function ,newdata= # the datagrid we want to understand the comparison by ,by = # the dimension we we want to aggregate by ,vcov= # uncertainity ,hypothesis # the specific question we want to answer or test for )</p>
+</section>
+<section id="how-to-understand-model-outputs" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="how-to-understand-model-outputs"><span class="header-section-number">5.3</span> how to understand model outputs</h2>
+<ul>
+<li><p>Create a sample dataframe framing the example variables that you want to understand (this creates the constant argument)</p></li>
+<li><p>Use the predicitions on the dataframe</p></li>
+<li><p>to understand the relative difference of variance, use the comparison</p></li>
+</ul>
+<p>#common categorical variables -unique -sequential -pairwise</p>
+</section>
+<section id="helper-packages" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="helper-packages"><span class="header-section-number">5.4</span> helper packages</h2>
+<p>matchit – stratify data mice – impute missing data</p>
+</section>
+<section id="notes-for-class" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="notes-for-class"><span class="header-section-number">5.5</span> notes for class</h2>
+<ul>
+<li>different column names when using view for predictions vs.&nbsp;what is printed in the console</li>
+<li>is setting variables argument in prediction the same as setting the grid_type=“counterfactual”</li>
+<li>in the newdata=datagrid is there a way to get average values per group (eg. if you use FUN_factor=unique</li>
+</ul>
+</section>
+</section>
+<section id="summary-of-functions" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Summary of functions</h1>
+<ul>
+<li>First create a linear model</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mod_simple <span class="ot">&lt;-</span> df_summary <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(rev<span class="sc">~</span><span class="fu">factor</span>(brand_name)<span class="sc">+</span><span class="fu">factor</span>(color_name)<span class="sc">+</span>avg_vol,<span class="at">data=</span>.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>You can use the predictions function to augment the predictions, this is very similiar to the broom::augment() function</p>
+<pre><code>-   Returns a prediction to each row
+-   Std. Error -- the different between Estimate and actual value
+-   2.5% to 97.% range of the estimate
+-   The input values 
+-   However additional arguments can be passed through to custom</code></pre></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>preds_out <span class="ot">&lt;-</span> mod_simple <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">predictions</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>predictions</strong></p>
+<ul>
+<li><p>predict row level</p></li>
+<li><p>predict based on average/median values if inputs</p></li>
+<li><p>Create counter factual data sets (eg. if values were set to x what would happen –duplicates dataset)</p></li>
+<li><p>Create group level summaries</p></li>
+<li><p>Alternatively you can supply a summary data frame to see how predicted values on counterfactual data</p></li>
+<li><p>you can use the <code>variables</code> function to supply a list of values to variable</p></li>
+<li><p>An alternative to the variable function is the to supply the variable paramters directly and then set grid_type=“counter factor”</p></li>
+<li><p>Alternatively you can set the new_data model to “mean” in lieu of datagrid()</p></li>
+<li><p>this will “control” the input of that variable by returning duplicate datasets controlling for reach dataset</p></li>
+<li><p>Create group level predictions by suppling quoted grouping variables to <code>by</code> argument</p>
+<ul>
+<li>Equivalent to using dplyr group_by() and summarize()</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div id="olsebflszk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#olsebflszk table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#olsebflszk thead, #olsebflszk tbody, #olsebflszk tfoot, #olsebflszk tr, #olsebflszk td, #olsebflszk th {
+  border-style: none;
+}
+
+#olsebflszk p {
+  margin: 0;
+  padding: 0;
+}
+
+#olsebflszk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#olsebflszk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#olsebflszk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#olsebflszk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#olsebflszk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#olsebflszk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#olsebflszk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#olsebflszk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#olsebflszk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#olsebflszk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#olsebflszk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#olsebflszk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#olsebflszk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#olsebflszk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#olsebflszk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#olsebflszk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#olsebflszk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#olsebflszk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#olsebflszk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#olsebflszk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#olsebflszk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#olsebflszk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#olsebflszk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#olsebflszk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#olsebflszk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#olsebflszk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#olsebflszk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#olsebflszk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#olsebflszk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#olsebflszk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#olsebflszk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#olsebflszk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#olsebflszk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#olsebflszk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#olsebflszk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#olsebflszk .gt_left {
+  text-align: left;
+}
+
+#olsebflszk .gt_center {
+  text-align: center;
+}
+
+#olsebflszk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#olsebflszk .gt_font_normal {
+  font-weight: normal;
+}
+
+#olsebflszk .gt_font_bold {
+  font-weight: bold;
+}
+
+#olsebflszk .gt_font_italic {
+  font-style: italic;
+}
+
+#olsebflszk .gt_super {
+  font-size: 65%;
+}
+
+#olsebflszk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#olsebflszk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#olsebflszk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#olsebflszk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#olsebflszk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#olsebflszk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#olsebflszk .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="type" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">type</th>
+<th id="function" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">function</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="type">row level prediction</td>
+<td class="gt_row gt_left" headers="function">predictions()</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="type">single prediction on average values</td>
+<td class="gt_row gt_left" headers="function">predictions(mod,newdata='mean')</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="type">single prediction on average values</td>
+<td class="gt_row gt_left" headers="function">predictions(mod,newdata=datagrid())</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="type">prediction on groups</td>
+<td class="gt_row gt_left" headers="function">predictions(mod,by='group_name')</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="type">prediction based counterfactual data</td>
+<td class="gt_row gt_left" headers="function">predictions(variable=list(var=c(1,10)))</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="type">prediction based counterfactual data</td>
+<td class="gt_row gt_left" headers="function">predictions(newdata=datagrid(var=c(1,10)))</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p><strong>avg_predictions</strong> - takes the average of an estimate</p>
+<p><strong>plot_predictions</strong></p>
+<ul>
+<li>plot predictions by passing the model and <code>condition</code></li>
+<li>this will create a plot of estimate on y axis and variable on the x axis</li>
+<li>if two variables are passed to condition the second variable will color</li>
+<li>Set draw=FALSE to return a dataframe with a group column</li>
+</ul>
+<section id="predictions-1" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="predictions-1"><span class="header-section-number">6.1</span> Predictions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>counterfactual_predictions <span class="ot">&lt;-</span> <span class="fu">predictions</span>(mod_simple,<span class="at">variables=</span><span class="fu">list</span>(<span class="at">avg_vol=</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">1000</span>)))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>counterfactual_predictions <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(avg_vol) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>( </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_rev=</span><span class="fu">mean</span>(estimate,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  avg_vol avg_rev
+    &lt;dbl&gt;   &lt;dbl&gt;
+1       4  35486.
+2    1000 253805.</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Alternatively you can use the datagrid() arguement to create new a dataset with each value at their average, median or mode value</p>
+<ul>
+<li>use the FUN_factor() and FUN_numeric to sample datamodel</li>
+<li>this will take overall mean or median values (not group specific)</li>
+<li>based on these unique values and overall avg values it will do a prediction per mini group</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predictions</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        mod_simple</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        ,<span class="at">newdata=</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">datagrid</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">FUN_numeric=</span>median</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>            ,<span class="at">FUN_factor=</span>unique)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Estimate Std. Error       z Pr(&gt;|z|)     S  2.5 % 97.5 %
+    45528        654  69.612   &lt;0.001   Inf  44246  46810
+    43660        726  60.154   &lt;0.001   Inf  42238  45083
+    89011        571 155.763   &lt;0.001   Inf  87891  90131
+    11977        846  14.153   &lt;0.001 148.6  10318  13635
+    77627        610 127.300   &lt;0.001   Inf  76432  78823
+--- 150 rows omitted. See ?avg_predictions and ?print.marginaleffects --- 
+     -240       1145  -0.209    0.834   0.3  -2483   2004
+    -1674       1613  -1.038    0.299   1.7  -4835   1487
+   -10693       1031 -10.372   &lt;0.001  81.3 -12713  -8672
+   -63592       3028 -21.001   &lt;0.001 322.9 -69527 -57657
+   -25311       1961 -12.905   &lt;0.001 124.2 -29155 -21466
+Columns: rowid, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, rev, brand_name, color_name, avg_vol 
+Type:  response </code></pre>
+</div>
+</div>
+</section>
+<section id="plot-predictions" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="plot-predictions"><span class="header-section-number">6.2</span> Plot predictions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mod_simple <span class="sc">%&gt;%</span>  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_predictions</span>(<span class="at">condition=</span><span class="fu">c</span>(<span class="st">"avg_vol"</span>,<span class="st">"brand_name"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="interactions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mod_simple <span class="sc">%&gt;%</span>  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_predictions</span>(<span class="at">condition=</span><span class="fu">c</span>(<span class="st">"avg_vol"</span>,<span class="st">"brand_name"</span>),   <span class="at">draw=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    rowid  estimate std.error statistic       p.value   s.value  conf.low
+1       4  75182.93  634.9763 118.40274  0.000000e+00       Inf  73938.40
+2       7  88256.06  690.7315 127.77189  0.000000e+00       Inf  86902.26
+3       1  87476.61  598.1267 146.25097  0.000000e+00       Inf  86304.31
+4       2 112464.84  602.8236 186.56344  0.000000e+00       Inf 111283.33
+5      10  55305.74  847.5537  65.25338  0.000000e+00       Inf  53644.57
+6       8  41600.50  717.1396  58.00893  0.000000e+00       Inf  40194.94
+7       3  98575.08  716.7132 137.53768  0.000000e+00       Inf  97170.35
+8       6  60404.65  620.6240  97.32891  0.000000e+00       Inf  59188.25
+9       9  75343.87  683.1283 110.29242  0.000000e+00       Inf  74004.97
+10      5  73345.61  676.9042 108.35449  0.000000e+00       Inf  72018.90
+11     14  77849.07  625.8719 124.38499  0.000000e+00       Inf  76622.38
+12     17  90922.20  679.5855 133.79066  0.000000e+00       Inf  89590.24
+13     11  90142.75  563.7441 159.90012  0.000000e+00       Inf  89037.83
+14     12 115130.97  596.3703 193.05284  0.000000e+00       Inf 113962.11
+15     20  57971.88  849.8823  68.21165  0.000000e+00       Inf  56306.14
+16     18  44266.64  723.7664  61.16150  0.000000e+00       Inf  42848.08
+17     13 101241.22  710.9418 142.40436  0.000000e+00       Inf  99847.79
+18     16  63070.79  622.9311 101.24842  0.000000e+00       Inf  61849.87
+19     19  78010.01  677.8138 115.09061  0.000000e+00       Inf  76681.52
+20     15  76011.74  663.7248 114.52297  0.000000e+00       Inf  74710.86
+21     24  80515.20  668.9076 120.36820  0.000000e+00       Inf  79204.17
+22     27  93588.33  716.7734 130.56894  0.000000e+00       Inf  92183.48
+23     21  92808.88  587.4183 157.99455  0.000000e+00       Inf  91657.56
+24     22 117797.11  644.2979 182.83020  0.000000e+00       Inf 116534.31
+25     30  60638.01  890.7602  68.07445  0.000000e+00       Inf  58892.15
+26     28  46932.77  774.9757  60.56032  0.000000e+00       Inf  45413.85
+27     23 103907.35  751.2654 138.30978  0.000000e+00       Inf 102434.90
+28     26  65736.92  676.8406  97.12320  0.000000e+00       Inf  64410.34
+29     29  80676.14  720.6940 111.94229  0.000000e+00       Inf  79263.61
+30     25  78677.87  700.0448 112.38977  0.000000e+00       Inf  77305.81
+31     34  83181.34  755.2219 110.14159  0.000000e+00       Inf  81701.13
+32     37  96254.47  795.5455 120.99179  0.000000e+00       Inf  94695.23
+33     31  95475.02  662.9586 144.01355  0.000000e+00       Inf  94175.64
+34     32 120463.24  736.0591 163.65974  0.000000e+00       Inf 119020.59
+35     40  63304.15  965.3023  65.57961  0.000000e+00       Inf  61412.19
+36     38  49598.91  862.8661  57.48158  0.000000e+00       Inf  47907.72
+37     33 106573.48  831.0006 128.24718  0.000000e+00       Inf 104944.75
+38     36  68403.06  771.6114  88.64962  0.000000e+00       Inf  66890.73
+39     39  83342.28  804.0953 103.64727  0.000000e+00       Inf  81766.28
+40     35  81344.01  778.9712 104.42492  0.000000e+00       Inf  79817.25
+41     44  85847.47  872.0572  98.44248  0.000000e+00       Inf  84138.27
+42     47  98920.60  905.1089 109.29139  0.000000e+00       Inf  97146.62
+43     41  98141.15  775.3508 126.57646  0.000000e+00       Inf  96621.49
+44     42 123129.38  857.6988 143.55783  0.000000e+00       Inf 121448.32
+45     50  65970.28 1066.4728  61.85838  0.000000e+00       Inf  63880.03
+46     48  52265.04  977.5938  53.46295  0.000000e+00       Inf  50349.00
+47     43 109239.62  940.1731 116.19097  0.000000e+00       Inf 107396.91
+48     46  71069.19  894.3468  79.46492  0.000000e+00       Inf  69316.30
+49     49  86008.41  917.0275  93.79044  0.000000e+00       Inf  84211.07
+50     45  84010.14  889.2305  94.47511  0.000000e+00       Inf  82267.28
+51     54  88513.61 1008.8649  87.73583  0.000000e+00       Inf  86536.27
+52     57 101586.74 1035.7377  98.08153  0.000000e+00       Inf  99556.73
+53     51 100807.29  911.0569 110.64873  0.000000e+00       Inf  99021.65
+54     52 125795.51  998.3549 126.00280  0.000000e+00       Inf 123838.77
+55     60  68636.41 1187.4851  57.79981  0.000000e+00       Inf  66308.99
+56     58  54931.18 1110.8745  49.44859  0.000000e+00       Inf  52753.90
+57     53 111905.75 1069.8083 104.60356  0.000000e+00       Inf 109808.97
+58     56  73735.33 1035.1469  71.23175  0.000000e+00       Inf  71706.48
+59     59  88674.55 1050.0051  84.45154  0.000000e+00       Inf  86616.57
+60     55  86676.28 1020.7185  84.91693  0.000000e+00       Inf  84675.71
+61     64  91179.74 1158.5915  78.69878  0.000000e+00       Inf  88908.94
+62     67 104252.87 1180.4593  88.31551  0.000000e+00       Inf 101939.22
+63     61 103473.42 1061.1699  97.50882  0.000000e+00       Inf 101393.57
+64     62 128461.65 1151.0772 111.60124  0.000000e+00       Inf 126205.58
+65     70  71302.55 1322.9054  53.89845  0.000000e+00       Inf  68709.70
+66     68  57597.31 1256.8197  45.82782  0.000000e+00       Inf  55133.99
+67     63 114571.89 1213.3653  94.42490  0.000000e+00       Inf 112193.74
+68     66  76401.46 1187.6040  64.33244  0.000000e+00       Inf  74073.80
+69     69  91340.68 1196.3624  76.34867  0.000000e+00       Inf  88995.85
+70     65  89342.41 1166.2773  76.60478  0.000000e+00       Inf  87056.55
+71     74  93845.87 1316.8375  71.26610  0.000000e+00       Inf  91264.92
+72     77 106919.01 1334.6973  80.10731  0.000000e+00       Inf 104303.05
+73     71 106139.56 1220.3849  86.97220  0.000000e+00       Inf 103747.65
+74     72 131127.78 1311.6578  99.97103  0.000000e+00       Inf 128556.98
+75     80  73968.68 1468.7537  50.36153  0.000000e+00       Inf  71089.98
+76     78  60263.45 1411.5064  42.69442  0.000000e+00       Inf  57496.95
+77     73 117238.02 1366.4632  85.79669  0.000000e+00       Inf 114559.80
+78     76  79067.60 1347.7679  58.66559  0.000000e+00       Inf  76426.02
+79     79  94006.82 1351.7605  69.54399  0.000000e+00       Inf  91357.41
+80     75  92008.55 1321.2645  69.63674  0.000000e+00       Inf  89418.92
+81     84  96512.01 1480.8743  65.17232  0.000000e+00       Inf  93609.55
+82     87 109585.14 1495.5100  73.27610  0.000000e+00       Inf 106654.00
+83     81 108805.69 1385.5678  78.52787  0.000000e+00       Inf 106090.03
+84     82 133793.92 1477.5367  90.55201  0.000000e+00       Inf 130898.00
+85     90  76634.82 1622.2199  47.24071  0.000000e+00       Inf  73455.33
+86     88  62929.58 1572.3568  40.02246  0.000000e+00       Inf  59847.82
+87     83 119904.16 1526.2336  78.56213  0.000000e+00       Inf 116912.79
+88     86  81733.73 1513.1934  54.01407  0.000000e+00       Inf  78767.93
+89     89  96672.95 1513.4169  63.87728  0.000000e+00       Inf  93706.71
+90     85  94674.68 1482.7267  63.85174  0.000000e+00       Inf  91768.59
+91     94  99178.14 1648.9747  60.14534  0.000000e+00       Inf  95946.21
+92     97 112251.28 1660.9892  67.58098  0.000000e+00       Inf 108995.80
+93     91 111471.83 1554.8177  71.69447  0.000000e+00       Inf 108424.44
+94     92 136460.05 1647.1138  82.84798  0.000000e+00       Inf 133231.77
+95    100  79300.95 1781.3361  44.51768  0.000000e+00       Inf  75809.60
+96     98  65595.72 1737.6601  37.74945  0.000000e+00       Inf  62189.97
+97     93 122570.29 1690.7861  72.49308  0.000000e+00       Inf 119256.41
+98     96  84399.87 1682.3292  50.16846  0.000000e+00       Inf  81102.56
+99     99  99339.09 1679.5256  59.14711  0.000000e+00       Inf  96047.28
+100    95  97340.82 1648.7626  59.03871  0.000000e+00       Inf  94109.30
+101   104 101844.28 1820.0130  55.95799  0.000000e+00       Inf  98277.12
+102   107 114917.41 1829.8690  62.80090  0.000000e+00       Inf 111330.93
+103   101 114137.96 1726.9392  66.09263  0.000000e+00       Inf 110753.22
+104   102 139126.18 1819.3555  76.47004  0.000000e+00       Inf 135560.31
+105   110  81967.09 1944.7159  42.14862  0.000000e+00       Inf  78155.52
+106   108  68261.85 1906.2582  35.80934 7.902353e-281  930.4795  64525.65
+107   103 125236.43 1858.8510  67.37303  0.000000e+00       Inf 121593.15
+108   106  87066.00 1854.1601  46.95711  0.000000e+00       Inf  83431.91
+109   109 102005.22 1848.8868  55.17115  0.000000e+00       Inf  98381.47
+110   105 100006.95 1818.1195  55.00571  0.000000e+00       Inf  96443.50
+111   114 104510.41 1993.2331  52.43261  0.000000e+00       Inf 100603.75
+112   117 117583.55 2001.2889  58.75391  0.000000e+00       Inf 113661.09
+113   111 116804.10 1901.1525  61.43857  0.000000e+00       Inf 113077.90
+114   112 141792.32 1993.5711  71.12479  0.000000e+00       Inf 137884.99
+115   120  84633.22 2111.3699  40.08451  0.000000e+00       Inf  80495.01
+116   118  70927.99 2077.3491  34.14351 1.669248e-255  846.3525  66856.46
+117   113 127902.56 2029.5560  63.01997  0.000000e+00       Inf 123924.71
+118   116  89732.13 2028.0012  44.24659  0.000000e+00       Inf  85757.33
+119   119 104671.35 2020.6831  51.79999  0.000000e+00       Inf 100710.89
+120   115 102673.09 1989.9498  51.59582  0.000000e+00       Inf  98772.86
+121   124 107176.55 2168.1121  49.43312  0.000000e+00       Inf 102927.13
+122   127 120249.68 2174.6483  55.29615  0.000000e+00       Inf 115987.45
+123   121 119470.23 2076.9314  57.52247  0.000000e+00       Inf 115399.52
+124   122 144458.45 2169.2851  66.59265  0.000000e+00       Inf 140206.73
+125   130  87299.36 2280.5804  38.27945  0.000000e+00       Inf  82829.50
+126   128  73594.12 2250.3642  32.70321 1.406206e-234  776.8394  69183.49
+127   123 130568.70 2202.2873  59.28777  0.000000e+00       Inf 126252.29
+128   126  92398.27 2203.3767  41.93485  0.000000e+00       Inf  88079.73
+129   129 107337.49 2194.3424  48.91556  0.000000e+00       Inf 103036.66
+130   125 105339.22 2163.6642  48.68557  0.000000e+00       Inf 101098.52
+131   134 109842.68 2344.2788  46.85564  0.000000e+00       Inf 105247.98
+132   137 122915.82 2349.5177  52.31534  0.000000e+00       Inf 118310.85
+133   131 122136.36 2253.9095  54.18867  0.000000e+00       Inf 117718.78
+134   132 147124.59 2346.1610  62.70865  0.000000e+00       Inf 142526.20
+135   140  89965.49 2451.8180  36.69338 9.312726e-295  976.7496  85160.02
+136   138  76260.26 2424.8917  31.44893 4.340993e-217  718.7404  71507.56
+137   133 133234.83 2376.6031  56.06104  0.000000e+00       Inf 128576.77
+138   136  95064.40 2379.9475  39.94391  0.000000e+00       Inf  90399.79
+139   139 110003.62 2369.4552  46.42570  0.000000e+00       Inf 105359.58
+140   135 108005.36 2338.8429  46.17897  0.000000e+00       Inf 103421.31
+141   144 112508.82 2521.4632  44.62045  0.000000e+00       Inf 107566.84
+142   147 125581.95 2525.5837  49.72393  0.000000e+00       Inf 120631.90
+143   141 124802.50 2431.8250  51.32051  0.000000e+00       Inf 120036.21
+144   142 149790.72 2523.9543  59.34764  0.000000e+00       Inf 144843.86
+145   150  92631.63 2624.6862  35.29246 7.665067e-273  903.9481  87487.34
+146   148  78926.39 2600.6271  30.34898 2.591240e-202  669.6558  73829.25
+147   143 135900.97 2552.1785  53.24901  0.000000e+00       Inf 130898.79
+148   146  97730.54 2557.4660  38.21382  0.000000e+00       Inf  92718.00
+149   149 112669.76 2545.7216  44.25848  0.000000e+00       Inf 107680.24
+150   145 110671.49 2515.1801  44.00142  0.000000e+00       Inf 105741.83
+151   154 115174.95 2699.4651  42.66584  0.000000e+00       Inf 109884.10
+152   157 128248.09 2702.6124  47.45338  0.000000e+00       Inf 122951.06
+153   151 127468.63 2610.4863  48.82946  0.000000e+00       Inf 122352.17
+154   152 152456.86 2702.4843  56.41360  0.000000e+00       Inf 147160.09
+155   160  95297.76 2798.8827  34.04850 4.271484e-254  841.6750  89812.05
+156   158  81592.53 2777.3412  29.37793 1.051391e-189  627.7721  76149.04
+157   153 138567.10 2728.7708  50.78004  0.000000e+00       Inf 133218.81
+158   156 100396.67 2735.7477  36.69807 7.838229e-295  976.9983  95034.71
+159   159 115335.89 2722.9175  42.35747  0.000000e+00       Inf 109999.07
+160   155 113337.63 2692.4480  42.09464  0.000000e+00       Inf 108060.52
+161   164 117841.09 2878.1327  40.94359  0.000000e+00       Inf 112200.05
+162   167 130914.22 2880.4263  45.44960  0.000000e+00       Inf 125268.69
+163   161 130134.77 2789.7501  46.64746  0.000000e+00       Inf 124666.96
+164   162 155122.99 2881.6136  53.83199  0.000000e+00       Inf 149475.13
+165   170  97963.90 2974.1743  32.93818 6.246070e-238  787.9759  92134.62
+166   168  84258.66 2954.8584  28.51530 7.570276e-179  591.7048  78467.24
+167   163 141233.24 2906.1943  48.59731  0.000000e+00       Inf 135537.20
+168   166 103062.81 2914.6526  35.36024 6.979270e-274  907.4052  97350.19
+169   169 118002.03 2900.8727  40.67811  0.000000e+00       Inf 112316.42
+170   165 116003.76 2870.4743  40.41275  0.000000e+00       Inf 110377.73
+171   174 120507.22 3057.3493  39.41559  0.000000e+00       Inf 114514.93
+172   177 133580.35 3058.8883  43.66958  0.000000e+00       Inf 127585.04
+173   171 132800.90 2969.5074  44.72153  0.000000e+00       Inf 126980.78
+174   172 157789.13 3061.2376  51.54423  0.000000e+00       Inf 151789.21
+175   180 100630.03 3150.3780  31.94221 6.931082e-224  741.3188  94455.40
+176   178  86924.79 3133.0421  27.74453 2.028217e-169  560.3856  80784.14
+177   173 143899.37 3084.3058  46.65535  0.000000e+00       Inf 137854.24
+178   176 105728.94 3094.0726  34.17145 6.422372e-256  847.7305  99664.67
+179   179 120668.16 3079.4554  39.18490  0.000000e+00       Inf 114632.54
+180   175 118669.89 3049.1262  38.91931  0.000000e+00       Inf 112693.72
+181   184 123173.36 3237.0237  38.05142  0.000000e+00       Inf 116828.91
+182   187 136246.49 3237.8916  42.07877  0.000000e+00       Inf 129900.34
+183   181 135467.04 3149.6735  43.00987  0.000000e+00       Inf 129293.79
+184   182 160455.26 3241.2734  49.50377  0.000000e+00       Inf 154102.48
+185   190 103296.17 3327.3490  31.04458 1.350004e-211  700.4939  96774.68
+186   188  89590.93 3311.7848  27.05216 3.602490e-161  532.9814  83099.95
+187   183 146565.50 3262.9924  44.91751  0.000000e+00       Inf 140170.16
+188   186 108395.08 3273.9229  33.10862 2.233332e-240  796.1035 101978.31
+189   189 123334.30 3258.5626  37.84929  0.000000e+00       Inf 116947.63
+190   185 121336.03 3228.2997  37.58512  0.000000e+00       Inf 115008.68
+191   194 125839.49 3417.0838  36.82657 6.936008e-297  983.8185 119142.13
+192   197 138912.62 3417.3507  40.64921  0.000000e+00       Inf 132214.74
+193   191 138133.17 3330.1821  41.47916  0.000000e+00       Inf 131606.14
+194   192 163121.40 3421.6565  47.67322  0.000000e+00       Inf 156415.07
+195   200 105962.30 3504.9711  30.23200 8.996071e-201  664.5383  99092.68
+196   198  92257.06 3491.0006  26.42711 6.688421e-154  508.8353  85414.83
+197   193 149231.64 3442.1649  43.35401  0.000000e+00       Inf 142485.12
+198   196 111061.21 3454.1364  32.15311 7.992229e-227  751.0791 104291.23
+199   199 126000.43 3438.1123  36.64814 4.898395e-294  974.3546 119261.86
+200   195 124002.16 3407.9127  36.38654 6.949323e-290  960.5623 117322.78
+201   204 128505.63 3597.4715  35.72110 1.860020e-279  925.9226 121454.71
+202   207 141578.76 3597.1978  39.35807  0.000000e+00       Inf 134528.38
+203   201 140799.31 3510.9805  40.10256  0.000000e+00       Inf 133917.91
+204   202 165787.53 3602.3344  46.02225  0.000000e+00       Inf 158727.09
+205   210 108628.44 3683.1501  29.49335 3.503620e-191  632.6794 101409.59
+206   208  94923.20 3670.6203  25.86026 1.865392e-147  487.4240  87728.91
+207   203 151897.77 3621.7506  41.94043  0.000000e+00       Inf 144799.27
+208   206 113727.35 3634.6591  31.28969 6.445845e-215  711.5262 106603.55
+209   209 128666.57 3618.0385  35.56252 5.321636e-277  917.7622 121575.34
+210   205 126668.30 3587.8990  35.30431 5.042942e-273  904.5521 119636.15
+211   214 131171.76 3778.1401  34.71861 4.127775e-264  874.9437 123766.74
+212   217 144244.89 3777.3772  38.18652  0.000000e+00       Inf 136841.37
+213   211 143465.44 3692.0260  38.85819  0.000000e+00       Inf 136229.20
+214   212 168453.67 3783.2651  44.52600  0.000000e+00       Inf 161038.60
+215   220 111294.57 3861.8088  28.81929 1.229804e-182  604.2925 103725.56
+216   218  97589.33 3850.5872  25.34401 1.046149e-141  468.3268  90042.32
+217   213 154563.91 3801.6915  40.65662  0.000000e+00       Inf 147112.73
+218   216 116393.48 3815.4470  30.50586 2.179131e-204  676.5496 108915.34
+219   219 131332.70 3798.2878  34.57682 5.636987e-262  867.8502 123888.19
+220   215 129334.43 3768.2053  34.32255 3.616943e-258  855.2027 121948.89
+221   224 133837.89 3959.0510  33.80555 1.634582e-250  829.7731 126078.30
+222   227 146911.03 3957.8437  37.11896 1.389563e-301  999.4257 139153.80
+223   221 146131.58 3873.2841  37.72808  0.000000e+00       Inf 138540.08
+224   222 171119.80 3964.4138  43.16396  0.000000e+00       Inf 163349.69
+225   230 113960.70 4040.8838  28.20193 5.538058e-175  578.8680 106040.72
+226   228 100255.47 4030.8550  24.87201 1.494775e-136  451.2023  92355.14
+227   223 157230.04 3981.9392  39.48580  0.000000e+00       Inf 149425.59
+228   226 119059.62 3996.4643  29.79124 5.073581e-195  645.4330 111226.69
+229   229 133998.84 3978.8163  33.67807 1.211096e-248  823.5619 126200.50
+230   225 132000.57 3948.7876  33.42813 5.352047e-245  811.4523 124261.09
+231   234 136504.03 4140.1724  32.97061 2.143012e-238  789.5192 128389.44
+232   237 149577.16 4138.5596  36.14232 4.911134e-286  947.7754 141465.73
+233   231 148797.71 4054.7261  36.69735 8.048866e-295  976.9600 140850.59
+234   232 173785.94 4145.7521  41.91904  0.000000e+00       Inf 165660.41
+235   240 116626.84 4220.3219  27.63458 4.275985e-168  555.9877 108355.16
+236   238 102921.60 4211.3849  24.43890 6.604512e-132  435.7711  94667.44
+237   233 159896.18 4162.4539  38.41392  0.000000e+00       Inf 151737.92
+238   236 121725.75 4177.6809  29.13716 1.215127e-186  617.5975 113537.65
+239   239 136664.97 4159.5875  32.85541 9.532618e-237  784.0441 128512.33
+240   235 134666.70 4129.6098  32.61003 2.956281e-233  772.4455 126572.82
+241   244 139170.16 4321.4779  32.20430 1.536570e-227  753.4580 130700.22
+242   247 152243.30 4319.4937  35.24563 4.002165e-272  901.5637 143777.25
+243   241 151463.85 4236.3284  35.75357 5.823368e-280  927.5980 143160.79
+244   242 176452.07 4327.2560  40.77690  0.000000e+00       Inf 167970.80
+245   250 119292.97 4400.0787  27.11155 7.195712e-162  535.3052 110668.98
+246   248 105587.74 4392.1447  24.04013 1.058759e-127  421.8025  96979.29
+247   243 162562.31 4343.2022  37.42914 1.312469e-306 1016.1177 154049.79
+248   246 124391.89 4359.0722  28.53632 4.152510e-179  592.5711 115848.26
+249   249 139331.11 4340.5713  32.09972 4.449260e-226  748.6022 130823.74
+250   245 137332.84 4310.6418  31.85902 9.871886e-223  737.4866 128884.14
+251   254 141836.30 4502.9454  31.49856 9.089678e-218  720.9961 133010.69
+252   257 154909.43 4500.6195  34.41958 1.284722e-259  860.0179 146088.38
+253   251 154129.98 4418.0714  34.88626 1.201313e-266  883.3683 145470.72
+254   252 179118.20 4508.9057  39.72543  0.000000e+00       Inf 170280.91
+255   260 121959.11 4580.1167  26.62795 3.223019e-156  516.5324 112982.24
+256   258 108253.87 4573.1070  23.67184 7.032986e-124  409.1049  99290.75
+257   253 165228.45 4524.1564  36.52138 5.076952e-292  967.6590 156361.26
+258   256 127058.02 4540.6170  27.98254 2.650058e-172  569.9656 118158.57
+259   259 141997.24 4521.7420  31.40322 1.828847e-216  716.6655 133134.79
+260   255 139998.97 4491.8580  31.16727 2.959211e-213  706.0055 131195.09
+261   264 144502.43 4684.5557  30.84656 6.229187e-209  691.6439 135320.87
+262   267 157575.57 4681.9150  33.65622 2.528465e-248  822.4999 148399.18
+263   261 156796.12 4599.9381  34.08657 1.166393e-254  843.5477 147780.40
+264   262 181784.34 4690.6841  38.75433  0.000000e+00       Inf 172590.77
+265   270 124625.24 4760.4041  26.17955 4.543400e-151  499.4274 115295.02
+266   268 110920.01 4754.2487  23.33071 2.163588e-120  397.5179 101601.85
+267   263 167894.58 4705.2924  35.68207 7.499946e-279  923.9111 158672.38
+268   266 129724.15 4722.2979  27.47056 3.947731e-166  549.4590 120468.62
+269   269 144663.37 4703.0779  30.75930 9.184015e-208  687.7619 135445.51
+270   265 142665.11 4673.2369  30.52811 1.104063e-204  677.5305 133505.73
+271   274 147168.57 4866.2931  30.24244 6.559712e-201  664.9939 137630.81
+272   277 160241.70 4863.3610  32.94876 4.407412e-238  788.4790 150709.69
+273   271 159462.25 4781.9148  33.34695 8.066610e-244  807.5385 150089.87
+274   272 184450.47 4872.5769  37.85481  0.000000e+00       Inf 174900.40
+275   280 127291.38 4940.9135  25.76272 2.321700e-146  483.7863 117607.37
+276   278 113586.14 4935.5502  23.01388 3.385302e-117  386.9063 103912.64
+277   273 170560.72 4886.5902  34.90383 6.503316e-267  884.2536 160983.18
+278   276 132390.29 4904.0995  26.99584 1.653786e-160  530.7827 122778.43
+279   279 147329.51 4884.5610  30.16228 7.403007e-200  661.4975 137755.95
+280   275 145331.24 4854.7607  29.93582 6.730466e-197  651.6691 135816.09
+281   284 149834.70 5048.1439  29.68115 1.344785e-193  640.7047 139940.52
+282   287 162907.84 5044.9415  32.29132 9.259595e-229  757.5106 153019.93
+283   281 162128.38 4963.9891  32.66091 5.610288e-234  774.8431 152399.14
+284   282 187116.61 5054.5716  37.01928 5.606659e-300  994.0913 177209.83
+285   290 129957.51 5121.6215  25.37429 4.848615e-142  469.4362 119919.32
+286   288 116252.28 5116.9944  22.71886 2.916853e-114  377.1554 106223.15
+287   283 173226.85 5068.0323  34.18030 4.745150e-256  848.1671 163293.69
+288   286 135056.42 5086.0091  26.55450 2.278634e-155  513.7107 125088.03
+289   289 149995.64 5066.1751  29.60728 1.204424e-192  637.5419 140066.12
+290   285 147997.38 5036.4134  29.38547 8.421518e-190  628.0923 138126.19
+291   294 152500.84 5230.0963  29.15832 6.552238e-187  618.4886 142250.04
+292   297 165573.97 5226.6423  31.67884 3.039808e-220  729.2202 155329.94
+293   291 164794.52 5146.1510  32.02287 5.240170e-225  745.0442 154708.25
+294   292 189782.74 5236.6576  36.24120 1.367490e-287  952.9418 179519.08
+295   300 132623.65 5302.5076  25.01150 4.583953e-138  456.2295 122230.92
+296   298 118918.41 5298.5667  22.44351 1.480987e-111  368.1675 108533.41
+297   293 175892.99 5249.6038  33.50595 3.947329e-246  815.2134 165603.95
+298   296 137722.56 5268.0155  26.14316 1.178908e-150  498.0518 127397.44
+299   299 152661.78 5247.9070  29.09003 4.799435e-186  615.6158 142376.07
+300   295 150663.51 5218.1818  28.87280 2.622006e-183  606.5222 140436.06
+301   304 155166.97 5412.1397  28.67017 8.986095e-181  598.1013 144559.37
+302   307 168240.11 5408.4514  31.10689 1.943460e-212  703.2901 157639.74
+303   301 167460.65 5328.3909  31.42800 8.389349e-217  717.7898 157017.20
+304   302 192448.88 5418.8258  35.51487 2.898084e-276  915.3171 181828.18
+305   310 135289.78 5483.5546  24.67191 2.141829e-134  444.0395 124542.21
+306   308 121584.55 5480.2543  22.18593 4.696089e-109  359.8587 110843.44
+307   303 178559.12 5431.2916  32.87600 4.843592e-237  785.0209 167913.98
+308   306 140388.69 5450.1087  25.75888 2.563591e-146  483.6433 129706.68
+309   309 155327.91 5429.7443  28.60686 5.520958e-180  595.4821 144685.81
+310   305 153329.65 5400.0538  28.39410 2.391698e-177  586.7232 142745.73
+311   314 157833.11 5594.2657  28.21337 4.008162e-175  579.3345 146868.55
+312   317 170906.24 5590.3580  30.57161 2.919360e-205  679.4496 159949.34
+313   311 170126.79 5510.7017  30.87207 2.832414e-209  692.7809 159326.01
+314   312 195115.01 5601.0683  34.83532 7.103443e-266  880.8044 184137.12
+315   320 137955.92 5664.7464  24.35341 5.334064e-131  432.7573 126853.22
+316   318 124250.68 5662.0461  21.94448 9.777110e-107  352.1569 113153.27
+317   313 181225.26 5613.0848  32.28621 1.092220e-228  757.2723 170223.81
+318   316 143054.83 5632.2807  25.39909 2.580638e-142  470.3461 132015.76
+319   319 157994.05 5611.6773  28.15451 2.110058e-174  576.9382 146995.36
+320   315 155995.78 5582.0197  27.94612 7.348806e-172  568.4941 145055.22
+321   324 160499.24 5776.4659  27.78502 6.580502e-170  562.0096 149177.58
+322   327 173572.37 5772.3531  30.06960 1.210311e-198  657.4664 162258.77
+323   321 172792.92 5693.0759  30.35142 2.406577e-202  669.7625 161634.70
+324   322 197781.15 5783.3776  34.19821 2.570947e-256  849.0513 186445.94
+325   330 140622.05 5846.0703  24.05412 7.559719e-128  422.2885 129163.96
+326   328 126916.81 5843.9324  21.71771 1.395716e-104  344.9995 115462.92
+327   323 183891.39 5794.9729  31.73292 5.464014e-221  731.6961 172533.45
+328   326 145720.96 5814.5234  25.06155 1.306585e-138  458.0403 134324.71
+329   329 160660.18 5793.6964  27.73017 3.022614e-169  559.8101 149304.75
+330   325 158661.92 5764.0701  27.52602 8.572409e-167  551.6623 147364.55
+331   334 163165.38 5958.7341  27.38256 4.425147e-165  545.9724 151486.47
+332   337 176238.51 5954.4285  29.59789 1.590761e-192  637.1405 164568.04
+333   331 175459.06 5875.5084  29.86279 5.990206e-196  648.5153 163943.27
+334   332 200447.28 5965.7483  33.59969 1.695193e-247  819.7548 188754.63
+335   340 143288.19 6027.5139  23.77235 6.453880e-125  412.5508 131474.48
+336   338 129582.95 6025.9047  21.50431 1.418660e-102  338.3321 117772.39
+337   333 186557.52 5976.9478  31.21284 7.133723e-214  708.0580 174842.92
+338   336 148387.10 5996.8313  24.74425 3.575141e-135  446.6223 136633.52
+339   339 163326.32 5975.7944  27.33131 1.801138e-164  543.9473 151613.98
+340   335 161328.05 5946.1979  27.13130 4.209576e-162  536.0787 149673.72
+341   344 165831.51 6141.0640  27.00371 1.336834e-160  531.0897 153795.25
+342   347 178904.64 6136.5772  29.15382 7.473435e-187  618.2988 166877.17
+343   341 178125.19 6057.9934  29.40333 4.978592e-190  628.8506 166251.74
+344   342 203113.42 6148.1743  33.03638 2.440842e-239  792.6534 191063.22
+345   350 145954.32 6209.0667  23.50664 3.488078e-122  403.4728 133784.77
+346   348 132249.08 6207.9554  21.30316 1.061092e-100  332.1073 120081.72
+347   343 189223.66 6159.0015  30.72311 2.797182e-207  686.1551 177152.24
+348   346 151053.23 6179.1980  24.44544 5.626536e-132  436.0023 138942.23
+349   349 165992.45 6157.9639  26.95574 4.886107e-160  529.2198 153923.06
+350   345 163994.18 6128.3957  26.75973 9.515481e-158  521.6144 151982.75
+351   354 168497.65 6323.4502  26.64647 1.966301e-156  517.2453 156103.91
+352   357 181570.78 6318.7926  28.73504 1.392958e-181  600.7908 169186.17
+353   351 180791.33 6240.5265  28.97052 1.547663e-184  610.6047 168560.12
+354   352 205779.55 6330.6509  32.50528 8.981246e-232  767.5204 193371.70
+355   360 148620.46 6390.7195  23.25567 1.246549e-119  394.9915 136094.88
+356   358 134915.22 6390.0776  21.11324  6.011208e-99  326.2832 122390.90
+357   353 191889.79 6341.1271  30.26115 3.722056e-201  665.8114 179461.41
+358   356 153719.37 6361.6186  24.16356 5.377745e-129  426.1017 141250.82
+359   359 168658.59 6340.1989  26.60147 6.528012e-156  515.5141 156232.03
+360   355 166660.32 6310.6576  26.40934 1.070253e-153  508.1570 154291.66
+361   364 171163.78 6505.8878  26.30906 1.510624e-152  504.3379 158412.47
+362   367 184236.91 6501.0693  28.33948 1.128249e-176  584.4853 171495.05
+363   361 183457.46 6423.1033  28.56212 1.986206e-179  593.6351 170868.41
+364   362 208445.69 6513.1742  32.00370 9.684752e-225  744.1581 195680.10
+365   370 151286.59 6572.4642  23.01824 3.060868e-117  387.0516 138404.80
+366   368 137581.35 6572.2658  20.93363  2.645840e-97  320.8233 124699.95
+367   363 194555.93 6523.3188  29.82468 1.869981e-195  646.8730 181770.46
+368   366 156385.50 6544.0885  23.89722 3.273769e-126  416.8520 143559.32
+369   369 171324.72 6522.4936  26.26675 4.600961e-152  502.7311 158540.87
+370   365 169326.45 6492.9781  26.07840 6.411131e-150  495.6086 156600.45
+371   374 173829.91 6688.3731  25.98986 6.447324e-149  492.2786 160720.94
+372   377 186903.05 6683.4022  27.96526 4.301045e-172  569.2669 173803.82
+373   371 186123.60 6605.7207  28.17612 1.147224e-174  577.8173 173176.62
+374   372 211111.82 6695.7401  31.52927 3.449727e-218  722.3938 197988.41
+375   380 153952.72 6754.2929  22.79331 5.341524e-115  379.6045 140714.55
+376   378 140247.49 6754.5141  20.76352  9.253425e-96  315.6951 127008.88
+377   373 197222.06 6705.5712  29.41167 3.894627e-190  629.2049 184079.39
+378   376 159051.64 6726.6040  23.64516 1.323678e-123  408.1926 145867.73
+379   379 173990.86 6704.8436  25.95002 1.817146e-148  490.7837 160849.60
+380   375 171992.59 6675.3528  25.76532 2.171223e-146  483.8830 158909.14
+381   384 176496.05 6870.9018  25.68746 1.613823e-145  480.9891 163029.33
+382   387 189569.18 6865.7868  27.61070 8.278058e-168  555.0346 176112.49
+383   381 188789.73 6788.3749  27.81074 3.216610e-170  563.0422 175484.76
+384   382 213777.96 6878.3453  31.07985 4.508886e-212  702.0760 200296.65
+385   390 156618.86 6936.1996  22.57992 6.826610e-113  372.6067 143024.16
+386   388 142913.62 6936.8183  20.60219  2.623294e-94  310.8699 129317.71
+387   383 199888.20 6887.8795  29.02028 3.650678e-185  612.6885 186388.20
+388   386 161717.77 6909.1611  23.40628 3.688314e-121  400.0703 148176.06
+389   389 176656.99 6887.2441  25.64988 4.240999e-145  479.5952 163158.24
+390   385 174658.72 6857.7767  25.46871 4.381144e-143  472.9044 161217.73
+391   394 179162.18 7053.4710  25.40057 2.485552e-142  470.4002 165337.64
+392   397 192235.32 7048.2192  27.27431 8.558109e-164  541.6989 178421.06
+393   391 191455.87 6971.0635  27.46437 4.680091e-166  549.2135 177792.83
+394   392 216444.09 7060.9868  30.65352 2.372210e-206  683.0710 202604.81
+395   400 159284.99 7118.1777  22.37722 6.561679e-111  366.0200 145333.62
+396   398 145579.76 7119.1737  20.44897  6.135913e-93  306.3220 131626.43
+397   393 202554.33 7070.2392  28.64887 1.656066e-180  597.2193 188696.92
+398   396 164383.91 7091.7569  23.17957 7.318315e-119  392.4379 150484.32
+399   399 179323.13 7069.6916  25.36506 6.130817e-142  469.0977 165466.78
+400   395 177324.86 7040.2467  25.18731 5.517825e-140  462.6058 163526.23
+401   404 181828.32 7236.0771  25.12802 2.457579e-139  460.4508 167645.87
+402   407 194901.45 7230.6957  26.95473 5.020605e-160  529.1806 180729.55
+403   401 194122.00 7153.7833  27.13557 3.747791e-162  536.2463 180100.84
+404   402 219110.23 7243.6617  30.24854 5.452340e-201  665.2607 204912.91
+405   410 161951.13 7300.2225  22.18441 4.857625e-109  359.8099 147642.96
+406   408 148245.89 7301.5768  20.30327  1.203043e-91  302.0288 133935.06
+407   403 205220.47 7252.6466  28.29594 3.876958e-176  582.7044 191005.54
+408   406 167050.04 7274.3881  22.96414 1.064474e-116  385.2535 152792.50
+409   409 181989.26 7252.1820  25.09441 5.723005e-139  459.2312 167775.24
+410   405 179990.99 7222.7587  24.91998 4.519589e-137  452.9280 165834.65
+411   414 184494.45 7418.7178  24.86878 1.620081e-136  451.0862 169954.03
+412   417 197567.59 7413.2130  26.65074 1.754853e-156  517.4094 183037.96
+413   411 196788.14 7336.5326  26.82304 1.740484e-158  524.0652 182408.80
+414   412 221776.36 7426.3677  29.86337 5.886870e-196  648.5404 207220.95
+415   420 164617.26 7482.3285  22.00081 2.829021e-107  353.9460 149952.17
+416   418 150912.03 7484.0237  20.16456  2.005326e-90  297.9697 136243.61
+417   413 207886.60 7435.0981  27.96017 4.959220e-172  569.0615 193314.08
+418   416 169716.17 7457.0526  22.75915 1.164837e-114  378.4797 155100.62
+419   419 184655.39 7434.7127  24.83692 3.580279e-136  449.9421 170083.63
+420   415 182657.13 7405.3100  24.66570 2.497465e-134  443.8179 168142.99
+421   424 187160.59 7601.3903  24.62189 7.364156e-134  442.2578 172262.14
+422   427 200233.72 7595.7683  26.36122 3.816860e-153  506.3226 185346.29
+423   421 199454.27 7519.3086  26.52561 4.910106e-155  512.6031 184716.70
+424   422 224442.49 7609.1024  29.49658 3.184958e-191  632.8170 209528.93
+425   430 167283.40 7664.4919  21.82576 1.321092e-105  348.4007 152261.27
+426   428 153578.16 7666.5118  20.03234  2.878187e-89  294.1264 138552.07
+427   423 210552.74 7617.5905  27.64033 3.647071e-168  556.2172 195622.53
+428   426 172382.31 7639.7476  22.56388 9.813806e-113  372.0831 157408.68
+429   429 187321.53 7617.2804  24.59165 1.551513e-133  441.1828 172391.93
+430   425 185323.26 7587.8974  24.42353 9.619065e-132  435.2286 170451.26
+431   434 189826.72 7784.0928  24.38649 2.378889e-131  433.9223 174570.18
+432   437 202899.86 7778.3587  26.08518 5.370594e-150  495.8641 187654.55
+433   431 202120.40 7702.1100  26.24221 8.771199e-152  501.8003 187024.55
+434   432 227108.63 7791.8639  29.14689 9.146707e-187  618.0073 211836.86
+435   440 169949.53 7846.7082  21.65870 5.031883e-104  343.1494 154570.27
+436   438 156244.30 7849.0377  19.90617  3.597764e-88  290.4826 140860.46
+437   433 213218.87 7800.1210  27.33533 1.613741e-164  544.1058 197930.92
+438   436 175048.44 7822.4712  22.37764 6.499482e-111  366.0337 159716.68
+439   439 189987.66 7799.8829  24.35776 4.797635e-131  432.9103 174700.17
+440   435 187989.40 7770.5189  24.19264 2.658932e-129  427.1179 172759.46
+441   444 192492.86 7966.8227  24.16181 5.610692e-129  426.0405 176878.17
+442   447 205565.99 7960.9819  25.82169 5.061804e-147  485.9838 189962.75
+443   441 204786.54 7884.9346  25.97188 1.029580e-148  491.6033 189332.35
+444   442 229774.76 7974.6505  28.81315 1.468127e-182  604.0369 214144.74
+445   450 172615.67 8028.9742  21.49909 1.587580e-102  338.1698 156879.17
+446   448 158910.43 8031.5991  19.78565  3.957415e-87  287.0232 143168.79
+447   443 215885.01 7982.6872  27.04415 4.474935e-161  532.6686 200239.23
+448   446 177714.58 8005.2214  22.19983 3.447275e-109  360.3047 162024.63
+449   449 192653.80 7982.5174  24.13447 1.087097e-128  425.0863 177008.35
+450   445 190655.53 7953.1716  23.97226 5.414924e-127  419.4479 175067.60
+451   454 195158.99 8149.5785  23.94713 9.899482e-127  418.5775 179186.11
+452   457 208232.13 8143.6359  25.56992 3.297273e-144  476.6364 192270.89
+453   451 207452.67 8067.7810  25.71372 8.210062e-146  481.9641 191640.11
+454   452 232440.90 8157.4600  28.49427 1.379344e-178  590.8392 216452.57
+455   460 175281.80 8211.2863  21.34645 4.207213e-101  333.4419 159187.98
+456   458 161576.57 8214.1937  19.67041  3.866347e-86  283.7348 145477.04
+457   453 218551.14 8165.2861  26.76589 8.066574e-158  521.8527 202547.47
+458   456 180380.71 8187.9963  22.02990 1.489118e-107  354.8718 164332.54
+459   459 195319.93 8165.1819  23.92108 1.848734e-126  417.6764 179316.47
+460   455 193321.67 8135.8537  23.76169 8.318260e-125  412.1847 177375.69
+461   464 197825.13 8332.3582  23.74179 1.335603e-124  411.5016 181494.00
+462   467 210898.26 8326.3183  25.32911 1.526847e-141  467.7813 194578.98
+463   461 210118.81 8250.6476  25.46695 4.582524e-143  472.8396 193947.84
+464   462 235107.03 8340.2914  28.18931 7.908163e-175  578.3541 218760.36
+465   470 177947.94 8393.6417  21.20033 9.483839e-100  328.9473 161496.70
+466   468 164242.70 8396.8192  19.56011  3.383519e-85  280.6054 147785.24
+467   463 221217.28 8347.9161  26.49970 9.769691e-155  511.6105 204855.66
+468   466 183046.85 8370.7942  21.86732 5.318962e-106  349.7132 166640.39
+469   469 197986.07 8347.8743  23.71694 2.411104e-124  410.6494 181624.54
+470   465 195987.80 8318.5629  23.56030 9.845929e-123  405.2976 179683.72
+471   474 200491.26 8515.1608  23.54521 1.405483e-122  404.7842 183801.85
+472   477 213564.39 8509.0277  25.09857 5.155834e-139  459.3818 196887.01
+473   471 212784.94 8433.5334  25.23082 1.839347e-140  464.1907 196255.52
+474   472 237773.17 8523.1431  27.89736 2.872486e-171  566.5274 221068.11
+475   480 180614.07 8576.0376  21.06032  1.839397e-98  324.6697 163805.35
+476   478 166908.83 8579.4736  19.45444  2.672684e-84  277.6237 150093.38
+477   473 223883.41 8530.5750  26.24482 8.190098e-152  501.8992 207163.79
+478   476 185712.98 8553.6140  21.71164 1.592746e-104  344.8090 168948.21
+479   479 200652.20 8530.5933  23.52148 2.459119e-122  403.9771 183932.55
+480   475 198653.94 8501.2981  23.36748 9.154236e-121  398.7589 181991.70
+481   484 203157.40 8697.9842  23.35684 1.174446e-120  398.3994 186109.66
+482   487 216230.53 8691.7619  24.87764 1.299139e-136  451.4047 199194.99
+483   481 215451.08 8616.4368  25.00466 5.439931e-138  455.9825 198563.17
+484   482 240439.30 8706.0138  27.61761 6.838189e-168  555.3103 223375.83
+485   490 183280.21 8758.4714  20.92605  3.101621e-97  320.5940 166113.92
+486   488 169574.97 8762.1552  19.35311  1.918988e-83  274.7797 152401.46
+487   483 226549.55 8713.2609  26.00055 4.882170e-149  492.6798 209471.87
+488   486 188379.12 8736.4539  21.56242 4.048446e-103  340.1412 171255.98
+489   489 203318.34 8713.3366  23.33415 1.996315e-120  397.6340 186240.51
+490   485 201320.07 8684.0570  23.18272 6.802583e-119  392.5434 184299.63
+491   494 205823.53 8880.8277  23.17617 7.921181e-119  392.3237 188417.43
+492   497 218896.66 8874.5197  24.66575 2.494294e-134  443.8197 201502.93
+493   491 218117.21 8799.3571  24.78786 1.212004e-135  448.1829 200870.79
+494   492 243105.44 8888.9025  27.34932 1.100202e-164  544.6584 225683.51
+495   500 185946.34 8940.9408  20.79718  4.590316e-96  316.7065 168422.42
+496   498 172241.10 8944.8623  19.25587  1.260400e-82  272.0642 154709.50
+497   493 229215.68 8895.9725  25.76623 2.120703e-146  483.9170 211779.89
+498   496 191045.25 8919.3132  21.41928 8.834682e-102  335.6935 173563.72
+499   499 205984.47 8896.1033  23.15446 1.310860e-118  391.5970 188548.43
+500   495 203986.20 8866.8387  23.00552 4.104792e-117  386.6283 186607.52
+    conf.high      rev color_name   avg_vol           brand_name
+1    76427.46 37508.44      Black   4.00000             A. Datum
+2    89609.87 37508.44      Black   4.00000      Adventure Works
+3    88648.92 37508.44      Black   4.00000              Contoso
+4   113646.35 37508.44      Black   4.00000             Fabrikam
+5    56966.92 37508.44      Black   4.00000              Litware
+6    43006.07 37508.44      Black   4.00000    Northwind Traders
+7    99979.81 37508.44      Black   4.00000            Proseware
+8    61621.05 37508.44      Black   4.00000     Southridge Video
+9    76682.78 37508.44      Black   4.00000    The Phone Company
+10   74672.31 37508.44      Black   4.00000 Wide World Importers
+11   79075.75 37508.44      Black  16.16327             A. Datum
+12   92254.16 37508.44      Black  16.16327      Adventure Works
+13   91247.67 37508.44      Black  16.16327              Contoso
+14  116299.84 37508.44      Black  16.16327             Fabrikam
+15   59637.61 37508.44      Black  16.16327              Litware
+16   45685.20 37508.44      Black  16.16327    Northwind Traders
+17  102634.64 37508.44      Black  16.16327            Proseware
+18   64291.71 37508.44      Black  16.16327     Southridge Video
+19   79338.50 37508.44      Black  16.16327    The Phone Company
+20   77312.62 37508.44      Black  16.16327 Wide World Importers
+21   81826.24 37508.44      Black  28.32653             A. Datum
+22   94993.18 37508.44      Black  28.32653      Adventure Works
+23   93960.20 37508.44      Black  28.32653              Contoso
+24  119059.91 37508.44      Black  28.32653             Fabrikam
+25   62383.87 37508.44      Black  28.32653              Litware
+26   48451.70 37508.44      Black  28.32653    Northwind Traders
+27  105379.80 37508.44      Black  28.32653            Proseware
+28   67063.51 37508.44      Black  28.32653     Southridge Video
+29   82088.68 37508.44      Black  28.32653    The Phone Company
+30   80049.94 37508.44      Black  28.32653 Wide World Importers
+31   84661.54 37508.44      Black  40.48980             A. Datum
+32   97813.71 37508.44      Black  40.48980      Adventure Works
+33   96774.39 37508.44      Black  40.48980              Contoso
+34  121905.89 37508.44      Black  40.48980             Fabrikam
+35   65196.10 37508.44      Black  40.48980              Litware
+36   51290.10 37508.44      Black  40.48980    Northwind Traders
+37  108202.22 37508.44      Black  40.48980            Proseware
+38   69915.39 37508.44      Black  40.48980     Southridge Video
+39   84918.27 37508.44      Black  40.48980    The Phone Company
+40   82870.76 37508.44      Black  40.48980 Wide World Importers
+41   87556.67 37508.44      Black  52.65306             A. Datum
+42  100694.58 37508.44      Black  52.65306      Adventure Works
+43   99660.81 37508.44      Black  52.65306              Contoso
+44  124810.44 37508.44      Black  52.65306             Fabrikam
+45   68060.53 37508.44      Black  52.65306              Litware
+46   54181.09 37508.44      Black  52.65306    Northwind Traders
+47  111082.32 37508.44      Black  52.65306            Proseware
+48   72822.08 37508.44      Black  52.65306     Southridge Video
+49   87805.75 37508.44      Black  52.65306    The Phone Company
+50   85753.00 37508.44      Black  52.65306 Wide World Importers
+51   90490.94 37508.44      Black  64.81633             A. Datum
+52  103616.75 37508.44      Black  64.81633      Adventure Works
+53  102592.93 37508.44      Black  64.81633              Contoso
+54  127752.25 37508.44      Black  64.81633             Fabrikam
+55   70963.84 37508.44      Black  64.81633              Litware
+56   57108.45 37508.44      Black  64.81633    Northwind Traders
+57  114002.54 37508.44      Black  64.81633            Proseware
+58   75764.18 37508.44      Black  64.81633     Southridge Video
+59   90732.52 37508.44      Black  64.81633    The Phone Company
+60   88676.85 37508.44      Black  64.81633 Wide World Importers
+61   93450.54 37508.44      Black  76.97959             A. Datum
+62  106566.53 37508.44      Black  76.97959      Adventure Works
+63  105553.28 37508.44      Black  76.97959              Contoso
+64  130717.72 37508.44      Black  76.97959             Fabrikam
+65   73895.40 37508.44      Black  76.97959              Litware
+66   60060.63 37508.44      Black  76.97959    Northwind Traders
+67  116950.04 37508.44      Black  76.97959            Proseware
+68   78729.12 37508.44      Black  76.97959     Southridge Video
+69   93685.51 37508.44      Black  76.97959    The Phone Company
+70   91628.27 37508.44      Black  76.97959 Wide World Importers
+71   96426.83 37508.44      Black  89.14286             A. Datum
+72  109534.97 37508.44      Black  89.14286      Adventure Works
+73  108531.47 37508.44      Black  89.14286              Contoso
+74  133698.58 37508.44      Black  89.14286             Fabrikam
+75   76847.39 37508.44      Black  89.14286              Litware
+76   63029.95 37508.44      Black  89.14286    Northwind Traders
+77  119916.24 37508.44      Black  89.14286            Proseware
+78   81709.17 37508.44      Black  89.14286     Southridge Video
+79   96656.22 37508.44      Black  89.14286    The Phone Company
+80   94598.18 37508.44      Black  89.14286 Wide World Importers
+81   99414.47 37508.44      Black 101.30612             A. Datum
+82  112516.29 37508.44      Black 101.30612      Adventure Works
+83  111521.35 37508.44      Black 101.30612              Contoso
+84  136689.83 37508.44      Black 101.30612             Fabrikam
+85   79814.31 37508.44      Black 101.30612              Litware
+86   66011.35 37508.44      Black 101.30612    Northwind Traders
+87  122895.52 37508.44      Black 101.30612            Proseware
+88   84699.54 37508.44      Black 101.30612     Southridge Video
+89   99639.19 37508.44      Black 101.30612    The Phone Company
+90   97580.77 37508.44      Black 101.30612 Wide World Importers
+91  102410.07 37508.44      Black 113.46939             A. Datum
+92  115506.76 37508.44      Black 113.46939      Adventure Works
+93  114519.21 37508.44      Black 113.46939              Contoso
+94  139688.33 37508.44      Black 113.46939             Fabrikam
+95   82792.31 37508.44      Black 113.46939              Litware
+96   69001.47 37508.44      Black 113.46939    Northwind Traders
+97  125884.17 37508.44      Black 113.46939            Proseware
+98   87697.17 37508.44      Black 113.46939     Southridge Video
+99  102630.89 37508.44      Black 113.46939    The Phone Company
+100 100572.33 37508.44      Black 113.46939 Wide World Importers
+101 105411.44 37508.44      Black 125.63265             A. Datum
+102 118503.89 37508.44      Black 125.63265      Adventure Works
+103 117522.70 37508.44      Black 125.63265              Contoso
+104 142692.06 37508.44      Black 125.63265             Fabrikam
+105  85778.66 37508.44      Black 125.63265              Litware
+106  71998.05 37508.44      Black 125.63265    Northwind Traders
+107 128879.71 37508.44      Black 125.63265            Proseware
+108  90700.09 37508.44      Black 125.63265     Southridge Video
+109 105628.97 37508.44      Black 125.63265    The Phone Company
+110 103570.40 37508.44      Black 125.63265 Wide World Importers
+111 108417.08 37508.44      Black 137.79592             A. Datum
+112 121506.00 37508.44      Black 137.79592      Adventure Works
+113 120530.29 37508.44      Black 137.79592              Contoso
+114 145699.65 37508.44      Black 137.79592             Fabrikam
+115  88771.43 37508.44      Black 137.79592              Litware
+116  74999.52 37508.44      Black 137.79592    Northwind Traders
+117 131880.42 37508.44      Black 137.79592            Proseware
+118  93706.94 37508.44      Black 137.79592     Southridge Video
+119 108631.82 37508.44      Black 137.79592    The Phone Company
+120 106573.32 37508.44      Black 137.79592 Wide World Importers
+121 111425.97 37508.44      Black 149.95918             A. Datum
+122 124511.91 37508.44      Black 149.95918      Adventure Works
+123 123540.94 37508.44      Black 149.95918              Contoso
+124 148710.17 37508.44      Black 149.95918             Fabrikam
+125  91769.21 37508.44      Black 149.95918              Litware
+126  78004.75 37508.44      Black 149.95918    Northwind Traders
+127 134885.10 37508.44      Black 149.95918            Proseware
+128  96716.81 37508.44      Black 149.95918     Southridge Video
+129 111638.32 37508.44      Black 149.95918    The Phone Company
+130 109579.93 37508.44      Black 149.95918 Wide World Importers
+131 114437.38 37508.44      Black 162.12245             A. Datum
+132 127520.79 37508.44      Black 162.12245      Adventure Works
+133 126553.95 37508.44      Black 162.12245              Contoso
+134 151722.98 37508.44      Black 162.12245             Fabrikam
+135  94770.97 37508.44      Black 162.12245              Litware
+136  81012.96 37508.44      Black 162.12245    Northwind Traders
+137 137892.89 37508.44      Black 162.12245            Proseware
+138  99729.02 37508.44      Black 162.12245     Southridge Video
+139 114647.67 37508.44      Black 162.12245    The Phone Company
+140 112589.40 37508.44      Black 162.12245 Wide World Importers
+141 117450.79 37508.44      Black 174.28571             A. Datum
+142 130532.00 37508.44      Black 174.28571      Adventure Works
+143 129568.79 37508.44      Black 174.28571              Contoso
+144 154737.58 37508.44      Black 174.28571             Fabrikam
+145  97775.92 37508.44      Black 174.28571              Litware
+146  84023.53 37508.44      Black 174.28571    Northwind Traders
+147 140903.14 37508.44      Black 174.28571            Proseware
+148 102743.08 37508.44      Black 174.28571     Southridge Video
+149 117659.28 37508.44      Black 174.28571    The Phone Company
+150 115601.15 37508.44      Black 174.28571 Wide World Importers
+151 120465.81 37508.44      Black 186.44898             A. Datum
+152 133545.11 37508.44      Black 186.44898      Adventure Works
+153 132585.09 37508.44      Black 186.44898              Contoso
+154 157753.63 37508.44      Black 186.44898             Fabrikam
+155 100783.47 37508.44      Black 186.44898              Litware
+156  87036.01 37508.44      Black 186.44898    Northwind Traders
+157 143915.39 37508.44      Black 186.44898            Proseware
+158 105758.64 37508.44      Black 186.44898     Southridge Video
+159 120672.71 37508.44      Black 186.44898    The Phone Company
+160 118614.73 37508.44      Black 186.44898 Wide World Importers
+161 123482.12 37508.44      Black 198.61224             A. Datum
+162 136559.75 37508.44      Black 198.61224      Adventure Works
+163 135602.58 37508.44      Black 198.61224              Contoso
+164 160770.85 37508.44      Black 198.61224             Fabrikam
+165 103793.17 37508.44      Black 198.61224              Litware
+166  90050.08 37508.44      Black 198.61224    Northwind Traders
+167 146929.27 37508.44      Black 198.61224            Proseware
+168 108775.42 37508.44      Black 198.61224     Southridge Video
+169 123687.63 37508.44      Black 198.61224    The Phone Company
+170 121629.79 37508.44      Black 198.61224 Wide World Importers
+171 126499.52 37508.44      Black 210.77551             A. Datum
+172 139575.67 37508.44      Black 210.77551      Adventure Works
+173 138621.03 37508.44      Black 210.77551              Contoso
+174 163789.04 37508.44      Black 210.77551             Fabrikam
+175 106804.66 37508.44      Black 210.77551              Litware
+176  93065.44 37508.44      Black 210.77551    Northwind Traders
+177 149944.50 37508.44      Black 210.77551            Proseware
+178 111793.21 37508.44      Black 210.77551     Southridge Video
+179 126703.78 37508.44      Black 210.77551    The Phone Company
+180 124646.07 37508.44      Black 210.77551 Wide World Importers
+181 129517.81 37508.44      Black 222.93878             A. Datum
+182 142592.64 37508.44      Black 222.93878      Adventure Works
+183 141640.28 37508.44      Black 222.93878              Contoso
+184 166808.04 37508.44      Black 222.93878             Fabrikam
+185 109817.65 37508.44      Black 222.93878              Litware
+186  96081.91 37508.44      Black 222.93878    Northwind Traders
+187 152960.85 37508.44      Black 222.93878            Proseware
+188 114811.85 37508.44      Black 222.93878     Southridge Video
+189 129720.96 37508.44      Black 222.93878    The Phone Company
+190 127663.38 37508.44      Black 222.93878 Wide World Importers
+191 132536.85 37508.44      Black 235.10204             A. Datum
+192 145610.51 37508.44      Black 235.10204      Adventure Works
+193 144660.21 37508.44      Black 235.10204              Contoso
+194 169827.72 37508.44      Black 235.10204             Fabrikam
+195 112831.92 37508.44      Black 235.10204              Litware
+196  99099.30 37508.44      Black 235.10204    Northwind Traders
+197 155978.16 37508.44      Black 235.10204            Proseware
+198 117831.19 37508.44      Black 235.10204     Southridge Video
+199 132739.01 37508.44      Black 235.10204    The Phone Company
+200 130681.55 37508.44      Black 235.10204 Wide World Importers
+201 135556.54 37508.44      Black 247.26531             A. Datum
+202 148629.14 37508.44      Black 247.26531      Adventure Works
+203 147680.70 37508.44      Black 247.26531              Contoso
+204 172847.98 37508.44      Black 247.26531             Fabrikam
+205 115847.28 37508.44      Black 247.26531              Litware
+206 102117.48 37508.44      Black 247.26531    Northwind Traders
+207 158996.27 37508.44      Black 247.26531            Proseware
+208 120851.15 37508.44      Black 247.26531     Southridge Video
+209 135757.79 37508.44      Black 247.26531    The Phone Company
+210 133700.45 37508.44      Black 247.26531 Wide World Importers
+211 138576.78 37508.44      Black 259.42857             A. Datum
+212 151648.42 37508.44      Black 259.42857      Adventure Works
+213 150701.68 37508.44      Black 259.42857              Contoso
+214 175868.73 37508.44      Black 259.42857             Fabrikam
+215 118863.58 37508.44      Black 259.42857              Litware
+216 105136.35 37508.44      Black 259.42857    Northwind Traders
+217 162015.09 37508.44      Black 259.42857            Proseware
+218 123871.62 37508.44      Black 259.42857     Southridge Video
+219 138777.21 37508.44      Black 259.42857    The Phone Company
+220 136719.98 37508.44      Black 259.42857 Wide World Importers
+221 141597.49 37508.44      Black 271.59184             A. Datum
+222 154668.26 37508.44      Black 271.59184      Adventure Works
+223 153723.07 37508.44      Black 271.59184              Contoso
+224 178889.91 37508.44      Black 271.59184             Fabrikam
+225 121880.69 37508.44      Black 271.59184              Litware
+226 108155.80 37508.44      Black 271.59184    Northwind Traders
+227 165034.50 37508.44      Black 271.59184            Proseware
+228 126892.54 37508.44      Black 271.59184     Southridge Video
+229 141797.17 37508.44      Black 271.59184    The Phone Company
+230 139740.05 37508.44      Black 271.59184 Wide World Importers
+231 144618.62 37508.44      Black 283.75510             A. Datum
+232 157688.59 37508.44      Black 283.75510      Adventure Works
+233 156744.83 37508.44      Black 283.75510              Contoso
+234 181911.46 37508.44      Black 283.75510             Fabrikam
+235 124898.52 37508.44      Black 283.75510              Litware
+236 111175.77 37508.44      Black 283.75510    Northwind Traders
+237 168054.44 37508.44      Black 283.75510            Proseware
+238 129913.85 37508.44      Black 283.75510     Southridge Video
+239 144817.61 37508.44      Black 283.75510    The Phone Company
+240 142760.59 37508.44      Black 283.75510 Wide World Importers
+241 147640.11 37508.44      Black 295.91837             A. Datum
+242 160709.35 37508.44      Black 295.91837      Adventure Works
+243 159766.90 37508.44      Black 295.91837              Contoso
+244 184933.34 37508.44      Black 295.91837             Fabrikam
+245 127916.97 37508.44      Black 295.91837              Litware
+246 114196.18 37508.44      Black 295.91837    Northwind Traders
+247 171074.83 37508.44      Black 295.91837            Proseware
+248 132935.51 37508.44      Black 295.91837     Southridge Video
+249 147838.47 37508.44      Black 295.91837    The Phone Company
+250 145781.54 37508.44      Black 295.91837 Wide World Importers
+251 150661.91 37508.44      Black 308.08163             A. Datum
+252 163730.48 37508.44      Black 308.08163      Adventure Works
+253 162789.24 37508.44      Black 308.08163              Contoso
+254 187955.50 37508.44      Black 308.08163             Fabrikam
+255 130935.97 37508.44      Black 308.08163              Litware
+256 117217.00 37508.44      Black 308.08163    Northwind Traders
+257 174095.63 37508.44      Black 308.08163            Proseware
+258 135957.47 37508.44      Black 308.08163     Southridge Video
+259 150859.69 37508.44      Black 308.08163    The Phone Company
+260 148802.85 37508.44      Black 308.08163 Wide World Importers
+261 153683.99 37508.44      Black 320.24490             A. Datum
+262 166751.95 37508.44      Black 320.24490      Adventure Works
+263 165811.83 37508.44      Black 320.24490              Contoso
+264 190977.91 37508.44      Black 320.24490             Fabrikam
+265 133955.46 37508.44      Black 320.24490              Litware
+266 120238.16 37508.44      Black 320.24490    Northwind Traders
+267 177116.79 37508.44      Black 320.24490            Proseware
+268 138979.69 37508.44      Black 320.24490     Southridge Video
+269 153881.24 37508.44      Black 320.24490    The Phone Company
+270 151824.48 37508.44      Black 320.24490 Wide World Importers
+271 156706.33 37508.44      Black 332.40816             A. Datum
+272 169773.71 37508.44      Black 332.40816      Adventure Works
+273 168834.63 37508.44      Black 332.40816              Contoso
+274 194000.55 37508.44      Black 332.40816             Fabrikam
+275 136975.39 37508.44      Black 332.40816              Litware
+276 123259.64 37508.44      Black 332.40816    Northwind Traders
+277 180138.26 37508.44      Black 332.40816            Proseware
+278 142002.15 37508.44      Black 332.40816     Southridge Video
+279 156903.07 37508.44      Black 332.40816    The Phone Company
+280 154846.40 37508.44      Black 332.40816 Wide World Importers
+281 159728.88 37508.44      Black 344.57143             A. Datum
+282 172795.74 37508.44      Black 344.57143      Adventure Works
+283 171857.62 37508.44      Black 344.57143              Contoso
+284 197023.39 37508.44      Black 344.57143             Fabrikam
+285 139995.71 37508.44      Black 344.57143              Litware
+286 126281.40 37508.44      Black 344.57143    Northwind Traders
+287 183160.01 37508.44      Black 344.57143            Proseware
+288 145024.82 37508.44      Black 344.57143     Southridge Video
+289 159925.16 37508.44      Black 344.57143    The Phone Company
+290 157868.57 37508.44      Black 344.57143 Wide World Importers
+291 162751.64 37508.44      Black 356.73469             A. Datum
+292 175818.00 37508.44      Black 356.73469      Adventure Works
+293 174880.79 37508.44      Black 356.73469              Contoso
+294 200046.40 37508.44      Black 356.73469             Fabrikam
+295 143016.37 37508.44      Black 356.73469              Litware
+296 129303.41 37508.44      Black 356.73469    Northwind Traders
+297 186182.02 37508.44      Black 356.73469            Proseware
+298 148047.68 37508.44      Black 356.73469     Southridge Video
+299 162947.49 37508.44      Black 356.73469    The Phone Company
+300 160890.96 37508.44      Black 356.73469 Wide World Importers
+301 165774.57 37508.44      Black 368.89796             A. Datum
+302 178840.48 37508.44      Black 368.89796      Adventure Works
+303 177904.11 37508.44      Black 368.89796              Contoso
+304 203069.58 37508.44      Black 368.89796             Fabrikam
+305 146037.35 37508.44      Black 368.89796              Litware
+306 132325.65 37508.44      Black 368.89796    Northwind Traders
+307 189204.26 37508.44      Black 368.89796            Proseware
+308 151070.71 37508.44      Black 368.89796     Southridge Video
+309 165970.02 37508.44      Black 368.89796    The Phone Company
+310 163913.56 37508.44      Black 368.89796 Wide World Importers
+311 168797.67 37508.44      Black 381.06122             A. Datum
+312 181863.14 37508.44      Black 381.06122      Adventure Works
+313 180927.57 37508.44      Black 381.06122              Contoso
+314 206092.91 37508.44      Black 381.06122             Fabrikam
+315 149058.62 37508.44      Black 381.06122              Litware
+316 135348.09 37508.44      Black 381.06122    Northwind Traders
+317 192226.70 37508.44      Black 381.06122            Proseware
+318 154093.90 37508.44      Black 381.06122     Southridge Video
+319 168992.73 37508.44      Black 381.06122    The Phone Company
+320 166936.34 37508.44      Black 381.06122 Wide World Importers
+321 171820.91 37508.44      Black 393.22449             A. Datum
+322 184885.98 37508.44      Black 393.22449      Adventure Works
+323 183951.15 37508.44      Black 393.22449              Contoso
+324 209116.36 37508.44      Black 393.22449             Fabrikam
+325 152080.14 37508.44      Black 393.22449              Litware
+326 138370.71 37508.44      Black 393.22449    Northwind Traders
+327 195249.33 37508.44      Black 393.22449            Proseware
+328 157117.22 37508.44      Black 393.22449     Southridge Video
+329 172015.62 37508.44      Black 393.22449    The Phone Company
+330 169959.28 37508.44      Black 393.22449 Wide World Importers
+331 174844.28 37508.44      Black 405.38776             A. Datum
+332 187908.97 37508.44      Black 405.38776      Adventure Works
+333 186974.84 37508.44      Black 405.38776              Contoso
+334 212139.93 37508.44      Black 405.38776             Fabrikam
+335 155101.90 37508.44      Black 405.38776              Litware
+336 141393.51 37508.44      Black 405.38776    Northwind Traders
+337 198272.13 37508.44      Black 405.38776            Proseware
+338 160140.67 37508.44      Black 405.38776     Southridge Video
+339 175038.66 37508.44      Black 405.38776    The Phone Company
+340 172982.38 37508.44      Black 405.38776 Wide World Importers
+341 177867.78 37508.44      Black 417.55102             A. Datum
+342 190932.11 37508.44      Black 417.55102      Adventure Works
+343 189998.64 37508.44      Black 417.55102              Contoso
+344 215163.62 37508.44      Black 417.55102             Fabrikam
+345 158123.87 37508.44      Black 417.55102              Litware
+346 144416.45 37508.44      Black 417.55102    Northwind Traders
+347 201295.08 37508.44      Black 417.55102            Proseware
+348 163164.24 37508.44      Black 417.55102     Southridge Video
+349 178061.84 37508.44      Black 417.55102    The Phone Company
+350 176005.62 37508.44      Black 417.55102 Wide World Importers
+351 180891.38 37508.44      Black 429.71429             A. Datum
+352 193955.38 37508.44      Black 429.71429      Adventure Works
+353 193022.53 37508.44      Black 429.71429              Contoso
+354 218187.40 37508.44      Black 429.71429             Fabrikam
+355 161146.04 37508.44      Black 429.71429              Litware
+356 147439.54 37508.44      Black 429.71429    Northwind Traders
+357 204318.17 37508.44      Black 429.71429            Proseware
+358 166187.91 37508.44      Black 429.71429     Southridge Video
+359 181085.15 37508.44      Black 429.71429    The Phone Company
+360 179028.98 37508.44      Black 429.71429 Wide World Importers
+361 183915.09 37508.44      Black 441.87755             A. Datum
+362 196978.78 37508.44      Black 441.87755      Adventure Works
+363 196046.51 37508.44      Black 441.87755              Contoso
+364 221211.27 37508.44      Black 441.87755             Fabrikam
+365 164168.38 37508.44      Black 441.87755              Litware
+366 150462.76 37508.44      Black 441.87755    Northwind Traders
+367 207341.40 37508.44      Black 441.87755            Proseware
+368 169211.68 37508.44      Black 441.87755     Southridge Video
+369 184108.57 37508.44      Black 441.87755    The Phone Company
+370 182052.46 37508.44      Black 441.87755 Wide World Importers
+371 186938.89 37508.44      Black 454.04082             A. Datum
+372 200002.28 37508.44      Black 454.04082      Adventure Works
+373 199070.57 37508.44      Black 454.04082              Contoso
+374 224235.23 37508.44      Black 454.04082             Fabrikam
+375 167190.90 37508.44      Black 454.04082              Litware
+376 153486.09 37508.44      Black 454.04082    Northwind Traders
+377 210364.74 37508.44      Black 454.04082            Proseware
+378 172235.54 37508.44      Black 454.04082     Southridge Video
+379 187132.11 37508.44      Black 454.04082    The Phone Company
+380 185076.04 37508.44      Black 454.04082 Wide World Importers
+381 189962.77 37508.44      Black 466.20408             A. Datum
+382 203025.88 37508.44      Black 466.20408      Adventure Works
+383 202094.70 37508.44      Black 466.20408              Contoso
+384 227259.26 37508.44      Black 466.20408             Fabrikam
+385 170213.56 37508.44      Black 466.20408              Litware
+386 156509.54 37508.44      Black 466.20408    Northwind Traders
+387 213388.19 37508.44      Black 466.20408            Proseware
+388 175259.48 37508.44      Black 466.20408     Southridge Video
+389 190155.74 37508.44      Black 466.20408    The Phone Company
+390 188099.72 37508.44      Black 466.20408 Wide World Importers
+391 192986.73 37508.44      Black 478.36735             A. Datum
+392 206049.57 37508.44      Black 478.36735      Adventure Works
+393 205118.90 37508.44      Black 478.36735              Contoso
+394 230283.37 37508.44      Black 478.36735             Fabrikam
+395 173236.37 37508.44      Black 478.36735              Litware
+396 159533.08 37508.44      Black 478.36735    Northwind Traders
+397 216411.75 37508.44      Black 478.36735            Proseware
+398 178283.49 37508.44      Black 478.36735     Southridge Video
+399 193179.47 37508.44      Black 478.36735    The Phone Company
+400 191123.49 37508.44      Black 478.36735 Wide World Importers
+401 196010.77 37508.44      Black 490.53061             A. Datum
+402 209073.36 37508.44      Black 490.53061      Adventure Works
+403 208143.16 37508.44      Black 490.53061              Contoso
+404 233307.54 37508.44      Black 490.53061             Fabrikam
+405 176259.30 37508.44      Black 490.53061              Litware
+406 162556.72 37508.44      Black 490.53061    Northwind Traders
+407 219435.39 37508.44      Black 490.53061            Proseware
+408 181307.58 37508.44      Black 490.53061     Southridge Video
+409 196203.28 37508.44      Black 490.53061    The Phone Company
+410 194147.34 37508.44      Black 490.53061 Wide World Importers
+411 199034.87 37508.44      Black 502.69388             A. Datum
+412 212097.22 37508.44      Black 502.69388      Adventure Works
+413 211167.48 37508.44      Black 502.69388              Contoso
+414 236331.77 37508.44      Black 502.69388             Fabrikam
+415 179282.36 37508.44      Black 502.69388              Litware
+416 165580.44 37508.44      Black 502.69388    Northwind Traders
+417 222459.13 37508.44      Black 502.69388            Proseware
+418 184331.73 37508.44      Black 502.69388     Southridge Video
+419 199227.16 37508.44      Black 502.69388    The Phone Company
+420 197171.27 37508.44      Black 502.69388 Wide World Importers
+421 202059.04 37508.44      Black 514.85714             A. Datum
+422 215121.15 37508.44      Black 514.85714      Adventure Works
+423 214191.84 37508.44      Black 514.85714              Contoso
+424 239356.06 37508.44      Black 514.85714             Fabrikam
+425 182305.53 37508.44      Black 514.85714              Litware
+426 168604.25 37508.44      Black 514.85714    Northwind Traders
+427 225482.94 37508.44      Black 514.85714            Proseware
+428 187355.94 37508.44      Black 514.85714     Southridge Video
+429 202251.12 37508.44      Black 514.85714    The Phone Company
+430 200195.27 37508.44      Black 514.85714 Wide World Importers
+431 205083.26 37508.44      Black 527.02041             A. Datum
+432 218145.16 37508.44      Black 527.02041      Adventure Works
+433 217216.26 37508.44      Black 527.02041              Contoso
+434 242380.40 37508.44      Black 527.02041             Fabrikam
+435 185328.80 37508.44      Black 527.02041              Litware
+436 171628.13 37508.44      Black 527.02041    Northwind Traders
+437 228506.83 37508.44      Black 527.02041            Proseware
+438 190380.21 37508.44      Black 527.02041     Southridge Video
+439 205275.15 37508.44      Black 527.02041    The Phone Company
+440 203219.33 37508.44      Black 527.02041 Wide World Importers
+441 208107.54 37508.44      Black 539.18367             A. Datum
+442 221169.23 37508.44      Black 539.18367      Adventure Works
+443 220240.73 37508.44      Black 539.18367              Contoso
+444 245404.79 37508.44      Black 539.18367             Fabrikam
+445 188352.17 37508.44      Black 539.18367              Litware
+446 174652.08 37508.44      Black 539.18367    Northwind Traders
+447 231530.79 37508.44      Black 539.18367            Proseware
+448 193404.52 37508.44      Black 539.18367     Southridge Video
+449 208299.25 37508.44      Black 539.18367    The Phone Company
+450 206243.46 37508.44      Black 539.18367 Wide World Importers
+451 211131.87 37508.44      Black 551.34694             A. Datum
+452 224193.36 37508.44      Black 551.34694      Adventure Works
+453 223265.23 37508.44      Black 551.34694              Contoso
+454 248429.23 37508.44      Black 551.34694             Fabrikam
+455 191375.63 37508.44      Black 551.34694              Litware
+456 177676.09 37508.44      Black 551.34694    Northwind Traders
+457 234554.81 37508.44      Black 551.34694            Proseware
+458 196428.89 37508.44      Black 551.34694     Southridge Video
+459 211323.40 37508.44      Black 551.34694    The Phone Company
+460 209267.65 37508.44      Black 551.34694 Wide World Importers
+461 214156.25 37508.44      Black 563.51020             A. Datum
+462 227217.54 37508.44      Black 563.51020      Adventure Works
+463 226289.78 37508.44      Black 563.51020              Contoso
+464 251453.70 37508.44      Black 563.51020             Fabrikam
+465 194399.17 37508.44      Black 563.51020              Litware
+466 180700.16 37508.44      Black 563.51020    Northwind Traders
+467 237578.89 37508.44      Black 563.51020            Proseware
+468 199453.30 37508.44      Black 563.51020     Southridge Video
+469 214347.60 37508.44      Black 563.51020    The Phone Company
+470 212291.88 37508.44      Black 563.51020 Wide World Importers
+471 217180.67 37508.44      Black 575.67347             A. Datum
+472 230241.78 37508.44      Black 575.67347      Adventure Works
+473 229314.37 37508.44      Black 575.67347              Contoso
+474 254478.22 37508.44      Black 575.67347             Fabrikam
+475 197422.80 37508.44      Black 575.67347              Litware
+476 183724.29 37508.44      Black 575.67347    Northwind Traders
+477 240603.03 37508.44      Black 575.67347            Proseware
+478 202477.76 37508.44      Black 575.67347     Southridge Video
+479 217371.86 37508.44      Black 575.67347    The Phone Company
+480 215316.17 37508.44      Black 575.67347 Wide World Importers
+481 220205.13 37508.44      Black 587.83673             A. Datum
+482 233266.07 37508.44      Black 587.83673      Adventure Works
+483 232338.98 37508.44      Black 587.83673              Contoso
+484 257502.78 37508.44      Black 587.83673             Fabrikam
+485 200446.49 37508.44      Black 587.83673              Litware
+486 186748.48 37508.44      Black 587.83673    Northwind Traders
+487 243627.22 37508.44      Black 587.83673            Proseware
+488 205502.25 37508.44      Black 587.83673     Southridge Video
+489 220396.16 37508.44      Black 587.83673    The Phone Company
+490 218340.51 37508.44      Black 587.83673 Wide World Importers
+491 223229.63 37508.44      Black 600.00000             A. Datum
+492 236290.40 37508.44      Black 600.00000      Adventure Works
+493 235363.64 37508.44      Black 600.00000              Contoso
+494 260527.37 37508.44      Black 600.00000             Fabrikam
+495 203470.26 37508.44      Black 600.00000              Litware
+496 189772.71 37508.44      Black 600.00000    Northwind Traders
+497 246651.47 37508.44      Black 600.00000            Proseware
+498 208526.78 37508.44      Black 600.00000     Southridge Video
+499 223420.51 37508.44      Black 600.00000    The Phone Company
+500 221364.89 37508.44      Black 600.00000 Wide World Importers</code></pre>
+</div>
+</div>
+<p>flowchart TD A –&gt; C{Predictions with ..} C –&gt;|counterfactual data| D[“counterfactual(duplicates data)”] D –&gt; counter[“predictions(,variables=list(var=c(0,1)))”] C –&gt;|averging effectsequally across a grid| E[“marginalmeans()”] C –&gt;|regressors at their/medians/mode/etc| G[Predict valuesregressors at contstant value] C –&gt; H[aggregate predictions] G –&gt;newdata[“predictions(,newdata=‘mean’)”] G –&gt;datagrid[“predictions(,datagrid(_numeric=mean) ) ”] datagrid–&gt;default[“predictions(,datagrid() )”] H –&gt;by[“predictions(,by=‘var’)”] H –&gt;avg_predictions[“avg_predictions(,by=‘var’)”] H –&gt;datagrid_by[“predictions(,newdata =datagrid(= mtcars$cyl, hp = c(90,100)),by=’var)”]</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./database.html" class="pagination-link" aria-label="Database and Larger Than Memory Problems">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./many_models.html" class="pagination-link" aria-label="many_models">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">many_models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

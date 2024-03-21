@@ -298,7 +298,7 @@ very similiar to the broom::augment() function
         -   The input values 
         -   However additional arguments can be passed through to custom
 
- ```{r}
+```{r}
 library(tidyverse)
 library(marginaleffects)
 
@@ -310,15 +310,15 @@ predictions()
 
 -   predict row level
 -   predict based on average/median values if inputs
--   Create counterfactual datasets (eg. if values were set to x what would 
+-   Create counter factual data sets (eg. if values were set to x what would 
 happen --duplicates dataset)
 -   Create group level summaries
 
--   Alternatively you can supply a summary dataframe to see how predicted
+-   Alternatively you can supply a summary data frame to see how predicted
 values on counterfactual data
 -   you can use the `variables` function to supply a list of values to variable
 -   An alternative to the variable function is the to supply the  variable 
-paramters directly and then set grid_type="counterfactor"
+paramters directly and then set grid_type="counter factor"
 -   Alternatively you can set the new_data model to "mean" in lieu of datagrid()
 -   this will "control" the input of that variable by returning duplicate
 datasets controlling for reach dataset
@@ -329,18 +329,19 @@ datasets controlling for reach dataset
 
 
 ```{r}
-#| echo: true
+#| echo: false
 #| eval: true
 
 tribble(
-~type,~function
-,"row level prediction",predictions()
-,"single prediction on average values",predictions(mod,newdata="mean")
-,"single prediction on average values",predictions(mod,newdata=datagrid())
-,"prediction on groups",predictions(mod,by="group_name")
-,"prediction based counterfactual data", predictions(variable=list(var=c(1,10)))
-,"prediction based counterfactual data", predictions(newdata=datagrid(var=c(1,10)))
-)
+~type,~"function"
+,"row level prediction","predictions()"
+,"single prediction on average values","predictions(mod,newdata='mean')"
+,"single prediction on average values","predictions(mod,newdata=datagrid())"
+,"prediction on groups","predictions(mod,by='group_name')"
+,"prediction based counterfactual data"," predictions(variable=list(var=c(1,10)))"
+,"prediction based counterfactual data", "predictions(newdata=datagrid(var=c(1,10)))"
+) |> 
+  gt::gt()
 
 ```
 
@@ -397,6 +398,7 @@ predictions(
 ## Plot predictions
 
 ```{r}
+
 mod_simple %>%  
 
 plot_predictions(condition=c("avg_vol","brand_name"))
@@ -405,7 +407,7 @@ mod_simple %>%
 
 plot_predictions(condition=c("avg_vol","brand_name"),   draw=FALSE)
 
-`
+
 ```
 
 flowchart TD

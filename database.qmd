@@ -44,10 +44,7 @@ evaluation order and syntax) so the beginners learning curve isn't steep
 ## How much SQL should I learn?
 
 If you're curious how much SQL you should learn, below is a framework that I
-found to be helpful:
-
--   Functions
-
+found to be helpful, with their Rstats comparison
 
     
 ```{r}
@@ -633,6 +630,7 @@ and have it results saved as a datafarme
 --| eval: false
 --| connection: con_db
 --| output.var: test.tbl
+--| echo: fenced
 
 SELECT * 
 
@@ -649,7 +647,7 @@ LIMIT 100
 -   If you want to run it in rmarkdown, you can do the following
 
 ```{sql, eval=FALSE,connection=con_db, output.var = "mydataframe"}
-
+--| echo: fenced
 SELECT * 
 
 FROM diamonds_db
@@ -663,7 +661,6 @@ LIMIT 100
 ## Run SQL queries safely
 
 ## How to plot a database object
-
 
 
 ## How to build packages or function to access dbplyr
