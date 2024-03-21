@@ -196,5 +196,236 @@
       "Introduction",
       "Index"
     ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "I have been to the darkest corners of the internet and beyond, searching for answers to the most impossible data problems. I’ve scoured every forum, every blog, every tutorial, and even ventured into the depths of the forbidden knowledge that mere mortals should not possess. But fear not, my friends, for I have returned with solutions that will save you agony and frustration.\nI’m not just talking about your everyday, run-of-the-mill data issues. No, no, no. I’m talking about the kind of data that would make even the most experienced analyst shake in their boots. Messy, inconsistent, non-standard, and downright ugly data that makes you want to throw your computer out the window. But fear not, for I have conquered these data demons and emerged victorious.\nAnd now, I am here to share my knowledge with you, my dear comrades in data crunching. This book will solve 80% of your data problems, with no complex macros or advanced languages required. It’s like a data superhero that will swoop in and save the day, leaving you with more time to sip on a margarita and bask in the glory of your newfound data skills.\nSo if you’re tired of staring at your computer screen, tears streaming down your face, and feeling like you’re stuck in a never-ending data nightmare, then this book is for you. It’s time to take back control of your data, and with my help, you’ll be a data champion in no time.\nThis is meant to quickly reference guide. I will teach you patterns techniques so that you can quickly and effectively get to solutions to your problems. This means building up your analysis frameworks and tool kits.\nIf you’ve been counting, you’ve noticed I’ve used “effective” almost 15 times. What do I mean by that, I’m balancing your time, With all the skills, you can (and some of you should) significantly advanced your knowledge but what happens? For many of you, you’ll build a tool only you can use, you will need to spend significantly amount of your time learning these skills and testing these skills. Things will go wrong. You will be frustrated, eventually you’ll get it right, you will be better for it. But then you will move, the person replacing you will have no clue what you are doing and will quickly undo it, and sure you’ve learnt an advance skill, but unless your organization is build around that level of skill standard - you may not intend it but you will do more harm than good.\nIt also means you will be able to do a typical problem in an defined amount of time. Trust me, there is no point reading this if you can’t do a simple analysis in 15 minutes. Why? Because you spent time training on to have any benefit with your work.\nBy the time you are done, you will gladly look forward to data. It will not intimidate you. You will be excited to quickly semi automate many of your processes. You will be confident. You will be focus on value and process.\nI want to tell you that you will be able to great in 2 weeks but I will lie to you. Yes, for sure you will do some great things very quickly and if you are lucky enough that your data is already perfectly organized and your management teams actually know what they want with data than for sure - you will hit the ground running quickly. However for the rest of us, it will take time to replicate your existing Excel skill set in R and than surpass it. However, I promise you, this is investment is worth it when you are able to automate a report in 10 minutes that used to take you a week.\nBe patient, the concepts taught here are not hard or complex they are just different than what you know. As you become more familiar with the new concepts you will learn it very quickly.\n\nBooks purpose\nThis book will guide you through realistic business scenarios on how to create and automate reports with an emphasis on maximizing your team’s effectiveness\nYou read this and 1) will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness (as defined by your team & maintenance of the reports you build)\nWhile there are some fantastic R reasources www.bigbookofR.com, the referenced example datasets rarely prepare you for the real life complexities of dealing with Corporate datasets, including challenges of dealing with messy Corporate datasets, maintaining reports when there is significant process changes, and system and offline manual data manipulation required to generate reports.\nAdditionally, whether it is R or python, most learning resources tend to have a heavy focus on statistical techniques / applications which while useful in certain contexts in reality do not help most analyst or managers with their business reporting.\nThis book is focused on developing effective analyst skills that will improve both your R and Excel skills, recognizing that he reality of using exclusively being able to use R in a corporate environment is rare. Furthermore by relating R to excel, you will gain a deeper learning into how R works.\nThere will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be able to maintain (however we will provide resources in case you are curious!)\n\nThe dirty secret of popular data science languages are they are perishable, that is to say if you don’t use them frequently you will forget the techniques, syntax and common patterns to solve your issues.\n\nthe real barrier and challenge to learning R is not the language itself, although you won’t believe it now, R is very simple to learn, the challenge will be getting sufficient practice to learn the patterns in your daily life\nFor this – its up to you and your level of dedication / committment.\nI’d recommend to find 30 minutes every day to practice specific skill elements.\nExcels main benefit is its visual user interface – eg you can click buttons, drag and drop columns/rows and you can see your data responds.\nTo help with the R journey, we will introduce (when possible / appropriate) their corresponding Excel actions.\nIt will help you understand what R is doing but help you understand the productivity benefits of R.",
+    "crumbs": [
+      "Introduction",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "learningR.html",
+    "href": "learningR.html",
+    "title": "1  How to save things on Git",
+    "section": "",
+    "text": "1.0.1 Categorical Variables\nIn general you will need to distinguish betwen your character values as either straight character or categorical with levels\nThis becomes critical as you look to create categories and relationships in your data\nforecats is the gotopackage in particular:\nrename\nrecode() to change values in column\nrecode(col,newvalue=oldvalue)\nreorder\nfct_relevel\nfct_relevel(col,level1,level2,etc)\nfct_reorder(col,col_to_be_reorderby,function)\n3)group variables into another group\ncase_when()\n-typically used in combination with mutate() -can reference multiple conditions\ncase_when(col1==var1 ~ val1, col1==var2 & col3==var3 ~ var 2, is.na(col1) ~ “missingvalue”, TRUE ~ “defaultvalue )` cut()\n##purr\n{ } is used to stop a data frame from passing into as first agurmen\n. is a place holder for the data frame\n{r } list.len=3 str(mpg,list.len=3)\nstr(mpg) listviewer::jsonedit(mpg)\n#patchwork\ncan organize with easy convention +,/,| is two charts on top and one chart beneath\nbut can also supplement with additional functions\nplot_layout can also arrnage by rows\nplot_layout(nrow = 3, byrow = FALSE) arguments: width= changes the graphs relative width size, when given as a numeric c(2,1) then the first columsn graphs are twice as large as the second columns height= changes the graphs reltive row heigh, ncol= numeric, changes number of columsn guides=“collect” to remove duplicate guides theme(legend.position=‘bottom’) moves the legend position\nguide_area() to create area that guides=collect move towards\nhttps://patchwork.data-imaginist.com/reference/plot_layout.html\nplot_annotation() to add annotation title = ‘The surprising story about mtcars’ tag_levels = ‘I’ or “A” or “1” to set tag on each plot caption=“Text” theme = theme(plot.title = element_text(size = 16))\nuse the below to add a blank text tile next to a plot grid::textGrob(‘Some really important text’) or a table gridExtra::tableGrob(mtcars\\[1:10, c('mpg', 'disp')\\])\nplot_spacer() inserts an empty plot\ninset_element() to insert a sub graph ontop of a new one\nleft = 0.6, bottom = 0.6, right = 1, top = 1 align_to = ’full\nhelpful tips:\nWhen creating a patchwork, the resulting object remain a ggplot object referencing the last added plot. This means that you can continue to add objects such as geoms, scales, etc. to it as you would a normal ggplot:When creating a patchwork, the resulting object remain a ggplot object referencing the last added plot. This means that you can continue to add objects such as geoms, scales, etc. to it as you would a normal ggplot:geom_jitter(aes(gear, disp))\nOften, especially when it comes to theming, you want to modify everything at once. patchwork provides two additional operators that facilitates this. & will add the element to all subplots in the patchwork, and * will add the element to all the subplots in the current nesting level. As with | and /, be aware that operator precedence must be kept in mind.\nstr_replace_all //s+ = all white spaces\nhow to write tables\nfont 1. Numerical data is right-aligned 2. Textual data is left-aligned 3. Headers are aligned with their data 3½. Don’t use center alignment.\n#visual guide ## axis title - axis title always all caps - align top y axis or left axis - color to match axis color ## graph title left alignment\nAcross(), if_any,if_all\nsummarize/mutuate/pivot_longer/pivot_wider\nacross // character based\nstarts_with\nends_with\ncontains\nmatches\nnum_range()\nlast_col\nwhere()// with a function that has bolean condition eg. is.numeric\nused to select columns by name, position or type (requires where() wrapp)\nc(column names), position or type (where)\nfunction, or list( function1=function(), function2=function())\n{} is used to refenence preivously declared variables in the glue package or in functions that rerence glue package\nsome attributes have sepcial references, such as {.col} to reference a column and {.fn} to refernece a function\nused in the .names argument of across\nacross() doesn’t work with select() or rename()\nmutate, group_by,count,distinct,summarize\nfilter is excluded and instead use if_any and if_all with exceltiion of\nfilter(across(everything), ~function)\nExamples for filter\ncolumn:\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.0     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nstarwars %&gt;%\n\nfilter(if_any(everything(), ~ !is.na(.x)))\n\n# A tibble: 87 × 14\n   name     height  mass hair_color skin_color eye_color birth_year sex   gender\n   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; \n 1 Luke Sk…    172    77 blond      fair       blue            19   male  mascu…\n 2 C-3PO       167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…\n 3 R2-D2        96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…\n 4 Darth V…    202   136 none       white      yellow          41.9 male  mascu…\n 5 Leia Or…    150    49 brown      light      brown           19   fema… femin…\n 6 Owen La…    178   120 brown, gr… light      blue            52   male  mascu…\n 7 Beru Wh…    165    75 brown      light      blue            47   fema… femin…\n 8 R5-D4        97    32 &lt;NA&gt;       white, red red             NA   none  mascu…\n 9 Biggs D…    183    84 black      light      brown           24   male  mascu…\n10 Obi-Wan…    182    77 auburn, w… fair       blue-gray       57   male  mascu…\n# ℹ 77 more rows\n# ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,\n#   vehicles &lt;list&gt;, starships &lt;list&gt;\nstarwars %&gt;%\n\nfilter(if_all(everything(), ~ !is.na(.x)))\n\n# A tibble: 29 × 14\n   name     height  mass hair_color skin_color eye_color birth_year sex   gender\n   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; \n 1 Luke Sk…    172    77 blond      fair       blue            19   male  mascu…\n 2 Darth V…    202   136 none       white      yellow          41.9 male  mascu…\n 3 Leia Or…    150    49 brown      light      brown           19   fema… femin…\n 4 Owen La…    178   120 brown, gr… light      blue            52   male  mascu…\n 5 Beru Wh…    165    75 brown      light      blue            47   fema… femin…\n 6 Biggs D…    183    84 black      light      brown           24   male  mascu…\n 7 Obi-Wan…    182    77 auburn, w… fair       blue-gray       57   male  mascu…\n 8 Anakin …    188    84 blond      fair       blue            41.9 male  mascu…\n 9 Chewbac…    228   112 brown      unknown    blue           200   male  mascu…\n10 Han Solo    180    80 brown      fair       brown           29   male  mascu…\n# ℹ 19 more rows\n# ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,\n#   vehicles &lt;list&gt;, starships &lt;list&gt;\nNeed to investigate rename_with and and itsimpact on select as it appears to be superseded\ndplyr/colwise.Rmd at main · tidyverse/dplyr · GitHub\nglamour of graphics\nalignemtn\ntop left aligned to the chart left (plot.titile.position=“plot”\nadd_count(dim,name=“text”) %&gt;% mutate(colname= glue::glue(“{col}{text}”)\nrotate lebels, either by swapping axis or removing axis all together\nremove borders\nremove gridlines\nleft /right align text to create clean borders\nindicate legend in title\ngraphing tips and tricks\nif you want to plot a subset of the data but show atrend agains the full data, leverage the data argument in the each individual geom (rather that defining this globally) (example below)\nR-Ladies Freiburg (English) - Level up your ggplot: Adding labels, arrows and other annotations - YouTube\ngeom_curve\naes(x,y,xend,yend)\narrow=arrow(length=unit(x,“inch)),\nsize\ncolr\ncurvature(0 is straight line, positive is right hand curve, negative is left hand curve)\nggforce package has advanced annotation options\ngeom_mark_circle\ngeom_mark_rect\ngeom_mark_hull\ngeom_mark_elipse`\naes(label,filter,description)\nexpand\nlabel.lineheight\nlabel.fontsize\nshow.legend\nggforce() package\nwith_blur() can blur the geoms (ten need to seperately map the geoms that you do want to show\nneed to warp the geom_jitter comand in with_blur\nwith_blur(\ngeom_jitter(),\nsigma = unit(#,“mm”) #blur impact\nfacet_zoom()# takes a larger dataset and then adds in a zoomed up graph\nfacet_zoom(axis =argument==filterar_gument)\nfacet_zoom(x=country==“spain”)\nfacet_zoom(y=length &lt;20)\nProgramming with dplyr • dplyr (tidyverse.org)\nArgument type: tidy-select — dplyr_tidy_select • dplyr (tidyverse.org)\nTidy evaluation is not all-or-nothing, it encompasses a wide range of features and techniques. Here are a few techniques that are easy to pick up in your workflow:\nPassing expressions through {{ and ….\nPassing column names to .data[[ and one_of().\nAll these techniques make it possible to reuse existing comp\nWhen creating forumlas how to referece to names?\nSTart with fixed names (only if you are sure it wont change) and try wrapping that around a test to ensur eit exists\nduoble currly braces {{}}\nWhen you want to reference a data variable from an env. variable in function, you pass the dataframe to the function then wrap the data var with {{var}} in order pull it from the env frame (instead of saying data$x)\nwhere() for search paramters\n.data[[var]]\nif you env variable is a character frame that you must use .data[[var]]\nall_of or any_of for character vectors for search praramters\ncompute_bmi &lt;- function(data) { if (!all(c(“mass”, “height”) %in% names(data))) { stop(“data must contain mass and height columns”) }\ndata %&gt;% transmute(bmi = mass / height^2) }\nhow to use as nmaes\n“mean_{{var}}” := mean({{var}})\nOpen questions\nwhen do you sue data and when do use .data (okay answer apparently when you use … you start other variables with “.” eg. .data to avoid conflictino ix | Tidyverse design guide\n)\nf you want the user to provide a set of data-variables that are then transformed, use across():\nmy_summarise &lt;- function(data, summary_vars) { data %&gt;% summarise(across({{ summary_vars }}, ~ mean(., na.rm = TRUE))) } starwars %&gt;% group_by(species) %&gt;% my_summarise(c(mass, height)) #&gt; # A tibble: 38 × 3 #&gt; species mass height #&gt;    #&gt; 1 Aleena 15 79 #&gt; 2 Besalisk 102 198 #&gt; 3 Cerean 82 198 #&gt; 4 Chagrian NaN 196 #&gt; # … with 34 more rows\nYou can use this same idea for multiple sets of input data-variables:\nmy_summarise &lt;- function(data, group_var, summarise_var) { data %&gt;% group_by(across({{ group_var }})) %&gt;% summarise(across({{ summarise_var }}, mean)) }\nUse the .names argument to across() to control the names of the output.\nmy_summarise &lt;- function(data, group_var, summarise_var) { data %&gt;% group_by(across({{ group_var }})) %&gt;% summarise(across({{ summarise_var }}, mean, .names = “mean_{.col}”)) }\nAction versb to know how to use\nArgument type: tidy-select — dplyr_tidy_select • dplyr (tidyverse.org)\neverything(): Matches all variables.\nlast_col(): Select last variable, possibly with an offset.\nThese helpers select variables by matching patterns in their names:\nstarts_with(): Starts with a prefix.\nends_with(): Ends with a suffix.\ncontains(): Contains a literal string.\nmatches(): Matches a regular expression.\nnum_range(): Matches a numerical range like x01, x02, x03.\nThese helpers select variables from a character vector:\nall_of(): Matches variable names in a character vector. All names must be present, otherwise an out-of-bounds error is thrown.\nany_of(): Same as all_of(), except that no error is thrown for names that don’t exist.\nThis helper selects variables with a function:\nwhere(): Applies a function to all variables and selects those for which the function returns TRUE.\narrange(), count(), filter(), group_by(), mutate(), and summarise() use data masking so that you can use data variables as if they were variables in the environment (i.e. you write my_variable not df$myvariable).\nacross(), relocate(), rename(), select(), and pull()\nrowwise()\ncolwise()\nTricks\nmean in summarize will give you the portion of that variable per the group\npurr\nresources\n9 Basic map functions | Functional Programming (stanford.edu)\nMap and Nested Lists | R-bloggers\npattern\ntake one element .x&lt;-list[[1]]\ndo the formula based on that element\nset_names() without argument sets the names equal to the values\nmap returns list, control map outcomes with map alternatives eg. map_df, map_dbl\nif function has more than one argument then define a function upfront in global environment and pass the second y argument as explicit command in map [follow up how to do this in anonymous way)\nmap(1:5,custom_function,y=2)\npmap for more than one vector\ncan also pass through functions as objects not just data\nfuns&lt;- list(mean,median,sd)\nmap(funs,~map_dbl(mtcars,.x))\nstart on the inside and then work your way to the outside\nwalk similiar ot map but is design for function that you want to run soley for hte side effects\nso walk will always return the origional vector eg. walk(.x,.f)=&gt; .x whereas map will return map(.x,.f)=&gt; .f(.x.\nSo why use walk? when you want the formula side effectt (eg saving a picture)\naccumulate\napplies same function again and again and again\napplies function to first argument then takes that result and applies that outcome to second argument\neg. accumulate(letters,paste), will produce a prymid of values of all the letters\nso accumlate will show all the interim values\nreduce will only show the final value\nthis is recursive\nHowever, if you want pair wise actions 11, 22, etc then you need map2\ntidytext\nunnest_tokens basically takes a string and breaks t into characters, words, or others ngrams,\nFrom there use typical dplybs to graph, popular geoms are geom_text to plot the words aagainst their proportion.\ntypiecal tokenize methodologies use ICI (international components of unicode) which defines word boundaries )\nChapter 2 Tokenization | Supervised Machine Learning for Text Analysis in R (smltar.com)\npackages\ntidytext\ntokenize\nstopwords\nSnowballC for stemming\nhunspell also for stemming / spell check\ntypes of toekn\ncharacters\nwords,\nsentences\nlines,\nparagraphs\nngrams\nyou can use tidytext package or tokenize package but here is your pattern\ngrab text\nadd a dimenion factor (eg. chapter, author, book)\nnest the data by the dimension\nif data is nested use mutate(map()) pattern to perform transformations\nif doing setences or paragraphs you may need to paste() the text and add paragraph breaks “” (paragraphs) or space breaks ” ” (sentences)\nthen use either tidytext(returns tibble) or tokenizer (returns lists) to do unnesting work\nunnest data\nanti_join(stop_words)\nregex considerations\n[:alpha:] brings in non US lettesr where as [a-zA-Z] only brings in US letters\n? is optional (will match or not)\n^ starts with\n$ends with\nstop words\nstopwords package with snowball, iso and other packages\nstemming\ncan stem words tree, tree’s into single word\nhowever also has impact of creating new words to stem by\nSnowballC package offers wordStem\ntokenizer::tokenize_word_stems\nhunspell:hunspell_stem\nmore resources\nChapter 2 Tokenization | Supervised Machine Learning for Text Analysis in R (smltar.com)\ntidytext",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>How to save things on Git</span>"
+    ]
+  },
+  {
+    "objectID": "learningR.html#tidy-evaluation",
+    "href": "learningR.html#tidy-evaluation",
+    "title": "1  How to save things on Git",
+    "section": "1.1 tidy evaluation",
+    "text": "1.1 tidy evaluation\nresources\n2 Why and how | Tidy evaluation (tidyverse.org)\nProgramming with dplyr • dplyr (tidyverse.org)\nImplementing tidyselect interfaces • tidyselect (r-lib.org)\nTechnical description of tidyselect • tidyselect (r-lib.org)\n13 Tidy evaluation basics | Functional Programming (stanford.edu)\nprinciples\ndata masking is when you delay the evaluation of a code so that the code can find relevant columns for computation. th\nThis is why you can can do::\n{r}\n#this will work starwars %&gt;% filter( height &lt; 200, gender == “male” )\n#but really the program needs this, reference to dataframe and column starwars[starwars\\(height &lt; 200 & starwars\\)gender == “male”, ]\ntechnical term for delaying code is quoting\nthis delaying of code evalution can help you when using code but also make things more complicated when writing code\nvectoring can occur when either input has 1 or same length of input object to ensure all columns have same length\nsome functions can repeat values if recycling completes the length\nhowevre other,like tidyverse family don’t\n!! takes a variable defined outside of function and allows you to use it within a function x&lt;-1 function(x) !!x+1, qq_show() allows you to see what is happening\n!! works for assiging a variable not a column name or only variable\n!! is simliar to := but := is only for left hand side eg setting a name\nwhen working with lists you need !!! to pull out each element and pass it through otherwise !! just pass through the list as is also need to use enquos() vs. enquo\nsym) is how you quote for column names and !! is how you unquote, however sym() only works for character strings so “mpg” vs. mpg\nenquo is used for non character strings and then !! is how you unquote them\nrlang::qq_show will help show what how !! is being evaluated\npattersn\nenquo() and !!\n:= and !!\nenquos() and !!!\nhow to use environment character vectors in a function or formula? - use all_of() or any_of() (use ! to negate) linkhere - you can also suse sym or syms with !!! link here\nhow to quote a uncharacter argument into a character arugment - dots &lt;- enquos(…, .named = TRUE) will turn a unquoted input into a quosure variable - nm1 &lt;- purrr::map_chr(dots, rlang::as_label) then use this to transform into character vectors which canbe used in functions linkhere\n#PCA\npca_rec &lt;- recipe(~., data = sample_df) %&gt;% update_role(daily_miss, new_role = “id”) %&gt;% step_normalize(all_predictors()) %&gt;% step_pca(all_predictors())\npca_prep &lt;- prep(pca_rec)\npca_prep\ntidied_pca &lt;- tidy(pca_prep, 2)\ntidied_pca %&gt;% filter(component %in% paste0(“PC”, 1:5)) %&gt;% mutate(component = fct_inorder(component)) %&gt;% ggplot(aes(value, terms, fill = terms)) + geom_col(show.legend = FALSE) + facet_wrap(~component, nrow = 1) + labs(y = NULL)\nprincomp with plot(pca_mod, type=“lines”).",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>How to save things on Git</span>"
+    ]
+  },
+  {
+    "objectID": "learningR.html#advanced-plotting-contorl-over-color-shape-or-alpha",
+    "href": "learningR.html#advanced-plotting-contorl-over-color-shape-or-alpha",
+    "title": "1  How to save things on Git",
+    "section": "1.2 advanced plotting, contorl over color, shape or alpha——",
+    "text": "1.2 advanced plotting, contorl over color, shape or alpha——\n\nadd column that by attribution (eg. color, shape,alpha)\nuse case_when that identifies row attributes and gives the custom formatting\n\n\ndiamonds_formatting &lt;- diamonds %&gt;% \n  mutate(\ncustom_col= case_when(\n  between(price, 400,2000) ~ 'grey60',\n  price &lt; 5000 ~ \"red\",\n  price &lt; 10000 ~ \"blue\",\n  price &lt; 20000 ~ \"purple\",\n  color ==\"G\" ~ '#AA4465',\n  TRUE ~ \"orange\"),\ncustom_shape=case_when(\n  color ==\"G\" |color==\"E\" ~ 13,\n  TRUE ~ 4)\n  \n)\n\n\npass arguments to ggplot mapping the col, shape, alpha to the respective columns\nmust add scale_*_identity() to the plot for this to work\n\n\ndiamonds_formatting %&gt;% \n  ggplot(aes(price,color,col=custom_col,shape=custom_shape))+\n  geom_point()+\n  scale_color_identity()+\n  scale_shape_identity()\n\n\n\n\n\n\n\n\n\nsource (https://alberts-newsletter.beehiiv.com/)[]\n\n#tidyselect verbs\ncontains() starts_with() ends_with() 1:10 a:b last_col() -offset=X –offset argument matches() num_range() -needs arguments\nbased on character names all_of() any_of()\npass a formula to check against each column where() -is.numeric() -is.factor() ~mean(.x) &gt;3.5\n\n1.2.1 common tasks—\napply a function to multiple columns to perform action onto column or new columns - Across() apply a column of arguments, one by one, as input into a function - map() apply two or more column of arguments as simulataneous inputs into a function - map2() apply one column of arguments as input to function, then combine output with new argument - purrr::reduce()\napply a function to pairs of columns on a rolling basis (eg. col 1 -2, col 2 - 3, etc) ????",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>How to save things on Git</span>"
+    ]
+  },
+  {
+    "objectID": "learningR.html#count",
+    "href": "learningR.html#count",
+    "title": "1  How to save things on Git",
+    "section": "1.3 count",
+    "text": "1.3 count\ncount very useful function to quickly tabulate data use .drop to show any data that has been filtered out or removed\n\nlibrary(tidyverse)\n\n\n1.3.1 how to parse out words from a sentence\n\nfixed position and fixed seperated but whole word (seperated by consistent seperator\n\n\nstring &lt;- c(\"I only want the third word of each sentence\",\n            \"I only need the third word of each setence\",\n            \"I only use the third worsd of each sentence\")\nlibrary(tidyverse)\nstringr::word(string, #vector of strings\n              start=3, #where to start extraction\n              end=3, #where to end extraction\n              sep=\" \")# what seperator to parse\n\n[1] \"want\" \"need\" \"use\" \n\n\nstringr::word(string,start=x,end=y,sep=?)\nis.element(input,check_strings) – validates inputs matches at least one in a set",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>How to save things on Git</span>"
+    ]
+  },
+  {
+    "objectID": "database.html",
+    "href": "database.html",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "",
+    "text": "3 Resource\nResource to understand databases\nR for datascience chapter on database\nDbplyr functions\nHow to use duckdb\nDBI function overivew\nPosit learning materials\ndbplot_histogram",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#the-essentials",
+    "href": "database.html#the-essentials",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.1 The Essentials",
+    "text": "4.1 The Essentials\nWhat do you need to access data in a database?\n\nA database with data inside of it\n\nAccess / permission to the database\nLocation, user name and password to database (or equivalent protocols as dictated by your organization’s security model)\nDatabase driver and related utilities\nSQL querys\nPatience\n\n\n\n\n\n\n\n“What is the advantage of a database?”\n\n\n\n\n\nIt comes down to scale and size. At some point your organization or process will generate substantial data and needs a more structured process to store the data so that multiple parties can access the data at scale.\nWhen dealing with a new database some key frameworks are:\n\nCloud vs. On-Premise\nSecurity model and access\n“Flavor” of database\nImproved data management: A database centralizes data, making it easier to manage and maintain\nEnhanced data security: A database provides secure storage and retrieval of sensitive data through user authentication and access control mechanisms\nBetter data organization: A database theoretically allows for better organization and structure of data through the use of tables, indexes, and relationships\nImproved query performance: Databases are optimized for query performance, allowing for faster retrieval of data.\nScalability: Databases can handle large amounts of data and scale as needed to meet growing storage demands.\n\nCloud vs On-Premise Database:\n\nCloud databases are hosted on remote servers, while on-premise databases are hosted on local servers (when you read servers just replace it with the word computers. You are either using your organization’s computer (on prem) or you are using someone else (cloud))\nCloud databases offer greater flexibility in terms of scalability and accessibility, as they can be accessed from any location with an internet connection.\nOn-premise databases provide more control over data security and privacy, as the data is stored on a local server and not transmitted over the internet.\nCloud databases typically require less setup and maintenance than on-premise databases, as they are managed by the provider.\nCost: Cloud databases are often subscription-based and can be more cost-effective than on-premise databases, especially for small to medium-sized businesses.\n\nSecurity Model and Access:\n\nSecurity model: A database’s security model determines who has access to the data and how they can access it. Common security models include Role-Based Access Control (RBAC), Attribute-Based Access Control (ABAC), and Identity-Based Access Control (IBAC).\nAccess control: A database’s access control mechanisms determine who can view, edit, or delete data. This can be based on user authentication, role-based access control, or attribute-based access control.\nAuthentication methods: Databases support various authentication methods such as username and password, single sign-on (SSO), and two-factor authentication (2FA).\nAuthorization methods: Databases support various authorization methods such as row-level security, column-level security, and table-level security.\nAuditing and logging: Databases can log all access attempts and successful accesses to track user activity and detect potential security breaches.\nEncryption: Databases can encrypt data both in transit and at rest to protect it from unauthorized access.\nBackup and recovery: Databases provide mechanisms for backing up data and recovering from failures or security incidents.\nIdentity and access management (IAM): IAM systems manage user identities and access rights within the database, ensuring that only authorized users can access the data.\nRole-based access control (RBAC): RBAC allows for assigning roles to users based on their job function or responsibilities, limiting the data they have access to.\nAttribute-based access control (ABAC): ABAC grants or denies access to data based on attributes associated with the user or the data itself, such as location or time of day.\n\n\n\n\nWhat does a database need from you?\n\nThe most frustrating part of database is getting access to the database, setting up the database utilities and then making the initial connection\nThere are multiple ways to connect to a database however almost all require the following:\n\nUser name\nPassword\nDatabase driver\nConnection string and associated arguments\nSQL query\n\nWe will review the DSN method for connecting to a database\nThese tend to be confusing because much of this is controlled and managed by your local IT department so whatever documentation or guide you read on online may not translate one for one to your localized experienced (this includes this guide as well :(",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#set-up-odbc-driver",
+    "href": "database.html#set-up-odbc-driver",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.2 Set up ODBC Driver",
+    "text": "4.2 Set up ODBC Driver\n\nDownload (if required) a database driver for your database – this is typically on the database company’s website\n\nYour company may have centralized package manager system where you will need to download and install all required drivers via that packet manager\n\nConfigure your DSN so that you can be authenticated\nYour database platform should have documentation on how to do this and your internal IT team should be able to articulate any proxy / security requirements\nHere is some example documentation\nYou are essentially saving the required information (listed above) to your computer so that you can pass these arguments to the database\nPay attention to the name you setup the DSN driver, you will need this later one\n\nExample Paramaters are below\n\nUser\nPassword\nServer\nDatabase\nSchema\nWarehouse\n\nTracing\nAuthenticator",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#create-connection-string",
+    "href": "database.html#create-connection-string",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.3 Create Connection String",
+    "text": "4.3 Create Connection String\n\nIf the above is done correctly you can then use DBI package in R to connect to the database of your choice\nCreate a connection string with DBI::dbConnect()\n\nSelect the DBMS wtih the driver_name such as ODBC::ODBC() to access your DSN set up connect to external database or can use DMBS package such as duckdb::duckdb() to replicate an internal instance of a database\nDSN name if external database (the name used to set up ODBC driver)\nAlternatively, you can directly supply the arguments in DBI::dbConnect() such as hostname,port,username, etc\n\n\n\n\nCode\n## this uses duckdb example to create a connection string\n\ncon &lt;- DBI::dbConnect(drv=duckdb::duckdb())\n\n## this is alternative example using a made up DSN name \n\ncon  &lt;- DBI::dbConnect(\n  drv=odbc:odbc()\n  ,dsn=\"your_DSN_name\" \n  )\n\n\n\n\n\n\n\n\nAdditional Utilities\n\n\n\n\n\n\nthe DBI and ODBC packages are extremely useful for database related utilities\nWhile they have some existing overlap, they can be used to view the schema in your database, list active connections and also disconnect.\nBelow are some useful utilities:\n\n\n4.3.0.1 list your drivers\nodbc::odbcListDrivers()\n\n\n4.3.0.2 list active connections\nDBI::dbListConnections()\n\n\n4.4 Checks if you can connect\nDBI::dbCanConnect()\n\n\n4.5 List tables listed under connection\nDBI::dbListTables()\n\n4.5.1 list tables in connection\ndbListTables(con) to list tables associated with a connection\n\n\n\n\n\n\nAfter you have created a connection string you now need to retrieve information from the database",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#checks-if-you-can-connect",
+    "href": "database.html#checks-if-you-can-connect",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.4 Checks if you can connect",
+    "text": "4.4 Checks if you can connect\nDBI::dbCanConnect()",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#list-tables-listed-under-connection",
+    "href": "database.html#list-tables-listed-under-connection",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.5 List tables listed under connection",
+    "text": "4.5 List tables listed under connection\nDBI::dbListTables()\n\n4.5.1 list tables in connection\ndbListTables(con) to list tables associated with a connection",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#option-1-create-sql-string",
+    "href": "database.html#option-1-create-sql-string",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.6 Option 1: Create SQL string",
+    "text": "4.6 Option 1: Create SQL string\n\nIf you know the database, schema and table name that you want, you can write the initial sql query to connect to the database\nYou can write simple or advance query insde the dplyr::sql() function\n\n\nsql_query &lt;- dplyr::SQL(\"select *  from database_name\")",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#accessing-databse",
+    "href": "database.html#accessing-databse",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.7 Accessing Databse",
+    "text": "4.7 Accessing Databse\n\nUse connection string and sql query together to create a lazy table with dplyr::tbl()\nWe call this a lazy table because it won’t actually execute the query and return the results which is good because your query might return 100s of results\n\n\ndata_db &lt;- dplyr::tbl(con,sql_query)\n\n\nFrom there you can use dplyr back end queries to see everything (notice the distinction betwee dbpyr and dplyr\nIf you use the dbplyr package, you are limited to queries that can be translated to sql which are detailed below\n\ngithub of dplyr commands that can be used in dbplyr\nYou can also check the database specifichere\n\nYou can see what query it will generate with dbplyr::show_query()\nNotice the class of the object you return, you are returning a database object – if you want to return a dataframe you need to use dplyr::collect()",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#option-2-push-existing-data-into-a-database",
+    "href": "database.html#option-2-push-existing-data-into-a-database",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.8 Option 2: Push existing data into a database",
+    "text": "4.8 Option 2: Push existing data into a database\n\nFirst you need to have a connection string to a database (and write permissions)\nIf you already have something as a dataframe you can upload it to a database with DBI::dbWriteTable(con,“tbl_name”,df) which will write the table to the connection with the name you gave\n\nDBI::dbWriteTable() can write a r dataframe or you can use sql to create a virtual table if you want\ndbplyr::copy_inline(con_db,df = df) is alternative method\nIf you have duckdb connection you can use the duckdb::duckdb_register()\n\n\n\n# create connection\ncon_db &lt;- DBI::dbConnect(duckdb::duckdb())\n\n# write data into database\nDBI::dbWriteTable(con_db,name = \"diamonds_db\",value = ggplot2::diamonds)\n\n# or alternative use the database argument to regester\nduckdb::duckdb_register(con_db, \"diamonds_db_2\",df =  ggplot2::diamonds)\n\n# validate data is in database by reference connection\nDBI::dbListTables(con_db)\n\n[1] \"diamonds_db\"   \"diamonds_db_2\"\n\n# Pull in data in database format\ndiamonds_db &lt;- dplyr::tbl(con_db,\"diamonds_db\")",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#what-happens-if-dbplyr-doesnt-have-a-function-that-i-need",
+    "href": "database.html#what-happens-if-dbplyr-doesnt-have-a-function-that-i-need",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.9 What happens if dbplyr doesn’t have a function that I need?",
+    "text": "4.9 What happens if dbplyr doesn’t have a function that I need?\n\n4.9.1 built in helper functions\n\n\n4.9.2 create sql query and use it",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#how-can-i-build-a-package-for-this",
+    "href": "database.html#how-can-i-build-a-package-for-this",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.10 how can I build a package for this?",
+    "text": "4.10 how can I build a package for this?\n\n4.10.1 sprintf() and SQL\n\n\n4.10.2 dbplyr",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#putting-it-all-together",
+    "href": "database.html#putting-it-all-together",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "4.11 Putting it all together",
+    "text": "4.11 Putting it all together\n\nSet up your drive, get required database info and related utilities\nCreate connection to your database\nwrite an inital query to select the columns that you want or need\nUse dbplyr to translate dplyr queries to SQL\nreturn results to your local machine with dplyr::collect()",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#you-can-pass-one-database-object-to-duckdb",
+    "href": "database.html#you-can-pass-one-database-object-to-duckdb",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "6.1 You can pass one database object to duckdb",
+    "text": "6.1 You can pass one database object to duckdb\n\n```{r}\n#| label: db-connect example\n#| eval: true\n\n## create connection string locally\ncon_db &lt;- DBI::dbConnect(duckdb::duckdb())\n\n# loads data into your connection either in memory\nDBI::dbWriteTable(con_db,\"diamonds_db\",ggplot2::diamonds)\n\n#create new table to the connection\n\nDBI::dbExecute(con_db, \"CREATE TABLE duckdb_table (col1 INT, col2 STRING)\")\n```\n\n[1] 0\n\n\n#preview what is in your connection\n\nDBI::dbListTables(con_db)\n\ndbplyr::copy_inline(con_db,df = diamonds)\n\n\ndiamonds_db &lt;- dplyr::tbl(con_db\n    ,\"diamonds_db\"\n    )",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#run-sql-queries-safely",
+    "href": "database.html#run-sql-queries-safely",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "8.1 Run SQL queries safely",
+    "text": "8.1 Run SQL queries safely",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#how-to-plot-a-database-object",
+    "href": "database.html#how-to-plot-a-database-object",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "8.2 How to plot a database object",
+    "text": "8.2 How to plot a database object",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
+  },
+  {
+    "objectID": "database.html#how-to-build-packages-or-function-to-access-dbplyr",
+    "href": "database.html#how-to-build-packages-or-function-to-access-dbplyr",
+    "title": "2  Database and Larger Than Memory Problems",
+    "section": "8.3 How to build packages or function to access dbplyr",
+    "text": "8.3 How to build packages or function to access dbplyr\n\ntwo options:\n\nsprintf to generate actual sql queries\ndbplyr / similiar to spring",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Database and Larger Than Memory Problems</span>"
+    ]
   }
 ]
