@@ -20,7 +20,7 @@ format:
     theme:
      light: flatly
      dark: darkly
-    output_dir: files
+    output_dir: docs
   pdf:
     documentclass: scrreprt
 

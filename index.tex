@@ -9,7 +9,6 @@
   numbers=noendperiod]{scrreprt}
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -19,6 +18,10 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -122,7 +125,7 @@
 \usepackage{array}
 \KOMAoption{captions}{tableheading}
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
 \definecolor{quarto-callout-color}{HTML}{909090}
 \definecolor{quarto-callout-note-color}{HTML}{0758E5}
@@ -136,10 +139,6 @@
 \definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
 \definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
 \definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -177,21 +176,16 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
-\makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -206,11 +200,10 @@
 
 \title{Excel to R: A Survivor's Guide for the Corporate Environment}
 \author{Alejandro Hagan}
-\date{9/10/03}
+\date{2003-09-10}
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, breakable, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -218,28 +211,24 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
-\hypertarget{index}{%
-\chapter*{Index}\label{index}}
+\chapter*{Index}\label{index}
 \addcontentsline{toc}{chapter}{Index}
 
 \markboth{Index}{Index}
 
-\hypertarget{excel-to-r-a-survivors-guide-for-the-corporate-environment}{%
 \section*{Excel to R: A Survivor's Guide for the Corporate
-Environment}\label{excel-to-r-a-survivors-guide-for-the-corporate-environment}}
+Environment}\label{excel-to-r-a-survivors-guide-for-the-corporate-environment}
 \addcontentsline{toc}{section}{Excel to R: A Survivor's Guide for the
 Corporate Environment}
 
 \markright{Excel to R: A Survivor's Guide for the Corporate Environment}
 
-\hypertarget{introduction}{%
-\section*{Introduction}\label{introduction}}
+\section*{Introduction}\label{introduction}
 \addcontentsline{toc}{section}{Introduction}
 
 \markright{Introduction}
 
-\hypertarget{set-up-configuration}{%
-\section*{Set Up \& Configuration}\label{set-up-configuration}}
+\section*{Set Up \& Configuration}\label{set-up-configuration}
 \addcontentsline{toc}{section}{Set Up \& Configuration}
 
 \markright{Set Up \& Configuration}
@@ -254,8 +243,7 @@ Corporate Environment}
   Vim
 \end{itemize}
 
-\hypertarget{the-whole-game}{%
-\section*{The Whole Game}\label{the-whole-game}}
+\section*{The Whole Game}\label{the-whole-game}
 \addcontentsline{toc}{section}{The Whole Game}
 
 \markright{The Whole Game}
@@ -272,8 +260,7 @@ Corporate Environment}
   Using statistical to shortcut business intelligence functions
 \end{itemize}
 
-\hypertarget{rethinking-data}{%
-\section*{Rethinking data}\label{rethinking-data}}
+\section*{Rethinking data}\label{rethinking-data}
 \addcontentsline{toc}{section}{Rethinking data}
 
 \markright{Rethinking data}
@@ -293,8 +280,7 @@ Corporate Environment}
 \end{verbatim}
 \end{itemize}
 
-\hypertarget{lookup-tables}{%
-\section*{lookup tables}\label{lookup-tables}}
+\section*{lookup tables}\label{lookup-tables}
 \addcontentsline{toc}{section}{lookup tables}
 
 \markright{lookup tables}
@@ -307,9 +293,8 @@ Corporate Environment}
   how to use them
 \end{itemize}
 
-\hypertarget{augmenting-and-creating-calculation}{%
 \section*{Augmenting and creating
-calculation}\label{augmenting-and-creating-calculation}}
+calculation}\label{augmenting-and-creating-calculation}
 \addcontentsline{toc}{section}{Augmenting and creating calculation}
 
 \markright{Augmenting and creating calculation}
@@ -320,25 +305,22 @@ calculation}\label{augmenting-and-creating-calculation}}
   adding columns and calculated columns
 \end{itemize}
 
-\hypertarget{grouping-and-summzaring-super-power-1}{%
 \section*{\#\# grouping and summzaring (super power
-1)}\label{grouping-and-summzaring-super-power-1}}
+1)}\label{grouping-and-summzaring-super-power-1}
 \addcontentsline{toc}{section}{\#\# grouping and summzaring (super power
 1)}
 
 \markright{\#\# grouping and summzaring (super power 1)}
 
-\hypertarget{filter-duplicates-advanced-aggregations}{%
 \section*{\#\# filter, duplicates, advanced
-aggregations}\label{filter-duplicates-advanced-aggregations}}
+aggregations}\label{filter-duplicates-advanced-aggregations}
 \addcontentsline{toc}{section}{\#\# filter, duplicates, advanced
 aggregations}
 
 \markright{\#\# filter, duplicates, advanced aggregations}
 
-\hypertarget{time-intelligence-functions}{%
 \section*{Time Intelligence
-Functions}\label{time-intelligence-functions}}
+Functions}\label{time-intelligence-functions}
 \addcontentsline{toc}{section}{Time Intelligence Functions}
 
 \markright{Time Intelligence Functions}
@@ -349,43 +331,37 @@ Functions}\label{time-intelligence-functions}}
   Power BI type intelligence functions
 \end{itemize}
 
-\hypertarget{merge-and-joins-super-power-2}{%
 \section*{Merge and joins (super power
-2)}\label{merge-and-joins-super-power-2}}
+2)}\label{merge-and-joins-super-power-2}
 \addcontentsline{toc}{section}{Merge and joins (super power 2)}
 
 \markright{Merge and joins (super power 2)}
 
-\hypertarget{pivot-and-unpivot-super-power-3}{%
 \section*{pivot and unpivot (super power
-3)}\label{pivot-and-unpivot-super-power-3}}
+3)}\label{pivot-and-unpivot-super-power-3}
 \addcontentsline{toc}{section}{pivot and unpivot (super power 3)}
 
 \markright{pivot and unpivot (super power 3)}
 
-\hypertarget{columnwise-vs.-rowwise-aggregation-super-power-4}{%
 \section*{columnwise vs.~rowwise aggregation (super power
-4)}\label{columnwise-vs.-rowwise-aggregation-super-power-4}}
+4)}\label{columnwise-vs.-rowwise-aggregation-super-power-4}
 \addcontentsline{toc}{section}{columnwise vs.~rowwise aggregation (super
 power 4)}
 
 \markright{columnwise vs.~rowwise aggregation (super power 4)}
 
-\hypertarget{importing-data}{%
-\section*{Importing Data}\label{importing-data}}
+\section*{Importing Data}\label{importing-data}
 \addcontentsline{toc}{section}{Importing Data}
 
 \markright{Importing Data}
 
-\hypertarget{spark-database}{%
-\section*{Spark \& Database}\label{spark-database}}
+\section*{Spark \& Database}\label{spark-database}
 \addcontentsline{toc}{section}{Spark \& Database}
 
 \markright{Spark \& Database}
 
-\hypertarget{statistical-applications-for-buinsess-intelligence}{%
 \section*{Statistical Applications for Buinsess
-Intelligence}\label{statistical-applications-for-buinsess-intelligence}}
+Intelligence}\label{statistical-applications-for-buinsess-intelligence}
 \addcontentsline{toc}{section}{Statistical Applications for Buinsess
 Intelligence}
 
@@ -401,8 +377,7 @@ Intelligence}
   lm+ interaction
 \end{itemize}
 
-\hypertarget{visualization-packages}{%
-\section*{Visualization packages}\label{visualization-packages}}
+\section*{Visualization packages}\label{visualization-packages}
 \addcontentsline{toc}{section}{Visualization packages}
 
 \markright{Visualization packages}
@@ -419,7 +394,7 @@ Intelligence}
 -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
 v dplyr     1.1.4     v readr     2.1.4
 v forcats   1.0.0     v stringr   1.5.1
-v ggplot2   3.4.4     v tibble    3.2.1
+v ggplot2   3.5.0     v tibble    3.2.1
 v lubridate 1.9.3     v tidyr     1.3.0
 v purrr     1.0.2     
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
@@ -437,10 +412,11 @@ This warning is displayed once every 8 hours.
 
 \begin{figure}
 
-{\centering 
+\centering{
 
-\hypertarget{fig-toc-1}{}
-\begin{longtable}{lllll}
+\captionsetup{labelsep=none}
+
+\begin{longtable*}{lllll}
 \toprule
 chapter & concept & excel & r & comment \\ 
 \midrule\addlinespace[2.5pt]
@@ -722,18 +698,17 @@ automation  & Bash  &   &   &   \\
   &   &   &   &   \\ 
   & - & - & - & - \\ 
 \bottomrule
-\end{longtable}
+\end{longtable*}
 
 }
 
-\caption{\label{fig-toc}\textbf{?(caption)}}
+\caption{\label{fig-toc}}
 
-\end{figure}
+\end{figure}%
 
 \part{Introduction}
 
-\hypertarget{introduction-2}{%
-\chapter*{Introduction}\label{introduction-2}}
+\chapter*{Introduction}\label{introduction-2}
 \addcontentsline{toc}{chapter}{Introduction}
 
 \markboth{Introduction}{Introduction}
@@ -806,8 +781,7 @@ Be patient, the concepts taught here are not hard or complex they are
 just \emph{different} than what you know. As you become more familiar
 with the new concepts you will learn it very quickly.
 
-\hypertarget{books-purpose}{%
-\subsection*{Books purpose}\label{books-purpose}}
+\subsection*{Books purpose}\label{books-purpose}
 \addcontentsline{toc}{subsection}{Books purpose}
 
 This book will guide you through realistic business scenarios on how to
@@ -867,8 +841,7 @@ appropriate) their corresponding Excel actions.
 It will help you understand what R is doing but help you understand the
 productivity benefits of R.
 
-\hypertarget{how-to-save-things-on-git}{%
-\chapter{How to save things on Git}\label{how-to-save-things-on-git}}
+\chapter{How to save things on Git}\label{how-to-save-things-on-git}
 
 \begin{itemize}
 \tightlist
@@ -1095,8 +1068,7 @@ two iems are expected, change the vector to a list
 
 output
 
-\hypertarget{categorical-variables}{%
-\subsection{Categorical Variables}\label{categorical-variables}}
+\subsection{Categorical Variables}\label{categorical-variables}
 
 In general you will need to distinguish betwen your character values as
 either straight character or categorical with levels
@@ -1269,7 +1241,7 @@ column:
 -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
 v dplyr     1.1.4     v readr     2.1.4
 v forcats   1.0.0     v stringr   1.5.1
-v ggplot2   3.4.4     v tibble    3.2.1
+v ggplot2   3.5.0     v tibble    3.2.1
 v lubridate 1.9.3     v tidyr     1.3.0
 v purrr     1.0.2     
 -- Conflicts ------------------------------------------ tidyverse_conflicts() --
@@ -1723,8 +1695,7 @@ Analysis in R (smltar.com)
 
 tidytext
 
-\hypertarget{tidy-evaluation}{%
-\section{tidy evaluation}\label{tidy-evaluation}}
+\section{tidy evaluation}\label{tidy-evaluation}
 
 resources
 
@@ -1829,9 +1800,8 @@ nrow = 1) + labs(y = NULL)
 
 princomp with plot(pca\_mod, type=``lines'').
 
-\hypertarget{advanced-plotting-contorl-over-color-shape-or-alpha}{%
 \section{advanced plotting, contorl over color, shape or
-alpha------}\label{advanced-plotting-contorl-over-color-shape-or-alpha}}
+alpha------}\label{advanced-plotting-contorl-over-color-shape-or-alpha}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
@@ -1884,13 +1854,7 @@ alpha------}\label{advanced-plotting-contorl-over-color-shape-or-alpha}}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}[H]
-
-{\centering \includegraphics{./learningR_files/figure-pdf/unnamed-chunk-4-1.pdf}
-
-}
-
-\end{figure}
+\includegraphics{learningR_files/figure-pdf/unnamed-chunk-4-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
@@ -1910,8 +1874,7 @@ based on character names all\_of() any\_of()
 pass a formula to check against each column where() -is.numeric()
 -is.factor() \textasciitilde mean(.x) \textgreater3.5
 
-\hypertarget{common-tasks}{%
-\subsection{common tasks---}\label{common-tasks}}
+\subsection{common tasks---}\label{common-tasks}
 
 apply a function to multiple columns to perform action onto column or
 new columns - Across() apply a column of arguments, one by one, as input
@@ -1923,8 +1886,7 @@ purrr::reduce()
 apply a function to pairs of columns on a rolling basis (eg. col 1 -2,
 col 2 - 3, etc) ????
 
-\hypertarget{count}{%
-\section{count}\label{count}}
+\section{count}\label{count}
 
 count very useful function to quickly tabulate data use .drop to show
 any data that has been filtered out or removed
@@ -1935,9 +1897,8 @@ any data that has been filtered out or removed
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{how-to-parse-out-words-from-a-sentence}{%
 \subsection{how to parse out words from a
-sentence}\label{how-to-parse-out-words-from-a-sentence}}
+sentence}\label{how-to-parse-out-words-from-a-sentence}
 
 \begin{itemize}
 \tightlist
@@ -1968,19 +1929,31 @@ stringr::word(string,start=x,end=y,sep=?)
 is.element(input,check\_strings) -- validates inputs matches at least
 one in a set
 
-\hypertarget{database-and-larger-than-memory-problems}{%
 \chapter{Database and Larger Than Memory
-Problems}\label{database-and-larger-than-memory-problems}}
+Problems}\label{database-and-larger-than-memory-problems}
+
+\chapter{Resource}\label{resource}
 
 \href{https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html\#}{Resource
-to understand databases} \href{https://r4ds.hadley.nz/databases.html}{r
-for datascience chapter on databse}
-https://dbplyr.tidyverse.org/articles/translation-function.html
-https://bwlewis.github.io/duckdb\_and\_r/talk/talk.html
-https://dbi.r-dbi.org/ https://solutions.posit.co/connections/db/
+to understand databases}
 
-\hypertarget{why-is-this-important}{%
-\chapter{Why is this important?}\label{why-is-this-important}}
+\href{https://r4ds.hadley.nz/databases.html}{R for datascience chapter
+on database}
+
+\href{https://dbplyr.tidyverse.org/articles/translation-function.html}{Dbplyr
+functions}
+
+\href{https://bwlewis.github.io/duckdb_and_r/talk/talk.html}{How to use
+duckdb}
+
+\href{https://dbi.r-dbi.org/}{DBI function overivew}
+
+\href{https://solutions.posit.co/connections/db/}{Posit learning
+materials}
+
+\href{https://edgararuiz.github.io/dbplot/}{dbplot\_histogram}
+
+\chapter{Why is this important?}\label{why-is-this-important}
 
 \begin{itemize}
 \item
@@ -2000,26 +1973,125 @@ https://dbi.r-dbi.org/ https://solutions.posit.co/connections/db/
   steep
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, colback=white, breakable, opacityback=0, toptitle=1mm, leftrule=.75mm, rightrule=.15mm, toprule=.15mm, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{How much SQL should I learn?}, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, bottomrule=.15mm, toprule=.15mm, opacityback=0, colback=white, arc=.35mm, left=2mm, rightrule=.15mm, colframe=quarto-callout-note-color-frame, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, breakable, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{How much SQL should I learn?}, leftrule=.75mm]
 
 If you're curious how much SQL you should learn, below is a framework
 that I found to be helpful:
 
-Functions - Where - Select - group by - summarization measures (eg. sum,
-count,min,max,etc) - partition - window - Having - With - Join - Like -
-Create or Replace - In - As
+\begin{itemize}
+\tightlist
+\item
+  Functions
+\end{itemize}
 
-Database frameworks - Temporary Tables - Curated tables - Materialized
-layers
+\begin{longtable*}{lll}
+\caption*{
+{\large Summary of SQL commands and their dplyr counterpart}
+} \\ 
+\toprule
+SQL & dpylr & comment \\ 
+\midrule\addlinespace[2.5pt]
+where & filter() & can be viewed as one for one replacement to filter(), you can pass arguments with AND or OR,
+Sometimes the first argument is TRUE for purely formatting purposes \\ 
+select & select() & Can be viewed as one for one replacement for select(), * is short cut for all columns \\ 
+group by & group\_by() & can be viewed as one for replacement for group\_by(), you need for it summarization measures as well as partition measures  \\ 
+sum & sum() & works the same as sum, na.rm is always TRUE for SQL \\ 
+min & min() & works the same as sum, na.rm is always TRUE for SQL \\ 
+max & max() & works the same as sum, na.rm is always TRUE for SQL \\ 
+count(*) & n() & works similiar to n() \\ 
+select distinct & select() |> distinct() & works almost exactly the same \\ 
+partition & group\_by() |> mutate() & works exactly the same  \\ 
+join & left\_join() & works similiar \\ 
+like & str\_detect() & similiar \\ 
+top & head() & works the same \\ 
+DISTINCT & distinct() & works the same \\ 
+DESCRIBE & glimpse() & works simliar, will display the columns and thier data types \\ 
+SET &  <-  & works simliar to assign single variables \\ 
+BETWEEN & between() & simliar \\ 
+MONTH & month() & simliar \\ 
+YEAR & year() & simliar \\ 
+DAY & day() & simliar \\ 
+QUARTER & quarter() & simliar \\ 
+DATEDIFF & difftime()  & simliar \\ 
+DATETRUC & floor\_date() & similar \\ 
+create or replace & tibble() & use this to create the final table \\ 
+in &  \%in\% & similiar \\ 
+as & rename() & simliar \\ 
+with & tibble() & Use this to create CTE or basic mini tables that you can then reference in different steps of the query, makes readable easier \\ 
+having & filter() or '[' &  similiar to where \\ 
+\bottomrule
+\end{longtable*}
+
+There are some nuances, in particular the evaluation order that
+typically trip up new SQL users and also some coding conventions that
+will be different than what you are used to but in general if you
+understand the above R commands you will quickly learn the SQL
+counterparts.
+
+With anything, you need to practice! luckily there are multiple SQL
+resources and practice studios which can help with reinforcement
+learning.
+
+\textbf{Database frameworks}
+
+\begin{itemize}
+\item
+  Temporary Tables / CTE
+
+  \begin{itemize}
+  \tightlist
+  \item
+    These are tables that only exist when you run them
+  \item
+    Helpful as interim steps or to break code into subqueries to make it
+    more modular
+  \end{itemize}
+\item
+  Curated tables
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Often times you may have loads of raw tables (eg 100s) that you need
+    to join together, filter or aggregrate before the data can be usable
+  \item
+    This process of turning raw /streaming data into table that can be
+    consumed for analysis is oftern called data curation
+  \item
+    This is often times created as a view which can be though of as
+    particular snapshot of a table
+  \end{itemize}
+\item
+  Materialized layers
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Materialized layer means the data is more persistent so when you run
+    it its not triggering the underlying queries (which will save you
+    alot of time)\\
+  \item
+    Typically you won't know
+  \end{itemize}
+\end{itemize}
 
 Database structure
 
 \begin{itemize}
-\tightlist
 \item
   Security Model
-\item
-  Access Model
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Because data can be privildedged, without a doubt your organization
+    has some security model that will aplly row level security and IDs
+    to ensure when you access a table you are seeing what you should be
+    seeing
+  \item
+    There is way to much to write here about it and honestly, I'm not
+    the right person to answer it
+  \end{itemize}
 \end{itemize}
 
 You may not need to know any of this but this mostly depends on your
@@ -2041,8 +2113,7 @@ organizations data strategy, staffing levels and operating model
   learn more
 \end{itemize}
 
-\hypertarget{the-essentials}{%
-\section{The Essentials}\label{the-essentials}}
+\section{The Essentials}\label{the-essentials}
 
 \textbf{What do you need to access data in a database?}
 
@@ -2063,7 +2134,7 @@ organizations data strategy, staffing levels and operating model
   Patience
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, colback=white, breakable, opacityback=0, toptitle=1mm, leftrule=.75mm, rightrule=.15mm, toprule=.15mm, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, bottomrule=.15mm, toprule=.15mm, opacityback=0, colback=white, arc=.35mm, left=2mm, rightrule=.15mm, colframe=quarto-callout-note-color-frame, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, breakable, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{``What is the advantage of a database?''}, leftrule=.75mm]
 
 It comes down to scale and size. At some point your organization or
 process will generate substantial data and needs a more structured
@@ -2171,7 +2242,7 @@ Cloud vs On-Premise Database:
 
 \end{tcolorbox}
 
-** What does a database need from you?**
+\textbf{What does a database need from you?}
 
 \begin{itemize}
 \item
@@ -2204,8 +2275,7 @@ Cloud vs On-Premise Database:
   experienced (this includes this guide as well :(
 \end{itemize}
 
-\hypertarget{set-up-odbc-driver}{%
-\section{Set up ODBC Driver}\label{set-up-odbc-driver}}
+\section{Set up ODBC Driver}\label{set-up-odbc-driver}
 
 \begin{itemize}
 \item
@@ -2236,7 +2306,7 @@ Cloud vs On-Premise Database:
   later one
 \end{itemize}
 
-Example Paramaters are below
+\textbf{Example Paramaters are below}
 
 \begin{itemize}
 \tightlist
@@ -2258,8 +2328,7 @@ Example Paramaters are below
   Authenticator
 \end{itemize}
 
-\hypertarget{create-connection-string}{%
-\section{Create Connection String}\label{create-connection-string}}
+\section{Create Connection String}\label{create-connection-string}
 
 \begin{itemize}
 \item
@@ -2268,17 +2337,18 @@ Example Paramaters are below
 \item
   Create a connection string with DBI::dbConnect()
 
-\begin{verbatim}
- -   Select the DBMS wtih the driver_name such as ODBC::ODBC() 
-     to access your DSN set up connect to external database or can use
-     DMBS package such as duckdb::duckdb() to replicate an internal 
-     instance of a database
-
--   DSN name if external database (the name used to set up ODBC driver)
-
--   Alternatively, you can directly supply the arguments 
-     in DBI::dbConnect() such as hostname,port,username, etc
-\end{verbatim}
+  \begin{itemize}
+  \item
+    Select the DBMS wtih the driver\_name such as ODBC::ODBC() to access
+    your DSN set up connect to external database or can use DMBS package
+    such as duckdb::duckdb() to replicate an internal instance of a
+    database
+  \item
+    DSN name if external database (the name used to set up ODBC driver)
+  \item
+    Alternatively, you can directly supply the arguments in
+    DBI::dbConnect() such as hostname,port,username, etc
+  \end{itemize}
 \end{itemize}
 
 \begin{Shaded}
@@ -2289,11 +2359,14 @@ Example Paramaters are below
 
 \DocumentationTok{\#\# this is alternative example using a made up DSN name }
 
-\NormalTok{con  }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(}\AttributeTok{drv=}\NormalTok{odbc}\SpecialCharTok{:}\FunctionTok{odbc}\NormalTok{(),}\AttributeTok{dsn=}\StringTok{"your\_DSN\_name"}\NormalTok{ )}
+\NormalTok{con  }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(}
+  \AttributeTok{drv=}\NormalTok{odbc}\SpecialCharTok{:}\FunctionTok{odbc}\NormalTok{()}
+\NormalTok{  ,}\AttributeTok{dsn=}\StringTok{"your\_DSN\_name"} 
+\NormalTok{  )}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, colback=white, breakable, opacityback=0, toptitle=1mm, leftrule=.75mm, rightrule=.15mm, toprule=.15mm, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Additional Utilities}, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, bottomrule=.15mm, toprule=.15mm, opacityback=0, colback=white, arc=.35mm, left=2mm, rightrule=.15mm, colframe=quarto-callout-note-color-frame, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, breakable, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Additional Utilities}, leftrule=.75mm]
 
 \begin{itemize}
 \tightlist
@@ -2307,59 +2380,24 @@ Example Paramaters are below
   Below are some useful utilities:
 \end{itemize}
 
-\hypertarget{list-your-drivers}{%
-\section{list your drivers}\label{list-your-drivers}}
+\subsubsection{list your drivers}\label{list-your-drivers}
 
 odbc::odbcListDrivers()
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
--- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.4     v readr     2.1.4
-v forcats   1.0.0     v stringr   1.5.1
-v ggplot2   3.4.4     v tibble    3.2.1
-v lubridate 1.9.3     v tidyr     1.3.0
-v purrr     1.0.2     
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
-i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# This will list any drivers that you have setup in your system}
-\NormalTok{odbc}\SpecialCharTok{::}\FunctionTok{odbcListDrivers}\NormalTok{()[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{unique}\NormalTok{()}\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{sort}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-character(0)
-\end{verbatim}
-
-\hypertarget{list-active-connections}{%
-\section{list active connections}\label{list-active-connections}}
+\subsubsection{list active connections}\label{list-active-connections}
 
 DBI::dbListConnections()
 
-\hypertarget{checks-if-you-can-connect}{%
-\section{Checks if you can connect}\label{checks-if-you-can-connect}}
+\section{Checks if you can connect}\label{checks-if-you-can-connect}
 
 DBI::dbCanConnect()
 
-\hypertarget{list-tables-listed-under-connection}{%
 \section{List tables listed under
-connection}\label{list-tables-listed-under-connection}}
+connection}\label{list-tables-listed-under-connection}
 
 DBI::dbListTables()
 
-\hypertarget{list-tables-in-connection}{%
-\subsection{list tables in connection}\label{list-tables-in-connection}}
+\subsection{list tables in connection}\label{list-tables-in-connection}
 
 \texttt{dbListTables(con)} to list tables associated with a connection
 
@@ -2372,8 +2410,7 @@ DBI::dbListTables()
   information from the database
 \end{itemize}
 
-\hypertarget{option-1-create-sql-string}{%
-\section{Option 1: Create SQL string}\label{option-1-create-sql-string}}
+\section{Option 1: Create SQL string}\label{option-1-create-sql-string}
 
 \begin{itemize}
 \item
@@ -2390,8 +2427,7 @@ DBI::dbListTables()
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{accessing-databse}{%
-\section{Accessing Databse}\label{accessing-databse}}
+\section{Accessing Databse}\label{accessing-databse}
 
 \begin{itemize}
 \tightlist
@@ -2436,9 +2472,8 @@ DBI::dbListTables()
   \texttt{dplyr::collect()}
 \end{itemize}
 
-\hypertarget{option-2-push-existing-data-into-a-database}{%
 \section{Option 2: Push existing data into a
-database}\label{option-2-push-existing-data-into-a-database}}
+database}\label{option-2-push-existing-data-into-a-database}
 
 \begin{itemize}
 \item
@@ -2489,29 +2524,22 @@ database}\label{option-2-push-existing-data-into-a-database}}
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{what-happens-if-dbplyr-doesnt-have-a-function-that-i-need}{%
 \section{What happens if dbplyr doesn't have a function that I
-need?}\label{what-happens-if-dbplyr-doesnt-have-a-function-that-i-need}}
+need?}\label{what-happens-if-dbplyr-doesnt-have-a-function-that-i-need}
 
-\hypertarget{built-in-helper-functions}{%
-\subsection{built in helper functions}\label{built-in-helper-functions}}
+\subsection{built in helper functions}\label{built-in-helper-functions}
 
-\hypertarget{create-sql-query-and-use-it}{%
 \subsection{create sql query and use
-it}\label{create-sql-query-and-use-it}}
+it}\label{create-sql-query-and-use-it}
 
-\hypertarget{how-can-i-build-a-package-for-this}{%
 \section{how can I build a package for
-this?}\label{how-can-i-build-a-package-for-this}}
+this?}\label{how-can-i-build-a-package-for-this}
 
-\hypertarget{sprintf-and-sql}{%
-\subsection{sprintf() and SQL}\label{sprintf-and-sql}}
+\subsection{sprintf() and SQL}\label{sprintf-and-sql}
 
-\hypertarget{dbplyr}{%
-\subsection{dbplyr}\label{dbplyr}}
+\subsection{dbplyr}\label{dbplyr}
 
-\hypertarget{putting-it-all-together}{%
-\section{Putting it all together}\label{putting-it-all-together}}
+\section{Putting it all together}\label{putting-it-all-together}
 
 \begin{itemize}
 \tightlist
@@ -2527,9 +2555,7 @@ this?}\label{how-can-i-build-a-package-for-this}}
   return results to your local machine with dplyr::collect()
 \end{itemize}
 
-\hypertarget{larger-than-memory-problems}{%
-\chapter{Larger than memory
-problems}\label{larger-than-memory-problems}}
+\chapter{Larger than memory problems}\label{larger-than-memory-problems}
 
 \begin{itemize}
 \item
@@ -2589,9 +2615,8 @@ To understand how to use the packages,let us define two scenarios:
   You have interim data that you want to save in workflow that is large
 \end{enumerate}
 
-\hypertarget{large-csv-files-that-you-need-to-work-with}{%
 \subsection{Large csv files that you need to work
-with:}\label{large-csv-files-that-you-need-to-work-with}}
+with:}\label{large-csv-files-that-you-need-to-work-with}
 
 \begin{itemize}
 \tightlist
@@ -2613,10 +2638,9 @@ other whereas duckdb only supports csv (if not already an object)
   You first need to create connection string
 \end{itemize}
 
-\hypertarget{existing-dataframes-however-they-got-there-that-are-either-too-large}{%
 \subsection{Existing dataframes (however they got there) that are either
 too
-large}\label{existing-dataframes-however-they-got-there-that-are-either-too-large}}
+large}\label{existing-dataframes-however-they-got-there-that-are-either-too-large}
 
 or individually are okay but seperately aren't okay
 
@@ -2632,30 +2656,26 @@ or individually are okay but seperately aren't okay
   like
 \end{itemize}
 
-\hypertarget{special-tricks}{%
-\chapter{Special tricks}\label{special-tricks}}
+\chapter{Special tricks}\label{special-tricks}
 
-\hypertarget{you-can-pass-one-database-object-to-duckdb}{%
 \section{You can pass one database object to
-duckdb}\label{you-can-pass-one-database-object-to-duckdb}}
+duckdb}\label{you-can-pass-one-database-object-to-duckdb}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}\{r\}}
-\CommentTok{\#| label: db{-}connect example}
-\CommentTok{\#| eval: true}
+\InformationTok{\#| label: db{-}connect example}
+\InformationTok{\#| eval: true}
 
-\FunctionTok{library}\NormalTok{(tidyverse)}
+\InformationTok{\#\# create connection string locally}
+\InformationTok{con\_db \textless{}{-} DBI::dbConnect(duckdb::duckdb())}
 
-\DocumentationTok{\#\# create connection string locally}
-\NormalTok{con\_db }\OtherTok{\textless{}{-}}\NormalTok{ DBI}\SpecialCharTok{::}\FunctionTok{dbConnect}\NormalTok{(duckdb}\SpecialCharTok{::}\FunctionTok{duckdb}\NormalTok{())}
+\InformationTok{\# loads data into your connection either in memory}
+\InformationTok{DBI::dbWriteTable(con\_db,"diamonds\_db",ggplot2::diamonds)}
 
-\CommentTok{\# loads data into your connection either in memory}
-\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbWriteTable}\NormalTok{(con\_db,}\StringTok{"diamonds\_db"}\NormalTok{,ggplot2}\SpecialCharTok{::}\NormalTok{diamonds)}
+\InformationTok{\#create new table to the connection}
 
-\CommentTok{\#create new table to the connection}
-
-\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbExecute}\NormalTok{(con\_db, }\StringTok{"CREATE TABLE duckdb\_table (col1 INT, col2 STRING)"}\NormalTok{)}
+\InformationTok{DBI::dbExecute(con\_db, "CREATE TABLE duckdb\_table (col1 INT, col2 STRING)")}
 \InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}}
 \end{Highlighting}
 \end{Shaded}
@@ -2666,55 +2686,49 @@ duckdb}\label{you-can-pass-one-database-object-to-duckdb}}
 
 \#preview what is in your connection
 
-DBI::dbListTables(con\_db)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DBI}\SpecialCharTok{::}\FunctionTok{dbListTables}\NormalTok{(con\_db)}
 
-dbplyr::copy\_inline(con\_db,df = diamonds)
+\NormalTok{dbplyr}\SpecialCharTok{::}\FunctionTok{copy\_inline}\NormalTok{(con\_db,}\AttributeTok{df =}\NormalTok{ diamonds)}
 
-diamonds\_db \textless- dplyr::tbl(con\_db ,``diamonds\_db'' )
 
-print(diamonds\_db)
+\NormalTok{diamonds\_db }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{tbl}\NormalTok{(con\_db}
+\NormalTok{    ,}\StringTok{"diamonds\_db"}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
 
-\begin{verbatim}
-# Example of passing one database object to arrow
+\chapter{Example of passing one database object to
+arrow}\label{example-of-passing-one-database-object-to-arrow}
 
-::: {.cell}
-
-```{.r .cell-code}
-diamonds_db %>% 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diamonds\_db }\SpecialCharTok{\%\textgreater{}\%} 
   
-  mutate(good_indicator=if_else(cut=="Good",1,0)) %>%
-  group_by(color) %>% 
-  summarise(
-    n=n()
-    ,mean=mean(carat)
-    ,mean_price=mean(price)
-    ,mean_ind=mean(good_indicator)
-    ,mean_adj=mean(carat[good_indicator==1])
-  ) %>% 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{good\_indicator=}\FunctionTok{if\_else}\NormalTok{(cut}\SpecialCharTok{==}\StringTok{"Good"}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(color) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{n=}\FunctionTok{n}\NormalTok{()}
+\NormalTok{    ,}\AttributeTok{mean=}\FunctionTok{mean}\NormalTok{(carat)}
+\NormalTok{    ,}\AttributeTok{mean\_price=}\FunctionTok{mean}\NormalTok{(price)}
+\NormalTok{    ,}\AttributeTok{mean\_ind=}\FunctionTok{mean}\NormalTok{(good\_indicator)}
+\NormalTok{    ,}\AttributeTok{mean\_adj=}\FunctionTok{mean}\NormalTok{(carat[good\_indicator}\SpecialCharTok{==}\DecValTok{1}\NormalTok{])}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%} 
 
-  arrange(desc(color)) %>% 
-  mutate(rolling_price=cumsum(mean_price)) %>% 
-    arrow::to_arrow() %>% 
-  ungroup() %>% 
- filter(color=="H") %>% 
-  select(color,mean_adj) %>% 
-  collect()
-\end{verbatim}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(color)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rolling\_price=}\FunctionTok{cumsum}\NormalTok{(mean\_price)) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{    arrow}\SpecialCharTok{::}\FunctionTok{to\_arrow}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+ \FunctionTok{filter}\NormalTok{(color}\SpecialCharTok{==}\StringTok{"H"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(color,mean\_adj) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{collect}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
 
-\begin{verbatim}
-# A tibble: 1 x 2
-  color mean_adj
-  <fct>    <dbl>
-1 H        0.915
-\end{verbatim}
+\chapter{Additional tricks}\label{additional-tricks}
 
-:::
-
-\hypertarget{additional-tricks}{%
-\chapter{Additional tricks}\label{additional-tricks}}
-
-\hypertarget{running-sql-in-r}{%
-\subsection{Running SQL in R}\label{running-sql-in-r}}
+\subsection{Running SQL in R}\label{running-sql-in-r}
 
 \begin{itemize}
 \tightlist
@@ -2725,11 +2739,9 @@ diamonds_db %>%
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{{-}{-}|connection: con\_db}
-
 \KeywordTok{SELECT} \OperatorTok{*} 
 
-\KeywordTok{FROM} \KeywordTok{table}
+\KeywordTok{FROM}\NormalTok{ diamonds\_db}
 
 \KeywordTok{WHERE}\NormalTok{ cut}\OperatorTok{==}\StringTok{\textquotesingle{}Good\textquotesingle{}}
 
@@ -2748,7 +2760,7 @@ diamonds_db %>%
 
 \KeywordTok{SELECT} \OperatorTok{*} 
 
-\KeywordTok{FROM} \KeywordTok{table}
+\KeywordTok{FROM}\NormalTok{ diamonds\_db}
 
 \KeywordTok{WHERE}\NormalTok{ cut}\OperatorTok{==}\StringTok{\textquotesingle{}Good\textquotesingle{}}
 
@@ -2756,20 +2768,13 @@ diamonds_db %>%
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{run-sql-queries-safely}{%
-\section{Run SQL queries safely}\label{run-sql-queries-safely}}
+\section{Run SQL queries safely}\label{run-sql-queries-safely}
 
-\hypertarget{how-to-plot-a-database-object}{%
 \section{How to plot a database
-object}\label{how-to-plot-a-database-object}}
+object}\label{how-to-plot-a-database-object}
 
-dbplot\_histogram
-
-(https://edgararuiz.github.io/dbplot/)
-
-\hypertarget{how-to-build-packages-or-function-to-access-dbplyr}{%
 \section{How to build packages or function to access
-dbplyr}\label{how-to-build-packages-or-function-to-access-dbplyr}}
+dbplyr}\label{how-to-build-packages-or-function-to-access-dbplyr}
 
 \begin{itemize}
 \item
