@@ -1,0 +1,123 @@
+---
+title: "trelliscopejs"
+---
+
+```{r}
+#| eval: false
+
+
+
+manipulateWidget::combineWidgets(ncol=2
+                                 nrow=2
+                                 ,ob1
+                                 ,ob2,
+                                 ,ob3
+                                 ,ob4
+)
+```
+
+
+Resources:
+
+https://jauntyjjs.github.io/Trelliscopejs_In_Quarto_Example/
+
+
+```{r}
+#| eval: true
+
+library(trelliscopejs)
+library(tidyverse)
+
+make_plot <- function(.data) {
+p <- .data %>% 
+  ggplot(aes(x=price,y=clarity))+
+  geom_point()+
+  geom_point()
+
+q <- plotly::ggplotly(p)
+return(q)
+}
+
+
+```
+
+- make function that returns a plotly object
+-   use trelliscopejs::map,trelliscopejs::map2, or trelliscopejs::pmp() as a new column, passing on the the data as a list (eg. list(.x=data)) and subsequent arguments for the function follow the function
+- what should result is a column  with plotly
+
+```{r}
+#| echo: false
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
+plot_tbl <- diamonds %>% 
+  nest_by(cut) %>% 
+  mutate(
+    data=list(data)
+    ,plots=
+      trelliscopejs::map_plot(
+        list(.x=data)
+        ,.f=~make_plot(.data=.x))
+      ) %>% ungroup() %>% 
+  mutate(row_id=row_number())
+
+
+```
+
+
+
+
+```{r}
+diamonds %>% 
+  group_by(cut) %>% 
+  ggplot(aes(price,carat))+
+  geom_point()+
+  trelliscopejs::facet_trelliscope(
+    ~cut,scales="free",as_plotly = TRUE,path="./"
+  )
+```
+
+
+
+```{r}
+#| echo: true
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
+
+manipulateWidget::combineWidgets(ncol=2
+                                 ,nrow=2
+                                 ,plot_tbl$plots[[1]]
+                                 ,plot_tbl$plots[[2]]
+                                 ,plot_tbl$plots[[3]]
+                                 ,plot_tbl$plots[[4]]
+)
+
+```
+
+```{r}
+#| echo: true
+#| label: name
+#| eval: false
+#| error: false
+#| warning: false
+
+
+plot_tbl %>% 
+  trelliscopejs::as_cognostics(
+    cond_cols = cut
+    ,key_col = plots
+    # ,cog_desc = cut
+    ,needs_key = FALSE
+    ,needs_cond = FALSE
+  ) 
+trelliscopejs::cog
+
+```
+

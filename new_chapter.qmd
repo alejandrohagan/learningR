@@ -1,0 +1,935 @@
+# Chapter 1: Let's get started
+
+# Named Objects
+
+::: callout-note
+in this package, we will use the following libraries
+
+library(tidyverse)
+:::
+
+```{r}
+#|echo: false
+
+pacman::p_load(tidyverse)
+
+```
+
+
+
+
+### Excel Skills to be covered
+
+In excel, this is for more straight forward -- you simply put the data into cells. Highlight the area and then click insert>table
+
+From there, Its a good practice to name the table (this will make referencing the table much easier and straight forward).
+
+Again for quick and simple analysis and one time analysis -- not necessary
+
+
+
+## adding columns to Tables
+
+### In R
+
+In R we can add to our base table by using the dplyr function `mutate()` which basically takes two arguments, the name of the column and the content of the column.
+
+```{r}
+tibble(
+  x=1:10
+  ,y=letters[1:10]
+) %>% 
+  mutate(z=1)
+```
+
+
+Probably the most confusing part of this for you will be the name mutate -- it doesn't sound rational or logical but in programming languages there is a concept called mutate where you change an object. 
+
+That may or not help you in remembering how to change an object but you will absolutely be using this function alot
+
+Secondly, this is your first introduction to the pipe! It looks funny but soon you will be super addicted to it.
+
+I said there are two key parameters for `mutate()` but actually, there is three mutate(data,column_name,value). However when I used it, I didn't specificy the data object. 
+
+That is because the %>% puts the left hand side as the first argument in the right handside function.
+
+so `mutate(tbl,z=1:10)` because `tbl %>% mutate(z=1:10)`. Additionally you can do `tbl |> mutate(.,z=1:10)`.
+
+Ok -- now for a first point of confusion -- you will sometimes see the pipeline written as `|>` and sometimes `%>%` 
+
+::: callout-tip
+## history
+
+
+:::
+
+
+
+## Tidyselect verbs -- first superpower
+
+```{r}
+
+```
+
+
+## Adding rows to a table
+
+### In R 
+
+You can do the following
+
+-   Make a table of values and bind it with `bind_rows()`
+-
+-   
+
+```{r}
+
+dplyr::rows_append(),dplyr::rows_insert(),dplyr::rows_update()
+
+
+
+```
+
+### In Excel
+
+Simply add the values you want at the bottom of the table
+
+
+## Referencing named objects
+
+
+### In R
+
+use the `ls()` funciton to see all the objects you named
+
+in Excel you use F5
+
+
+index() 
+
+
+
+tab references 
+
+how to edit named objects 
+
+data Entry Form add in 
+
+existing data 
+
+new series of Numbers 
+
+new series of Dates 
+
+flash Fill tips 
+
+adding/subtracting/dividing/multiplying columns 
+
+
+```{r}
+diamonds |> 
+  mutate(ratio=table/depth)
+```
+
+one formula works against all rows in a column 
+
+rowwise equvalant
+
+
+
+
+colwise equvailant 
+
+mean 
+
+median 
+
+sum 
+
+count 
+
+aggregate 
+
+error handling 
+
+iferror() 
+
+nA vs. null vs. ref 
+
+array \[what did I mean by this\]
+
+## R skills to be covered
+
+tibbles 
+
+lists 
+
+vectors 
+
+dataeditR 
+
+arrange() 
+
+generating data 
+
+-numbers 
+
+-letters 
+
+-dates 
+
+-rep() 
+
+-seq() 
+
+-mutate
+
+::: {#special .sidebar}
+::: warning
+here is a warning.
+:::
+
+more content.
+:::
+
+
+
+<<<<<<< HEAD
+#tidymodels
+
+split data & sample folds
+
+1.  rsample::initial_sample(dataframe,strata=variable)
+
+2.  rsample::training(split_data)
+
+3.  rsample::testing(split_data)
+
+4.  vfold_cv(df_testing, strata = type)
+
+#### recipe to create formula and transform daata
+
+1.  recipes::recpe(outcome \~ predictor,data=train_df)
+
+#### select the ml model and type
+
+parsnip::logistic_reg() %\>% set_mode() %\>% set_engine()
+
+### workflow
+
+workflow() %\>% add_recipe(rec) %\>% add_model(mod)
+
+
+
+
+i(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
+
+#### Metadata for columns
+
+resource:
+
+\[link to original source\](https://www.pipinghotdata.com/posts/2022-09-13-the-case-for-variable-labels-in-r/)
+
+    penguins_metadata <- tribble(
+        ~variable,           ~variable_label, 
+        "species",           "Penguin species",
+        "island",            "Island in Palmer Archipelago, Antarctica",
+        "bill_length_mm",    "Bill length (mm)",
+        "bill_depth_mm",     "Bill depth (mm)",
+        "flipper_length_mm", "Flipper length (mm)",
+        "body_mass_g",       "Body mass (g)",
+        "sex",               "Penguin sex",
+        "year",              "Study year"
+    )
+
+`labelled::generate_dictionary()`
+
+generates a data dictionary
+
+subsittute labels for points in graph
+
+to substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(
+        species           = "Penguin species",
+        island            = "Island in Palmer Archipelago, Antarctica",
+        bill_length_mm    = "Bill length (mm)",
+        bill_depth_mm     = "Bill depth (mm)",
+        flipper_length_mm = "Flipper length (mm)",
+        body_mass_g       = "Body mass (g)",
+        sex               = "Penguin sex",
+        year              = "Study year"
+      )
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(!!!penguins_labels)
+
+
+
+#### Quarto style guides
+
+as best I can tell there are 3 ways to format presentations
+
+
+`:::{.args input1="..." input2="...}`
+
+impact text
+`:::`
+- this appears to reference built in quarto arguments
+- they start with .args followed by inputs into that args
+
+{style="args:..."}`
+- this appears to reference CSS style arguments
+
+##### Change changing style within string
+if you want to edit a single word or string of  words **within a string** 
+
+
+[existing text]{style="args:..."}
+
+
+or if you want to edit a whole string (not just parts of it)
+
+`:::{style="args:..."}` 
+insert text
+`:::` 
+
+*popular arguments* (arguments are separate by `;`)
+margin-top: 200px; 
+margin-bottom: 200px; 
+margin-left: 200px; 
+margin-right: 200px; 
+font-size: 3em; 
+color: red;
+background-color:
+font-style: italic
+border: 4px dotted red;
+border-bottom: 4px dotted red;
+letter-spacing: 2px;
+opacity: 0.3;
+padding-left: 50px;
+position: (absolute, static,relative);
+  right:5px; 
+  top: 5px
+  bottom:
+  top:
+  z-index:
+  
+  
+  
+##### CSS Examples
+
+##### Section heads
+.sectionhead {
+  font-size: 1em;
+text-align: center;
+color: $presentation-heading-color;
+font-family: $presentation-heading-font;
+background-color: $body-bg;
+margin: 1px;
+padding: 2px 2px 2px 2px;
+width: 120px;
+border-left: 10px solid;
+}   
+
+
+
+
+
+
+[1] "hello"
+
+a asfds
+a dog and elephant
+a list of things
+a safdfs
+aas sdf
+b dsfsfa
+cadfaa
+d adfas
+
+
+```{r}
+
+
+
+```
+
+
+
+
+##### How to complete missing data
+
+
+###### Set group_by() .drop to FALSE
+
+  If  data is a factor and you have filtered out the data 
+(but its listed as level), then you can set the `.drops` argument to `FALSE` in the `group_by()` and `summarize()` pattern and levels that have been filtered or do not have values will show up (by default these are droped `.drop=TRUE`)
+
+```{r}
+
+
+missing_data <- diamonds %>% 
+  filter(cut!='Ideal')
+
+
+missing_data %>% 
+  group_by(cut) %>% 
+  summarise(n=n())
+
+
+```
+
+-   Since `Ideal` has been filtered out we don't see it in the table above
+-   Howver, sometimes we do want to show the values are zero
+
+
+```{r}
+
+missing_data %>% 
+  group_by(cut,.drop=FALSE) %>% 
+  summarize(n=n())
+
+
+```
+- Setting `.drop` to `FALSE` will now include the missing levels and their count (0) 
+
+###### Use complete()
+
+
+```{r}
+
+missing_data <- mpg %>% 
+  filter(!((manufacturer=='audi')&(year==2008)))
+
+missing_data %>% 
+  count(manufacturer,year)
+
+```
+
+- we see that the `audi` and `2008` are missing as we have filtered it out
+
+- If we want to show these missing missing values, we can use complete() which will look ensure for every value in each column pair, there is entry
+
+```{r}
+
+#shows the missing values
+
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year)
+
+# replaces the missing values with an entry
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year,fill = list(n=0))
+
+```
+
+original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
+
+
+
+orkflow
+
+workflow() %\>% add_recipe(rec) %\>% add_model(mod)
+
+
+=======
+`tibble::enframe()` takes a named list and turns into a tibble
+>>>>>>> a548534aa2ba9c3ce865bab0e837a2867fc5c783
+
+
+i(rgb) will take the literal names f the columns and apply the colors https://www.youtube.com/watch?v=CTWkJrvfRBc minute 37:42
+
+#### Metadata for columns
+
+resource:
+
+\[link to original source\](https://www.pipinghotdata.com/posts/2022-09-13-the-case-for-variable-labels-in-r/)
+
+    penguins_metadata <- tribble(
+        ~variable,           ~variable_label, 
+        "species",           "Penguin species",
+        "island",            "Island in Palmer Archipelago, Antarctica",
+        "bill_length_mm",    "Bill length (mm)",
+        "bill_depth_mm",     "Bill depth (mm)",
+        "flipper_length_mm", "Flipper length (mm)",
+        "body_mass_g",       "Body mass (g)",
+        "sex",               "Penguin sex",
+        "year",              "Study year"
+    )
+
+`labelled::generate_dictionary()`
+
+generates a data dictionary
+
+subsittute labels for points in graph
+
+to substitute variable labels for variable names on your input variables, add [`ggeasy::easy_labs()`](https://jonocarroll.github.io/ggeasy/reference/easy_labs.html) to your ggplot.
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(
+        species           = "Penguin species",
+        island            = "Island in Palmer Archipelago, Antarctica",
+        bill_length_mm    = "Bill length (mm)",
+        bill_depth_mm     = "Bill depth (mm)",
+        flipper_length_mm = "Flipper length (mm)",
+        body_mass_g       = "Body mass (g)",
+        sex               = "Penguin sex",
+        year              = "Study year"
+      )
+
+    penguins_labelled <- penguins |> 
+      set_variable_labels(!!!penguins_labels)
+
+
+
+#### Quarto style guides
+
+as best I can tell there are 3 ways to format presentations
+
+
+`:::{.args input1="..." input2="...}`
+
+impact text
+`:::`
+- this appears to reference built in quarto arguments
+- they start with .args followed by inputs into that args
+
+{style="args:..."}`
+- this appears to reference CSS style arguments
+
+##### Change changing style within string
+if you want to edit a single word or string of  words **within a string** 
+
+
+[existing text]{style="args:..."}
+
+
+or if you want to edit a whole string (not just parts of it)
+
+`:::{style="args:..."}` 
+insert text
+`:::` 
+
+*popular arguments* (arguments are separate by `;`)
+margin-top: 200px; 
+margin-bottom: 200px; 
+margin-left: 200px; 
+margin-right: 200px; 
+font-size: 3em; 
+color: red;
+background-color:
+font-style: italic
+border: 4px dotted red;
+border-bottom: 4px dotted red;
+letter-spacing: 2px;
+opacity: 0.3;
+padding-left: 50px;
+position: (absolute, static,relative);
+  right:5px; 
+  top: 5px
+  bottom:
+  top:
+  z-index:
+  
+  
+  
+##### CSS Examples
+
+##### Section heads
+.sectionhead {
+  font-size: 1em;
+  text-align: center;
+  color: $presentation-heading-color;
+  font-family: $presentation-heading-font;
+  background-color: $body-bg;
+  margin: 1px;
+  padding: 2px 2px 2px 2px;
+  width: 120px;
+  border-left: 10px solid;
+}
+
+
+
+##### How to complete missing data
+
+
+###### Set group_by() .drop to FALSE
+
+if data is a factor and you have filtered out the data 
+(but its listed as level), then you can set the `.drops` argument to `FALSE` in the `group_by()` and `summarize()` pattern and levels that have been filtered or do not have values will show up (by default these are droped `.drop=TRUE`)
+
+```{r}
+
+
+missing_data <- diamonds %>% 
+  filter(cut!='Ideal')
+
+
+missing_data %>% 
+  group_by(cut) %>% 
+  summarise(n=n())
+
+
+```
+
+-   Since `Ideal` has been filtered out we don't see it in the table above
+-   Howver, sometimes we do want to show the values are zero
+
+
+```{r}
+
+missing_data %>% 
+  group_by(cut,.drop=FALSE) %>% 
+  summarize(n=n())
+
+
+```
+- Setting `.drop` to `FALSE` will now include the missing levels and their count (0) 
+
+###### Use complete()
+
+
+```{r}
+
+missing_data <- mpg %>% 
+  filter(!((manufacturer=='audi')&(year==2008)))
+
+missing_data %>% 
+  count(manufacturer,year)
+
+```
+
+- we see that the `audi` and `2008` are missing as we have filtered it out
+
+- If we want to show these missing missing values, we can use complete() which will look ensure for every value in each column pair, there is entry
+
+```{r}
+
+#shows the missing values
+
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year)
+
+# replaces the missing values with an entry
+missing_data %>% 
+  count(manufacturer,year) %>% 
+  complete(manufacturer,year,fill = list(n=0))
+
+```
+
+original post on [Albert Rapp's Twitter](https://twitter.com/rappa753/status/1611754568123289601)
+
+
+
+## How to create new packages
+
+library(devtools)
+library(usethis)
+
+
+create packge in the workspace that you want
+devtools::create_package("package_name")
+
+then do usethis::use_r("function_name") to create a script, put yoru function there
+
+then do code>insert roxygen skeleton to comment code
+load_all() to load code
+# time series & machine learning
+
+## kmeans
+
+
+
+- step 1: 
+organize  data into normalied format
+
+whatever we tryign to study (eg. product purchases) then you fill in the percent of that produc tby the dimenion you want (customer), eg customer by product
+
+- step 2:
+use kmeans function with table and initial group selection
+
+-only can have numeric input (so create with explantory varibale then deselect variable (eg. customers))
+
+kmeans_obj = kmeans(nomarlized_tbl,
+centers=num__of_groups,
+iter.max=something,
+nstarts= higher is better (say 100))
+
+
+
+kmeans_obj$center = all various centers
+
+kmeans_obj$cluster=classify each obs to a clsuter
+
+step 3: apply kmeans_obj to data
+
+broom::augment(kmeans_obj,normalized_tbl)
+
+step4: how to intrpret
+tot.withinss is metric of total squared varition (lower is better), 
+
+broom::glance(kmeans_obj)]
+g
+
+-   step5 optimze by setting up a grid
+
+create function that calcules kmeans with cneters (and nstarts if you want) to be iterated with an input table and pipe this into glance
+
+- plot tot.withinss and cneters to see which centers is optimized
+
+# kmeans example
+
+```{r}
+devtools::load_all("/home/hagan/R/fpaR")
+sales_by_store_product <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(sales_amount=unit_price*sales_quantity) %>% 
+  group_by(store_key,product_key) %>% 
+  summarise(sum_usd=sum(sales_amount),.groups = "drop") %>% 
+  arrange(product_key) %>% 
+  group_by(store_key) %>% 
+  mutate(prop_usd=sum_usd/sum(sum_usd)) %>% 
+  select(store_key,product_key,prop_usd) %>% 
+  pivot_wider(names_from=product_key,values_from=prop_usd,values_fill = 0,names_repair = janitor::make_clean_names)
+
+
+kmeans_obj <- sales_by_store_product %>% 
+  select(-store_key) %>% 
+  kmeans(centers=15,nstart=100,iter.max = 100)
+
+stores_with_kmeans <- kmeans_obj %>% broom::augment(data=sales_by_store_product) 
+kmeans_obj %>% broom::glance()
+
+
+kmeans_mapper <- function(centers=3) {
+  sales_by_store_product %>% kmeans(x=.,centers=centers,nstart = 100,iter.max=100)
+  
+}
+
+grid_kmeans <- tibble(centers=1:15) %>% 
+  mutate(kmeans_obj=map(.x=centers,~kmeans_mapper(.x)),
+         kmeans_output=map_df(kmeans_obj,broom::glance)
+  )
+
+grid_kmeans %>%
+  unnest(kmeans_output) %>% 
+  select(centers,tot.withinss) %>% 
+  ggplot(aes(x=centers,y=tot.withinss))+
+  geom_point()+
+  geom_line()
+
+```
+
+## umap
+
+very simliar to kmeans just without addition arguments
+stregth is merge the kmeans output with the kmeans output so that you can mpa them together
+then manually inspect original data frame by the new clusters to see what patterns or attributes (eg. can sort by some cumsum and attributes to look for patterns)
+
+
+step1 
+- use same normalized model
+- only select numeric data
+- pass through to umeans
+
+step2
+- take hte umeans$layout covert to tibble, rename columns and bind with framing column
+
+
+
+
+```{r}
+
+library(umap)
+umap_obj <- sales_by_store_product %>% 
+  select(-store_key) %>% 
+  umap()
+
+umap_tbl <- umap_obj$layout %>%
+  as_tibble() %>% 
+  set_names(c("x","y")) %>% 
+  bind_cols(sales_by_store_product) %>% 
+  select(store_key,x,y)
+
+umap_tbl %>% 
+  ggplot(aes(x,y))+
+  geom_point()
+  
+kmeans_result_tbl <-   grid_kmeans %>%
+    filter(centers==8) %>% 
+    pull(kmeans_obj) %>% 
+    pluck(1) %>% broom::augment(sales_by_store_product) %>% 
+    relocate(last_col()) %>% 
+    select(.cluster,store_key)
+
+
+kmeans_result_tbl %>% 
+  left_join(umap_tbl,by="store_key") %>% 
+  ggplot(aes(x=x,y=y,col=.cluster))+
+  geom_point()
+
+```
+
+
+## assert that
+assertthat packageschecks if column names are in a dataframe
+
+
+## combine umeans and kmeans
+
+
+
+### data masking
+
+sym() is used to take a quoted input "x" and use it in a context without quotes. Need !!sym("x") to be used
+
+or  rlang::englue("var) within the .data[[var]] context
+
+
+.data[[rlang::englue("var")]]
+
+.env$var to refer to grid table
+
+```{r}
+library(tidyverse)
+
+
+col_numbers <- 1:ncol(diamonds)
+
+  map(
+    .x=col_numbers
+      ,.f=~diamonds[.x:10]
+  )
+
+  split(diamonds, ~ cut) %>% 
+    map(
+      .x=.
+      ,~.x %>% pull(price) %>% sum) %>% 
+    stack()
+
+ 
+    map(
+      .x=col_numbers
+      ,.f = ~mtcars[.x] %>% table()
+      )
+```
+
+
+
+
+```{r}
+
+library(tidyverse)
+
+df <- readr::read_csv("/home/hagan/Downloads/pop23.csv",name_repair = janitor::make_clean_names) %>% 
+     filter(
+    sex!=0
+    ,age<99
+    )
+
+
+extract_year_make_longer  <- function(.data,.col) {
+
+  .data %>% 
+  select(
+    age
+    ,sex
+    ,any_of(
+      c({{.col}})
+      )
+    ) %>% 
+  pivot_longer(-c(1:2)) %>% 
+    mutate(year=parse_number(name)) %>% 
+    select(-name)
+}
+
+
+
+col_names <- c("popestimate2020","popestimate2021","popestimate2022")
+
+list_df <- map(col_names,~extract_year_make_longer(df,.x))
+
+df_20 <- list_df[[1]] %>% as_tibble() %>% rename(pop20=value) %>% select(sex,age,pop20)
+
+df_21 <- list_df[[2]] %>% 
+    as_tibble() %>% 
+  mutate(age_20=age-1) %>% 
+  filter(age_20>-1) %>% 
+    select(age_20,value,sex) %>% 
+  rename(pop_21=value) 
+
+
+df_22 <- list_df[[3]] %>% 
+  as_tibble() %>% 
+  mutate(age_20=age-2) %>% 
+  filter(age_20>-1) %>% 
+  select(age_20,value,sex) %>% 
+  rename(pop22=value)
+
+
+
+
+left_join(df_20,
+          df_21,
+          join_by(age==age_20
+                  ,sex==sex)) %>% 
+  left_join(df_22,
+           join_by( age==age_20
+            ,sex==sex)) %>% 
+  mutate(
+    one_year_delta=pop_21-pop20
+    ,two_year_delta=pop22-pop20
+  ) %>% 
+  ggplot(aes(y=two_year_delta,x=age,fill=factor(sex,labels = c("male","female"))))+
+  geom_col()+
+  geom_vline(xintercept = 18,linetype="dotted",size=1, color="grey")+
+  geom_vline(xintercept = 65, size=1, color="grey")+
+  scale_x_continuous(n.breaks=30)+
+  scale_y_continuous(labels = scales::label_comma(scale=1/1e6,suffix="M"))+
+  scale_fill_manual(values=c(male="midnightblue",female="firebrick"))+
+  theme_classic()+
+  labs(
+    fill="Gender"
+    ,title="Two year change in population by age group"
+    )
+
+```
+df_2021_spk <- df_spk %>% 
+  select(age,sex,popestimate2021)
+df_2022_spk <- df_spk %>% 
+  select(age,sex,popestimate2022)
+
+
+df_spk %>% 
+  filter(
+    age<99
+    ,sex!=0
+    ) %>% 
+  ggplot(aes(y=popestimate2022,x=age,fill=factor(sex)))+
+  geom_col()+
+  geom_vline(xintercept = 18,linetype="dotted")+
+  geom_vline(xintercept = 75,linetype="dotted")+
+  scale_x_continuous(n.breaks = 30)
+  # geom_col(aes(y=popestimate2020),col="blue",alpha=.2)
+
+
+# expand dates
+
+# Create columns for year, month and day for each date 
+# column in a data.frame
+expand_dates <- function(x, parts = c("year", "month", "day")) {
+  funs <- list(year = year, month = month, day = day)[parts]
+  mutate(x, across(where(lubridate::http://is.Date), funs))
+}
+
+```
+
+
+
+
+

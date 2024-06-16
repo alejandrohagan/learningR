@@ -1,0 +1,129 @@
+---
+title: "github"
+---
+
+## Resources
+
+-   https://raps-with-r.dev/git.html
+-   https://happygitwithr.com/
+-   https://learngitbranching.js.org/?locale=en_US
+
+
+# summary
+
+-   Git is file versioning system that allows users to track additions, 
+deletions, and modifications to file.
+
+-   It is has many advantages relative to a traditional file save in that
+you can walk up and down the various "states" of your file allowing 
+collaborators to transparently see coding modifications
+
+-   As with any new framework -- it takes time to learn the nuances, best 
+practices and other pitfalls before this workflow becomes useful
+
+-   Consistent with learning any new skill, this will be your journey
+    
+    -   Incredible frustration to initiate, setup and connect your code  base
+    to your git repository
+    -   High learning curve to adopt basic workflow 
+    -   Excitement after basic workflow works
+    -   Insane frustration when you need do something other than your basic
+    workflow because now you have high learning curve to learn intermediate and 
+    even advanced skills
+    -   Confidence in using git and you are now saving time and energy to 
+    offset your initial investment
+    -   Destroyed confidence when you realize you can't do what you thought
+    was a basic task
+    -   Repeat cycle
+
+# How does it work?
+
+-   You are essentially pushing a version of your file /data to the cloud so
+there exists two version -- one on your local machine and another in the cloud
+
+-   You work on your local machine, and "push" your work via "commits" to cloud
+
+-   Then when you start a new session, you "pull" the version from the cloud
+and continue your work, edits / deletions 
+
+
+# Introduction
+
+-   Create your git account on one of the git sites (eg. github, gitlab or 
+gitbucket)
+
+-   It is often times easier to create your first repo (short for repository)
+in github first and then connect and push files from your local machine
+
+-    First set your user name and email address
+
+-   You can do this with command line interface ("cli") arguments 
+
+-   While intimidating, I do recommend you get comfortable with CLI arguments 
+
+```{bash}
+#| eval: false
+
+git config --global user.name 'alejandrohagan'
+
+git config --global user.email 'alejandro.hagan@outlook.com'
+
+
+git config --global --list
+```
+
+- Or you can use r package usethis to do this
+
+2. if you need a PAT  you store it below (thjs will also let you view it and run it)
+
+```{r}
+#| eval: false
+# set creditential using this
+gitcreds::gitcreds_set()
+
+# check using this
+
+gitcreds::gitcreds_get()
+# validate who you are 
+gh::gh_whoami()
+
+
+usethis::git_sitrep()
+```
+
+
+## connect to a repo
+
+
+## pull, committ and push
+
+git pull to pull latest copy from the origin
+Try to do this immediately as it makes merge conflicts less (in case you edit a file that is updated in the origin )
+
+Then you `git add .` too add all changed documents are specifically specific
+
+Then use `git` commit -m "message"`
+
+-   Make messages meaningful focuses on what and why -- helps with merge
+
+-   You can use `git status` to see status of things and `git log` to see past commands
+
+## reversing / undoing
+
+
+## branching / merging
+
+add branch
+-   `git checkout branch "branch name"`
+
+delete branch
+
+-   `git brand -d "branch name"`
+
+
+
+
+
+
+
+

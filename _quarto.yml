@@ -1,0 +1,28 @@
+project:
+  type: book
+  output-dir: docs
+  
+book:
+  title: "Excel to R: A Survivor's Guide for the Corporate Environment"
+  author: "Alejandro Hagan"
+  date: "9/10/23"
+  chapters:
+    - part: "Introduction"
+      chapters: 
+        - index.qmd
+        
+    - part: "Misc"
+      chapters: 
+        - tidyselect.qmd
+        
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+     light: flatly
+     dark: darkly
+    freeze: true
+
+
+

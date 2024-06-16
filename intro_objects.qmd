@@ -1,0 +1,586 @@
+---
+title: "vectors, objects & lists"
+---
+
+## Create objects
+
+Although not the most glamorous place to start, learning how to create named objects, reference and manipulate them as well generate data becomes incredibly useful down the road when combined with other techniques and workflows.
+
+### In R
+
+In R this is the main way you save, reference, and manipulate your data.
+
+you use the `<-` (ctrl + - ) or the `=` symbol to assign a result to an object
+
+```{r}
+#| label: obj-intro
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+library(tidyverse)
+
+object <- 1+1
+
+```
+
+Whatever name you type will become the object's name, if you type in the object, it will return whatever you assigned to the name
+
+As you start to name variables, you will quickly understand that naming conventions is your friend.
+
+Specifically, if you want to have spaces in you name -- you will need to wrap the object's name in either "" or '' before calling it.
+
+Since this adds extra effort to writing names, most programmers avoid spaces and instead use "_" or another naming convention to avoid spaces.
+
+Embrace this -- it's your friend.
+
+```{r}
+
+this_is_easier_to_reference <- 10
+
+"this will annoy you to reference" <- 10
+
+
+
+```
+
+
+There are different naming conventions -- ultimately its stylistic choice.
+
+I'd suggest to use snake_case to start. It may take awhile for your finger to learn where the "_" key is key but after a while you will see that that it will be second nature, and you will groan when you see variable names with spaces in it.
+
+
+### In Excel
+In excel, you can also name a cell by putting your cursor over the cell and click on the named box in the top left.
+
+This is a useful technique for commonly referenced cells but the "workflow" is a bit nonstandard. You can use F5 to quickly name an object
+
+To keep track of all the names, you can press F5 and you will see a dialog box that will help you manage all of your names.
+
+When you want to refer to that cell, you can simply type in the cell name.
+
+Although useful for intermediate analysis, I would say from a workflow perspective, it isn't "easy" as you have to constantly break your workflow but it will make your work more readable.
+
+Although this is fairly intuitive to understand, if you are coming from an Excel background, it will take time to develop this habit of assigning names to results because in Excel, you can refer to a result by its cell location by physically pointing a formula to a input.
+
+For quick and simple calculations, this will be quicker but if you try to do something even beyond a simple calculation, you will see it becomes very difficult to manage, easy to make mistakes and reduces your productivity as you have to constantly point to those input cells or have to remember non-intuitive names `eg C5` .
+
+## Types of data
+  
+  If you are coming from an excel background you most likely didn't pay attention to an the datatype of a an object because excel is very forgiving with data types. In R, this is more important to understand and pay attention to
+  
+### In R
+
+  In R you will need to pay attention to datatypes otherwise R, while trying to be helpful will throw an error. While this will frustrate you, it is doing it for your own protection.
+  
+While there are actually many classes of data types, in practice you are mainly focused on three:
+
+-   character^[in a few moments we will also learn about factors which is a type of character types]
+-   numeric/integer
+-   date
+-   NA / NULL
+
+```{r}
+#| label: types
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+character_example <- "test"
+numeric_example <- 1
+date_example <- as.Date("2012/2/12")
+integer_example <- 2L  # In R a digit followed by 'L' means it is exactly that digit
+not_available <- NA
+null <- NULL
+```
+
+
+You don't pay attention to data types in Excel as much until you have problems -- it is a strength and weakness. You can throw any values together and excel doesn't care (until you try to do something with it).
+
+R (and most other languages) really care about data types -- in fact most^[Yes I know there is something called type coercion that we will review in a bit] of the time they let you do anything unless the data types are aligned. 
+
+This is mainly for you benefit / protection -- even if its annoying at first
+
+### In Excel
+
+-   You can format as well
+    
+    -   numeric
+    -   date
+    -   text
+    -   percentage
+    
+You will find alot of jokes about how excel converts a bunch of integrets into dates
+
+## Structure
+
+In excel, you typically enter  values in each cell. eg one value per cell.
+
+n R you will through four main "structures"
+
+-   vectors
+-   lists
+-   dataframes/tibbles
+-   matrix (but we will cover this later on)
+
+This may feel overwhelming -- in reality it will feel very intuitive -- only later on will some nuance really distinguish between these types
+
+### Vector
+
+```{r}
+#| label: var
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+
+a <- 1:10
+
+b<- c(1:10)
+
+identical(a,b)
+
+
+```
+
+
+If you want to add more than one element you will need to use the `c()` function. What does the c function short for? -- no one knows. Actually, I think the consensus is that it stands for concatenate. The documentation says combine. Who knows for sure. 
+
+But essentially, you enter what you want and wrap it with "c()" and separate each value with a comma ",".
+
+If it is sequential digits (eg. 1,2,3,4,5) then  as a short cut you can just type c(1:5), instead of c(1,2,3,4,5).
+
+
+
+```{r}
+#| label: type-coercion
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+# simple vector of different types
+c(1:5, 10.5, "next")
+
+# you can also name vectors -- very simple look up list that we evaluate more later
+
+c(
+  months_number=1:12
+  ,years=2000:2020
+  ,month_name=month.name # our first R built in data set, the name of each month
+  )
+
+```
+
+
+Notice what happens when we added a character with a numeric -- it turned everything into character without throwing an error.
+
+This is is called type coercion -- it is sometimes your friend and sometimes a source of frustration.
+
+So even though, it looks like a number to us -- it will not behave like a number. You can't add to it or subtract from it. 
+
+There may be a more technical name for this but basically most program languages limit your ability to "combine" data elements with different types.
+
+This becomes a frustration when:
+    
+    -   You load datasets that you are not familiar with and it converts a column that many appear to numeric but is actually character (typically happens with transactonal data like sales or purchase order numbers)
+    -   Some function only work correctly when a data is in the right type  (typically happens with date related functions which really care that dates) 
+
+Type coercion works inconsistently across structures. For example, when we get to tibbles, you will see they are strict on data structures and will throw an error.
+
+## Lists
+
+-   You can think of lists as the ultimate flexible structure.
+-   Not only can you combine multiple data types
+-   Forget data types, do you want to hold different structures all together? then you need a `list()`
+-   Lists are  flexible and once you get used to manipulating and sub-setting lists you will feel very comfortable referencing them
+
+-   For the purposes going forward even though there is a base::list(), we will use the rlang::list2(), equivalent features but rlang::list2() has some cool benefits that we reference down the road.
+
+-   Lists are also the foundation of a tibble, which is nothing more but lists stitched together
+
+
+
+```{r}
+a <- c(1:10)
+b <- rlang::list2(1:10)
+
+
+a==b[[1]]
+identical(a,b[[1]])
+```
+
+
+
+::: {.callout-note}
+## how to compare lists and vectors?
+
+There are many ways to simplify and reduce vectors and lists but a little known trick with `c()` which is to use the argument `recursive` argument to `TRUE`
+
+```{r}
+
+c(1:10,2:21,1,1,list(10:1))
+
+c(1:10,2:21,1,1,list(10:1),recursive=TRUE)
+
+```
+
+:::
+
+## what can I do with this?
+
+Not a whole lot at this point but you are  great building blocks for your analysis foundation
+
+
+## classes of data
+
+Checking classes of data isn't always a routine action but if you have errors, its helpful in solving this
+
+We use `class()` or `typeof()` to return an objects class . Alternatively if we want a binary outcome (EG TRUE or FALSE) we can use the below specific functions. Below are list of some helpful class validation functions.
+
+-   is.Data.frame()
+-   is.list
+-   is.vector
+
+-   is.na()
+-   is.infinite()
+-   is.logical()
+
+-   is.numeric()
+-   is.character()
+-   is.Date()
+-   is.factor()
+
+
+```{r}
+#| label: class-example
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+list(
+  class_example_1=class(character_example)
+,class_example_2=class(numeric_example)
+,class_example_3=class(date_example)
+,class_example_4=class(integer_example)
+,type_of_example=typeof(character_example)
+,is.character_example=base::is.character(character_example)
+,is.integer_example=base::is.integer(date_example)
+,is.integer_example=base::is.numeric(integer_example)
+,is.Date_example=lubridate::is.Date(date_example) ## notice we used lubricate package
+)
+
+
+```
+
+::: {.callout-note}
+## Caution with dates
+
+We will learn about using dates later on but quick caution that `lubridate::is.Date()` only check if its a object's class is a date, not necessarily that the date is a real date or that the date actually exists.
+
+We will later learn how to validate if a date is a valid date format
+:::
+
+
+
+### Excel
+
+## Type conversions --
+
+
+So what happens if you combine a character with integer in R?
+
+You get what is called a type conversion -- eg. R will automatically convert one character type to another
+
+
+
+
+```{r}
+#| label: type-conversion
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+
+c(1:10,"a")
+```
+
+Sometimes this is very helpful and sometimes this will cause some bug that will take you forever to figure out
+
+You will typically see this bugs when you try to do analysis, join tables or make a plot.
+
+If you want to force a column to be a certain class type, then you can use the as_* class of functions. Below are some common examples
+
+-   as.numeric()
+-   as.Date()
+-   as.character()
+-   as.factor()
+
+
+```{r}
+
+c(1:10,"a") |> as.integer()
+```
+
+Note if you change a vector or column to class, any values that don't meet that class will return `NA`
+
+
+### How to generate data
+
+## In R
+
+This may not seem useful but I assure its very useful
+
+Often times you need to generate data to help with your analysis, perhaps a series of numbers, perhaps values that repeat until a condition is met or a irregular pattern.
+
+Typing that manual is painful. Below are some helpful functions that to generate values.
+
+#### List of numbers
+
+the easist way is to put your starting number and ending number seperated by a ":" and this will create a vector of numbers automatically.
+
+```{r}
+#| label: vec-numbers-forward
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+1:10
+
+10:1
+```
+
+```{r}
+#| label: vec-numbers-backwards
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+10:1
+```
+
+Alternatively you can use the `seq()` function 
+
+
+```{r}
+#| label: seq-example
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+seq(1,100,10)
+
+seq_along(1:100)
+
+seq_len(10)
+
+sequence(c(5, 5), from=1L, by=2L)
+
+seq.int(1,10,1)
+
+
+seq.Date(
+  from=as.Date("2021-01-01")
+  ,to = as.Date("2021-01-13")
+  ,by="days"
+)
+```
+
+### repeat
+
+What if you need to repeat a set of values a certain amount of times?
+
+```{r}
+
+vec <- c("a","b","c","d")
+rep.int(vec,10)
+rep_along(x = vec,c(4,4,4,4,5))
+
+
+```
+
+#### how to randomly pick a value from a set of values
+```{r}
+
+sample(1:100,size=30,replace = TRUE)
+
+
+n=100
+dunif(.2, min = 0, max = 1, log = FALSE)
+punif(q, min = 0, max = 1, lower.tail = TRUE, log.p = FALSE)
+qunif(p, min = 0, max = 1, lower.tail = TRUE, log.p = FALSE)
+runif(n, min = 0, max = 1)
+```
+
+#### Built in lists
+
+
+```{r}
+
+month.name
+month.abb
+
+## runif
+
+## distributions
+
+#build in dataaets
+letters
+
+LETTERS
+
+state.abb
+
+
+```
+
+
+
+
+
+### how to eddi lists
+
+when we create lists or vectors, sometimes you want to add to it- in reality not really but we want to get you more comfortable with lists and vectors and introduce some simple functions that can be helpful later in your journey
+
+`append()` is a great function that adds to an existing function
+
+
+In practice you won't use this much in your beginning analysis -- it can be helpful later on when you start to write functions but for now its just to get you use to the command line and scripting and take away some of the angst
+
+```{r}
+library(rlang)
+
+a <- list2(c=2:10)
+
+append(a,values=list2(a=1:2,z=1:10),after = 2)
+```
+
+
+## subsetting
+
+how do we extract from vectors
+
+well this is where these bracket things come from basically you are can look inside and either call out by number or name the object you want
+
+```{r}
+
+list_obj <- list2(
+  a=1:10
+  ,b=words[10]
+  ,c=words[1:3]
+  ,d=10:1
+  )
+
+
+list_obj$a
+
+list_obj["a"]
+
+list_obj[1]
+
+```
+
+
+## recyling
+
+
+
+
+### how to create and named Tables
+
+##### In R
+
+regardless if the data object is a cell or a table (or actually any type of object) the naming methodology is the same.
+
+however creating a table isn't as straight forward because you don't have the same GUI.
+
+data entry is not R (or any scripting languages) strong suit - which doesn't mean you can't do it but if you are strictly entering in data (of great length), use excel.
+
+however, below shows you how to create tables
+
+#### tibble / data frame
+
+```{r}
+library(tidyverse)
+df_example <- tibble(
+  x=1:10
+  ,y=2:11
+  ,z=3:12
+  )
+
+```
+
+#### Tribble
+
+When trying to do data entry that you need to reference columns wise & rowwise, this can challenging, so thats why there is a `tribble`, a handy way to still see your columnwise and rowwise data together
+
+::: callout-note
+there is a concept of vectorization, which for now, we will define as recycling. Which is to say if I put one column with 10 elements, and another column with only 1 element, tibble will recycle the "1" until it length of the tibble.
+:::
+
+```{r}
+df_tribble <- tribble(
+  ~col1,~col2,~col3,
+  1,2,3,
+  5,6,7,
+  8,9,10
+  
+  
+)
+```
+
+another methodology which can be useful are the `data.edit` and
+
+```{r}
+
+```
+
+::: callout-tip
+## Naming Convention
+What naming convention should we use in R? This is where you will start to see naming conventions that you are not familiar with such as snake_case, kebab-case, or Upper_camel.
+
+For this book, we will use snake_case (but you use whatever is easiest for you).
+
+Coming up with names for variables will be challenging as you will either type too little or too much, over time you will get your own convention. It is not important what is optimal, more important to focus on convention (means consistency) so that when you read something you immediately know what it is.
+
+for this book if its a regular R object we will append the object with `_tbl` to help keep track of objects
+
+If you're interested to learn more about this, Hadley Wickam has a great blog to help inspire you and give you some great heuristics
+
+https://style.tidyverse.org/syntax.html#object-names
+
+:::
+
+### Factors
+
+
+### data objects
+
+
+## summary
+
+While maybe a boring chapter, many of the fundamentals covered here will help you down the road. Becoming comfortable with vectors, lists and dataframes including how to subset them, amend them, generate them and reference them creats a great foundation for intermediate and so called advanced concpets.
+
+
+
+

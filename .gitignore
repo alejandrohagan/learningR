@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+files
+appfiles/*
+/.quarto/
+.quarto
+cash_validation_files/*
+data

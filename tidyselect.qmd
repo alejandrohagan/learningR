@@ -1,0 +1,1046 @@
+---
+format: html
+title: Tidy Select Verbs (Basic)
+---
+
+```{r}
+#| label: setup
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+#| error: false
+
+library(tidyverse)
+library(gt)
+```
+
+One of the underrated capabilities of the tidyverse are the tidyselect verbs.
+
+Hopefully you will mainly deal with familiar datasets that are narrow and manageable. However there will be times that you will deal with database with hundreds of columns or you will need to do repetitive transformations to columns whose content, names, position and types dynamically change.
+
+Manually typing up the columns names is tedious and quite frankly sucks the life out of enjoyable programming or the analysis experience.
+
+Let's solve that with our new superpower, the tidyselect verbs:
+
+We will learn basic and intermediate techniques to identify columns for selection/deselecting, filtering, grouping or iterationing and transformation functions across dozen of packages (such as creating tables with `gt` package, machine learning with `tidymodels`, data manipulation with `tidyr`, `dplyr`, or managing larger than memory data with `dbplyr`, `dtplyr`, `duckplyr`).
+
+
+If that doesn't excite you, it just means you haven't had to navigate large datasets or had to do any exploratory analysis on complex datasets that you are not familiar with.
+
+
+Trust me, this will happen to you and out of everything we will learn this gets you the most impact with least amount of investment. 
+
+
+## The whole game
+
+By the end of the post you'll know how to reference columns in a data frame based on the column's:
+
+-   Location
+-   Quoted or unquoted name
+-   Pattern in the name such a prefix, suffix or regex match
+-   The column's class
+-   If the column meets a defined criteria (either in aggregate or per row)
+
+```{r}
+#| label: var
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+
+tibble::tribble(
+~verb,~description,
+"colA:colZ","Identifies all columns between Cols A through Z"
+,"colA,ColB","Identifies unquoted column names"
+,"any_of(c('ColA','ColB'))","identifies quoted names"
+,"all_of(c('ColA','ColB'))","only returns columns if all names exist"
+,"contains('Col')","Uses regex expression"
+,"starts_with('Col')","retruns any column that starts with Col"
+,"ends_with('Col')", "returns any column that ends with Col"
+,"num_range('Col',1:10)","returns any column starting with col followed by the numbers 1 through 10, eg col01,col02,etc"
+,"matches(Col*)","returns a match using regex"
+) |> 
+  gt::gt() |> 
+  gt::cols_label(
+  verb~md("**Verb**")
+  ,description~md("**Description**")
+  )
+```
+It will also be a great a application of the skill sets we covered already with objects (vectors, lists, subsetting)
+
+![](insert_picture)
+
+For starters we will show how tidyselect verbs can be used with `select()`. These will equally apply to dplyr verb's of `relocate()`, `pivot_longer()`, and `pivot_wider()`. 
+
+For `group_by()` we will need to introduce a minor variation. 
+
+When we get to the iteration section will show the verbs are used with `filter()` and `mutate()`
+
+OK Ready? Let's get started!
+
+## Identify a column using unquoted names
+
+The simplest way to select a column is to simply type the column name without quotes. This works well if you don't have too many columns or if the names aren't too long.
+
+Simply type the name separated by columns. Additionally columns will return in the order that you type them.
+
+If a column name has a space or special character, then you will need to quote the name.
+
+```{r}
+#| label: unquoted
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    Sepal.Length #<1>
+    ,Petal.Width #<1>
+    ,Species     #<1>
+  ) |> 
+  head()
+  
+```
+1. Simplify type the column names, without quotes separated by a `,`
+
+```{r}
+#| label: unquoted-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    Sepal.Length 
+    ,Petal.Width 
+    ,Species     
+  ) |> 
+  head() |> 
+  gt::gt()
+  
+```
+
+::: {.callout-note}
+## When to use ",', or \`
+
+For the most part when referencing column names, " and ' are interchangeable. 
+
+However for some names such those that start with numbers, you will need to use ` 
+
+:::
+
+
+Alternative you can use ":" to select columns in a series. This will select the columns on either side of ":" and every column between.
+
+```{r}
+#| label: unquoted2
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    Sepal.Length:Petal.Length #<1>
+  ) |> head()
+```
+1. This will select all the columns between Sepal.Length and Petal.Length (inclusive)
+
+```{r}
+#| label: unquoted2-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    Sepal.Length:Petal.Length #<1>
+  ) |> 
+  head() |> 
+  gt::gt()
+```
+
+
+## Identify a column using quoted names
+
+Sometimes, you may generate or write the names in a separate character vector. If you want to pass these quoted names (or strings) then simply use either `any_of()` or `all_of()`.
+
+`any_of()` will return any columns that match and won't return an error if you pass a column that doesn't exist.
+
+`all_of()` will return the column names but will return an error if the column name doesn't exist in the table
+
+```{r}
+#| label: quoted
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+vec <- c("Species","Sepal.Length","does_not_exist")
+
+iris |> 
+  select(
+    any_of(vec) #<1>
+  ) |> 
+  head()
+```
+1.  pass a vector quoted names, this will return any of the names that match the columns in the dataframe
+```{r}
+#| label: quoted-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+vec <- c("Species","Sepal.Length","does_not_exist")
+
+iris |> 
+  select(
+    any_of(vec) #<1>
+  ) |> 
+  head() |> 
+  gt()
+```
+
+```{r}
+#| label: all_of
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    all_of(vec) #<1>
+  ) |> 
+  head()
+
+```
+1. This will return an error because "does_not_exist" isn't in in the iris data column
+"
+Error in `all_of()`:
+! Can't subset columns that don't exist.
+✖ Column `does_not_exist` doesn't exist.
+Backtrace:
+  1. utils::head(select(iris, all_of(vec)))
+ 23. tidyselect::all_of(vec)
+ "
+
+
+When reading the error we can see the comment "Column 'does_not_exist` doesn't exist."
+
+Sometimes it will make sense to set up the column names as strings ahead of time or use programmatic techniques to create a series of colnames or test if a table has a columm name, etc. 
+
+## Identify a column using quoted names
+
+Simple put the number position of the column starting with 1 as the first column.
+
+You can use ":" if you have a series of consecutive numbers eg. 1:5 is 1,2,3,4,5.
+
+
+
+```{r}
+#| label: number
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(1:3) |> #<1>
+  head()
+```
+
+
+
+
+```{r}
+#| label: number-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(1:3) |> #<1>
+  head() |> 
+  gt()
+```
+
+
+
+```{r}
+#| label: number2
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(2:4,5) |> #<1> selects the second through fourth column and fifth column
+  head()
+```
+1. selects the second through fourth column and fifth column
+
+```{r}
+#| label: number2-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(2:4,5) |>
+  head() |> 
+  gt::gt()
+```
+
+If you want to select the last column of a data frame then you can use `last_col()` which will select the last column. This is particularly useful when combined with `relocate()` to move a column you just added to the beginning of the table so that you can see its results.
+
+`last_col()` when used without any other argument simply returns the last column.
+
+If you want to return the second to last, third to last from the end then use the offset argument. If you want to reference the last column, then offset is 0 (the default), the second from last is 1, third to last is 2 etc.^[One of the rare times where you will index from zero].
+
+If you want to pass along a different set of column names to reference you pass them along to "vars" and the argument and the offset will work off of those. 
+
+```{r}
+#| label: last_col
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+
+
+iris |> 
+  select(
+    last_col() #<1> 
+  ) |> 
+  head()
+
+```
+1. selects the last column
+
+
+```{r}
+#| label: last_col-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+
+iris |> 
+  select(
+    last_col() #<1> 
+  ) |> 
+  head() |> 
+  gt::gt()
+
+```
+
+
+```{r}
+#| label: offset
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+
+iris |> 
+  select(
+    last_col(offset=2) #<1> 
+  ) |> 
+  head()
+
+
+```
+1. selects the third column from the end
+
+
+```{r}
+#| label: offset-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    last_col(offset=2) #<1> 
+  ) |> 
+  head() |> 
+  gt::gt()
+
+
+```
+
+
+```{r}
+#| label: last_col_offset
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  select(
+    1:last_col(offset=2) #<1> 
+  ) |> 
+  head()
+
+```
+1. selects the first through third column offset from the end (also the third column)
+
+```{r}
+#| label: last_col_offset-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+iris |> 
+  
+  select(
+    1:last_col(offset=2) #<1> 
+  ) |> 
+  head() |> 
+  gt::gt()
+
+```
+
+## Identify a column using patterns in the column name
+
+If you want to return a column whose names match a pattern then you need the below functions. These are most useful when you have a consistent naming convention
+
+-   `starts_with()` matches any columns that starts with the given pattern
+-   `ends_with()` matches any columns that ends with the given pattern
+-   `contains()` matches any columns that contain the given pattern (no matter where in the column they appear)
+-   `num_range()` matches a column that has a character and numeric pattern (either has prefix or suffix eg. wk4, wk5, wk6, etc)
+-   `matches()` matches column according to any regex pattern
+
+
+
+```{r}
+#| label: starts-with
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+#delcare variables
+
+iris |> 
+  select(
+    starts_with("Sepal")
+  ) |> 
+  head()
+```
+
+
+```{r}
+#| label: starts-with-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+#delcare variables
+
+iris |> 
+  select(
+    starts_with("Sepal")
+  ) |> 
+  head() |> 
+gt::gt()
+```
+
+```{r}
+#| label: ends-with
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+
+#delcare variables
+
+iris |> 
+  select(
+    ends_with("Width")
+  ) |> 
+  head()
+```
+
+```{r}
+#| label: end-with-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+#delcare variables
+
+iris |> 
+  select(
+    ends_with("Width")
+  ) |> 
+  head() |> 
+  gt::gt()
+```
+
+
+```{r}
+#| label: contains
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+#delcare variables
+
+starwars |>
+  select(
+    contains("_")
+  ) |> 
+  head()
+
+```
+
+
+```{r}
+#| label: contains-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+#delcare variables
+
+starwars |>
+  select(
+    contains("_")
+  ) |> 
+  head() |> 
+  gt::gt()
+
+```
+
+
+
+
+
+```{r}
+#| label: num-range
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+datasets::LifeCycleSavings |> 
+  select(
+    num_range(
+      prefix="pop"
+      ,range = 15:76
+    )
+  ) |> 
+  head()
+
+
+```
+
+
+```{r}
+#| label: num-range-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+datasets::LifeCycleSavings |> 
+  select(
+    num_range(
+      prefix="pop"
+      ,range = 15:76
+    )
+  ) |> 
+  head() |> 
+  gt::gt()
+
+
+```
+## Identify a column based on a summarized attritube of the column
+
+Down the road you will need to identify columns that meet a certain condition. Often times you will need to set up your condition so that a test can be evaluated to either TRUE or FALSE. 
+
+So how to do that? A common pattern is to summarize a column to single attribute, say its mean, count, number of distinct values, max, median, most frequent value, number of distinct values, etc and test if that exceeds, equals or falls short of some threshold (or between a range, etc)
+
+You will be combining your function building skill sets to make what are called predicate functions^[fancy name for a function that returns TRUE or FALSE]
+
+To do this in tidy select you wrap your predicate function in the `where()` which will evaluate each column against the condition and will return the ones that pass.
+
+Don't know where to start? Instead of building our own let us use some existing functions that check a column based on its class of data:
+
+-   `is.factor()`
+-   `is.numeric()`
+-   `is.Date()`
+-   `is.character()`
+
+Common aggregation functions are below. Basically any function that return a single value
+-   `mean()`
+-   `length()`
+-   `unique()`
+-   `distinct_n()`
+-   `median()`
+-   `max()`
+-   `min()`
+
+
+
+
+
+
+```{r}
+#| label: where-numeric
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+
+diamonds %>%
+  select(
+    where(is.numeric) #<1>
+    ) |> 
+  head()
+
+```
+
+1. checks each column with `is.numeric()` and if TRUE will return those column names to be selected
+
+
+
+```{r}
+#| label: where-numeric-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds %>%
+  select(
+    where(\(x) is.numeric(x))
+    ) |> 
+  head() |> 
+  gt::gt()
+
+
+```
+
+
+```{r}
+#| label: where-factor
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(
+    where(\(x) is.factor(x)) #<1>
+  ) |> 
+  head()
+
+```
+1. selects any columns that is.factor returns TRUE
+```{r}
+#| label: where-factor-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(
+    where(\(x) is.factor(x))
+  ) |> 
+  head() |> 
+  gt::gt()
+
+```
+
+Built in predicate functions are great. But often times you will need to build you own. Don't be intimidate, the below framework will significantly help you.
+
+What if we want to test if the column's average value is greater than 300?
+
+```{r}
+#| label: agg-test
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(
+  where(\(x) is.numeric(x) & mean(x) > 300)
+  ) |> 
+  head()
+
+```
+
+
+```{r}
+#| label: agg-test-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(
+  where(\(x) is.numeric(x) & mean(x) > 300)
+  ) |> 
+  head() |> 
+  gt::gt()
+
+```
+
+
+
+
+```{r}
+#| label: row-test
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+
+diamonds |> 
+  select(
+    where(
+      \(x) length(unique(x))<10)
+      ) |> 
+  head()
+
+```
+
+
+
+```{r}
+#| label: row-test-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+diamonds |> 
+  select(
+    where(
+      \(x) length(unique(x))<10)
+      ) |> 
+  head() |> 
+  gt::gt()
+
+```
+Ultimately the pattern is simple. 
+
+Take a column
+
+```{r}
+#| label: agg-test1
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(price)|> 
+  head()
+
+```
+
+```{r}
+#| label: agg-test1-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(price) |> 
+  head() |> 
+  gt::gt()
+```
+
+
+apply your aggregation test to it
+
+```{r}
+#| label: agg-test2-gt
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+table(diamonds$price) |> which.max() |> unname() >200
+```
+
+now wrap that in a function, replace your table and column reference with x
+
+
+
+```{r}
+#| label: agg-test3
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(
+    where(\(x) table(x) |> which.max() |> unname() > 200)
+  ) |> 
+  head()
+```
+
+```{r}
+#| label: agg-test3-gt
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  select(
+    where(\(x) table(x) |> which.max() |> unname() > 200)
+  ) |> 
+  head() |> 
+  gt::gt()
+```
+
+
+
+## Identify a column based on the indviduals rows of a column
+
+Similar to the step above, we also use `where()` to set a testing condition and pass each column through that condition. The only nuance here is how you set that condition so that it works against each row vs. a single summarized attribute of that column.
+
+So instead of return a single value `mean(x) <300` which return a single TRUE or FALSE instead  will do a test of `x <300` which will evaluate the test against every row returning a series of `TRUE` or `FALSE`.
+
+You still need a single TRUE or FALSE, so from there depending on what you want, you typically use `any()` or `all()` to return a final TRUE or FALSE for selection
+
+
+Common predicate functions that are useful when doing row level validation are:
+
+`any()`
+`all()`
+`some()`
+`none()`
+`every()`
+
+
+```{r}
+#| label: every1
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+mtcars |> 
+  select(
+    where(
+      \(x) every(x,\(x) x<4)
+          )
+    ) |> 
+  head()
+
+
+```
+
+
+
+
+
+```{r}
+#| label: every
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+mtcars |> 
+  select(
+    where(
+      \(x) every(x,\(x) x<4)
+          )
+    ) |> 
+  head()
+
+
+```
+
+
+
+
+
+```{r}
+#| label: none1
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+mtcars |> 
+  select(
+    where(
+      \(x) none(x,\(x) x<4)
+          )
+    ) |> 
+  head()
+
+
+```
+
+
+```{r}
+#| label: none
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+mtcars |> 
+  select(
+    where(
+      \(x) none(x,\(x) x<4)
+          )
+    ) |> 
+  head()
+
+```
+
+
+## rounding out
+
+We will use tidyselect verbs alot but to round out this chapter, lets also introduce some minor additions
+
+`pick()` 
+
+Although we have tidyselect verbs that we can use in `select()` what if you want to use them in `group_by()` or `filter()`
+
+For these verbs we will need to wrap the tidyselect verbs in `pick()` and then they will work!
+
+```{r}
+#| label: pick
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  group_by(
+    pick(where(is.factor))
+  ) |> 
+  summarize(
+    n=n()
+    ,.groups="drop"
+  )
+```
+
+
+
+
+```{r}
+#| label: filter
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+diamonds |> 
+  group_by(
+    pick(where(is.factor))
+  ) |> 
+  summarize(
+    n=n()
+    ,.groups="drop"
+  ) |> 
+  head() |> 
+  gt::gt()
+```
+
+
+
+
+```{r}
+#| label: pick1
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+diamonds |> 
+  filter(
+    all(pick(x:z)>-1)
+  )
+
+```
+

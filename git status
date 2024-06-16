@@ -1,0 +1,522 @@
+[33mcommit 54eb6f1aaeb971793bb288cdd745d53f3d3d6c36[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Wed Mar 20 23:08:51 2024 -0500
+
+    new chapters
+
+[33mcommit 21aeeb36add77a4cf8f1d1816aebe78bebe59678[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Wed Mar 20 23:05:34 2024 -0500
+
+    added new chapters
+
+[33mcommit 44499411b01ac86ad6135a6615755ce3bfa5d505[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Wed Mar 20 22:28:29 2024 -0500
+
+    removed pdf
+
+[33mcommit 6adc78d37413a7c0bc4316f6f17c7d12aa516527[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Wed Mar 20 22:23:35 2024 -0500
+
+    add docs folder
+
+[33mcommit 0cc97db3b902adfecdbc951f50dcb478ef5ea780[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Wed Mar 20 22:16:15 2024 -0500
+
+    docs creat
+
+[33mcommit a9ab711533b0a6f76661eb225b76ebb65bfd9493[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Wed Mar 20 22:08:55 2024 -0500
+
+    big push
+
+[33mcommit 183a7d3e664af0db97b1364fffda60bc68ca05ea[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Dec 10 11:41:06 2023 -0600
+
+    updated github file
+
+[33mcommit f162bf786288be563a69a5aec5b5b72981563e2b[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Dec 10 10:58:18 2023 -0600
+
+    update many files
+
+[33mcommit 60d25a1298f5b9cee38744604760dc3665569190[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Thu Aug 31 10:17:24 2023 -0500
+
+    vim chapter update
+
+[33mcommit c7bff2109d6ae38e2627d984ee9cf04073ec7e7b[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 29 21:29:19 2023 -0500
+
+    new reference
+
+[33mcommit ba8e7f27c502b09abc151871ebaf32a25f836452[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jul 23 22:33:53 2023 -0500
+
+    new functions comments
+
+[33mcommit f6672ea728f17d19c09312ddffb5f92563ccbcea[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jul 23 17:36:52 2023 -0500
+
+    data masking update
+
+[33mcommit b13d16666b6f44b8194fd01c90a8e547e7794ed7[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 22 21:02:01 2023 -0500
+
+    new data masking content
+
+[33mcommit 06482c65dc4db12331f898c92808d1c430ca34f0[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 22 19:58:15 2023 -0500
+
+    data masking
+
+[33mcommit 9456cc98584f898a11c7a888b7d4352aafedc8b2[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 22 19:55:33 2023 -0500
+
+    udpated new_chapter
+
+[33mcommit df813e09585553d960ba9420d223860374c9eb39[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 22 18:58:59 2023 -0500
+
+    this is the submission of new chapters
+
+[33mcommit 46a111281feafeb118bf81faed7d4a4877733e5a[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Thu Jul 20 00:03:08 2023 -0500
+
+    updated new chapter
+
+[33mcommit faba81f11838db0e0363634bee4080232c4ac322[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jul 16 17:47:17 2023 -0500
+
+    new data masking chapter
+
+[33mcommit ab71edaf4ba6022b2c8c2099cb9b83a4a02534d4[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Mon Jul 10 22:57:14 2023 -0500
+
+    updated git chapter with branch options
+
+[33mcommit 7ae913bc70321513ad0394878f1832f696678a90[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Mon Jul 10 00:14:26 2023 -0500
+
+    updated git pull, commit and push section
+
+[33mcommit e21359c66ee23a7f2df1de10ffb92f00c95b20b0[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Mon Jul 3 00:36:48 2023 -0500
+
+    mm wip
+
+[33mcommit c8f90d9989f96339ae3560149876cdcb5c59343c[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jul 2 10:55:28 2023 -0500
+
+    new practice section added
+
+[33mcommit def99db474c1cf9d0af4e9f8f46ec311cddaeeb8[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jul 2 00:07:48 2023 -0500
+
+    example many models
+
+[33mcommit f0808121bc67dd3a20ed1f0365ebcd7fdd8f9e47[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 22:56:56 2023 -0500
+
+    time series wip
+
+[33mcommit 38117c9a25cbd754ffec4106e750a2721dc60cfb[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 22:42:54 2023 -0500
+
+    wip
+
+[33mcommit 75087353fe4f5589c28e4ef1eb70ec739ef50fc2[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 22:39:49 2023 -0500
+
+    minor cleaning of time series chapter
+
+[33mcommit 79835b4d48db78f1914e8489df30afc7e5e7f5bc[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 22:34:28 2023 -0500
+
+    minor edits
+
+[33mcommit 7364e1991d77732cbd8c4ceb0431b4e8345342a0[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sat Jul 1 22:32:52 2023 -0500
+
+    Delete .~lock.test.csv#
+
+[33mcommit 8f3383c888028280cd24f1343eeae93cc06d092e[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sat Jul 1 22:32:32 2023 -0500
+
+    Update .~lock.test.csv#
+
+[33mcommit e583e9e179cc0e5ed890aecd57af7288bea1b693[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 22:24:15 2023 -0500
+
+    minor edits
+
+[33mcommit 0ccdc05919ad55dba7ea15d2790db029b03884fb[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 22:20:07 2023 -0500
+
+    updated database and deleted readme.html
+
+[33mcommit d5a81a543eac0a7b6a71ecca062577ec21992110[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jul 1 21:48:31 2023 -0500
+
+    initial many models chapter
+
+[33mcommit a92e1db7b9981a763bf28af034eedd7765b70d89[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Thu Jun 29 22:28:01 2023 -0500
+
+    render results
+
+[33mcommit 6e14748052a88efdeae19f587e0a23513fd6860f[m
+Author: Hagan <alejandro.hagan@exxonmobil.com>
+Date:   Wed Jun 28 19:52:27 2023 -0500
+
+    added notes from work computer
+
+[33mcommit bc637921b986e76fd436187b66a1ce68e47ca460[m
+Merge: 9637937 f2cdf72
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Tue Jun 27 21:54:46 2023 -0500
+
+    Merge branch 'main' of https://github.com/alejandrohagan/learningR
+    
+    please merge
+    .
+
+[33mcommit 96379372d5444d4c9ffd78abe267ba87f0d1b870[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Tue Jun 27 21:53:51 2023 -0500
+
+    test
+    
+    my commit message
+
+[33mcommit f2cdf729491f4d507e7566e70abee6a41c2830dd[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Tue Jun 27 21:53:51 2023 -0500
+
+    test
+
+[33mcommit c7b9be8276e528e827e91d758122f40a5a15177f[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jun 25 17:46:09 2023 -0500
+
+    add resource links
+
+[33mcommit 2e22e4d8cb49be08e3ea22221b8fcfff166d94ff[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jun 25 17:38:09 2023 -0500
+
+    ignore appfiles
+
+[33mcommit ff8cfffcc2dca7f75393792dad657cad4590cc6e[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jun 24 14:27:55 2023 -0500
+
+    -   updated database chapter with new arguments
+    -   Tried new publication technqieu with trelliscopejs but it didn't
+        work -- need a seperate effort
+
+[33mcommit f29be5c244b2e13ac7a8c23f9953fa681fe18105[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sat Jun 24 12:56:40 2023 -0500
+
+    updated interaction pag
+
+[33mcommit 4f348f350785ab2dc54bdd36a5d650dbf4a78abe[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jun 18 19:08:07 2023 -0500
+
+    whatever thi sis
+
+[33mcommit 53ca044023707a90edc67d452389be42a966d57e[m
+Author: alejandrohagan <alejandro.hagan@outlook.com>
+Date:   Sun Jun 18 19:07:46 2023 -0500
+
+    interaction supdate
+
+[33mcommit cd43124e8066ef00510f0101cd8fbcee83a5e3c6[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Sat Jun 17 14:08:38 2023 -0500
+
+    update
+
+[33mcommit 1e313799aa7081ba6ecea5fd827deff4c22cb237[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Wed Jun 14 22:55:38 2023 -0500
+
+    updated chapter
+
+[33mcommit fc42e1dd8fe116a13238d61ef75195ffd752056d[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Wed Jun 14 17:19:03 2023 -0500
+
+    new spark chapter
+
+[33mcommit 8bb69f9d3185e72ee7243d64fcf37798709b7aaf[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Sat May 27 20:26:16 2023 -0500
+
+    update spark and got it to work
+
+[33mcommit ce9c0f2eb32c9e9f68b4dae9cc14e097c015a133[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Sat May 27 09:25:12 2023 -0500
+
+    new spark chapter and example
+
+[33mcommit 156e6f17a31da1caddaff3471da0554675d07e87[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Fri May 26 22:56:03 2023 -0500
+
+    added twitter book marks
+
+[33mcommit d0776c36cca6f3d2219cb2d5f2d18c59bbe60c8f[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Fri May 26 21:36:14 2023 -0500
+
+    wip
+
+[33mcommit 46d1eda196bc94a86024ef7ebf5d36011f7a2b9d[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Sun May 21 20:48:02 2023 -0500
+
+    added new chapters
+
+[33mcommit 0ff331b7ffe41d6b8546b2a35c8b892f32296f7a[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sat May 20 14:16:41 2023 -0500
+
+    tbl of contents
+
+[33mcommit 51a06c3e236a580bc91ced0033257b2be614d5f3[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Sat May 20 12:46:18 2023 -0500
+
+    test penguins script
+
+[33mcommit cb5d71cde00065a50e2151698bbc8d0c0c9461bc[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Sun May 14 12:53:42 2023 -0500
+
+    update
+
+[33mcommit 169d25c90856cf00b3c3ca5c72a198476d0f977e[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Tue Apr 18 10:02:31 2023 -0500
+
+    some minor cleaning
+
+[33mcommit 423394104a14738698c78bf0605b6914d77d87b9[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Tue Apr 18 07:37:48 2023 -0500
+
+    updated ignore files
+
+[33mcommit 80d91e08d4741403e46e74c52d9c54bafbe7a521[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Tue Apr 18 06:55:24 2023 -0500
+
+    delete
+
+[33mcommit 2c9f2d1d8bdbcf1426dd00a8ba68b33548df8800[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Tue Apr 18 06:54:39 2023 -0500
+
+    not sure
+
+[33mcommit 89a9fe00f21da3c24de26f083b1d58ac2c65c914[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Tue Apr 18 06:52:24 2023 -0500
+
+    update the read me file
+
+[33mcommit a9b0c710b420b8664b608664e9883a416fd90849[m
+Author: hagan <alejandro.hagan@outlook.com>
+Date:   Tue Apr 18 03:06:04 2023 -0500
+
+    clean up formatting
+
+[33mcommit a4125beefaabff73666e29ae1f5dbf39f5507398[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Tue Apr 18 01:49:25 2023 -0500
+
+    clean up to time series chapter
+
+[33mcommit af53446c7fcba2b85764971a814b89e3574ed2b6[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Tue Apr 18 00:54:24 2023 -0500
+
+    what is this
+
+[33mcommit 20c461f0a3ddb8907c3e9127e660166ab3a9c840[m
+Merge: 73061e3 a548534
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Tue Apr 18 00:53:23 2023 -0500
+
+    sure
+    
+    Merge branch 'main' of https://github.com/alejandrohagan/learningR
+    
+    # Conflicts:
+    #       machine_learning.qmd
+    #       new_chapter.qmd
+
+[33mcommit 73061e3b7d5fe2d495442e11d36a15b2f7a55540[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Sun Apr 16 06:20:55 2023 -0500
+
+    time series update
+
+[33mcommit 53ce24396b387a76b21224e9bdaeab851e78d642[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Fri Apr 14 22:23:01 2023 -0500
+
+    updated time series chapter with additional model time explanation and metrics
+    
+    up next is machine learning
+
+[33mcommit c8774fd6db81258ef24622716227fb0ca8bc42ba[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Thu Apr 13 22:47:20 2023 -0500
+
+    commit new chapters including iterations and time series and clean up new_chapter
+
+[33mcommit b4049a518e3237efc3af0571c310732b6355c014[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Tue Apr 11 19:14:16 2023 -0500
+
+    wip
+
+[33mcommit 229edba8ab8fff83ccb5eb18135b4ff2a9387192[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Tue Apr 11 09:55:46 2023 -0500
+
+    wip
+
+[33mcommit ad03cf24f2edaeb376c78f060a52047da6fcac78[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Sat Apr 8 21:04:42 2023 -0500
+
+    update to set up file with getwd text
+
+[33mcommit a548534aa2ba9c3ce865bab0e837a2867fc5c783[m
+Author: Hagan <alejandro.hagan@exxonmobil.com>
+Date:   Mon Mar 27 12:38:20 2023 -0500
+
+    updated chapters
+
+[33mcommit 7d584ce1f8e44a4820ccba96789c310cf667e4d4[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Sun Mar 26 18:35:37 2023 -0500
+
+    added new things
+
+[33mcommit 8c34a0a42a06219472c82c973ae0ab2395afb63e[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Fri Mar 24 15:44:21 2023 -0500
+
+    new posts
+
+[33mcommit 322f74443a10970f88a348b7cfd72dc863f54f54[m
+Author: hagan <hagan@pop-os.localdomain>
+Date:   Fri Mar 10 12:44:01 2023 -0600
+
+    update of intro
+
+[33mcommit 7f244db33073318504807e7c5739c897c0cb0288[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sun Feb 5 13:49:24 2023 -0600
+
+    test text upload
+
+[33mcommit 27da03ad37b58c49154da5f2faa6e66e3d49560b[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sun Feb 5 13:47:27 2023 -0600
+
+    test feather upload
+
+[33mcommit 0f53ec2711abf09db90c2dcd7fc4edadf884dd8a[m
+Author: alejandrohagan <alejandro.hagan@outlok.com>
+Date:   Sun Jan 8 15:00:12 2023 -0600
+
+    updated with missing data
+
+[33mcommit 2bb9515bdcd5e86023b1fdd4a90cabcdb275f4a0[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Thu Nov 24 19:26:36 2022 -0600
+
+    2022-11-24 manual upload of files
+    
+    Added offline files to github so that work can be directly pushed / pull from the account
+
+[33mcommit 1310854dc53b63fc337c67bc50b8aaf45d240890[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Fri Aug 26 23:54:53 2022 -0500
+
+    Delete cars.csv
+
+[33mcommit 0a03e6bc17a69750d5660c7f9fe23bdd3d3e53aa[m
+Author: haganistic <alejandro.hagan@outlook.com>
+Date:   Fri Aug 26 23:47:43 2022 -0500
+
+    test save
+
+[33mcommit 14597f2f0daec847856693bb59662c42c7081e64[m
+Author: haganistic <alejandro.hagan@outlook.com>
+Date:   Fri Aug 26 23:39:28 2022 -0500
+
+    transfered draft notes to read me
+
+[33mcommit 10c753152ff930707a82ead159905db0c59011c2[m
+Author: haganistic <alejandro.hagan@outlook.com>
+Date:   Fri Aug 26 23:25:38 2022 -0500
+
+    moved writing to dedicated markdown
+
+[33mcommit ed946e179b155188d7c8b65dacb3c72029b34359[m
+Author: haganistic <alejandro.hagan@outlook.com>
+Date:   Fri Aug 26 23:22:36 2022 -0500
+
+    learningR v1
+
+[33mcommit eda8f9b99934a9900c535e54122930a2ffe5a390[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sat May 7 18:12:44 2022 -0500
+
+    Update README.md
+
+[33mcommit 7daa783b164b9f2e23eea5a944ec0d59708c4724[m
+Author: Alejandro Hagan <87534364+alejandrohagan@users.noreply.github.com>
+Date:   Sat May 7 17:36:14 2022 -0500
+
+    Initial commit

@@ -1,0 +1,788 @@
+---
+title: "tidymodel_practice"
+format: html
+--- 
+
+
+
+## Required packages
+
+-   Tidymodels
+    -   `rsample` used to split your sample into training, testing, and validation set 
+    -   `recipes` used to create recipe and transform data (normlize)
+    -   `parsnip` used to create the model, engine and mode
+    -   `workflow` puts together model (parsnip) and formula (recipe)
+    -   `parsnip` also fits the everything together
+    -    `tune` will help you optimize your model 
+    -   `yardstick` provides metrics to evaluate your model 
+-   usemodels can help set up your workflow including tunning and grid
+-   There is no "set" pattern and these steps can be combined through other 
+variables however below is a typical workflow
+
+
+### Load libraries
+
+```{r}
+#| echo: true
+pacman::p_load(tidyverse,scales,tidymodels,janitor,lubridate,vip)
+```
+
+### rsample
+
+-   First rsample::initial_split(df,strata=x,prop=y) to split your data set 
+into training and testing and assign it to an object
+    
+    -   `strata` ensures the predicated variable is kept constant in both samples
+    -   'prop' determins the proportion of of initial vs. split   
+-   From here, you need use that split object with `training_split()` and `testing_split()` and also assign to new objects
+-   This will create a training data set and testing data set (respectively)
+
+    -   Its possible to further break up your training data set into a 
+    validation set
+
+-   You can further "split" your training data into either folds or bootstrap
+-   `rsample::vfold_cv()` is fold your data into sub samples
+
+    -   `strata` arguments makes sure the outcome variables is equally 
+    represented in each sample
+    -   `v` is the number of times "fold" the data, default is 10
+    -   `repeats` will repeat the folding patterns x times, default is 1
+
+```{r split-data}
+#| echo: true
+#| eval: true
+
+library(tidyverse)
+diamonds_tbl <- diamonds %>% 
+  mutate(high_price_indicator=if_else(price>10000,"high","low")
+          ,high_price_indicator=factor(high_price_indicator)
+         ,bin_carat=cut_number(carat,n=4,labels=c("0.2 - .0.4","0.4 - 0.7","0.7 - 1.04","1.04 - 5.01"))
+         )
+
+data_split <- rsample::initial_split(diamonds)
+
+training_tbl <- rsample::training(data_split)
+testing_tbl <- rsample::testing(data_split)
+
+
+diamonds_fold_lst <- rsample::vfold_cv(training_tbl)
+
+```
+
+## Parsnip
+
+- This is package where you choose the model, engine and mode and configure it (set its engine and mode)
+-   Most models start with their modeling name (eg.`logistic_reg()`, `rand_forest()`, `linear_reg()`) 
+- Following selection the model you need select their engine (typical - name of the underlying package) and their mode (not always applicable; eg classification or regression) - most models have default modes and engine
+-   First start with the model eg. `linear_reg()`
+
+    -   Then choose the mode arugment in the model(mode="regression"), for some there is an option (regression or classification), for others it can only be one so you can't change it
+-   Then set the engine (`set_egine()`) which determines which underlying package you want to use (eg. stats::lm, spark, etc)
+-   optional: At this point, you have the option of just directly applying parsnip::fit() into the model by directly entering recipe and then data
+    
+    -   Fit(model,price ~ category, data=train_tbl) and this will directly  output results
+    -   If you do this you cna directly put in `predict(model_fit, new_data=test_data)` 
+
+
+```{r choose-model}
+#| echo: true
+#| eval: true
+#| warning: false
+
+log_mod <- parsnip::logistic_reg() %>% 
+  parsnip::set_mode("classification") %>%
+  parsnip::set_engine("glm")
+
+ranger_quant_mod <- parsnip::rand_forest(trees = 1000) %>% 
+  parsnip::set_mode("regression") %>% 
+ parsnip::set_engine("ranger",quantreg = TRUE,importance = "impurity", seed = 63233)
+
+
+
+ranger_mod <- parsnip::rand_forest(trees = 1000) %>% 
+  set_mode("regression") %>% 
+  set_engine("ranger")
+
+
+glmnet_mod <- parsnip::linear_reg(penalty = 10,mixture = 0.5) %>% 
+  parsnip::set_mode("regression") %>% 
+  parsnip::set_engine("glmnet")
+
+
+rpart_mod <- decision_tree(cost_complexity = 0.01,min_n=10) %>% 
+  set_mode("regression") %>% 
+  set_engine("rpart")
+
+
+lm_mod <- parsnip::linear_reg()
+
+```
+
+### Recipes
+
+-   this is where you put the formula and transformation steps that you want your model
+
+-   typical to start with recipes::recipe(outcome \~ predictor1+ predictor2, data=training_tbl)
+
+-   you can then transform data with `step_?` using tidy select principles
+
+    -   for the dataset you should put your training set (not your folded data set or testing set)
+    -   `step_other()` takes high variable data and categories minor categories into other
+    -   `step_normalize()` takes data and scales and center its - either directly reference or use `all_numeric()` as a shortcut
+    -   `step_dummy()` which transform categorical variable into columns, use `one_hot=TRUE` ; variables should all be factors
+    -   `step_zv()` to remove variables with zero variation (can use with `all_predictors()`)
+
+-   while you may have many models and parameters, you would typically have one reciepe that can be leverage many times
+
+-   the data should be the training set to avoid leakage
+
+-   [recipes links](https://www.tmwr.org/recipes.html)
+
+
+-   Be mindful of the recipes stage -- you can introduce many errors down the line
+because you created a column down in the testing set that for some reason
+isn't available in the training set
+
+-   Also be mindful of transformations and how to interpret the model results
+
+-   We will go through some examples
+
+
+### Workflow
+
+-   This stitches together your various elements (model, recipe)
+-   This makes it easier to:
+    -   Undertand all the of transformation steps and modeling choices 
+    associated with a machine learning model
+    -   Incrementalize or reiterate through older models in a systemtic way
+    -   Extract out various elements of a workflow for consistency
+-   Depending on approach you can either use workflow() or workflow_set() to 
+create a list of workflows
+
+Common formulas - `workflow()` - `workflow_set()` if passing multiple formulas or models
+
+::: callout-note
+From the learning site, workflows section of [tidy models book](https://www.tmwr.org/workflows.html), workflows are : if you are using multiple model types, or constantly updating various elements of the model then workflow allows to add / substract specific elements (without rebuilding the entire model from scratch)
+
+This "full model" is compared to a sequence of the same model that removes each predictor in turn. Using basic hypothesis testing methods or empirical validation, the effect of each predictor can be isolated and assessed.
+:::
+
+
+```{r}
+wf_basic <- workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(rec_basic)
+
+```
+
+#### Workflowset
+
+[https://workflowsets.tidymodels.org/]
+
+you can apply multiple formulas with a list
+
+```{r}
+recipes <- list(
+  longitude = rec_basic
+  ,latitude = rec_adv
+)
+```
+
+Then you can applly the various formulas to various models with 'workflow_set()'
+
+```{r}
+
+workflow_sets_diamond <- workflow_set(
+  preproc = recipes
+   ,models = list(
+    lm = lm_mod
+  ,ranger=ranger_mod
+  ,ranger_quant=ranger_quant_mod
+  ,rpart=rpart_mod
+    )
+  )
+
+workflow_sets_diamond %>% 
+  mutate(fit=
+           map(
+             info
+             ,~fit(training_tbl,.x$workflow[[1]])
+             )
+         )
+
+  fit(workflow_sets_diamond$info[[1]]$workflow[[1]],training_tbl)
+
+```
+
+you fit each model with purrr
+
+```{r}
+   location_models %>%
+   mutate(fit = map(info, ~ fit(.x$workflow[[1]], ames_train)))
+location_models
+
+```
+
+### Fit Model
+
+
+-   This is when you actually apply fit the model to your data and do the "machine learning"
+
+-   If you did not do the `rsample::vfold_cv()` step then you use the `parsnip::fit()`
+
+    -   parsnip::fit(workflow,data=traniing_tbl)
+
+-   If you did use `rsample::vfold_cv()` then use `tune::fit_resamples`
+
+    -   `workflow()` - insert your workflow here
+
+    -   `resamples= folds` - this is where you set the folds (data)
+
+    -   `control = control_resamples(save_pred = TRUE)` -need to manually save predictions
+
+    -   this can take alot of time so turn on parellel processing `doParallel::registerDoParallel()`
+
+-   typically fit the training data as the data argument
+
+
+
+```{r fit}
+
+fit_basic <- workflow() %>% 
+  add_recipe(rec_basic) %>% 
+  add_model(lm_mod) %>% 
+  fit(training_tbl)
+
+
+doParallel::registerDoParallel()
+
+### if you did not vfold_cv()
+
+#fit_rf <- workflow %>%
+ # fit(data=training_split)
+
+
+### if you did vfold
+fit_folds <- tune::fit_resamples(workflow,
+    resamples = diamonds_fold,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+
+```
+
+You can see the various elements of the fit with the various extract commands and you can use see use further downstream functions at this point (eg. 'summary()'
+-   'extract_fit_engine()'
+    - use this to extract out the underlying model results
+    -  this is equivalent to the model ouput had you used the underlying model
+    package
+
+additionally you can use 'last_fit()' to fit to entire training set and evaluated against testing setj
+
+last_fit(lm_wflow, ames_split)
+
+
+## Apply Model to Data set
+
+-   if you have a fitted model you can use either 'predict()' or 'augment()' to apply your fitted model to the underlying data sets
+
+-   unclear what happens to preprocessings steps? I guess automatically applied?
+
+
+
+## Yardsticks
+
+- once you ahve a tbl with test results and prediction columns
+- easiest way is to use `yardstricks::metrics()` or `yardstick::calc_metrics()`
+  -   truth= what you are testing for
+  -   estimate= what you predicted
+- this will product standard metrics like mae,rmse and rsq
+
+
+Validate model - if you want to see your samples you can do the `collect_metrics(rs_data)` or metric_set() with augmented data
+
+- If regression results
+
+    -   use `predict()` or `augment()`
+    -   then list argument that you want in `metric_set()` and assign it to variable
+    -   then pass the fit model to this assigned variable -- indicating which is the truth and estimate column
+    -   
+
+```{r}
+ames_metrics <- metric_set(rmse, rsq, mae)
+  
+predict_results <- fit_basic %>% augment(new_data=training_tbl)
+
+ames_metrics(predict_results,truth=price,estimate=.pred)
+
+
+
+```
+
+-   use the roc_curve to plot your results - if resampled group by the resampled id
+-   the variable predicted probabilities will use the `pred_var1` and `pred_var1` name
+
+```{r}
+#| eval: false
+collect_predictions(fit_folds) %>%
+  group_by(id) %>%
+  roc_curve(high_price_indicator,.pred_high) %>%
+  autoplot()
+```
+
+### confusion matrix on training data
+
+-   can also do a confusion matrix - no need to unnest data
+
+```{r}
+conf_mat_resampled(fit_folds, tidy = FALSE) %>%
+  autoplot()
+
+
+```
+
+-   you can also apply the confusion matrix on the entire set (including testing set)
+-   must use `last_fit(workfow, original_split)` -- I don't super undersand why
+-   form there follow same path
+
+```{r}
+final_fitted <- last_fit(workflow, data_split)
+
+collect_metrics(final_fitted)
+
+collect_predictions(final_fitted) %>%
+  conf_mat(high_price_indicator, .pred_class) %>%
+  autoplot()
+
+collect_predictions(final_fitted) %>%
+  roc_curve(high_price_indicator,.pred_high) %>%
+  autoplot()
+
+```
+
+-   Can also rank the feature importance with VIP packge
+-   take recipe, prep it and apply it blank data -- still dont under prep() vs. juice() vs. bake()
+-   
+
+```{r}
+library(vip)
+
+imp_data <- rec %>%
+  prep() %>%
+  bake(new_data = NULL)
+
+rf_spec %>%
+  set_engine("ranger", importance = "permutation") %>%
+  fit(high_price_indicator ~ ., data = imp_data) %>%
+  vip(geom = "point")
+```
+
+
+## Tune()
+
+- In reality you will need to tun() your models and iterate through your model
+specifications and preprocessing steps
+
+- Tune packages enables you to iterate through various inputs tune paramters 
+via a grid so that you can see run the model multiple times and pick the model 
+paratematers that maximize the results
+
+- as tune returns a nested table of models, paramters, results you will need 
+to extract the tune paramaters to fit it against the training and testing set
+
+- practically there are a few patterns / techniques we can use to do this at 
+scale
+
+- note that this can take alot of time as you are essentially runnign the 
+models multiple times with combination of factors
+
+## Model Specific Arguments
+
+
+## Rpart
+
+- the easist one to start with and understand to form your data science journey
+- its a form of regression trees that will neable the users to understand 
+how we a machine learning algorythym is making decisions and optimizing
+behind the scenes
+
+- cost copmplexity -- at what pint should we exclude the predictor
+- tree_depth (how many laters of decisoin tree do we want
+- min_n - how many minimum number of predictors should be included
+
+- The advantage of regression tree is that we can plot the final tree
+so that we can visutalize the decision path
+
+### rpart.plot
+
+
+
+::: {.callout-note}
+
+- note that there isn't tree() argument which typically indicates how many 
+tress you want in the model and that is because a regression model will 
+evalulate all the dimension in the model 
+
+- We will later see why later on with random forest models, sampling of predictors
+(eg not using all) leads to better decisions
+
+:::
+
+### Random Forest
+
+-   okay to use between 500 - 1000 trees
+-   can set your cores directly in rand_forest() argument (cores \<- `parallel::detectCores()`)
+-   turn predicted varible into factor
+
+#### Shortcuts to remember things
+
+Great shortcut to set up your model so that you don't have to remember everything - you need to know your receipe and training split ahead of time
+
+##### Usemodels
+
+```{r}
+
+
+df <- tibble(x=1:4,
+       y=letters[1:4],
+       z=c("alpha","omega","charlie","echo"))
+
+rec_2 <- recipes::recipe(x~.,data=df) %>% 
+  step_dummy(z,one_hot = TRUE)
+
+rec_2 %>% prep() %>% juice()
+```
+
+## ploting reuslts
+
+-    take the fit object and broom::tidy()
+-   
+
+## kmeans
+
+
+
+- step 1: 
+organize  data into normalied format
+
+whatever we tryign to study (eg. product purchases) then you fill in the percent of that produc tby the dimenion you want (customer), eg customer by product
+
+- step 2:
+use kmeans function with table and initial group selection
+
+-only can have numeric input (so create with explantory varibale then deselect variable (eg. customers))
+
+kmeans_obj = kmeans(nomarlized_tbl,
+centers=num__of_groups,
+iter.max=something,
+nstarts= higher is better (say 100))
+
+
+
+kmeans_obj$center = all various centers
+
+kmeans_obj$cluster=classify each obs to a clsuter
+
+step 3: apply kmeans_obj to data
+
+broom::augment(kmeans_obj,normalized_tbl)
+
+step4: how to intrpret
+tot.withinss is metric of total squared varition (lower is better), 
+
+broom::glance(kmeans_obj)]
+g
+
+-   step5 optimze by setting up a grid
+
+create function that calcules kmeans with cneters (and nstarts if you want) to be iterated with an input table and pipe this into glance
+
+- plot tot.withinss and cneters to see which centers is optimized
+
+# kmeans example
+
+```{r}
+devtools::load_all("/home/hagan/R/fpaR")
+sales_by_store_product <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(sales_amount=unit_price*sales_quantity) %>% 
+  group_by(store_key,product_key) %>% 
+  summarise(sum_usd=sum(sales_amount),.groups = "drop") %>% 
+  arrange(product_key) %>% 
+  group_by(store_key) %>% 
+  mutate(prop_usd=sum_usd/sum(sum_usd)) %>% 
+  select(store_key,product_key,prop_usd) %>% 
+  pivot_wider(names_from=product_key,values_from=prop_usd,values_fill = 0,names_repair = janitor::make_clean_names)
+
+
+kmeans_obj <- sales_by_store_product %>% 
+  select(-store_key) %>% 
+  kmeans(centers=15,nstart=100,iter.max = 100)
+
+stores_with_kmeans <- kmeans_obj %>% broom::augment(data=sales_by_store_product) 
+kmeans_obj %>% broom::glance()
+
+
+kmeans_mapper <- function(centers=3) {
+  sales_by_store_product %>% kmeans(x=.,centers=centers,nstart = 100,iter.max=100)
+  
+}
+
+grid_kmeans <- tibble(centers=1:15) %>% 
+  mutate(kmeans_obj=map(.x=centers,~kmeans_mapper(.x)),
+         kmeans_output=map_df(kmeans_obj,broom::glance)
+  )
+
+grid_kmeans %>%
+  unnest(kmeans_output) %>% 
+  select(centers,tot.withinss) %>% 
+  ggplot(aes(x=centers,y=tot.withinss))+
+  geom_point()+
+  geom_line()
+
+```
+
+## umap
+
+very simliar to kmeans just without addition arguments
+stregth is merge the kmeans output with the kmeans output so that you can mpa them together
+then manually inspect original data frame by the new clusters to see what patterns or attributes (eg. can sort by some cumsum and attributes to look for patterns)
+
+
+step1 
+- use same normalized model
+- only select numeric data
+- pass through to umeans
+
+step2
+- take hte umeans$layout covert to tibble, rename columns and bind with framing column
+
+
+
+
+```{r}
+
+library(umap)
+umap_obj <- sales_by_store_product %>% 
+  select(-store_key) %>% 
+  umap()
+
+umap_tbl <- umap_obj$layout %>%
+  as_tibble() %>% 
+  set_names(c("x","y")) %>% 
+  bind_cols(sales_by_store_product) %>% 
+  select(store_key,x,y)
+
+umap_tbl %>% 
+  ggplot(aes(x,y))+
+  geom_point()
+  
+kmeans_result_tbl <-   grid_kmeans %>%
+    filter(centers==8) %>% 
+    pull(kmeans_obj) %>% 
+    pluck(1) %>% broom::augment(sales_by_store_product) %>% 
+    relocate(last_col()) %>% 
+    select(.cluster,store_key)
+
+
+kmeans_result_tbl %>% 
+  left_join(umap_tbl,by="store_key") %>% 
+  ggplot(aes(x=x,y=y,col=.cluster))+
+  geom_point()
+
+```
+
+
+[https://juliasilge.com/blog/un-voting/]
+
+-   You can also use recipes for PCA or umap analysis, the example below goes through that
+
+-   This is helpful in an unsupervised way to understand what is going on with
+your data to find hidden patterns
+-   How to start?
+    -   Identify the variable you want to understand eg. stores, customers,
+    countries, plants etc
+    -   For each of those levels get some summarized supporting attributes, eg.
+    number of transction, mean,min,max or mode, standard deviation,etc. 
+        -   This will help you later understand the groups to see what type of 
+        levels were grouped together
+        -   Try to find arguments that create a narrative (Eg. mean of purchase
+        can be proxy for expensive for loss cost purchaes, number of transaction
+        can be proxy for business of the store, etc)
+-   Then, based on the question find a variable or variables to normalize that
+answer the question
+
+    -   If you you are trying to understand customer buying patterns then you 
+    want to normalize purchases across products as percentage of that customers
+    total purchases
+
+-   Once you have the variable normalized then you can mass all of the numeric
+normlized variables into pca or kmeans to allow the unsupersvised machine
+learning techniques to categorize 
+
+-   It will be helpful to create a grid of possible centers (groups) to know 
+when the sum of squares to use
+
+-   From there assign each kmeans/pca group to the overall dataset along with 
+the categories that you already established and you can now plot your data 
+together
+
+-   From the descriptions you assigned you can see how they related to each 
+other
+
+```{r}
+unvotes <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/unvotes.csv")
+issues <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/issues.csv")
+
+```
+
+-   When structuring PCA 
+        
+        -   the group column that you want to ID the results by in scatter plot (eg. country, customer, business scenario) is in the rows
+        -   the detail attribute you want to understand the resutls by in a bar chart it by is in the column
+                -   Typically the detail factors you want to understand things by
+                -   This can be an ID that links to other ids if you want to fill in the results eg( a grouping column)
+                -   You need to have this in a way that there are observationsin each category
+                -   So it should be a dimension where there is no missing data instead it should have 0 observations
+        -   the attribute you want to measure by -- is body
+-   All the body must be normalized with no missing data
+
+
+```{r}
+unvotes_df <- unvotes %>%
+  select(country, rcid, vote) %>%
+  mutate(
+    vote = factor(vote, levels = c("no", "abstain", "yes")),
+    vote = as.numeric(vote),
+    rcid = paste0("rcid_", rcid)
+  ) %>%
+  pivot_wider(names_from = "rcid", values_from = "vote", values_fill = 2)
+```
+
+-   Then follow the recipe steps to normalize and add `step_pca()` with predictors and number of computations
+-   Ensure to add `prep()` to apply the steps then `bake()` to see the data
+
+
+```{r}
+
+pca_rec <- recipe(~., data = unvotes_df) %>%
+  update_role(country, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors(), num_comp = 5)
+
+pca_prep <- prep(pca_rec)
+```
+
+
+-   From there you can visualize the pca results with the Id column
+
+
+```{r}
+bake(pca_prep, new_data = NULL) %>%
+  ggplot(aes(PC1, PC2, label = country)) +
+  geom_point(color = "midnightblue", alpha = 0.7, size = 2) +
+  geom_text(check_overlap = TRUE, hjust = "inward", family = "IBMPlexSans") +
+  labs(color = NULL)
+```
+
+-   alternatively you can see the traditional PCA categories by `tidy()` the results
+-   filter the components you want to see
+-   
+```{r}
+pca_comps <- tidy(pca_prep, 2) %>%
+  filter(component %in% paste0("PC", 1:4)) %>%
+  left_join(issues %>% mutate(terms = paste0("rcid_", rcid))) %>%
+  filter(!is.na(issue)) %>%
+  group_by(component) %>%
+  top_n(8, abs(value)) %>%
+  ungroup()
+
+pca_comps %>%
+  mutate(value = abs(value)) %>%
+  ggplot(aes(value, fct_reorder(terms, value), fill = issue)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~component, scales = "free_y") +
+  labs(
+    x = "Absolute value of contribution",
+    y = NULL, fill = NULL,
+    title = "What issues are most important in UN voting country differences?",
+    subtitle = "Human rights and economic development votes account for the most variation"
+  )
+```
+i
+
+
+### prep & juice & bake
+
+- applies recipes steps to a data set - prep(rec,new_data=null)
+
+[prep_and_bake](https://www.tmwr.org/dimensionality.html)
+
+```{r}
+rec_adv<- recipes::recipe(price ~ ., data=training_tbl) %>%
+  step_string2factor(c("cut","color","clarity")) %>% 
+  recipes::step_normalize(all_numeric_predictors()) %>% 
+  step_zv(all_predictors()) %>% 
+  step_dummy(c("cut","color","clarity","bin_carat"),one_hot = TRUE) %>% 
+  step_rm(price)
+
+
+```
+
+
+```{r}
+rec_basic <- recipes::recipe(price ~ carat, data=training_tbl) 
+  # step_string2factor(c("cut","color","clarity")) %>% 
+  # recipes::step_normalize(all_numeric_predictors()) %>% 
+  # step_zv(all_predictors()) %>% 
+   # step_rm(price)
+```
+
+
+
+
+## combine umeans and kmeans
+
+
+# machine learning models
+
+-   tips and tricks to tuneing and workign with these models
+
+# mermaid diagram on work flow
+
+
+
+
+## regression
+
+linear
+
+mars
+
+xgboost
+
+randomforest
+
+mars
+
+svm
+
+glmnet
+
+rpart
+
+## classification
+
+xgboost
+
+randomforest
+
+rpart
+
+logistic
+
+## time series
+
+prophet
+gluonts
+

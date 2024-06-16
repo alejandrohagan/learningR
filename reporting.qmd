@@ -1,0 +1,82 @@
+---
+title: "business_communication"
+---
+
+
+
+#resources
+
+-   https://www.ibcs.com/
+
+# summary
+
+-   one of the areas that you will spend a lot of time on is on formatting of
+business reports, presentations, graphs, axis, labels, etc
+
+-   one of the most powerful tools you can deploy is establish convention and
+consistency in your reporting standards and conventions
+
+-   However the biggest challenge is getting everyone else to follow the 
+same standards / conventions and in defining the right standard and convention
+
+    -   Did you define at a high enough level? 
+
+    -   Are you too accomodating of the all nauce / details/ exceptions which 
+    creates an overly complex framework?
+
+    -   Are you too high level which isn't reflecting the purpose of the 
+    framework which is to simplify overall framewor 
+
+-  While ultimately this can be overwhelming, below are some helpful suggestion
+in how to approach consistency
+
+-    the added advantage of this approach is that it will make it easier 
+for you to create packages and functions to improve productivity
+
+-   Let us focus on three major aspects of business communication
+
+    -   Graphs
+    -   Reports
+    -   Presentations
+
+-   Dimension that are helpful to be consistent across is
+    -   aes()
+        -   colors (both outline and fill)
+        -   shapes
+    -   text / labels
+        -   units
+        -   text (title, font, capitalization, etc)
+        -   time periods
+    -   values
+        -   values (positive/negative)
+    -   Other
+        -   highlights / focus areas
+        -   aggregated vs. individual values
+        -   reference points
+
+# Graphs 
+
+-   At the beginning of your report I strongly recommend defining your key
+legends, abbreviations
+
+-   You can consider defining your color scheme upfront and giving assigned 
+labels and data dictionary for how the work will be completed
+
+## Convenions
+
+-   Title Concept
+        
+        -   title=Take away message (what is the key message you want the user
+        to understand)
+        -   subtitle= What is it (dimension, units) and timeframe
+        -   plot label=sample size (how many observations are include and
+        mention of missing vs. excluded data
+        
+-   Title and Structure
+-   Scenario notation
+    -   patterns (solid, fill, checkered)
+    -   colors
+    -   font style
+-   Absolute vs. relative variance
+-   Proper scaling
+-   missing data and data size

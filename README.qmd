@@ -1,0 +1,356 @@
+ ---
+title: "Readme"
+format: gfm
+---
+
+This is a draft of my book "Bridging the Gap: Learn R Alongside Excel - a Survival Guide for Corporate Environments" which documents my 10 year learning journey of business intelligence.
+
+Why do we need another book about R or Excel?
+
+While there are amazing books about R, specifically in the [www.bigbookofR.com](www.bigbookofR.com) I have found that they either
+
+-   Tend to be overly focused on statistics or theory where the application to the Corporate environment may not always be immediately understood
+-   Are too beginner focused that do not take into account the challenges of data reporting in a Corporate environment
+
+
+# Mission and Vision:
+
+After reading this book you will:
+
+-   You will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness and not theory (as defined by your team & maintenance of the reports you build)
+
+-   We will cover some introductory concepts however, the focus is mainly on application but we will direct you to resources for additional learning
+
+-   There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be ready for
+
+# Introduction
+
+I've scoured every tip, every yahoo message board, every stackoverflow/ mr. excel, . I've read all the XX for dummy books, blogs, secret forums. Youtube videos for days. Udemy? Done it. XXX I know it. I've reached all the dead ends. I've stared at the screen frustrated. I've been in your shoes as we data increases yet tools get more complicated. Promises made and promises broken.
+
+But I've cried, I've sweat blood and cried tears so that you don't have to. After working years in financail plannning, budeging , analysis, manipulating, system data, external data, data meant to help that hurts, non standard data, excedl models that are so large you pray that they
+
+But there is a solution. If you are dreading your monthly report, your weekly stewardship and KPIs, I am here to tell you that this book will get you answers. Answers that you can use today to fix your problems. No complex macros to learn, no advanced languages. This will solve 80% of your problems, and will point you towards resources to solve the remaining.
+
+This is meant to quickly refrence guide. I will teach you patterns techniques so that you can quickly and efectively get to solutions to yoru prblems. This means building up your analysis frameowrks and tool kits.
+
+If you’ve been coutning, you've noticed I've used "effective" almst 15 times. What do I mean by that, I'm balancing your time, With all the skills, you can (and some of you should) signficantly advanced your knowledge but what happens? For many of you, you'll build a tool only you can use, you will need to spend signficantly amoutn of your time learning these skills and testing these skills. Things will go wrong. You will be frustrated, eventually you'll get it right, you will be better for it. But then you will move, the person replacing you will have no clue what you are doing and will quickly undo it, and sure you've learnt an advance skill, but unless your organization is build around that level of skill standard - you may not intend it but you will do more harm than good.
+
+It also means you will be able to do a typical problem in an defined amoutn of time. Trust me, there is no point reading this if you can't do a simple analysis in 15 minutes. Why? Because you spent time training on to have any benefit with your work.
+
+By the time you are done, you will gladly look forward to data. It will not intimidate you. You will be excited to quickly semi automate many of your processes. You will be confident. You will be focus on value and process.
+
+# My assumption about you
+
+-   You regularly use excel for most of your reporting, visualizations and presentations
+-   You regularly inherit other people's spreadsheets that are challenging to maintain, update or change
+-   Requests for additional information are me with 
+
+# Book structure
+
+## Vocabulary that is helpful to learn
+
+File Type 
+
+(excel, datasource, txt, csv)
+
+
+Tables vs. Not Tables
+
+Basically, you need ito start thinking of your data in tables, this will seriously unlock your potentials and make your data much easier to work with
+
+Data Structure:
+
+Pivoted vs. unpivoted
+
+
+Consistency of data?
+
+Are you new columns added? Will new categories be added? Will categories be split open
+
+Granularity of inputs/outputs
+
+You are going to quickly learn how confusing data can be with granularity, even simple questions of
+
+Column types: Text, numbers, dates, mixed, etc
+
+Excel makes this mostly easily for you but the reality is ou need to be explict in a column type
+
+Variability of inputs / outputs
+
+Does your data have inputs or sensitivities? Do you need
+
+Size
+
+Data is big and can quicky overwhelm. This will become painful true if your orgnaization is using excel for everything. Get ready for megasize files, that link to megsize files that link further to megasize files. No joke. Excel files get currupted, links are broken. Your life will suffer. Sometimes thee isn't a way out of that but sometimes there is.
+
+Convention: Naming, colors, fonts
+
+Color convention
+
+# High level framework to think about data
+
+ETL+C+V
+
+This part is pretty crucial for you to start to understand as you will think through your process better. It will help you to manage others that send you data or that you send data too. Many of your data will have cross functions inputs. You will need to send out inputs, receive inputs, plug those, document those, have a way to track changes, etc
+
+## Extract:
+
+This is often the most critical part. It’s the part that can make your life incredible easy and incredibly simple
+
+Consistency of data
+
+Structure of data
+
+Variability of data
+
+## Transform
+
+The more you get E right the less you need to do with T, but that being said, there is some you may need to do, adding columns, unpivot / pivoting, changing data types, grouping,
+
+## Load
+
+In this context, it will be either excel, connection only or data model but it could mean loading it into a cloud system or other input files
+
+## Calculate
+
+Now you do your actual calculations on your data, this can be in a structured template, or custom formulas, but this is when you will use either basic or advanced formulas
+
+## Visual
+
+This is how you take complex, confusing, granular information and make it understandable and easy to understand. This is where your learnings are applied
+
+Application
+
+Data Structure: Pivot vs. Unpivot
+
+Pros & Cons
+
+Pros
+
+Easily see information
+
+Which one is easier to find and understand
+
+Identify patterns
+
+Cons
+
+Terrible to use in analysis
+
+Information may already be aggregated and you loose granularity in what happens
+
+May identify patterns but not the ones that we need
+
+If you connect it to, very difficult to automate
+
+Toolkit
+
+Advanced formulas, edit connections
+
+Power query to transform
+
+Understand why this is important, lets take a simple example side by side
+
+Two datasets, side by side, exactly same information just structured differently
+
+Try to find the answers to these questions, using your existing excel skills
+
+Unpivoted Data
+
+Tables vs. Tibbles
+
+How to add data
+
+Adding column
+
+How is this different?
+
+It applies against all rows
+
+If you reference a column, it references all columns
+
+If you want a subset, you will need interim columns to aggregate or dissect data in separate columns
+
+Adding rows
+
+Generally automatically puts into table, we will see how this is useful
+
+Form
+
+How to make data entry easier
+
+How to interact
+
+Filter
+
+Basic to advanced options
+
+Sort
+
+Basic to advanced options
+
+Add slicer
+
+Caution - this can be useful addictive and then super frustrating
+
+Reference tables
+
+Basic:
+
+Naming tables / headers
+
+Try to keep with some consistnecy, you'll see why this is useful
+
+Here's a useful sheet to help
+
+Writing formulas against tables
+
+Bucket your Formulas
+
+AGGREGATION
+
+LOGIC
+
+REFERENCE
+
+STATISTICAL
+
+MATHETICAL
+
+INFORMATIONAL
+
+Benefits
+
+Intellisense
+
+You will love this and get addicted to his especially if you are building complex models
+
+Multi-conditional formula
+
+Basic ones
+
+Sumif
+
+Averageif
+
+Countif
+
+Minif
+
+maxif
+
+Intermediate:
+
+These are great, but what happens when youneed more?
+
+Medianif?
+
+Modeif?
+
+Percintileif
+
+Stdevif
+
+Geomeanif
+
+Anyexcelformulaif
+
+Introduce greatest formula ever - aggregate
+
+n cell F2, type this formula =MEDIAN (IF ($A$2:$A$12=$E2,IF ($C$2:$C$12=F$1,$B$2:$B$12))), and press Shift >
+
+Having graphs against formulas
+
+How to reference to make it dynamic
+
+Pivot tables
+
+Connecting to a table
+
+Using a pivot table basics
+
+Pivot table naming
+
+Forms and fields
+
+Replicate what we did in up above
+
+When to use pivot tables
+
+Much easier
+
+Much more flexibility
+
+Only the beginning
+
+Filter data (recreate up above)
+
+Conditional formatting or spark cells
+
+Intermediate skills
+
+Change pivot table formats
+
+View / perspective
+
+Color formatting
+
+Saving formatting
+
+Reference cells (both ways, and pluses and minus to both)
+
+Interpreting summarized data
+
+Use statistics description - think beyond your data
+
+Create reports summary
+
+Limitations on multiple pivot tables
+
+How to structure
+
+Caution on pivot tables
+
+Advanced
+
+Custom formulas - I put it but only because not everyone does power bi but try not to use it
+
+How to build reports with pivot tables or tables
+
+Before we talk technical tips / tricks you need to understand framework
+
+Automate, automate, automate
+
+Variation is the enemy, consistency is the savior
+
+Data contract with input providers
+
+Checks to ensure you don't have things missing
+
+Understand that we have difference between types of data
+
+Facts vs. reference ( or dimensions)
+
+Examples of that
+
+Context transition
+
+Need to fully understand how this looks in Excel vs. power pivot
+
+If I wanted one variable to defined in context in which I created it vs the context that it currently is, how would that looks like?
+
+Probably need to duplicate the data, eg. Have one table that has the definition context (say average of category sales) and then need another area where I execute the formula
+
+Time Intelligence calculations in R | by Hamza Rafiq | Towards Data Science
+
+Time intelligence functions
+
+Library ideas
+
+ABC analysis and variance with group vs. overall population
+
+Nonstandard date calendars
+
+4-5-4 calendar (according to retail federation standards for leap year treatment)
+
+4-4-5 calendar

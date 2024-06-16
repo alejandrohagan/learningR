@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Aug 14 11:21:59 CDT 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0189-f4da-aeb4-000022a2ebf0 
+on database directory memory:/home/hagan/R/learningR/databaseName=metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5ffd2b27 
+Loaded from file:/home/hagan/spark/spark-3.3.0-bin-hadoop2/jars/derby-10.14.2.0.jar
+java.vendor=Ubuntu
+java.runtime.version=11.0.20+8-post-Ubuntu-1ubuntu122.04
+user.dir=/home/hagan/R/learningR
+os.name=Linux
+os.arch=amd64
+os.version=6.4.6-76060406-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

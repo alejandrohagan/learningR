@@ -1,0 +1,78 @@
+---
+title: "Untitled"
+format: html
+---
+
+```{r}
+#| label: setup
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+library(bslib)
+library(tidyverse)
+library(htmlwidgets)
+library(bsicons)
+library(shiny)
+```
+
+
+
+```{r}
+#| label: card
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+bslib::card(
+  
+  bslib::card_title(
+    "This is the title header"
+  )
+  ,bslib::card_body(
+    shiny::p("this is a paragraph body")
+    ,"this is another paragraph body"
+    ,shiny::markdown("[link](www.bbcnews.com)")
+    ,full_screen=TRUE
+  )
+  ,theme="purple"
+)
+```
+
+```{r}
+bslib::value_box(
+  title = "I got",
+  value = "99 problems",
+  theme = "purple",
+  showcase = bs_icon("music-note-beamed"),
+  p("bslib ain't one", bs_icon("emoji-smile")),
+  p("hit me", bs_icon("suit-spade"))
+)
+```
+
+
+```{r}
+ value_box(
+    title = "3rd value",
+    value = "789",
+    showcase = bs_icon("pie-chart"),
+    theme = "pink",
+    p("The 4th detail"),
+    p("The 5th detail"),
+    p("The 6th detail"),
+    "test"
+  )
+```
+
+:::{.card}
+
+## hello
+
+text
+:::
+
+

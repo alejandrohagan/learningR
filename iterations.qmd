@@ -1,0 +1,2095 @@
+---
+title: "iterations"
+---
+
+This chapter review iterations, specifically how do we apply one or more functions/ transformation to each row(s) or column(s) so that you don't need to repeat yourself.
+
+Traditionally this is done with what is called a for loop - almost all programming languages have them and R is no exception. They are not challenging but for new comers it can represent a paradiam shift in how you think about your data. 
+
+If you got to this point of the book and choose to not go further that is okay! you should smile in your accomplishment in how much you have done - you are more advanced then the lion's share of people out there and you will benefit.
+
+However if you are willing to push yourself just a bit further you will find that enormous incremental benefits - truly the lion's share of the benefits awaits you.
+
+This section can be intimidating for excel users not because it is hard but more than it is not as visible or transparent what is happening. Unlike Excel where you can trace what is happening in each calculation cell, here, it will be a bit more opaque which normally isn't an issue until you want to validate the findings or problem solve.
+
+Don't worry, we are going to solve this for you.
+
+We will show what a traditional for loop mainly because its the corner stone of what is going on here and no matter what scripting language you use this is a critical skill to learn.
+
+However, you will see that it is super tedious. We won't be using for loops, not because there isn't anything wrong with them but more because we are lazy and want to do as little typing as possible.
+
+There is a great speech by hadley wickam on [purr] (https://www.youtube.com/watch?v=rz3_FDVt9eg) so that you can understand the approach.
+
+
+there are two frameworks that we will use
+
+-   apply()
+-   map()
+-   rowwise()
+
+We will show numerous examples of common problems that you will most likely encourage and give you the framework and understanding of how to overcome these issues.
+
+## What is a for loop anyways?
+
+```{r}
+#| label: for-loop
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+library(tidyverse)
+
+
+# select only numeric columns
+
+df <- diamonds %>% 
+  select(where(is.numeric))
+
+
+
+input<- df |> as.list()
+
+
+out <- vector("list", length = length(input))
+
+
+for (i in seq_along(input)) {
+  out[[i]] <- quantile(input[[i]], 0.25, na.rm = TRUE)
+}
+
+names(out) <- names(df)
+
+
+
+```
+
+
+
+## Tools for your toolkit
+
+Traditionally, you will learn how how to use for loops to do iterations
+
+This is valid and to be honest, it is a skill you should learn as almost universal in all programming languages and other people will share code with it
+
+We are taking a non-traditional approach and will first learn some alternative frameworks which I find more visutally helpful to learn
+
+Then we will pivot for loops when we get fo functions
+
+`sample()`
+`replicate()`
+`crossing()`
+`rowwise()`
+`accumulate()`
+`map()`
+
+Now there are two approaches to iteration basically what we can simplify to  column wise operations vs. row wise operations.
+
+While this may seem unusually complex, it is not, its just a matter of convention and depending on what you are trying to do one approach will be easier to use than the other but both can do anything that the other can.^[I think]
+
+
+
+```{r}
+library(tidyverse)
+
+
+df <- diamonds %>% 
+  select(where(is.numeric))
+  
+
+df %>%
+  map(.x=.,quantile,c(25:75/100)) %>% 
+  pivot_longer(-colname) %>% 
+  pivot_wider(names_from = colname
+              ,values_from = value) %>% 
+  select(-name) %>% cor
+
+
+reduce(.x=1:10,~.x+.y,.init = 100,.dir = "forward")
+
+df=map(
+  letters[1:3]
+  , ~ sample(1:10, 15, replace = T)
+  )
+
+
+
+diamonds %>% 
+  select(where(is.numeric)) %>% 
+  map(.x=.,quantile,.25)
+
+
+
+
+```
+-Takes arguments and seperates that into lists (if it comes in as data frame)
+-   Assign each split list a variable called .x
+-   Takes one list at a time and applies the function to it (.x)
+-   Captures the results as a list or a specified output
+-   you an see that column title carries forward with the output so it is actually a named lists
+
+
+```{r}
+
+df <- select(diamonds,where(is.numeric))
+
+ncol(df)
+
+out <- vector(mode = "list",length = 7)  
+
+
+for (i in 1:7) {
+
+out[i]=mean(df[[i]])
+
+}
+out
+
+
+
+```
+
+
+## Iterations with vectors and iterations
+
+
+```{r}
+
+dat <- diamonds |> 
+  select(
+    where(\(x) is.numeric(x))
+  ) |> 
+  as.list()
+
+
+mean(dat$carat)
+
+mean(dat$depth)
+
+mean(dat$table)
+
+mean(dat$price)
+
+mean(dat$x)
+
+mean(dat$y)
+
+mean(dat$z)
+```
+
+
+
+This is tedious to write and inefficient. What if we have 100's of objects? That would ruin our day. 
+
+So whats an alternative. We could do a for loop but we can more straight of the point just use your new favorite function `map()` family of functions.
+
+In particular if you are working with list and vector this will simplif your life tremendously.
+
+Le't see it action
+
+
+```{r}
+map( 
+  .x=dat
+  ,\(x) mean(x)
+)
+```
+
+
+This is taking your list and passing through each element one by one. then with that element our function is doing something with it.
+
+
+
+
+
+
+
+This can be helpful in its on write, such as apply arguments to columns and rows here are some common examples, however the power really shines when you have custom functions (or even just regular functions)
+- Change a column from type a to type b
+
+-   Get attributes of a column
+
+
+
+So how do we combine some of year to date learnings of tidyselect helpers, group_by()+sumamrize(), rename_with(), and our new map() friend?
+
+
+
+
+Get ready to meet across(), an insanely useful and powerful verb that you will use to great satisfiction
+
+
+Some  of the challenges in the many models approach is how to refer to variables variables when they are part of the dataframe you are iterating over or a column from the input column or from the global environment
+
+
+## how to use nested map
+
+- if access arguments in a column just access column regularly - no prefix
+- if access nested data frame you can use .x$var
+- if column is quoted then use .data[[var]] and define var="quoted var"
+- if column is inserted as position, you can use .data[[pos]] for position arguments
+
+*Considerations*
+-   need to be mindful about the formula
+      
+    -   tidy friendly formula
+    -   has data argument
+    -   does not have data argument
+-   helpful links
+[r4epi purr](https://www.r4epi.com/using-the-purrr-package.html)
+[paulvan purr](https://paulvanderlaken.com/tag/purrr/)
+framework
+[jenny bc](https://jennybc.github.io/purrr-tutorial/)
+[got](http://zevross.com/blog/2019/06/11/the-power-of-three-purrr-poseful-iteration-in-r-with-map-pmap-and-imap/)
+[presnetation on advance purr functions](https://hendrikvanb.gitlab.io/slides/purrr_beyond_map.html#8)
+
+[going off the map](https://hookedondata.org/posts/2019-01-09_going-off-the-map-exploring-purrrs-other-functions/)
+[scraping data with purr](https://colinfay.me/purrr-web-mining/)
+[rowwise purr](https://thatdatatho.com/rowwise-purrr-pmap-apply-split-apply-combine/)
+
+[modify_if purr](https://thatdatatho.com/rowwise-purrr-pmap-apply-split-apply-combine/)
+[additional purr tricks](https://www.brodrigues.co/blog/2017-03-24-lesser_known_purrr/)
+[overview presentatoin](https://shannonpileggi.github.io/iterating-well-with-purrr/#/title-slide)
+[additional purr functoins](https://rstudio-pubs-static.s3.amazonaws.com/602410_2171106b3c7d429b96e606e8e41960a4.html)
+[examples of purr](http://joshuamccrain.com/tutorials/purrr/purrr_introduction.html)
+[applied purr](https://www.weirdfishes.blog/blog/practical-purrr/)
+[addition purr fucntions](https://www.emilhvitfeldt.com/post/2018-01-08-purrr-tips-and-tricks/)
+
+```{r}
+
+library(tidyverse)
+
+df <- mtcars %>% 
+  rownames_to_column("brand")
+
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+nested_df
+
+
+  
+
+
+
+```
+
+-   nested dataframe with names of columns directly in formula
+
+```{r}
+df
+
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+# this works
+agg_fun <- function(df) {
+  sum(df$hp - df$drat)
+}
+
+# this doesn't work
+agg_fun2 <- function(df) {
+  sum(hp - drat)
+}
+
+nested_df %>% 
+  mutate(test=map_dbl(data,agg_fun))
+
+
+
+
+  
+  
+```
+-   nested dataframe with names passed on as arguments in formula (unquoted)
+
+```{r}
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+agg_fun <- function(df,var1,var2) {
+ x=df %>% pull({{var1}})
+ y=df %>% pull({{var2}})
+ print(sum(x - y))
+}
+
+nested_df %>% 
+  mutate(test=map_dbl(.x=data,~agg_fun(df=.x,hp,drat)))
+
+```
+
+
+
+```{r}
+library(tidyverse)
+tibble(
+  x = 1:10,
+  y = 100:109,
+  r = cor(x, y))
+
+
+```
+
+
+-   nested dataframe with with names reference from source data as arguments in formula
+
+```{r}
+nested_df <- df %>% 
+  group_by(gear) %>% 
+  nest()
+
+agg_fun <- function(df,var1,var2) {
+ x=df %>% pull({{var1}})
+ y=df %>% pull({{var2}})
+ print(sum(x - y))
+}
+
+sel_fun <- function(df,...) {
+  df <- df %>% 
+    select(any_of(c(...)))
+
+sum(df[[1]] - df[[2]])
+  
+}
+
+
+
+nested_df %>% 
+  mutate(test=map_dbl(.x=data,
+                      ~sel_fun(df=.x,"qsec","mpg")
+                      )
+         )
+
+```
+
+-   nested dataframe with names names references as list from source data as arguments in formula
+
+-   trying to do aggregated function (eg return a single value) to each column of a table based on fixed value
+  -   all_of() for quoted columns
+  -   any_of() for quoted columns
+  -   use this when you want to select the column names from vector
+  
+- quos or quos or quo_name()
+    
+    -   example
+      map_dfr(
+      .x = quos(age, ht_in, wt_lbs, bmi),
+      .f = continuous_stats
+      )
+      
+- if you use this then you pair this with {{}} - you don't need to use "" marks
+      
+[quos and purr](https://www.r4epi.com/using-the-purrr-package.html)
+
+
+We haven’t seen the quos() function before. It’s another one of those tidy evaluation functions. You can type ?rlang::quos in your console to read more about it. When we can wrap a single column name with the quo() function, or a list of column names with the quos() function, we are telling R to look for them in the data frame being passed to a dplyr verb rather than looking for them as objects in the global environme
+  
+
+```{r}
+
+#delcare variables
+vars <- c("mpg","wt","magic")
+pos <- c(2,7)
+
+
+# direct and unquoted based on name or position
+df %>% mutate(across(c(mpg,wt),
+              max))
+df %>% mutate(across(c(2,7),mean))
+# direct and quoted
+df %>% mutate(across(c("mpg","wt"),
+              max))
+
+# indirect and quoted based on name or postion
+df %>% mutate(across(any_of(vars),mean))
+df %>% mutate(across(all_of(pos),mean))
+
+
+
+
+```
+
+
+
+## one note
+
+-   purrr?
+-   vscode?
+-   timeseries?
+
+```{r}
+lass <- tibble(
+  ht_in = c(70, 63, 62, 67, 67, 58, 64, 69, 65, 68, 63, 68, 69, 66, 67, 65, 
+            64, 75, 67, 63, 60, 67, 64, 73, 62, 69, 67, 62, 68, 66, 66, 62, 
+            64, 68, NA, 68, 70, 68, 68, 66, 71, 61, 62, 64, 64, 63, 67, 66, 
+            69, 76, NA, 63, 64, 65, 65, 71, 66, 65, 65, 71, 64, 71, 60, 62, 
+            61, 69, 66, NA),
+  wt_lbs = c(216, 106, 145, 195, 143, 125, 138, 140, 158, 167, 145, 297, 146, 
+             125, 111, 125, 130, 182, 170, 121, 98, 150, 132, 250, 137, 124, 
+             186, 148, 134, 155, 122, 142, 110, 132, 188, 176, 188, 166, 136, 
+             147, 178, 125, 102, 140, 139, 60, 147, 147, 141, 232, 186, 212, 
+             110, 110, 115, 154, 140, 150, 130, NA, 171, 156, 92, 122, 102, 
+             163, 141, NA)
+)
+
+
+cor.test(lass$ht_in,lass$wt_lbs,na.rm=TRUE) %>% broom::tidy()
+```
+
+
+### purrr framework
+
+[purr gapminder example](https://www.rebeccabarter.com/blog/2019-08-19_purrr#simplest-usage-repeated-looping-with-map)
+
+
+```{r}
+gapminder_orig <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv")
+
+
+gapminder_orig
+```
+
+
+[purr good pictures](https://dcl-prog.stanford.edu/purrr-extras.html)
+
+
+## test
+
+
+
+```{r}
+
+eda_fun <- function(df) {
+df %>% tibble(distinct=n_distinct(.x),
+                   range=range(.x),
+                   avg=mean(.x),
+                   median=median(.x)
+                   )
+  )
+}
+
+
+  tibble(
+    name=colnames(mtcars$mpg),
+    class=class(mtcars$mpg),
+    distinct=n_distinct(mtcars$mpg),
+    range=paste0(range(mtcars$mpg)[1]," - ",range(mtcars$mpg)[2]),
+    avg=mean(mtcars$mpg),
+    median=median(mtcars$mpg),
+    missing=sum(is.na(mtcars$mpg))
+    )
+
+  
+gapminder_nested <- gapminder_orig %>% 
+  group_by(continent) %>% 
+  nest()  
+
+args <- tibble(cols=c("pop","lifeExp","gdpPercap"))
+
+new_df <- gapminder_nested %>%
+  crossing(args)
+
+cus_mean <- function(df,cols) {
+
+  cols <- quos(cols)
+  
+  mean(df$cols)
+  
+}
+
+new_df %>% 
+mutate(avg=
+           map2_dbl(.x=data,
+                    .y=cols,
+                    function(.x,.y) .x %>% pull(.y) %>% mean(.,na.rm=TRUE),.progress = TRUE
+                    )
+         )
+```
+## purr continueod
+
+
+group_map()
+
+this works more like summarize on a grouped dataframe, whereas regular map() works more lke mutate (in that you need a mutate to add a couple)
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+df <- data.frame(
+  group = c("A", "A", "B", "B", "B"),
+  value = c(1, 2, 3, 4, 5)
+)
+
+df %>%
+  group_by(group) %>%
+  group_map(~ mean(.$value))
+
+df %>%
+  split(.$group) %>%
+  map(~ mean(.$value))
+
+
+df %>%
+  group_by(group) %>%
+  nest() %>%
+  mutate(mean = map_dbl(data, ~ mean(.$value))) %>%
+  select(group, mean)
+
+
+remotes::install_github("TimTeaFan/loopurrr")
+
+
+```
+
+
+### Rowwise
+
+
+An alternative approach (which actually is equal to the pmap approach if every column was used) is rowwise
+
+#### Simple
+
+1. use `nest_by()` to automatically group,nest and rowwise()
+2. Then you can create a new column, and reference the data column to apply a function but ensure it is wrapped with `list()`
+3. you can continue to use other broom function such as broom::tidy or broom::glimpse to get the model results
+4. unnest to get the results
+
+Advantage
+-   easy to do
+
+Disadvantage
+
+
+```{r}
+
+dplyover::csat
+
+lookup_vec <- set_names(names(csatraw), names(csat))
+
+csat_named <- csatraw |>
+  rename(any_of(lookup_vec)) |>
+  select(cust_id, type, product, csat,
+         ends_with("rating"))
+
+
+my_formula <- csat ~ postal_rating + phone_rating + email_rating +
+  website_rating + shop_rating
+
+
+csat_named %>% 
+  nest_by(product) %>% 
+  mutate(mod=
+           list(
+           lm(
+             my_formula
+             ,data=data
+             )
+           )
+         ,modstat=list(broom::glance(mod))
+         ,res=list(broom::tidy(mod))
+         ) %>% 
+  unnest(modstat)
+```
+
+- have to have mutiple versions of your model
+
+
+### Intermediate
+
+compare model subsegment to overall model 
+-   for nested column, copy over values with "ALL"
+-   Bind with the original column so that you double the data (however one has a single catagory all)
+
+```{r}
+csat_all <- csat_named |>
+  mutate(product = "All") |>
+  bind_rows(csat_named) 
+```
+
+add additional subgroups based on filtering criteria
+
+-   expand_grid
+-   list
+
+-   first create a list of your arguments
+
+        -   if you want to filter a column in a data set you can put the filter arguments in `expr()` ofr example expr(type!= "reactive")
+        -   you can add a default argument TRUE so that no filter is applied
+-   Then use `expand_grid` against the nested dataframe so that each group gets all the argument criteria
+-   replicate the column arguments names by taking the names of the list arguments and turning them into columns
+-   then you can add a column that will further filter/create subgroups by using the the `eval()` around the fitler argument list
+
+
+```{r}
+filter_ls <- list(
+  All = TRUE,
+  no_reactivate = expr(type != "reactivate")
+)
+
+
+csat_all_grps <- csat_all |>
+  nest_by(product) |>
+  expand_grid(filter_ls) |>
+  mutate(type = names(filter_ls),
+         .after = product)
+
+csat_all_grps_grid <- csat_all_grps |>
+  rowwise() |>
+  mutate(data = list(
+    filter(data, eval(filter_ls))
+    ),
+    .keep = "unused"
+  )
+
+
+
+```
+
+
+
+dynamically name model outputs with `list2()`
+
+
+-you can not only dynamiclly name different list output but also you can give it glue like syntax in the name 
+
+```{r}
+library(rlang)
+csat_all_grps_grid <- csat_all_grps |>
+  rowwise() |>
+  mutate(mod     = list2("{product}_{type}" := lm(my_formula, data = data)),
+         res     = list2("{product}_{type}" := broom::tidy(mod)),
+         modstat = list2("{product}_{type}" := broom::glance(mod)))
+
+```
+
+data less  grids
+
+1. Use expand_grid() to create all the input columns that would have been created with nest_by()
+2. tricky part is how to tell R when we want to refer to an input column vs the dataframe column
+        
+        - by default an unquoted column referes to a dtaframe column so to refer to the list column we must use `env$colname`
+        -
+-   Pass the filter arguments through to the data portion of the formula
+        
+        -   first filter must be all the combinations of your master group so that input table remains whole (using env$colname)
+        -   pass the eval(filter_args) as you did before
+        
+        
+
+```{r}
+
+
+product <- c(
+  "All", unique(csat_named$product)
+)
+
+all_grps_grid <- expand_grid(product, filter_ls) |>
+  mutate(type = names(filter_ls),
+         .after = product)
+
+
+
+all_grps_grid |>
+  rowwise() |>
+  mutate(mod = list(
+    lm(my_formula,
+       data = filter(csat_named,
+                     # 1. filter product categories
+                     .env$product == "All" | .env$product == product,
+                     
+                     # 2. filter customer types
+                     eval(filter_ls) 
+                     )
+       )
+    )
+    ) |>
+  select(! filter_ls)
+
+
+```
+
+
+Build formulas programmatically so that  you can add incrementally add in factors 
+
+- using `expand_grid()`, add in the indepednet variables that you want to use as characters
+-   in the formuala argument use `reformulate()` and referncence the indepdent column variables with the dependent variable
+-   Create a list with a base (starting formula so you put NULL), and then terms you want to add (as quote)
+-   Then create a new column that just contains the formula using `update(old_formula,reformulate(c(".",update_vars)))`
+
+```{r}
+all_grps_grid_final_res <- all_grps_grid_final |>
+
+  rowwise() |>
+
+  mutate(
+    
+  # dynamically name list
+  form = list2( "{product}_{type}_{model_spec}_{dep_vars}" :=
+  # update formula
+    update(my_formula2, # old formula
+           reformulate(c(".", update_vars), dep_vars)) # changes to formula
+  ),
+    
+  mod = list(
+    lm(form,
+  # create data on the fly
+       data = filter(csat_named_top,
+                     .env$product == "All" | .env$product == product,
+                     eval(filter_ls)
+       )
+    )
+  ),
+
+  res = list(broom::tidy(mod)),
+
+  modstat = list(broom::glance(mod))
+
+  ) |>
+  select(product:model_spec, dep_vars, mod:modstat)
+
+```
+
+
+resrouces
+[Timtea Blog](https://tim-tiefenbach.de/post/2023-dplyr-many-models/)
+
+
+
+## alterantives to columnwise iterators
+
+
+dplyover::over(create multiple lead lag against a singel column)
+
+
+```{r}
+tibble(a = 1:25) %>% 
+   mutate(over(c(1:3),
+              list(lag  = ~ lag(a, .x),
+                   lead = ~ lead(a, .x)),
+              .names = "a_{fn}{x}"))
+
+
+
+```
+
+
+```{r}
+iris %>%
+   transmute(
+     crossover(starts_with("sepal"),
+                1:5,
+                list(lag = ~ lag(.x, .y)),
+                .names = "{xcol}_{fn}{y}"))
+```
+
+
+
+```{r}
+iris %>%
+  transmute(across2(ends_with("Length"),
+                    ends_with("Width"),
+                    .fns = list(delta = ~ .x - .y,
+                                sum = ~ .x + .y),
+                   .names = "{pre}_{fn}",
+                   .names_fn = tolower))
+```
+
+
+## Birthday problem
+
+> A room has n people, and each has an equal chance of being born on any of the 365 days of the year. (For simplicity, we’ll ignore leap years). What is the probability that two people in the room have the same birthday?
+
+```{r}
+
+library(tidyverse)
+
+dat <- 
+crossing(
+  people = seq(2, 75, 2)
+  ,trial = 1:1000
+  ) |> 
+  mutate(
+    birthday = map(people, ~ sample(1:365, ., replace = TRUE))
+    ,multiple = map_lgl(birthday, ~ any(duplicated(.)))
+    ) |> 
+  group_by(people) |> 
+  summarize(chance = mean(multiple))
+
+# Visualizing the probability
+ggplot(dat, aes(people, chance)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(y = "Probability two have the same birthday")+
+  geom_smooth(method = "glm",  method.args = list(family = "binomial"), 
+    se = FALSE)
+
+
+library(quantreg)
+glm(chance~people, family = "binomial",data=dat)
+```
+
+## deadly board game
+
+> While traveling in the Kingdom of Arbitraria, you are accused of a heinous crime. Arbitraria decides who’s guilty or innocent not through a court system, but a board game. It’s played on a simple board: a track with sequential spaces numbered from 0 to 1,000. The zero space is marked “start,” and your token is placed on it. You are handed a fair six-sided die and three coins. You are allowed to place the coins on three different (nonzero) spaces. Once placed, the coins may not be moved.
+
+> After placing the three coins, you roll the die and move your token forward the appropriate number of spaces. If, after moving the token, it lands on a space with a coin on it, you are freed. If not, you roll again and continue moving forward. If your token passes all three coins without landing on one, you are executed. On which three spaces should you place the coins to maximize your chances of survival?
+
+
+
+```{r}
+
+
+roll_dice <- function(rolls=1:50,dice_number=1,max_space=50){
+   accumulate(rolls,.f = 
+             function(.x,...){
+               
+               
+               
+           out <-     sample(1:6,dice_number,replace=TRUE) |> sum(.x)
+                  if(out>max_space){
+                      done(out)
+                    } else {
+                      out
+                    }
+               
+},.init = 0)
+}
+
+
+crossing(
+  coin_placement=1:100
+  ,trials=1:100
+  
+) |> 
+  mutate(
+    roll_dice=map(trials,~roll_dice(dice_number = 3,max_space = 100))
+    ,win_indicator=map2(roll_dice,coin_placement,~any(if_else(.y == .x,1,0)))
+  ) |>  
+  unnest(win_indicator) |> 
+  group_by(coin_placement) |> 
+  summarize(
+    prop_winning=mean(win_indicator)
+  )
+
+
+
+ crossing(people = seq(5, 100, 5),
+                            trial = 1:100) %>%
+  mutate(birthday = map(people, ~ sample(365, ., replace = TRUE))) %>%
+  mutate(most_common = map_int(birthday, ~ max(table(.))))
+ 
+ 
+ sample(365,100,replace=TRUE) |> table() |> max()
+```
+```{r}
+cumsum(sample(1:20,1,replace=TRUE))
+
+cumsum(sample(x = 1:6, 20, replace = TRUE))
+```
+
+```{r}
+
+tibble(
+  x=seq(2,100,2)
+) |> 
+  crossing(
+    sim=1:1000
+  ) |> 
+  rowwise() |> 
+  mutate(
+    mod=list(sample(1:365,x,replace=TRUE))
+    ,match=list(duplicated(mod))
+    ,status=list(length(match[match==TRUE])>2)
+  ) |> 
+  unnest(status) |> 
+  group_by(
+    x
+  ) |> 
+  summarize(
+    prop=mean(status)
+  )
+
+
+```
+
+
+
+## Grass hopper
+
+>You are trying to catch a grasshopper on a balance beam that is 1 meter long. Every time you try to catch it, it jumps to a random point along the interval between 20 centimeters left of its current position and 20 centimeters right of its current position.
+
+>If the grasshopper is within 20 centimeters of one of the edges, it will not jump off the edge. For example, if it is 10 centimeters from the left edge of the beam, then it will randomly jump to anywhere within 30 centimeters of that edge with equal probability (meaning it will be twice as likely to jump right as it is to jump left).
+
+>After many, many failed attempts to catch the grasshopper, where is it most likely to be on the beam? Where is it least likely? And what is the ratio between these respective probabilities?
+
+
+## Grandmom
+
+>Each morning, your fairy godmother appears and gives you a chance to play a game. In this game, she deals 10 cards face down. Nine of the cards are winners, and one card is a loser. If you pick a winning card, you get a prize. You can then either take your prize and walk away or play again for the chance to win a second prize. But if you lose on that second play, you walk away with nothing and the game is over for the day. Each time you succeed, she invites you to play again under the same conditions (win yet another prize or lose everything).
+
+>What strategy maximizes the average number of prizes you win each day? And what is that average?
+
+https://fivethirtyeight.com/features/can-you-escape-the-traffic-jam-again/
+
+```{r}
+
+sample(1:10,size=10)
+
+
+tibble(
+  sim=1:100
+) |> 
+  crossing(
+  rounds=1:10
+) |> 
+  rowwise() |> 
+  mutate(
+    cards=list(sample(1:10,size=10))
+    ,winning_card=sample(1:10,1)
+  ) |> 
+  unnest(cards) |> 
+  mutate(
+    winning_round=if_else(cards==winning_card,1,0)
+    ,round=row_number()
+  ) |> 
+  filter(
+    winning_round==1
+    ,.by=c(rounds)
+  )
+
+
+
+```
+
+
+
+# birthday
+
+
+
+>Earlier today, James’s boss was surprised to find out that not only did no one on their team have a birthday this week, but that nobody was celebrating a birthday for the entire month. With a total of 40 people on the team, the probability of this happening seemed to be miniscule.
+
+>But was that really the case? What was the probability that none of the 40 people had birthdays this month? (For the purpose of this riddle, assume that a year consists of 12 equally long months. It’s a sufficiently good approximation!)
+
+>Extra credit: What is the probability that there is at least one month in the year during which none of the 40 people had birthdays (not necessarily this month)?
+
+
+```{r}
+
+3*30
+4*30
+
+replicate(10000,sample(12*30,40,replace=TRUE),simplify = FALSE) |> 
+  map_int(~if_else(any(.x%in% 90:119),0,1)) |> mean()
+
+
+
+
+```
+(https://fivethirtyeight.com/features/can-you-measure-the-mystery-planet/)
+
+
+
+## race
+
+
+
+>The Flash challenges Usain Bolt to a 100-meter race. Bolt runs at an average speed of 10 meters per second. To make it interesting, the Flash decides he will pick a random speed between 5 meters per second and 16 meters per second, with each speed in between being equally likely. (Note that fractional and decimal speeds are included here, rather than just whole numbers.)
+
+>On average, how often would you expect the Flash to win? What would be his average margin of victory?
+
+(https://fivethirtyeight.com/features/can-you-level-up-your-armor/)
+
+
+```{r}
+
+
+speeds <-   crossing(
+    decimals=1:1000/10000
+    ,speed=5:16
+  ) |> 
+  arrange(speed) |> 
+  mutate(
+    speed=speed+decimals
+  )
+if_else(sample(speeds$speed,1000,replace=TRUE)>10,1,0) |> mean()
+
+
+```
+
+## all three
+
+
+>You have three fair coins, three fair dice and a full deck of cards in your possession. First, you flip all three coins and note the number of heads. Next, you toss all three dice and note the number of ones or sixes. Finally, you draw three random cards from the deck of 52 and note the number of hearts.
+
+>What is the probability that all three numbers are the same?
+
+(https://fivethirtyeight.com/features/can-you-crawl-around-the-cone/)
+
+
+```{r}
+
+coin <- c(1,0)
+dice <- 1:6
+cards <- 1:52
+
+sim_three <- function(){
+  
+  
+ coin_out <-  sample(coin,3,replace=TRUE) |> sum()
+ 
+ dice_out <- if_else(sample(dice,3,replace=TRUE)  %in% c(1,6),1,0) |> sum()
+ 
+ card_out <- if_else(sample(cards,3,replace=TRUE)  %in% c(1:13),1,0) |> sum()
+ 
+ out <- if_else(coin_out==dice_out&coin_out==card_out,1,0) 
+ 
+ return(out)
+}
+
+dat <- tibble(
+ x= 1:1000
+) |> 
+  mutate(
+    res=map(x,~replicate(100,sim_three()) |> mean())
+    ) |> 
+  unnest(res)
+
+
+dat |> 
+  mutate(
+    prop=percent_rank(res)
+    ,ci_indicator=if_else(prop>.025&prop<.975,1,0)
+  ) |> 
+  arrange(prop) |> 
+  ggplot(aes(res,fill=factor(ci_indicator)))+
+  geom_histogram(show.legend = FALSE)+
+  scale_fill_manual(values=c("grey30","midnightblue"),)+
+  theme_light()
+
+```
+## lucky coin
+
+
+
+>I have in my possession 1 million fair coins. Before you ask, these are not legal tender. Among these, I want to find the “luckiest” coin.
+
+>I first flip all 1 million coins simultaneously (I’m great at multitasking like that), discarding any coins that come up tails. I flip all the coins that come up heads a second time, and I again discard any of these coins that come up tails. I repeat this process, over and over again. If at any point I am left with one coin, I declare that to be the “luckiest” coin.
+
+>But getting to one coin is no sure thing. For example, I might find myself with two coins, flip both of them and have both come up tails. Then I would have zero coins, never having had exactly one coin.
+
+>What is the probability that I will — at some point — have exactly one “luckiest” coin?
+
+
+```{r}
+
+flips <- 100
+
+lucky <- function(flips=100,initial=100){
+  
+out <- accumulate(
+  
+  .x=1:flips
+  
+  ,.f=function(x,...){
+    
+    out <- sample(
+      c(1,0)
+      ,x
+      ,replace=TRUE
+      ) |> sum()
+    
+    if(out==1){
+      done(out)
+    }else{
+      out
+    }
+    
+    
+  }
+  ,.init = initial
+) 
+
+res <- if_else(out==1,TRUE,FALSE) |> any()
+
+return(res)
+}
+
+dat <- tibble(
+  sim=1:1000
+) |> 
+  mutate(
+    res=map(sim,~lucky(flips=1e4,initial=1e3))
+  )
+
+dat |> 
+  unnest(res) |> 
+  summarise(
+    prop=mean(res)
+  )
+
+```
+
+## Accumulate
+
+you can turn output of one step into
+# the input for the next
+
+you can turn output of one step into the input for the next iteration of your function.
+
+There are three key arguments to understand when using accumulate
+-   accumulate's .x input
+-   accumulate's .fn input -- this is where function that you want to iterate over goes
+-   the output of your function as a new input back into your function (the first arg in your function) and then passing through the .x input to your function (the second arg in your function) 
+-   accumulates .init argument
+
+Between these four arguments you will have a practioner's understanding of the accumulate's function
+
+-   The key to accumulate benefit's is that will take your function's output and then iterate again with output
+-   To accomplish and control the intended output, we need to understand the relationship of the accumulates inputs and your function's input
+-   Let's introduce a simple example that just print's each output separately
+-   For reference, I will call the function's previous output that feeds back to the function as "prev" and I will call the values that you set to .x as .x
+-   Our example will simply start with number 0 and 1 and then take that result and continue adding 1 a total of 6 times
+
+
+```{r}
+library(tidyverse)
+accumulate(
+  .x=10:15             #<1>
+  ,.f=function(prev,.x){    #<2> 
+    
+    print(paste0("prev is: ",prev))  #<3>
+    print(paste0(".x is: ",.x))  #<4>
+     
+    
+    sum(1,prev)          #<5>
+    
+    }
+  ,.init = 0           #<6>
+)
+
+```
+1. The length of this vector is the number of times our function will repeat
+2. our function should always have two inputs, even if you don't use the inputs at all
+3. Print what previous output values that our function's main args will use as an input
+4. Print what would would be passed through from .x if our function was to use it
+5. Take the function's previous output and add one to it
+6. Use 0 as the initial input to your function's body, accumulate will always return this value as is as the first element
+
+Lines three and four make it clear how accumulate passes through to your function the previous output and the .x input
+
+Note the names of the function inputs aren't important, what is important is the argument position.
+
+The first position in your function's body is always for the recursive input and the second position is what you input to .x
+
+Note we don't have to use both inputs in our function. In the above example we intentionally didn't use .x inputs in our function.
+
+However, the length of .x is used to control the number of recursions.
+
+What else can we do with this?
+
+You can also name accumulates outputs if you name the .x input 
+
+```{r}
+#| label: accumulate-names
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+input <- 10:15
+
+names(input) <- c("first .x input","second .x input","third .x input","fourth .x input","fifth .x input", "sixth .x input")
+
+accumulate(
+  .x=input           #<1>
+  ,.f=function(prev,.x){    #<2> 
+    
+    print(paste0("prev is: ",prev))  #<3>
+    print(paste0(".x is: ",.x))  #<4>
+     
+    
+    sum(1,prev)          #<5>
+    
+    }
+  ,.init = 0           #<6>
+)
+```
+
+notice that .init's output gets laballed init.
+
+This can be useful if you are trying to problem solve or assign a label to a function's output
+
+
+Now that we have the basic, lets use it to answer some riddles from the riddler
+
+
+
+
+## Cake
+
+>For the first method, Friend 1 takes half of the cake, Friend 2 takes a third of what remains, Friend 3 takes a quarter of what remains after Friend 2, Friend 4 takes a fifth of what remains after Friend 3, and so on. 
+After your infinitely many friends take their respective pieces, you get whatever is left.
+
+>For the second method, your friends decide to save you a little more of the take. This time around, Friend 1 takes 1/22 (or one-quarter) of the cake, Friend 2 takes 1/32 (or one-ninth) of what remains, Friend 3 takes 1/42 of what remains after Friend 3, and so on.
+Again, after your infinitely many friends take their respective pieces, you get whatever is left.
+
+
+
+```{r}
+#| label: cake
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+
+method_1 <- accumulate(
+  .x=1:10
+  ,.f=function(x,y){
+    
+    frac <- (1/(y+1))
+    x*(1-frac)
+    
+    
+  }
+  ,.init=1
+)
+
+
+method_2 <- accumulate(
+  .x=1:10
+  ,.f=function(x,y){
+   
+    
+    frac <- (1/(y+1))^2
+    
+
+    x*(1-frac)
+   
+    
+    
+  }
+  ,.init=1
+)
+```
+
+
+[](https://fivethirtyeight.com/features/are-you-smarter-than-a-fourth-grader/)
+
+  ## Elevator
+
+>You are on the 10th floor of a tower and want to exit on the first floor. You get into the elevator and hit 1. However, this elevator is malfunctioning in a specific way. When you hit 1, it correctly registers the request to descend, but it randomly selects some floor below your current floor (including the first floor). The car then stops at that floor. If it’s not the first floor, you again hit 1 and the process repeats.>
+Assuming you are the only passenger on the elevator, how many floors on average will it stop at (including your final stop, the first floor) until you exit?
+
+[riddler](https://fivethirtyeight.com/features/can-you-build-the-longest-ladder/)
+
+```{r}
+library(tidyverse)
+
+set.seed(12345)
+
+press_button <- function(){
+  
+  purrr::accumulate(
+    .x = 1:20
+    ,.f = function(current,...) {
+      res <- sample(current, size = 1, replace = FALSE)-1
+      
+      if(res==0|res<0){
+        done(res)
+        }else{
+          res
+        }
+      }
+  ,.init = 1:9
+)
+  
+}
+
+# run simulation
+
+dat <- tibble(
+  sim_id=1:10000
+) |> 
+  mutate(
+    mod=map(sim_id,~press_button())
+    ,len=map(mod,length)
+) |> 
+  unnest(len) |> 
+  mutate(
+    len=len-1
+  ) 
+  
+dat |> 
+summarize(
+      mean_len=mean(len)
+  )
+
+?accumulate
+
+```
+
+## solution
+https://fivethirtyeight.com/features/its-elementary-my-dear-riddler/
+
+
+
+::: {.callout-note}
+## Bridge to some examples that you may not see but don't understand
+
+
+```{r}
+
+
+?accumulate(letters[1:5], paste, sep = ".")
+
+sum(1:5)
+
+```
+
+
+Looking at paste's function, paste takes "..." for its arguments. Since ... is generic placeholder for multiple inputs, both .x are supplied AND the function's recursive output.
+
+### single function input
+
+If you use "..." for your function's input then in short both the previous function's input (previously defined as prev above) and .x are combined together
+
+
+
+
+```{r}
+accumulate(
+  .x=10:15           #<1>
+  ,.f=function(...){    
+    
+    print(paste0("... is: ",...))  #<2>
+
+    sum(1,...)          #<3>
+    
+    }
+  ,.init = 1           #<4>
+)
+```
+
+:::
+
+Now let us replace the "..." in our function body with a named variable ("x") and see what happens
+
+
+Let's summarize:
+
+- order of inputs matters (first is output, second is .x)
+
+
+::: {.callout-note}
+## .dir 
+
+Note by default .dir is set to "forward", however note that if you set it to "backward" not only will it start backwards through the vector you set as .x but it will also switch the position argument of body's inputs
+
+:::
+
+```{r}
+tribble(
+  ~"scenario",~".x",~"...",~"function(...)",~"function(x,...)",~"result",
+  "xxx"      , ,"X"    ,"x"             ,NA               ,"... take both .x and previous iteration's output "
+)
+
+
+
+```
+
+
+
+
+
+
+```{r}
+
+accumulate(
+  .x=1:4
+  ,.f=\(prev,.x){
+    
+    .x*2*prev
+
+  }
+  ,.init=1
+  ,.dir = "forward"
+)
+
+
+
+
+```
+
+>Riddler Express
+
+>From Irwin Altrows comes a problem about a problematic business model:
+The Riddler Shirt Store sells N kinds of shirts, each kind with a picture of a different famous mathematician. Unfortunately, on average, 80 percent of orders are returned.
+That’s because the company’s website has customers order their shirts using a code (from 1 to N), but does not state which code corresponds to which shirt. Each customer knows which mathematician — and therefore which shirt — they want.
+But to get that desired shirt, they enter a random shirt code and order the corresponding shirt without knowing which mathematician they’ll get. If that shirt depicts the wrong mathematician, they randomly select a different (untested) code, and repeat this process until the desired shirt arrives.
+How many different shirts does the store sell?
+
+https://fivethirtyeight.com/features/can-you-buy-the-right-shirt/
+
+
+```{r}
+
+pick_shirts <- function(shirts=20){
+
+
+sample(shirts,size=,replace=FALSE)
+  
+}
+
+
+accumulate(
+  .x=1:20
+  ,.f=function(prev,.x){
+    sample(.x,1,replace=FALSE)
+  }
+)
+
+
+tibble(
+  sim=1:100000
+) |> 
+  crossing(
+    shirts=8:10
+  ) |> 
+  rowwise() |> 
+  mutate(
+    pick=list(sample(shirts,shirts,replace=FALSE))
+  ) |> 
+  unnest(pick) |> 
+  group_by(sim,shirts) |> 
+  mutate(
+    row_num=row_number()
+    ,correct=if_else(shirts==pick,1,0)
+  ) |> 
+  filter(correct!=0) |> 
+  mutate(
+        pick_correct=correct/row_num
+  ) |> 
+  group_by(shirts) |> 
+  summarize(
+    mean_pick=mean(pick_correct)
+  )
+
+
+
+```
+
+>At the moment, you are racing against three other riders up one of the mountains. The first rider over the top gets 5 points, the second rider gets 3, the third rider gets 2, and the fourth rider gets 1.
+
+>All four of you are of equal ability — that is, under normal circumstances, you all have an equal chance of reaching the summit first. But there’s a catch — two of your competitors are on the same team. Teammates are able to work together, drafting and setting a tempo up the mountain. Whichever teammate happens to be slower on the climb will get a boost from their faster teammate, and the two of them will both reach the summit at the faster teammate’s time.
+
+>As a lone rider, the odds may be stacked against you. In your quest for the polka dot jersey, how many points can you expect to win on this mountain, on average?
+
+
+
+
+```{r}
+
+
+dat <- tibble(
+    x=1:100
+) |> 
+    rowwise() |> 
+    mutate(
+        data=list(sample_n(diamonds,1000))
+        ,mod=list(lm(price~cut,data=data))
+        ,gl=list(broom::glance(mod))
+    ) |> 
+    unnest(gl) |> 
+    select(1,p.value)
+
+
+dat |> 
+    summarise(mean=median(p.value))
+
+
+
+dat |> 
+    ggplot(aes(p.value))+
+    geom_histogram()
+
+lm(price~cut,data=diamonds) |> broom::glance() |> pull(p.value)
+```
+>You know from experience that the bank can only spot your fakes 25 percent of the time, and trying to deposit only counterfeit bills would be a ticket to jail. However, if you combine fake and real notes, there’s a chance the bank will accept your money. You have $2,500 in bona fide hundreds, plus a virtually unlimited supply of counterfeits. The bank scrutinizes cash deposits carefully: They randomly select 5 percent of the notes they receive, rounded up to the nearest whole number, for close examination. If they identify any note in a deposit as fake, they will confiscate the entire sum, leaving you only enough time to flee.
+
+>How many fake notes should you add to the $2,500 in order to maximize the expected value of your bank account? How much free money are you likely to make from your strategy?
+
+
+
+
+```{r}
+library(tidyverse)
+dat <- tibble(
+    sim=1:100
+    ) |> 
+    crossing(
+        fake=1:35
+    ) |> 
+    rowwise() |> 
+    mutate(
+        deposit=fake+25
+        ,bills=list(c(rep(0,25),rep(1,fake)))
+        ,sample_prop=ceiling(deposit*0.05)
+        ,sample_res=list(sample(bills,sample_prop,replace=FALSE))
+        ,caught=list(any(sample_res))
+        ,winning=list(if_else(caught==TRUE,0,(fake*100)))
+    ) |> 
+    unnest(caught,winning) 
+
+dat |> 
+    group_by(fake) |>
+    summarize(
+        mean_winning=mean(winning)
+        ,.groups="drop"
+    ) |>
+    arrange(-mean_winning) |> 
+    ggplot(aes(y=mean_winning,x=fake))+
+    geom_point()+
+  geom_smooth()
+    geom_smooth(method="glm"
+                ,method.args = list(family = "binomial")
+                , se = FALSE,col="blue",size=2)
+
+
+
+
+```
+
+
+>Bill has four opaque bags, each of which has three marbles inside. Three of the bags contain two white marbles and one red marble, while the last bag contains three white marbles. The bags are otherwise indistinguishable.
+
+>Ted watches as Bill randomly selects a bag and reaches in without looking to grab two marbles without replacement. It so happens that both marbles are white. Bill is about to reach in and grab the last marble in that bag.
+
+>What is the probability that this marble is red?
+
+
+https://fivethirtyeight.com/features/how-fast-can-you-make-the-track/
+
+```{r}
+
+library(tidyverse)
+
+bag_1 <- c("w","w","r")
+
+bag_2 <- c("w","w","r")
+bag_3 <- c("w","w","r")
+bag_4 <- c("w","w","w")
+
+
+tibble(
+  bag_1=bag_1
+) |> 
+  crossing(
+    bag_2
+    ,bag_3
+    ,bag_4
+  )
+
+dat <- tibble(
+  sim=1:1000
+) |> 
+  rowwise() |> 
+  mutate(
+    bag=sample(1:4,1)
+    ,sel=case_when(
+      bag==1 ~list(bag_1)
+      ,bag==2 ~list(bag_2)
+      ,bag==3 ~list(bag_3)
+      ,bag==4 ~list(bag_4)
+    )
+    ,pick=list(sample(sel,3,replace=FALSE))
+) |> 
+  unnest(pick) |> 
+  group_by(
+    sim
+  ) |> 
+  filter(
+    first(pick)=="w"
+    ,nth(pick,2)=="w"
+  ) |> 
+  mutate(
+    indicator=if_else(nth(pick=="r",3),1,0)
+  ) |> 
+  summarise(
+    prop=mean(indicator)
+  ) 
+  summarise(
+    prop=mean(prop)
+  )
+  
+  
+  dat |> 
+    arrange(prop) |> 
+    mutate(
+      sim=factor(sim)
+    ) |> 
+    ggplot(
+      aes(x=fct_inorder(sim),y=prop)
+    )+
+    geom_point()
+    # geom_line()+
+    theme_minimal()
+    geom_smooth(
+      method = "glm"
+      ,method.args=list(family = "binomial")
+      ,se=FALSE
+      )
+
+
+```
+
+
+
+>You and your friends are singing the traditional song, “99 Bottles of Beer.” With each verse, you count down the number of bottles. The first verse contains the lyrics “99 bottles of beer,” the second verse contains the lyrics “98 bottles of beer,” and so on. The last verse contains the lyrics “1 bottle of beer.”
+
+>There’s just one problem. When completing any given verse, your group of friends has a tendency to forget which verse they’re on. When this happens, you finish the verse you are currently singing and then go back to the beginning of the song (with 99 bottles) on the next verse.
+
+>For each verse, suppose you have a 1 percent chance of forgetting which verse you are currently singing. On average, how many total verses will you sing in the song?
+
+(https://fivethirtyeight.com/features/its-a-star-its-a-plane-its-the-riddler/)
+
+```{r}
+library(tidyverse)
+
+
+
+
+bottle_fn <- function(){
+  
+  accumulate(
+  .x=1:1000
+  ,.f=funcition(prev,.x){
+    
+    rep <- sample(c(0:1),size=1,replace=FALSE,prob = c(.99,.01))
+    out <- prev-1
+    
+    if(rep==0){
+      out
+    }else{
+      out <- 99
+    }
+    
+    if(out==1){
+      done(out)
+    } else{
+      out
+    }
+  }
+  ,.init=99
+)
+}
+
+tibble(
+  sim=1:1000
+) |> 
+  rowwise() |> 
+  mutate(
+    bottles=list(bottle_fn())
+    ,len=list(length(bottles))
+  ) |> 
+  unnest(len) |> 
+  summarize(
+    mean_len=mean(len)
+  )
+
+
+```
+
+>From Irwin Altrows comes a “high-speed” express:
+
+>The winner of a particular baseball game will be determined by the next pitch. The pitcher will either throw a fastball or an offspeed pitch, while the batter will similarly be anticipating a fastball or an offspeed pitch. If the batter correctly guesses the pitch will be a fastball, they have a 1-in-5 chance of hitting a home run. If the batter correctly guesses the pitch will be offspeed, they have a 1-in-2 chance of hitting a home run. But if the batter guesses incorrectly, they will strike out and lose the game. (The batter is guaranteed to swing either way.)
+
+>To spice things up, the pitcher truthfully announces the probability with which they will throw a fastball. Then the batter truthfully announces the probability with which they will anticipate a fastball.
+
+>Assuming both pitcher and batter are excellent logicians, what is the probability that the batter will hit a home run?
+
+
+```{r}
+dat <- tibble(
+  sim=1:1000
+) |> 
+  crossing(
+    pitch=seq(0,100,5)/100
+    ,bat=seq(0,100,5)/100
+  ) |> 
+  rowwise() |> 
+  mutate(
+    pitch_type=list(sample(c("fast","slow"),1,prob=c(pitch,1-pitch)))
+    ,bat_type=list(sample(c("fast","slow"),1,prob=c(bat,1-bat)))
+  ) |> 
+  ungroup() |> 
+  unnest(pitch_type,bat_type) |> 
+  mutate(
+    home_run_prop=
+      case_when(
+        pitch_type=="fast"&bat_type=="fast"~.2
+        ,pitch_type=="slow"&bat_type=="slow"~.5
+        ,TRUE ~ 0
+      )
+  ) |> 
+  rowwise() |> 
+  mutate(
+    hr=list(sample(c(1,0),1,prob = c(home_run_prop,1-home_run_prop)))
+  ) |> 
+  unnest(hr) |> 
+  group_by(
+    pitch
+  ) |>
+  arrange(pitch,mean_hr,.by_group = TRUE) |> 
+  summarise(
+    mean_hr=mean(hr)
+    ,first(hr)
+    ,last(hr)
+  ) |> 
+  arrange(-mean_hr)
+
+
+dat |> 
+  filter(pitch==1) |> 
+  arrange(mean_hr)
+```
+
+>A goat tower has 10 floors, each of which can accommodate a single goat. Ten goats approach the tower, and each goat has its own (random) preference of floor. Multiple goats can prefer the same floor.
+
+>One by one, each goat walks up the tower to its preferred room. If the floor is empty, the goat will make itself at home. But if the floor is already occupied by another goat, then it will keep going up until it finds the next empty floor, which it will occupy. But if it does not find any empty floors, the goat will be stuck on the roof of the tower.
+
+>What is the probability that all 10 goats will have their own floor, meaning no goat is left stranded on the roof of the tower?
+
+```{r}
+
+dat <- tibble(
+  sim=1:100
+) |> 
+  crossing(
+    goats=1:10
+  ) |> 
+  rowwise() |> 
+  mutate(
+    pref=list(sample(1:10,1))
+  ) |> 
+  unnest(pref)
+
+dat
+
+accumulate(
+  .x=1:10
+  ,.f=function(prev,.x){
+    
+    if(prev[.x])
+    
+    
+    
+  }
+)
+
+
+
+
+
+
+```
+
+>You have an urn with an equal number of red balls and white balls, but you have no information about what that number might be. You draw 19 balls at random, without replacement, and you get eight red balls and 11 white balls. What is your best guess for the original number of balls (red and white) in the urn?
+
+
+
+```{r}
+
+dat <- tibble(
+  sim=1:1000000
+) |> 
+  crossing(
+    total_balls=seq(22,44,2)
+  ) |> 
+  rowwise() |> 
+  mutate(
+    balls=list(c(rep("white",total_balls/2),rep("red",total_balls/2)))
+    ,pick=list(sample(balls,19,replace=FALSE))
+    ,white=list(str_count(pick,"white") |> sum())
+    ,red=list(str_count(pick,"red") |> sum())
+    
+  ) |> 
+  unnest(c(red,white))
+
+
+dat |> 
+  filter(
+    red==8
+    ,white==11
+  ) |> 
+  group_by(total_balls) |> 
+  summarise(
+    n=n()
+  ) |> 
+  arrange(-n)
+
+
+dat |> 
+  group_by(total_balls) |> 
+  summarise(
+    n=n()
+    ,match=length(sim[white==11&red==8])
+    ,.groups="drop"
+  ) |> 
+  mutate(
+    prop=match/n
+  ) |> 
+  arrange(-prop) |> 
+  ggplot(
+    aes(x=total_balls,y=prop)
+  )+
+  geom_point()+
+  geom_line()
+
+
+
+```
+>You have it on good authority that she is playing fairly, performing all the moves in plain sight, albeit too fast for you to track precisely which cups she’s moving. However, you do have one additional key piece of information — every time she swaps cups, one of them has the ball. In other words, she never swaps the two empty cups.
+
+>When it’s your turn to guess, you note which cup she initially places the ball under. Then, as she begins to swap cups, you close your eyes and count the number of swaps. Once she is done, you open your eyes again. What is your best strategy for guessing which cup has the ball?
+
+
+```{r}
+
+move_cups <- function(start,n){
+  reduce(
+  .x=n
+  ,.f=function(prev,.x){
+    
+    out <- case_when(
+      prev==1~sample(c(2,3),1)
+      ,prev==2~sample(c(1,3),1)
+      ,prev==3~sample(c(2,3),1)
+    )
+    
+  }
+  ,.init=start
+  )
+}
+
+move_cups(1,10)
+
+tibble(
+  sim=1:100
+) |> 
+  crossing(
+    start=1:3
+    ,count=1:20
+  ) |> 
+  rowwise() |> 
+  mutate(
+    ending_cup=list(move_cups(start,count))
+  ) |> 
+  unnest(c(ending_cup)) |> 
+  group_by(start,count,ending_cup) |> 
+  summarize(
+    n=n()
+  )
+  group_by(startcount) |> 
+  arrange(
+    desc(n)
+    ,.by_group = TRUE
+  )
+
+```
+
+
+
+>I am working with the R programming language.
+
+>I am trying to simulate a "pancake flipping on a frying pan" experiment with the following conditions:
+
+>    Each turn, there is a 0.5 probability of the pancake being "selected for flipping" (e.g. imagine randomly shaking the pan and hoping the pancake flips)
+    If the pancake is indeed flipped, there is a 0.5 probability that it lands on heads and a 0.5 probability it lands on tails
+    At each turn, we record the cumulative number of heads and tails observed - if the pancake is not selected for flipping, the side the pancake is currently on contributes towards the cumulative numbers
+
+
+
+```{r}
+
+tibble(
+  sim=1:100
+) |> 
+  rowwise() |> 
+  mutate(
+    flip_status=list(sample(c("flip","not_flip"),1))
+  ) |> 
+  unnest(flip_status) |> 
+  mutate(
+    group=cumsum(if_else(flip_status!=lag(flip_status,1,first(flip_status)),1,0))
+    ,prop=if_else(flip_status=="not_flip",-.1,.5)
+    ,applied_prop=if_else(flip_status=="not_flip",cumsum(prop),.5)
+  )
+
+    ,flip=list(sample(c("H","T"),1))
+    ,side_status=list(if_else(flip_status=="flip",flip,lag(flip,1,default="T")))
+  ) |> 
+  unnest(c(flip_status,flip,side_status,flip_prop)) |> 
+  mutate(
+    head_cumsum=cumsum(side_status=="H")
+    ,tail_cumsum=cumsum(side_status=="T")
+  )
+
+cumsum(dat$side_status=="H")
+
+cumsum(1:3)
+
+sum(1:3)
+```
+
+>My Question: Now I am trying to add another detail to this simulation to make it a bit more realistic
+
+>    Imagine that the longer the pancake sits on the pan without being selected, it starts to burn and stick to the pan, becoming much harder to flip. I want to make it so that each turn the pancake is not selected, the probability of it being selected for flipping reduces by 0.01. However if we are able to dislodge it, the counter resets and goes back to 0.5.
+    Imagine that the side which is cooked more is also heavier. Thus, when the pancake is flipped, its more likely to land on the heavier side as a function of its cumulative ratios. For example, if cumulative_heads=1 and cumulative_tails=3, the pancake is 3 times more likely to land on tails than heads
+
+
+
+
+
+
+
+
+
+
+
+
+
+## transfer the below 
+
+
+Tidy select is very helpful and its our first change to combine some of previous lessons learnt such vectors, lists and predicate functions. 
+
+Let's extend your powers with your new favorite function, `across()`
+
+## Across framework
+
+Often times you need to an action against multiple columns, but is there an alternative to individually performing that fucntion aginst each folumn?
+
+Aboustely. 
+
+lets see this in action. What if we needed to scale all of our numeric varables?
+
+There is a built in scale function, `stats::scale()` so that part is covered. 
+
+We just learnt how to refernece columns based on predicate function like `is.numeric()` so we also a covered that
+
+We know how to add or amend a column with our the `mutate()` function, so we have that but we don't know how to avoid manually typing each function one by one agianst each column.
+
+There is where `across()`
+
+```{r}
+diamonds |> 
+  mutate(  #<1>
+    across(  #<2>
+      .cols=where(\(x) is.numeric(x)) #<3>
+      ,.fn= \(x) scale(x)     #<3>
+    )
+  )
+
+
+```
+
+We see that we return our original dataset but each numeric column has been transformed by the scale function
+
+In this example in transformed the existing columns but what if we wanted to return new columns and keep the existing columns, then simply apploy one more argument 
+
+```{r}
+diamonds |> 
+  mutate(  #<1>
+    across(  #<2>
+      .cols=where(\(x) is.numeric(x)) #<3>
+      ,.fn= \(x) scale(x)     #<3>
+      ,.names = "scale_{.col}" #<4>
+    )
+  ) |> 
+  relocate(contains("scale"))
+```
+
+
+
+
+
+-   trying to do a fixed action to each column based on tidy select
+-   trying to do a dynamic action based on another lists inputs or column inputs
+-   trying to do something to each colname
+-   trying to do something each column based on its row level or summarized attribute
+-   trying to do something to each column based on a dynamic attribute
+
+-   trying to do multiple things on a pair(s) of columns of the above
+-   trying to do multiple things to each column of a table base on multiple column location attributes
+-   trying to do multiple things to each column of a table base on a multiple column attributes (eg. three consecutive rows)
+
+  -   goal here is to come up with predicate function that tests the attribute you want and then apply that function to each column
+
+
+
+
+
+if_any or if_all() for summarized attribute test against another test
+
+```{r}
+library(palmerpenguins)
+
+
+big <- function(x) {
+  x > mean(x, na.rm = TRUE)
+}
+
+
+penguins %>% 
+  filter(!is.na(bill_length_mm)) %>% 
+  mutate(
+    category = case_when(
+      if_any(contains("bill"), big) ~ "both big", 
+      if_any(contains("bill"), big) ~ "one big", 
+      TRUE                          ~ "small"
+    )) %>% 
+  relocate(last_col()) |> 
+  head()
+
+```
+
+
+Specific to group_by() and filter(), you can use tidyselect verbs with pick() to and you can tidyselect as we talked about above
+
+
+```{r}
+quantile_df <- function(x, probs = c(0.25, 0.5, 0.75)) {
+  tibble(quantile = probs, value = quantile(x, probs))
+}
+
+
+quantile_df(diamonds$price)
+
+test_tbl <- diamonds |> 
+  group_by(
+    cut
+  ) |> 
+  summarise(
+    across(
+      .cols=where(is.numeric)
+      ,.fns=quantile_df
+      # ,.unpack = TRUE
+    )
+  ) 
+
+
+test_tbl |> as.list()
+  unnest(-c(cut))
+dir()
+```

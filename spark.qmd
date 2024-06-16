@@ -1,0 +1,61 @@
+---
+title: "spark"
+---
+
+-   There are two ways to manipulate data in spark, sparklyr and SparkR
+-   Sparklyr uses dblyr backend so many of your dplyr calls can be used
+-   Furthermore you can use any R package if you use `spark_apply()`
+-   Using spark is pretty consistent any of database backends
+-   Create a spark connection with `spark_connect()` and assign it to a variable usually "sc"
+    -   Can either use master="local" or if you are in databricks you can use master="databricks"
+-   Then you can import your data referencing your spark connection
+    - for inline data you can simply reference copy_to(sc,df,df_name) and assign to a object (typically sdf prefix)
+-   From there you can use all your standard dblyr type functions however sometimes certain functions won't work
+-   The master trick here is to use the `sparklyr::spark_apply()` function
+    -   pass the df object to as argument and then pass function or custom function
+    -   I don't think there are room for additional parameters? but I may be wrong
+    -   If you use %>% then you usually need to call the library(magrittr) in your function
+
+
+```{r}
+#| echo: true
+#| label: examples spark
+#| eval: true
+#| warning: false
+#| error: false
+
+
+# load libraries
+library(tidyverse)
+library(sparklyr)
+
+
+#Create spark connection
+sc <- sparklyr::spark_connect(master="local")
+
+# take a data object and copy it too a spark object
+
+diamonds_sdf <- sparklyr::copy_to(sc,diamonds,"diamonds_sprk")
+
+# filter the object down to smaller size
+ small_diamonds_sdf <- diamonds_sdf %>% head(100)
+
+
+#  create custom rowwise function
+rowwise_fun <- function(e){
+
+library(magrittr)
+ e %>% 
+   dplyr::rowwise() %>% 
+   dplyr::mutate(test=sum(dplyr::c_across(x:z)))
+}
+
+# use function on the dataset 
+
+
+ sparklyr::spark_apply(
+  x=small_diamonds_sdf
+  ,f=rowwise_fun
+) 
+```
+

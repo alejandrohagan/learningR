@@ -1,0 +1,74 @@
+---
+title: "best_of_twitter"
+---
+
+# insert variables embedded with custom tags
+https://twitter.com/moh_fodil/status/1684467674728779776?s=20
+
+
+```{r}
+
+var <- "john"
+var_age <- 25
+
+glue::glue(
+  '{
+  "name":"<<<var>>>",
+  "age":"<<<var_age>>>"
+  
+  }',
+  .open = "<<<"
+  ,.close=">>>"
+)
+
+
+```
+
+## case when with tibbles
+
+https://twitter.com/antoine_fabri/status/1683557715115687939?s=20
+
+Can add multiple columns / tibbles without a named argument
+
+```{r}
+cars %>% 
+  mutate(case_when(
+    speed==20~ tibble(a=1,b=2)
+    ,speed==7 ~ tibble(a=3)
+  )
+  )
+
+```
+
+
+R and Github action
+https://www.youtube.com/watch?v=u-TcADhWosA&ab_channel=RfortheRestofUs    
+
+http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/
+
+#functional programming
+
+
+# data dictionary
+
+https://tim-tiefenbach.de/post/2023-recode-columns/
+
+# intro to R
+https://www.youtube.com/playlist?list=PLHfe4A2DV-b2XDFl-9ytrcmQVZ9NNOEQS
+
+
+https://www.marvinschmitt.com/blog/functional-programming-r-basics/?card=true
+
+## .Last.value
+
+-   whatever last analysis you run you can re-run it again with `.Last.value`
+
+-   helpful when you have done complex analysis and don't want to waste time re-running it
+
+```{r}
+x <- 1:10
+
+
+.Last.value
+```
+

@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Excel to R: A Survivor’s Guide for the Corporate Environment - 5&nbsp; Vim</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./github.html" rel="next">
+<link href="./many_models.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vim.html">Misc</a></li><li class="breadcrumb-item"><a href="./vim.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Vim</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Excel to R: A Survivor’s Guide for the Corporate Environment</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./learningR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">How to save things on Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./database.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Understanding a model outcome</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./many_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">many_models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Misc</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vim.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Vim</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">github</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#what-is-vim" id="toc-what-is-vim" class="nav-link active" data-scroll-target="#what-is-vim"><span class="header-section-number">5.1</span> What is VIM?</a></li>
+  <li><a href="#how-to-use-vim-in-rstudio-and-why" id="toc-how-to-use-vim-in-rstudio-and-why" class="nav-link" data-scroll-target="#how-to-use-vim-in-rstudio-and-why"><span class="header-section-number">5.2</span> How to use VIM in RStudio and why?</a></li>
+  <li><a href="#why-learn-vim-in-rstudio" id="toc-why-learn-vim-in-rstudio" class="nav-link" data-scroll-target="#why-learn-vim-in-rstudio"><span class="header-section-number">5.3</span> Why learn VIM in RStudio?</a></li>
+  <li><a href="#how-do-i-get-started" id="toc-how-do-i-get-started" class="nav-link" data-scroll-target="#how-do-i-get-started"><span class="header-section-number">5.4</span> How do I get started?</a>
+  <ul class="collapse">
+  <li><a href="#insert-mode" id="toc-insert-mode" class="nav-link" data-scroll-target="#insert-mode"><span class="header-section-number">5.4.1</span> Insert Mode</a></li>
+  </ul></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">5.5</span> Recap</a></li>
+  <li><a href="#vim-keybindings-in-rstudio" id="toc-vim-keybindings-in-rstudio" class="nav-link" data-scroll-target="#vim-keybindings-in-rstudio"><span class="header-section-number">6</span> VIM keybindings in Rstudio</a>
+  <ul class="collapse">
+  <li><a href="#motions" id="toc-motions" class="nav-link" data-scroll-target="#motions"><span class="header-section-number">6.0.1</span> motions</a></li>
+  <li><a href="#counts" id="toc-counts" class="nav-link" data-scroll-target="#counts"><span class="header-section-number">6.0.2</span> counts</a></li>
+  <li><a href="#motions-counts" id="toc-motions-counts" class="nav-link" data-scroll-target="#motions-counts"><span class="header-section-number">6.0.3</span> motions + counts</a></li>
+  <li><a href="#actions" id="toc-actions" class="nav-link" data-scroll-target="#actions"><span class="header-section-number">6.0.4</span> actions</a></li>
+  <li><a href="#marks" id="toc-marks" class="nav-link" data-scroll-target="#marks"><span class="header-section-number">6.0.5</span> marks</a></li>
+  <li><a href="#registry" id="toc-registry" class="nav-link" data-scroll-target="#registry"><span class="header-section-number">6.0.6</span> Registry</a></li>
+  </ul></li>
+  <li><a href="#additional-vim-bindings-resources" id="toc-additional-vim-bindings-resources" class="nav-link" data-scroll-target="#additional-vim-bindings-resources"><span class="header-section-number">7</span> Additional VIM bindings / Resources</a>
+  <ul class="collapse">
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">7.1</span> Resources</a></li>
+  </ul></li>
+  <li><a href="#actual-vim" id="toc-actual-vim" class="nav-link" data-scroll-target="#actual-vim"><span class="header-section-number">8</span> Actual VIM</a>
+  <ul class="collapse">
+  <li><a href="#how-to-use-vim-if-you-are-in-a-windows-environment" id="toc-how-to-use-vim-if-you-are-in-a-windows-environment" class="nav-link" data-scroll-target="#how-to-use-vim-if-you-are-in-a-windows-environment"><span class="header-section-number">8.1</span> How to use VIM if you are in a windows environment</a></li>
+  <li><a href="#how-to-find-your-.vimrc-file" id="toc-how-to-find-your-.vimrc-file" class="nav-link" data-scroll-target="#how-to-find-your-.vimrc-file"><span class="header-section-number">8.2</span> How to find your .vimrc file</a></li>
+  <li><a href="#setting-up-vim-first-time" id="toc-setting-up-vim-first-time" class="nav-link" data-scroll-target="#setting-up-vim-first-time"><span class="header-section-number">8.3</span> Setting up VIM first time</a></li>
+  <li><a href="#additional-set-ups" id="toc-additional-set-ups" class="nav-link" data-scroll-target="#additional-set-ups"><span class="header-section-number">8.4</span> Additional set ups</a>
+  <ul class="collapse">
+  <li><a href="#mappings-to-decrease-repititiveness" id="toc-mappings-to-decrease-repititiveness" class="nav-link" data-scroll-target="#mappings-to-decrease-repititiveness"><span class="header-section-number">8.4.1</span> Mappings to decrease repititiveness</a></li>
+  <li><a href="#shortcuts" id="toc-shortcuts" class="nav-link" data-scroll-target="#shortcuts"><span class="header-section-number">8.4.2</span> Shortcuts</a></li>
+  <li><a href="#key-navigation" id="toc-key-navigation" class="nav-link" data-scroll-target="#key-navigation"><span class="header-section-number">8.4.3</span> Key Navigation</a></li>
+  </ul></li>
+  <li><a href="#patterns-to-know" id="toc-patterns-to-know" class="nav-link" data-scroll-target="#patterns-to-know"><span class="header-section-number">8.5</span> Patterns to know</a>
+  <ul class="collapse">
+  <li><a href="#search" id="toc-search" class="nav-link" data-scroll-target="#search"><span class="header-section-number">8.5.1</span> Search</a></li>
+  <li><a href="#replace" id="toc-replace" class="nav-link" data-scroll-target="#replace"><span class="header-section-number">8.5.2</span> Replace</a></li>
+  <li><a href="#popular-regex" id="toc-popular-regex" class="nav-link" data-scroll-target="#popular-regex"><span class="header-section-number">8.5.3</span> Popular regex</a></li>
+  </ul></li>
+  <li><a href="#registers-macros" id="toc-registers-macros" class="nav-link" data-scroll-target="#registers-macros"><span class="header-section-number">8.6</span> Registers (macros)</a></li>
+  <li><a href="#text-blocks-and-multiple-files" id="toc-text-blocks-and-multiple-files" class="nav-link" data-scroll-target="#text-blocks-and-multiple-files"><span class="header-section-number">8.7</span> Text blocks and multiple files</a>
+  <ul class="collapse">
+  <li><a href="#marks-1" id="toc-marks-1" class="nav-link" data-scroll-target="#marks-1"><span class="header-section-number">8.7.1</span> Marks</a></li>
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering"><span class="header-section-number">8.7.2</span> Filtering</a></li>
+  </ul></li>
+  <li><a href="#edit-multiple-files" id="toc-edit-multiple-files" class="nav-link" data-scroll-target="#edit-multiple-files"><span class="header-section-number">8.8</span> Edit multiple files</a></li>
+  <li><a href="#buffer-copy" id="toc-buffer-copy" class="nav-link" data-scroll-target="#buffer-copy"><span class="header-section-number">8.9</span> Buffer Copy</a></li>
+  <li><a href="#visual-basic-mode" id="toc-visual-basic-mode" class="nav-link" data-scroll-target="#visual-basic-mode"><span class="header-section-number">8.10</span> Visual Basic Mode</a></li>
+  <li><a href="#digraph" id="toc-digraph" class="nav-link" data-scroll-target="#digraph"><span class="header-section-number">8.11</span> Digraph</a></li>
+  <li><a href="#misc." id="toc-misc." class="nav-link" data-scroll-target="#misc."><span class="header-section-number">8.12</span> Misc.</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vim.html">Misc</a></li><li class="breadcrumb-item"><a href="./vim.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Vim</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Vim</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="what-is-vim" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="what-is-vim"><span class="header-section-number">5.1</span> What is VIM?</h2>
+<p>Vim is a keybinding that has a bit of cult following. It will look and feel different than your traditional key bindings (eg what is in front of your hands today) but over time, you will be will be more productive and efficient. Honestly – it will excite you.</p>
+<blockquote class="blockquote">
+<p>Getting started is the hardest because its new – The Primeagen</p>
+</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What is a keybinding?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I’ll use the word alot but you can think of a keybinding as a combination of keys that are pressed to do an outcome</p>
+<p>For example ‘SHIFT + y’ produces the capital letter ‘Y’</p>
+<p>‘Alt + =’ will produce ‘&lt;-’ in Rstudio</p>
+<p>Pression ‘Ctrl + left arrow’ will skip ahead left by one whole word</p>
+</div>
+</div>
+<p>How will VIM do this?</p>
+<p>This will make more sense as we go along. VIM’s real secret is not only how is there a tool for every general or specialized use case but also you can access the built in short cuts or quickly create your own to use most of these tools with minimal hand movement.</p>
+<p>the ability to “move mountains” while barely lifting your fingers from your keyboards homerow is incredible.</p>
+<p>So how can I do more things, quickly, with fewer key strokes and less hand movement?</p>
+<p>This is actually due to previous limitations in early computers where they didn’t have an up,down,left,right errors or other specialized keys (eg. ‘tab’, caps lock) so they had to leverage the existing keys to do many things.</p>
+<p>VIM’s trick in doing this is that it is not just simple text editor but instead it is a modular editor.</p>
+<p>This means VIM has different modes (insert,normal, visual, command and replace) – each mode has a different “interface” which you can think of as surgeon’s tool kit that can be used for a focused purpose.</p>
+</section>
+<section id="how-to-use-vim-in-rstudio-and-why" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="how-to-use-vim-in-rstudio-and-why"><span class="header-section-number">5.2</span> How to use VIM in RStudio and why?</h2>
+<p>While VIM (or its alternative flavors) is its own program – due to popularity and benefits many of VIM’s key bindings are available in other editors, including Rstudio and VScode.</p>
+<blockquote class="blockquote">
+<p>One limitation upfront, specifically in the case of RStudio is that only a selection of VIM’s key bindings are available – quite honestly you are missing a lot of VIM’s firepower – but for a beginner that wants to graduate to intermediate skill set – its actually a great place to start.</p>
+</blockquote>
+<p>Additionally, everything you learn is 100% portable to a different editor.</p>
+</section>
+<section id="why-learn-vim-in-rstudio" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="why-learn-vim-in-rstudio"><span class="header-section-number">5.3</span> Why learn VIM in RStudio?</h2>
+<p>Given that you are essentially learning VIM lite – why go through with this at all? RStudio as its own shortcuts and utilities, what makes this so special for R users?</p>
+<p><strong>Incremental benefits</strong></p>
+<ul>
+<li><p>“Mark” sections of a your script, rmarkdown or quarto document and instantly transport there making navigation a breeze</p></li>
+<li><p>Quickly record keyboard macros to do repititive edits, deletions or insertions (think captializing first word of a list or replace ‘.’ with ’_’ in variable’s name,etc)</p></li>
+<li><p>Search and replace letters or words without using your mouse</p></li>
+<li><p>Instantly jump to specific words or characters in a line</p></li>
+<li><p>Navigate your document with minimal handmovement – maximizing your ergnomic benefits</p></li>
+<li><p>Highlight words, lines paragarphs with precision</p></li>
+</ul>
+</section>
+<section id="how-do-i-get-started" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="how-do-i-get-started"><span class="header-section-number">5.4</span> How do I get started?</h2>
+<p>Before we enable VIM in RStudio we need to talk about two key modes, how you switch between and interact with these modes</p>
+<section id="insert-mode" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="insert-mode"><span class="header-section-number">5.4.1</span> Insert Mode</h3>
+<p>This will be the most familiar to you as this mode is basically the interface you are most used to today.</p>
+<p>You press the letter “a” and you see the letter “a” printed on the screen. You want to move around, you press up arrow or left arrow,etc.</p>
+<p>There is nothing controversial or hard to learn about this mode – this mode works as you are used to today.</p>
+<p>However, believe it or not – you will try to spend as little time in this mode as possible. That is because this mode should only be used to enter in text – not for navigation around your document or between paragraphas, not for highlighting words or sections, not for editing or deleting texts – you get the point.</p>
+<p>Getting out of the habit of using insert mode for nothing more than just inserting text will be an initial source of frustration</p>
+<p>The real fun starts in what is known as ‘normal mode’ – which is the mode you will first start in which is used mainly for navigating around your document, neutral mode that you will transition to other modes from,</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Transfer from Insert mode to Normal mode
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<blockquote class="blockquote">
+<p>To get out of insert mode and switch to normal mode you need to press <esc> or <ctrl> +[. (note in real vim you can create new key mappings so that you can use any key combination to to escape mode). I recommend to start with esc but eventually you want to move towards <ctrl> + [ because it <strong>should</strong> be less reaching for your pinky fingers.</ctrl></ctrl></esc></p>
+</blockquote>
+</div>
+</div>
+</div>
+<p>When you are in normal mode, at first glance everything will be the same – with one exception.</p>
+<p>your cursor will look like a block rather than a slim line.</p>
+<p>That is it.</p>
+<p>However when you start typing in normal mode that is when you will start to see differences. If you were to type b,t s or q nothing happens. That is because this mode isn’t intended to insert new texts instead it is meant motions and operators.</p>
+<p>To move around in this mode you can theoritically still use the arrow keys but honestly the quicker you ditch that habit the better.</p>
+<p>Instead you use ‘hjk’ and ‘l’ to go ‘left’, ‘down’, ‘up’ and ‘right’ (respecively)</p>
+<p>This is a great place for you to start your transformation to a VIM user. Coincidently it will be the same time when you also pull out your hair in frustration.</p>
+<p>You use this mode to navigate around your spread sheet, move,change or delete words and line. To insert new text you need to be in insert mode.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Transfer from Normal mode to Insert mode
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To go into insert mode there are multiple options depending where in the word, paragraph or line you want the cursur to “jump” to. However in practice you will principlly be suing four letters to do so:</p>
+<p>i,a,s or o (or there are capital equivalents)</p>
+</div>
+</div>
+</div>
+<p>So lots of new information to you – lets recap some fundamentals.</p>
+</section>
+</section>
+<section id="recap" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="recap"><span class="header-section-number">5.5</span> Recap</h2>
+<ol type="1">
+<li>Introduced two of four modes so far and their main pursoes
+<ul>
+<li>insert is to insert text into your file (this will be the most familiar)</li>
+<li>normal mode is to navigate around and between your file, delete, copy and paste words/sentences or paragraphes</li>
+</ul></li>
+<li>How to switch between each mode
+<ul>
+<li>Press <esc> or <ctrl> +[. to get out of insert mode to normal mode</ctrl></esc></li>
+<li>Press i,a,s or o to get out of normal mode into insert mode</li>
+</ul></li>
+</ol>
+<p>What can you do with this so far? - not alot –but patience my friend – we are establishing vocabulary and framework. - now you know enough to enable VIM keybindings in Rstudio</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+How to enable VIM in Rstudio?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Go to “Global Options”</li>
+<li>Select “Code”</li>
+<li>Under keybindings select “VIM”</li>
+</ol>
+</div>
+</div>
+</div>
+<p>In RStudio VIM you will get a light flavor of the keybindings, no support for custom keybinds, a taste of the distinct modes, modest macro support and most search &amp; replace functionality with no plugins from the open source community</p>
+</section>
+<section id="vim-keybindings-in-rstudio" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> VIM keybindings in Rstudio</h1>
+<p>let’s explore the insert optons in more detail:</p>
+<p>‘i’ will <em>i</em>nsert your cursor to the left of your bloc ‘a’ will <em>a</em>ppend your cursor to the right of your bloc ‘I’ will <em>I</em>insert your cursor to the beginning of the line ‘A’ will <em>A</em>ppend your cursor to end of the line ‘o’ will <em>o</em>open a new line below the current line to the beginning ‘O’ will <em>O</em>open a new line above the current line to the beginning</p>
+<p>Again once you are in insert mode – the only way to leave insert mode is to esc</p>
+<p>Why all the different ways to go into insert mode?</p>
+<p>you want to change your mindset towards minimizing the amount of keystrokes required to write your document.</p>
+<p>Being precise with where exactly you want your cursor to go enables you to a avoid using arrow keys to move your cursor</p>
+<p>You want to be a surgeron –minimal, light touch and ruthless with your efficiency</p>
+<p>To improve your productivity let us go to your favorite mode (you just don’t know it yet) – normal mode</p>
+<p>As stated before you will want to try and stay in normal mode because of how addicting your efficiency wil be.</p>
+<p>To move around in normal mode you need to use h,j,k and l. Probably the biggest hurdle to you learning VIM starts right here</p>
+<p>but stay with it! the pain you fill now will quickly make up for itself with gloarious macros and ridiculous efficiency with VIM.</p>
+<section id="motions" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="motions"><span class="header-section-number">6.0.1</span> motions</h3>
+<p>These are the keybindings that help you move across your document, you can move move by character, word, line or paragraph (or multiples of them).</p>
+<p>We have already covered how to move your line one character at a time with h,j,k and l. However that will be really inefficient.</p>
+<p>If you want sail through your line a useful keybinding is ‘w’,‘e’, ‘b’ and ‘ge’</p>
+<p>This will enable to move you forward one “word” at a time.</p>
+<p>Whats the differnce between w and e? w will move you to the beginning of a word whereas e will move you to the end of the word.</p>
+<p>At this point – you won’t care about this distinction</p>
+<p>Want to move two words you can add a count to it – eg. ‘2w’ will move you two “words”. 5w will move you five words.</p>
+<p>Additional include ‘0’ and ‘$’ to move you to the beginning or the end of the sentence (still in normal mode)</p>
+<section id="vertical-motions" class="level4" data-number="6.0.1.1">
+<h4 data-number="6.0.1.1" class="anchored" data-anchor-id="vertical-motions"><span class="header-section-number">6.0.1.1</span> vertical motions</h4>
+<p>so how to move down a paragraph</p>
+<p>who do move down a a screen</p>
+</section>
+<section id="horizonal-motions" class="level4" data-number="6.0.1.2">
+<h4 data-number="6.0.1.2" class="anchored" data-anchor-id="horizonal-motions"><span class="header-section-number">6.0.1.2</span> horizonal motions</h4>
+</section>
+</section>
+<section id="counts" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="counts"><span class="header-section-number">6.0.2</span> counts</h3>
+<p>1,2,3 or 4 are all examples of counts</p>
+</section>
+<section id="motions-counts" class="level3" data-number="6.0.3">
+<h3 data-number="6.0.3" class="anchored" data-anchor-id="motions-counts"><span class="header-section-number">6.0.3</span> motions + counts</h3>
+</section>
+<section id="actions" class="level3" data-number="6.0.4">
+<h3 data-number="6.0.4" class="anchored" data-anchor-id="actions"><span class="header-section-number">6.0.4</span> actions</h3>
+<p>d – delete x – delete character y – copy c – change p – paste</p>
+</section>
+<section id="marks" class="level3" data-number="6.0.5">
+<h3 data-number="6.0.5" class="anchored" data-anchor-id="marks"><span class="header-section-number">6.0.5</span> marks</h3>
+</section>
+<section id="registry" class="level3" data-number="6.0.6">
+<h3 data-number="6.0.6" class="anchored" data-anchor-id="registry"><span class="header-section-number">6.0.6</span> Registry</h3>
+</section>
+</section>
+<section id="additional-vim-bindings-resources" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Additional VIM bindings / Resources</h1>
+<section id="resources" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="resources"><span class="header-section-number">7.1</span> Resources</h2>
+<ul>
+<li><a href="https://www.iopb.res.in/vimbook-OPL.pdf">older book but good starting materials</a></li>
+<li><a href="https://vimtricks.com/p/vim-jump-list">dunno</a></li>
+<li><a href="https://fzheng.me/2018/03/20/practical-vim-getting-around-faster/">pragmatic key strokes – for intermediates</a></li>
+</ul>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="actual-vim" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Actual VIM</h1>
+<section id="how-to-use-vim-if-you-are-in-a-windows-environment" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="how-to-use-vim-if-you-are-in-a-windows-environment"><span class="header-section-number">8.1</span> How to use VIM if you are in a windows environment</h2>
+<ul>
+<li><p>Your corporate enviorment may have allow you to have ‘Git BASH’ which is really helpful! because if you have that you have VIM!</p></li>
+<li><p>Alternatively your corporate environmetn may have Mysys</p></li>
+</ul>
+</section>
+<section id="how-to-find-your-.vimrc-file" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="how-to-find-your-.vimrc-file"><span class="header-section-number">8.2</span> How to find your .vimrc file</h2>
+<p>In order to customize your vim file, you will need to have a vim configuration file, often times known as ‘vimrc’ file, however finding this file can be confusing at time.</p>
+<p>The below are some helpful tips you can use run in vim to help find where your vim is sourcing your vimrc file</p>
+<p>Note, if your vimrc file doesn’t exist you can just create a new one</p>
+<ul>
+<li><p>:version ▶ tells you where VIM is sourcing the .vimrc file</p></li>
+<li><p>:echo $VIM ▶ to see the filepath tha vim is looking for the vimrc</p></li>
+<li><p>:source filepath ▶ to source a different vim file</p></li>
+</ul>
+</section>
+<section id="setting-up-vim-first-time" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="setting-up-vim-first-time"><span class="header-section-number">8.3</span> Setting up VIM first time</h2>
+<p>Below are helpful commands to set up in your vimrc to help making vim sing</p>
+<p><span style="color: grey">Set’s VIM so that it won’t be capitible with Vi</span></p>
+<ul>
+<li>:set nocompatible</li>
+</ul>
+<p>[Gives each line a number]</p>
+<ul>
+<li>:set number (nu)</li>
+</ul>
+<p>[Gives each line a number]</p>
+<ul>
+<li>:set relativenumber (rnu)</li>
+</ul>
+<p>[Gives each line a number]</p>
+<ul>
+<li>:set hlsearch ▶ highlight words in a search</li>
+</ul>
+<p>[Gives each line a number] - :set ruler ▶ provides row and column index [Gives each line a number] - :set autoindent [Gives each line a number] - :set incrsearch == incremental search [Gives each line a number] - :set autowrite ▶ automatic save [Gives each line a number] - set cursorline ▶ highlight current row [Gives each line a number] - set cursorcolumn ▶ highlight current column [Gives each line a number] - set showcmd [Gives each line a number] - set backspace=indent,eol,start [Gives each line a number] - set backup [Gives each line a number] - let mapleader = “&lt;space&gt;” ▶ map leader key [Gives each line a number] - nobell=all == turns off visual and audio bells [Gives each line a number]</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Leaderkey concept
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Leaderkey is a</p>
+</div>
+</div>
+</section>
+<section id="additional-set-ups" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="additional-set-ups"><span class="header-section-number">8.4</span> Additional set ups</h2>
+<ul>
+<li>This will depend on your linux set up</li>
+<li>If you are using a barebones linux setup you may require more set up lets go ## Mappings</li>
+</ul>
+<section id="mappings-to-decrease-repititiveness" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="mappings-to-decrease-repititiveness"><span class="header-section-number">8.4.1</span> Mappings to decrease repititiveness</h3>
+<ul>
+<li>imap jk <esc> ▶ custom escape key (to jk)</esc></li>
+<li>crtl + P ▶ to auto fill from words already present in the sheet</li>
+<li>:xnoremap p pgvy ▶ paste, re-copies previous selection and yanks it again</li>
+<li>:abbreviate shortcut fullword ▶ set custom snippets</li>
+<li>:map <key> actions ▶ maps a key, simliar to a register</key></li>
+<li><code>.</code> ▶ will repeat the last action</li>
+</ul>
+</section>
+<section id="shortcuts" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="shortcuts"><span class="header-section-number">8.4.2</span> Shortcuts</h3>
+<ul>
+<li><p>nohl ▶ erases current highlights</p></li>
+<li><p>:marks [args] ▶ lists all marks</p>
+<ul>
+<li>’ ▶ the last place the cursor was at</li>
+<li>” ▶ line 1</li>
+<li>[ ▶ start of the last insert</li>
+<li>] ▶ this end of the insert</li>
+</ul></li>
+<li><p>:wnext ▶ save current file and go to nextfile</p></li>
+<li><p>:next! ▶ force next</p></li>
+<li><p>:first ▶ first file</p>
+<ul>
+<li>:last ▶ last file</li>
+<li>:Next ▶ go to previous</li>
+<li>:args ▶ current file that you are on</li>
+<li>:f ▶ will dispaly current file</li>
+</ul></li>
+<li><p>:put=range(start_num,end_num,inc) ▶ put range of numbers in script</p></li>
+</ul>
+<p>This is probably better understood as a mimic of VIM key bindings but even this limited capabilities can signifcantly help your producively</p>
+</section>
+<section id="key-navigation" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="key-navigation"><span class="header-section-number">8.4.3</span> Key Navigation</h3>
+<ul>
+<li>J ▶ joins lines</li>
+<li>:t [row number] ▶ copies to row number</li>
+<li>:m [row_number] ▶ moves to row number</li>
+<li>gUU ▶ upper cases entire line</li>
+<li>g~~ ▶ inverts case of line</li>
+<li>{ ▶ up a section</li>
+<li>} ▶ down a section</li>
+<li>:Ex == Open up file explorer</li>
+<li>gj == navigate one visual line</li>
+<li>gk == navigate one visual line</li>
+</ul>
+</section>
+</section>
+<section id="patterns-to-know" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="patterns-to-know"><span class="header-section-number">8.5</span> Patterns to know</h2>
+<section id="search" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="search"><span class="header-section-number">8.5.1</span> Search</h3>
+<p>VIM has very powefful search functionality with <code>/</code></p>
+<ul>
+<li>Use the ‘/’ to search for a key word</li>
+<li>if multiple matches you can use ‘n’ to select the next option.</li>
+<li>or you can use ? to go back to a previous option</li>
+</ul>
+</section>
+<section id="replace" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="replace"><span class="header-section-number">8.5.2</span> Replace</h3>
+<ul>
+<li><p>:[start_num,end_num]s/new_word/old_word/g ▶ replace a word</p>
+<ul>
+<li>start_num,end_num ▶ can be replaced with %</li>
+<li>s – to substitute</li>
+<li>g ▶ indicates its a global so if it happens more than once to go replace it</li>
+<li>c ▶ confirm before change</li>
+<li>% or 1,$ ▶ full document</li>
+</ul></li>
+</ul>
+</section>
+<section id="popular-regex" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="popular-regex"><span class="header-section-number">8.5.3</span> Popular regex</h3>
+<ul>
+<li>$ and ^ around single word will only find those words</li>
+</ul>
+</section>
+</section>
+<section id="registers-macros" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="registers-macros"><span class="header-section-number">8.6</span> Registers (macros)</h2>
+<ul>
+<li>Start recording with q</li>
+<li>Assign a letter to the macro</li>
+<li>Do your key bindings step by step</li>
+<li>q to stop macros</li>
+<li><span class="citation" data-cites="letter">(<a href="#ref-letter" role="doc-biblioref"><strong>letter?</strong></a>)</span> to call macro</li>
+<li>Can add count to do it muliple times</li>
+</ul>
+</section>
+<section id="text-blocks-and-multiple-files" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="text-blocks-and-multiple-files"><span class="header-section-number">8.7</span> Text blocks and multiple files</h2>
+<ul>
+<li>Cutting, deleting and yanking a word puts it in the registrar</li>
+</ul>
+<section id="marks-1" class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="marks-1"><span class="header-section-number">8.7.1</span> Marks</h3>
+<ul>
+<li>mark a spot with ‘m’ and a letter</li>
+<li>to go to a mark use ’ and the letter
+<ul>
+<li>Useful to delete until a word d’a or to mark a frequently used section</li>
+</ul></li>
+</ul>
+</section>
+<section id="filtering" class="level3" data-number="8.7.2">
+<h3 data-number="8.7.2" class="anchored" data-anchor-id="filtering"><span class="header-section-number">8.7.2</span> Filtering</h3>
+<ul>
+<li><p>! + abs rows + G + command</p>
+<ul>
+<li>!10Gsort ▶ will sort the ten rows from currnet row to row 10</li>
+<li>!10Grev ▶ will rev the rows from point to line 10</li>
+</ul></li>
+<li><p>!! command ▶ to directly enter in a different comand</p>
+<ul>
+<li>!!ls ▶ lists files and folders</li>
+<li>!!pwd ▶ lists current directory</li>
+<li>!!date ▶ lists the current date</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="edit-multiple-files" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="edit-multiple-files"><span class="header-section-number">8.8</span> Edit multiple files</h2>
+<ul>
+<li><p>vim file1 file2</p></li>
+<li><p>this will open up the first file to switch you need :write and :next or :wnext</p></li>
+<li><p>:args ▶will display the current file that you are on</p></li>
+<li><p>:f ▶ will display current file</p></li>
+<li><p>crtl + ^ will get you</p></li>
+</ul>
+</section>
+<section id="buffer-copy" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="buffer-copy"><span class="header-section-number">8.9</span> Buffer Copy</h2>
+<ul>
+<li>:[numberOfLines]split [file] ▶ split current file or named file-</li>
+<li>:new ▶ to open up a new buffer<br>
+</li>
+<li>:bnext ▶ next buffer</li>
+<li>:bprevious ▶ previous buffer</li>
+<li>:vsplit [+/pattern]▶ for visual split to go pattern</li>
+<li>ctrl+Ww ▶ -cycle through buffers</li>
+<li>:hide ▶ hide buffer</li>
+<li>:buffers ▶ list buffers</li>
+<li>:buffer [number] ▶ go to list of buffers</li>
+</ul>
+</section>
+<section id="visual-basic-mode" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="visual-basic-mode"><span class="header-section-number">8.10</span> Visual Basic Mode</h2>
+<ul>
+<li>v starts line by line visual mode ▶ can only select line wise at a time</li>
+<li>V highlights the whole line</li>
+<li>vaw ▶ visualize around the word</li>
+<li>ctrl + v enters visual block mode</li>
+<li>ctrl + v + I <insert text=""> + escape ▶ insert text across multiple lines
+<ul>
+<li>use <code>o</code> to toggle between start and ending of visual search</li>
+</ul></insert></li>
+</ul>
+</section>
+<section id="digraph" class="level2" data-number="8.11">
+<h2 data-number="8.11" class="anchored" data-anchor-id="digraph"><span class="header-section-number">8.11</span> Digraph</h2>
+<ul>
+<li><p>ctrl + k character character number</p>
+<ul>
+<li>• is ctrl+k oo</li>
+<li>▶ is cktrl+k RP</li>
+</ul></li>
+</ul>
+</section>
+<section id="misc." class="level2" data-number="8.12">
+<h2 data-number="8.12" class="anchored" data-anchor-id="misc."><span class="header-section-number">8.12</span> Misc.</h2>
+<ul>
+<li><code>&gt;&gt;</code> shifts left <code>&lt;&lt;</code> shifts right</li>
+<li>set shiftwidth=number ▶ sets the shift command</li>
+<li>:numrange p ▶ print last lines</li>
+<li>:start_range,/search p ▶ print until a serached word ▶ also works with marks’</li>
+<li>ctrl + v :’ ▶ will put range in and you can execute commands from there</li>
+<li>o ▶ to insert space beneath the line</li>
+<li>O ▶ to insert space above the current line</li>
+<li>g ctrl-g == display words, lines and bytes</li>
+</ul>
+<p>:25t. – copies line 25 and pastes it below :t20 – copies current line and pastes it below line 20</p>
+<p>in insert mode ctrl+r+= and arthemtic operation to add calculator to vim <a href="https://jovica.org/posts/vim_advanced_copy/">copy, move, delete in norm mode</a></p>
+<p>t or co = copy m = move d = delete . = current line</p>
+<p>start_range,end_rate,motion,line</p>
+<p>gi == last insert gv – last visual</p>
+<p>shift+k over bash command will open man pages</p>
+<p>gx – to open url (must have https://)</p>
+<p>g+ ctrl+g =count words, lines,etc</p>
+<p>ctrl + a == incremental number ctrl+ x == decrease number</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./many_models.html" class="pagination-link" aria-label="many_models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">many_models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./github.html" class="pagination-link" aria-label="github">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">github</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

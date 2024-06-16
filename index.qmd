@@ -1,0 +1,96 @@
+# Index {.unnumbered}
+
+## Excel to R: A Survivor's Guide for the Corporate Environment
+
+## Introduction
+
+
+## Set Up & Configuration
+-   Rstudio
+-   Visual Studio
+-   Vim
+
+
+## The Whole Game
+
+-   Reproducible research
+-   Version Control
+-   Importing data from different systems and environments
+-   Using statistical to shortcut business intelligence functions
+
+## Rethinking data
+
+-   Learning about tabular data vs. report data and why it is important
+-   Column naming convention and best practices
+-   data dictionary
+-   Data principles
+        
+        -https://www.ibcs.com/
+        
+        
+## lookup tables
+-   how to create them
+-   how to use them
+
+
+## Augmenting and creating calculation
+-   adding columns and calculated columns
+
+## grouping and summzaring (super power 1)
+-   
+
+## filter, duplicates, advanced aggregations
+-   
+
+## Time Intelligence Functions
+-   Power BI type intelligence functions
+
+## Merge and joins (super power 2)
+
+## pivot and unpivot (super power 3)
+
+## columnwise vs. rowwise aggregation (super power 4)
+
+## Importing Data
+
+## Spark & Database 
+
+## Statistical Applications for Buinsess Intelligence
+
+- lm+ simple= group_by()+ summarize(mean)
+- rq+ simple =group_by()+summarize(median)
+- lm+ interaction
+
+## Visualization packages
+    -   ggplot()
+        -ggiraph
+        -gganimate
+    -   gt()
+    -   observablejs
+
+
+
+```{r}
+#| echo: false
+#| label: fig-toc
+
+library(tidyverse)
+
+readODS::read_ods(
+  
+  here::here("learningR_framework.ods")
+  ,skip = 1
+) %>% 
+  janitor::clean_names() %>% 
+  select(chapter:comment) %>% 
+  fill(chapter,.direction = "down") %>% 
+  gt::gt() %>% 
+  gt::fmt_missing(
+    missing_text="-"
+  ) %>% 
+  gt::tab_options(
+    ihtml.active = TRUE
+    ,ihtml.use_pagination = TRUE
+  )
+```
+

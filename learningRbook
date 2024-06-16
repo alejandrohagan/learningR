@@ -1,0 +1,1029 @@
+---
+title: "learningR"
+author: "Alejandro Hagan"
+date: "2022-08-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+#Working directory and file manipulation concepts
+
+- Before you start working you need to set up the space you are working in. 
+- If you don't have a git or version sharing repository
+- When you save a file, data file, read inputs or otherwise, the folderpath branching will generally speaking come from here
+
+- `getwd()` will tell you what is your current working directory
+- `setwd()` can be used to change your working directly
+
+Other popular system funtions are
+
+- the abilily to list files or filders in a folder path
+list.files(pattern=$^, recursive=T)
+
+-the ability to check if a file exists?
+
+file.exists dir.exists basename("c:/filedir/file.txt") -> "file.txt dirname("c:/filedir/file.txt")->
+
+- create files
+create.dir("./newdir") file.create("filename.txt") shell.exec("filename.txt")
+
+-move files
+filesstrings::move_file("c:home/filename.txt","c:newdir") file.copy("filename", "destination") file.rename(directory,"existing file name","new file name") -if directory is blank will assume getwd() file.choose() base::unlink("filename", recursive=T) -recursve must be T to delete directories
+
+Link to learn more [where did I have this???]
+
+```{r}
+library(tidyverse)
+write_csv(cars,"cars.csv")
+
+read_csv("https://raw.githubusercontent.com/alejandrohagan/learningR/main/cars.csv")
+
+cars.csv
+cars.csv
+
+```
+
+#gitworkflow
+
+- You can either save on a local site or you can push to a version sharing repository. 
+- Critical that you get familiar with version sharing site
+
+how to connect to github
+
+while all this may seem to new, quite honestly its because we have never been told good versioning and collaboration practices so we are reliant on saving to a LAN system, amending the name with versioning control
+
+create a new github repsository in github
+
+go to global settings (not repository settings), go to develrop settings and click personal access tokens
+
+generate new token, copy (consider saving as you can only see it once)
+
+usethis::git_branch_default()
+
+check local branch
+
+gert::git_remote_ls()
+
+get information
+
+resources
+
+https://rfortherestofus.com/2021/02/how-to-use-git-github-with-r/
+
+{r}
+usethis::use_git_remote("origin",url=NULL,overwrite=TRUE)
+usethis::use_github()
+usethis::gh_token_help()
+
+usethis::use_git_remote(name = "origin",url = "https://github.com/alejandrohagan/learningR.git",overwrite=TRUE)
+
+gitcreds::gitcreds_set(url = "https://github.com/alejandrohagan/learningR.git")
+
+usethis::use_github()
+usethis::git_default_branch()
+
+gh::gh_whoami()
+
+usethis::git_remotes()
+
+usethis::pr_push()
+
+usethis::pr_fetch()
+
+usethis::pr_pull()
+
+usethis::pr_init(branch = "main")
+
+ git config pull.rebase false
+
+usethis::use_git_remote(name = "origin",url = "https://github.com/alejandrohagan/learningR.git",overwrite=TRUE))
+
+• To create a personal access token, call `create_github_token()`
+• To store a token for current and future use, call `gitcreds::gitcreds_set()`
+
+5 steps to change GitHub default branch from master to main | R-bloggers
+
+Don't Lose your HEAD over Default Branches | R-bloggers
+
+Git: Moving from Master to Main | R-bloggers
+
+push & committ and commenting
+
+How to manipulate & tidy data
+
+##how to import data----------
+
+read.csv()
+
+read_csv()
+
+fread()
+
+##how to change column types----
+
+how to create data
+
+seq() runif() sample(data,# of times, replace,) c() data.frame()
+
+how to create data with basic loops / repitition
+
+types of data
+
+vector data.frame list
+
+some base R basics that will be helpful to you as you read the forums
+
+how to import files
+
+by folder
+
+by website
+
+excel spreadsheet
+
+powerbi model
+
+how to find files by their type
+
+how to append files together
+
+how to automate file importation
+
+file column names
+
+how to change column names
+
+statically
+
+dynamically
+
+best practices when naming columns
+
+how to change column types
+
+statically
+
+dynamically
+
+how to check data structure
+
+-unique
+
+how to clean data
+
+how to shape data
+
+how to subset data
+
+filter
+
+dynamic
+
+static
+
+select
+
+dynamic
+
+static
+
+grouby
+
+summarize
+
+mutate
+
+fill / blanks/ replace values
+
+recode
+
+pivot / unpivot
+
+merge
+
+iterate
+
+apply a single function (single input or multiple inputs) to every/ some/ based on criteria column and get its outputs into a data frame (to be accessed)
+
+apply a single function with multiple inputs
+
+apply a functions to nested data frames
+
+explatory analysis
+
+start with variance analysis
+
+how to extract information out of a table
+
+for (i in range){
+
+do something }
+
+basic framework 1. is to define the vector that you want as an output and its size with vector("type",vectorsize) 2. assign that vector names with names() so that data has headings 3. create for (i in range) 4. define the task it will do individually to thedataset 4. assign that to the output vector
+
+tips & tricks
+
+check the task individually against a single element to ensure it works
+
+you can extract other elements (typically row / column names) using other techniques (names()) and assign to output (doesn't need to be in the loop) -use seq_along(), ncol(), [[]] to define parameters and extract elements
+
+{r loop_example, message=FALSE, warning=FALSE}
+output <- vector("double",ncol(mtcars)) #assigns the output vector
+
+cols_names <- names(mtcars) # assigns names of the dataframe to variable
+names(output) <- cols_names # assigns the names 
+
+
+for (i in cols_names) { # sometimes useful to use seq_along() here as well
+  
+  
+  output[i] <- mean(mtcars[[i]]) # the double brackets ensures we only take out one item, this needs to be adjusted if two iems are expected, change the vector to a list
+  
+}
+
+output
+
+
+### Categorical Variables
+
+In general you will need to distinguish betwen your character values as either straight character or categorical with levels
+
+This becomes critical as you look to create categories and relationships in your data
+
+forecats is the gotopackage in particular:
+
+rename
+
+recode() to change values in column
+
+recode(col,newvalue=oldvalue)
+
+reorder
+
+fct_relevel
+
+fct_relevel(col,level1,level2,etc)
+
+fct_reorder(col,col_to_be_reorderby,function)
+
+3)group variables into another group
+
+case_when()
+
+-typically used in combination with mutate() -can reference multiple conditions
+
+case_when(col1==var1 ~ val1,             col1==var2 & col3==var3 ~ var 2,             is.na(col1) ~ "missingvalue",             TRUE ~ "defaultvalue )` cut()
+
+##purr
+
+{ } is used to stop a data frame from passing into as first agurmen
+
+. is a place holder for the data frame
+
+{r }
+list.len=3
+str(mpg,list.len=3)
+
+str(mpg)
+listviewer::jsonedit(mpg)
+
+#patchwork
+
+can organize with easy convention +,/,| is two charts on top and one chart beneath
+
+but can also supplement with additional functions
+
+plot_layout can also arrnage by rows
+
+plot_layout(nrow = 3, byrow = FALSE) arguments: width= changes the graphs relative width size, when given as a numeric c(2,1) then the first columsn graphs are twice as large as the second columns height= changes the graphs reltive row heigh, ncol= numeric, changes number of columsn guides="collect" to remove duplicate guides theme(legend.position='bottom') moves the legend position
+
+guide_area() to create area that guides=collect move towards
+
+https://patchwork.data-imaginist.com/reference/plot_layout.html
+
+plot_annotation() to add annotation title = 'The surprising story about mtcars' tag_levels = 'I' or "A" or "1" to set tag on each plot caption="Text" theme = theme(plot.title = element_text(size = 16))
+
+use the below to add a blank text tile next to a plot grid::textGrob('Some really important text') or a table gridExtra::tableGrob(mtcars$$1:10, c('mpg', 'disp')$$)
+
+plot_spacer() inserts an empty plot
+
+inset_element() to insert a sub graph ontop of a new one
+
+left = 0.6, bottom = 0.6, right = 1, top = 1 align_to = 'full
+
+helpful tips:
+
+When creating a patchwork, the resulting object remain a ggplot object referencing the last added plot. This means that you can continue to add objects such as geoms, scales, etc. to it as you would a normal ggplot:When creating a patchwork, the resulting object remain a ggplot object referencing the last added plot. This means that you can continue to add objects such as geoms, scales, etc. to it as you would a normal ggplot:geom_jitter(aes(gear, disp))
+
+Often, especially when it comes to theming, you want to modify everything at once. patchwork provides two additional operators that facilitates this. & will add the element to all subplots in the patchwork, and * will add the element to all the subplots in the current nesting level. As with | and /, be aware that operator precedence must be kept in mind.
+
+str_replace_all //s+ = all white spaces
+
+how to write tables
+
+font 1. Numerical data is right-aligned 2. Textual data is left-aligned 3. Headers are aligned with their data 3½. Don't use center alignment.
+
+#visual guide ## axis title - axis title always all caps - align top y axis or left axis - color to match axis color ## graph title left alignment
+
+Across(), if_any,if_all
+
+summarize/mutuate/pivot_longer/pivot_wider
+
+across // character based
+
+starts_with
+
+ends_with
+
+contains
+
+matches
+
+num_range()
+
+last_col
+
+where()// with a function that has bolean condition eg. is.numeric
+
+used to select columns by name, position or type (requires where() wrapp)
+
+c(column names), position or type (where)
+
+function, or list( function1=function(), function2=function())
+
+{} is used to refenence preivously declared variables in the glue package or in functions that rerence glue package
+
+some attributes have sepcial references, such as {.col} to reference a column and {.fn} to refernece a function
+
+used in the .names argument of across
+
+`across()` doesn't work with `select()` or `rename()`
+
+mutate, group_by,count,distinct,summarize
+
+filter is excluded and instead use if_any and if_all with exceltiion of
+
+filter(across(everything), ~function)
+
+Examples for filter
+
+* `if_any()` keeps the rows where the predicate is true for *at least one* selected
+
+column:
+
+```{r}
+
+starwars %>%
+
+filter(if_any(everything(), ~ !is.na(.x)))
+
+```
+
+* `if_all()` keeps the rows where the predicate is true for *all* selected columns:
+
+```{r}
+
+starwars %>%
+
+filter(if_all(everything(), ~ !is.na(.x)))
+
+```
+
+* Find all rows where no variable has missing values:
+
+```{r}
+
+starwars %>% filter(across(everything(), ~ !is.na(.x)))
+
+```
+
+Need to investigate rename_with and and itsimpact on select as it appears to be superseded
+
+dplyr/colwise.Rmd at main · tidyverse/dplyr · GitHub
+
+glamour of graphics
+
+alignemtn
+
+top left aligned to the chart left (plot.titile.position="plot"
+
+add_count(dim,name="text") %\>% mutate(colname= glue::glue("{col}{text}")
+
+rotate lebels, either by swapping axis or removing axis all together
+
+remove borders
+
+remove gridlines
+
+left /right align text to create clean borders
+
+indicate legend in title
+
+graphing tips and tricks
+
+if you want to plot a subset of the data but show atrend agains the full data, leverage the data argument in the each individual geom (rather that defining this globally) (example below)
+
+R-Ladies Freiburg (English) - Level up your ggplot: Adding labels, arrows and other annotations - YouTube
+
+geom_curve
+
+aes(x,y,xend,yend)
+
+arrow=arrow(length=unit(x,"inch)),
+
+size
+
+colr
+
+curvature(0 is straight line, positive is right hand curve, negative is left hand curve)
+
+ggforce package has advanced annotation options
+
+geom_mark_circle
+
+geom_mark_rect
+
+geom_mark_hull
+
+geom_mark_elipse`
+
+aes(label,filter,description)
+
+expand
+
+label.lineheight
+
+label.fontsize
+
+show.legend
+
+ggforce() package
+
+with_blur() can blur the geoms (ten need to seperately map the geoms that you do want to show
+
+need to warp the geom_jitter comand in with_blur
+
+with_blur(
+
+geom_jitter(),
+
+sigma = unit(#,"mm") #blur impact
+
+facet_zoom()# takes a larger dataset and then adds in a zoomed up graph
+
+facet_zoom(axis =argument==filterar_gument)
+
+facet_zoom(x=country=="spain")
+
+facet_zoom(y=length <20)
+
+Tidy models
+
+data load
+
+rsamples
+
+assign to training df: split
+
+based on proportions and strata
+
+assign to training df: assign trianing
+
+assign cross validation sets (if ncessary)
+
+assign to testingdf: assign testing
+
+initial_split()
+
+training()
+
+testing()
+
+recipes
+
+prepare the data with prepeprosing
+
+assign vairables
+
+other transformation steps
+
+recipte()
+
+update_role()
+
+parsnip
+
+specify and fit the model
+
+model (decision_tree()
+
+set_engine()
+
+set_mode()
+
+workflow
+
+workflow()
+
+add_receipe()
+
+add_model()
+
+Tidy evaluation
+
+Programming with dplyr • dplyr (tidyverse.org)
+
+Argument type: tidy-select — dplyr_tidy_select • dplyr (tidyverse.org)
+
+Tidy evaluation is not all-or-nothing, it encompasses a wide range of features and techniques. Here are a few techniques that are easy to pick up in your workflow:
+
+Passing expressions through {{ and ....
+
+Passing column names to .data[[ and one_of().
+
+All these techniques make it possible to reuse existing comp
+
+When creating forumlas how to referece to names?
+
+STart with fixed names (only if you are sure it wont change) and try wrapping that around a test to ensur eit exists
+
+duoble currly braces {{}}
+
+When you want to reference a data variable from an env. variable in function, you pass the dataframe to the function then wrap the data var with {{var}} in order pull it from the env frame (instead of saying data$x)
+
+where() for search paramters
+
+.data[[var]]
+
+if you env variable is a character frame that you must use .data[[var]]
+
+all_of or any_of for character vectors for search praramters
+
+<!-- -->
+
+compute_bmi <- function(data) {
+  if (!all(c("mass", "height") %in% names(data))) {
+    stop("`data` must contain `mass` and `height` columns")
+  }
+
+  data %>% transmute(bmi = mass / height^2)
+}
+
+how to use as nmaes
+
+"mean_{{var}}" := mean({{var}})
+
+Open questions
+
+when do you sue data and when do use .data (okay answer apparently when you use … you start other variables with "." eg. .data to avoid conflictino (20 Dot prefix | Tidyverse design guide
+
+)
+
+f you want the user to provide a set of data-variables that are then transformed, use across():
+
+my_summarise <- function(data, summary_vars) {
+  data %>%
+    summarise(across({{ summary_vars }}, ~ mean(., na.rm = TRUE)))
+}
+starwars %>% 
+  group_by(species) %>% 
+  my_summarise(c(mass, height))
+#> # A tibble: 38 × 3
+#>   species   mass height
+#>   <chr>    <dbl>  <dbl>
+#> 1 Aleena      15     79
+#> 2 Besalisk   102    198
+#> 3 Cerean      82    198
+#> 4 Chagrian   NaN    196
+#> # … with 34 more rows
+
+You can use this same idea for multiple sets of input data-variables:
+
+my_summarise <- function(data, group_var, summarise_var) {
+  data %>%
+    group_by(across({{ group_var }})) %>% 
+    summarise(across({{ summarise_var }}, mean))
+}
+
+Use the .names argument to across() to control the names of the output.
+
+my_summarise <- function(data, group_var, summarise_var) {
+  data %>%
+    group_by(across({{ group_var }})) %>% 
+    summarise(across({{ summarise_var }}, mean, .names = "mean_{.col}"))
+}
+
+Action versb to know how to use
+
+Argument type: tidy-select — dplyr_tidy_select • dplyr (tidyverse.org)
+
+everything(): Matches all variables.
+
+last_col(): Select last variable, possibly with an offset.
+
+These helpers select variables by matching patterns in their names:
+
+starts_with(): Starts with a prefix.
+
+ends_with(): Ends with a suffix.
+
+contains(): Contains a literal string.
+
+matches(): Matches a regular expression.
+
+num_range(): Matches a numerical range like x01, x02, x03.
+
+These helpers select variables from a character vector:
+
+all_of(): Matches variable names in a character vector. All names must be present, otherwise an out-of-bounds error is thrown.
+
+any_of(): Same as all_of(), except that no error is thrown for names that don't exist.
+
+This helper selects variables with a function:
+
+where(): Applies a function to all variables and selects those for which the function returns TRUE.
+
+arrange(), count(), filter(), group_by(), mutate(), and summarise() use data masking so that you can use data variables as if they were variables in the environment (i.e. you write my_variable not df$myvariable).
+
+across(), relocate(), rename(), select(), and pull()
+
+rowwise()
+
+colwise()
+
+Tricks
+
+mean in summarize will give you the portion of that variable per the group
+
+purr
+
+resources
+
+9 Basic map functions | Functional Programming (stanford.edu)
+
+Map and Nested Lists | R-bloggers
+
+pattern
+
+take one element .x<-list[[1]]
+
+do the formula based on that element
+
+set_names() without argument sets the names equal to the values
+
+map returns list, control map outcomes with map alternatives eg. map_df, map_dbl
+
+if function has more than one argument then define a function upfront in global environment and pass the second y argument as explicit command in map [follow up how to do this in anonymous way)
+
+map(1:5,custom_function,y=2)
+
+pmap for more than one vector
+
+can also pass through functions as objects not just data
+
+funs<- list(mean,median,sd)
+
+map(funs,~map_dbl(mtcars,.x))
+
+start on the inside and then work your way to the outside
+
+walk similiar ot map but is design for function that you want to run soley for hte side effects
+
+so walk will always return the origional vector eg. walk(.x,.f)=> .x whereas map will return map(.x,.f)=> .f(.x.
+
+So why use walk? when you want the formula side effectt (eg saving a picture)
+
+accumulate
+
+applies same function again and again and again
+
+applies function to first argument then takes that result and applies that outcome to second argument
+
+eg. accumulate(letters,paste), will produce a prymid of values of all the letters
+
+so accumlate will show all the interim values
+
+reduce will only show the final value
+
+this is recursive
+
+However, if you want pair wise actions 1*1, 2*2, etc then you need map2
+
+tidytext
+
+unnest_tokens basically takes a string and breaks t into characters, words, or others ngrams,
+
+From there use typical dplybs to graph, popular geoms are geom_text to plot the words aagainst their proportion.
+
+typiecal tokenize methodologies use ICI (international components of unicode) which defines word boundaries )
+
+Chapter 2 Tokenization | Supervised Machine Learning for Text Analysis in R (smltar.com)
+
+packages
+
+tidytext
+
+tokenize
+
+stopwords
+
+SnowballC for stemming
+
+hunspell also for stemming / spell check
+
+types of toekn
+
+characters
+
+words,
+
+sentences
+
+lines,
+
+paragraphs
+
+ngrams
+
+you can use tidytext package or tokenize package but here is your pattern
+
+grab text
+
+add a dimenion factor (eg. chapter, author, book)
+
+nest the data by the dimension
+
+if data is nested use mutate(map()) pattern to perform transformations
+
+if doing setences or paragraphs you may need to paste() the text and add paragraph breaks "\n" (paragraphs) or space breaks " " (sentences)
+
+then use either tidytext(returns tibble) or tokenizer (returns lists) to do unnesting work
+
+unnest data
+
+anti_join(stop_words)
+
+regex considerations
+
+[:alpha:] brings in non US lettesr where as [a-zA-Z] only brings in US letters
+
+? is optional (will match or not)
+
+^ starts with
+
+$ends with
+
+| or
+
+stop words
+
+stopwords package with snowball, iso and other packages
+
+stemming
+
+can stem words tree, tree's into single word
+
+however also has impact of creating new words to stem by
+
+SnowballC package offers wordStem
+
+tokenizer::tokenize_word_stems
+
+hunspell:hunspell_stem
+
+more resources
+
+Chapter 2 Tokenization | Supervised Machine Learning for Text Analysis in R (smltar.com)
+
+tidytext
+
+tidy evaluation
+
+resources
+
+2 Why and how | Tidy evaluation (tidyverse.org)
+
+Programming with dplyr • dplyr (tidyverse.org)
+
+Implementing tidyselect interfaces • tidyselect (r-lib.org)
+
+Technical description of tidyselect • tidyselect (r-lib.org)
+
+13 Tidy evaluation basics | Functional Programming (stanford.edu)
+
+principles
+
+data masking is when you delay the evaluation of a code so that the code can find relevant columns for computation. th
+
+This is why you can can do::
+
+{r}
+
+#this will work
+starwars %>% filter(
+  height < 200,
+  gender == "male"
+)
+
+#but really the program needs this, reference to dataframe and column
+starwars[starwars$height < 200 & starwars$gender == "male", ]
+
+
+technical term for delaying code is quoting
+
+this delaying of code evalution can help you when using code but also make things more complicated when writing code
+
+vectoring can occur when either input has 1 or same length of input object to ensure all columns have same length
+
+some functions can repeat values if recycling completes the length
+
+howevre other,like tidyverse family don't
+
+!! takes a variable defined outside of function and allows you to use it within a function x<-1 function(x) !!x+1, qq_show() allows you to see what is happening
+
+!! works for assiging a variable not a column name or only variable
+
+!! is simliar to := but := is only for left hand side eg setting a name
+
+when working with lists you need !!! to pull out each element and pass it through otherwise !! just pass through the list as is also need to use enquos() vs. enquo
+
+sym) is how you quote for column names and !! is how you unquote, however sym() only works for character strings so "mpg" vs. mpg
+
+enquo is used for non character strings and then !! is how you unquote them
+
+rlang::qq_show will help show what how !! is being evaluated
+
+pattersn
+
+enquo() and !!
+
+:= and !!
+
+enquos() and !!!
+
+
+
+#PCA
+
+pca_rec <- recipe(~., data = sample_df) %>%
+  update_role(daily_miss, new_role = "id") %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors())
+
+pca_prep <- prep(pca_rec)
+
+pca_prep
+
+
+tidied_pca <- tidy(pca_prep, 2)
+
+tidied_pca %>%
+  filter(component %in% paste0("PC", 1:5)) %>%
+  mutate(component = fct_inorder(component)) %>%
+  ggplot(aes(value, terms, fill = terms)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~component, nrow = 1) +
+  labs(y = NULL)
+
+princomp with plot(pca_mod, type="lines").
+
+
+## advanced plotting, contorl over color, shape or alpha------
+
+
+1) add column that by attribution (eg. color, shape,alpha)
+2) use case_when that identifies row attributes and gives the custom formatting
+
+
+```{r}
+diamonds_formatting <- diamonds %>% 
+  mutate(
+custom_col= case_when(
+  between(price, 400,2000) ~ 'grey60',
+  price < 5000 ~ "red",
+  price < 10000 ~ "blue",
+  price < 20000 ~ "purple",
+  color =="G" ~ '#AA4465',
+  TRUE ~ "orange"),
+custom_shape=case_when(
+  color =="G" |color=="E" ~ 13,
+  TRUE ~ 4)
+  
+)
+
+```
+3) pass arguments to ggplot mapping the col, shape, alpha to the respective columns
+4) **must** add `scale_*_identity()` to the plot for this to work
+
+
+
+```{r}
+diamonds_formatting %>% 
+  ggplot(aes(price,color,col=custom_col,shape=custom_shape))+
+  geom_point()+
+  scale_color_identity()+
+  scale_shape_identity()
+```
+
+5) source (https://alberts-newsletter.beehiiv.com/)[]
+
+
+#tidyselect verbs
+
+contains()
+starts_with()
+ends_with()
+1:10
+a:b
+last_col() 
+-offset=X --offset argument
+matches()
+num_range() -needs arguments
+
+
+based on character names
+all_of()
+any_of()
+
+pass a formula to check against each column
+where()
+-is.numeric()
+-is.factor()
+~mean(.x) >3.5
+
+
+
+### common tasks---
+
+apply a function to multiple columns to perform action onto column or new columns
+- Across()
+apply a column of arguments, one by one, as input into a function
+- map()
+apply two or more column of arguments as simulataneous inputs into a function
+- map2()
+apply one column of arguments as input to function, then combine output with new argument
+- purrr::reduce()
+
+apply a function  to pairs of columns on a rolling basis (eg. col 1 -2, col 2 - 3, etc)
+????
+
+
+
+```{r}
+
+
+ibrary(tidymodels)
+iris
+
+rec <- recipe(Species ~.,data = iris)
+
+parsnip
+
+```
+
+
+
+
+## count
+
+count 
+very useful function to quickly tabulate data
+use .drop to show any data that has been filtered out or removed
+
+
+```{r}
+libra
+diamonds %>% 
+  filter(color=="E") %>% count(color)
+
+
+diamonds %>% 
+  filter(color=="E") %>% count(color,.drop=FALSE)
+?count()
+```
+
+
+
+
+
+
+```{r}
+
+
+install.packages("corrr")
+
+library(corrr)
+
+mtcars %>% 
+  na.omit() %>% 
+  correlate() %>% 
+  network_plot(colours = c("firebrick","white","midnight blue"))
+
+install.packages("bookdown")
+
+```
+

@@ -1,0 +1,42 @@
+---
+title: "resources"
+---
+
+## Resources
+
+### ggblanket package
+-   simplified ggplot alternative package
+
+[ggblanket](https://davidhodge931.github.io/ggblanket/articles/ggblanket.html)
+
+### Conditional geoms in ggplot
+
+(https://statisticsglobe.com/if-else-condition-add-extra-layer-ggplot2-plot-r)
+
+
+
+
+## make a map into points
+
+https://github.com/BjnNowak/bertin
+
+## package to simplify statitsics summary and plots
+
+https://jtools.jacob-long.com/
+
+## ggpub for pulbican type polots with stats
+
+https://rpkgs.datanovia.com/ggpubr/
+
+#explanation of log odds
+
+https://rpkgs.datanovia.com/ggpubr/
+
+## web plot digitizaer
+
+https://automeris.io/WebPlotDigitizer/
+
+
+## rename cols based on data dictionary
+
+https://twitter.com/i/bookmarks

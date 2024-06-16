@@ -1,0 +1,1330 @@
+---
+title: "Database and Larger Than Memory Problems"
+html:
+  code-fold: "show"
+---
+
+## Book Format
+
+
+
+# Resource
+
+[Resource to understand databases](https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html#)
+
+[R for datascience chapter on database](https://r4ds.hadley.nz/databases.html)
+
+[Dbplyr functions](https://dbplyr.tidyverse.org/articles/translation-function.html)
+
+[How to use duckdb](https://bwlewis.github.io/duckdb_and_r/talk/talk.html)
+
+[DBI function overivew](https://dbi.r-dbi.org/)
+
+[Posit learning materials](https://solutions.posit.co/connections/db/)
+
+[dbplot_histogram](https://edgararuiz.github.io/dbplot/)
+
+
+
+# Why is this important?
+
+-   You will get to a point where the data you need is inside a database and 
+not excel sheets or csv files 
+
+-   This is a point of potential rejoice or mourning
+
+-   While we can say goodbye excel sheets and csv files we also need to say hello 
+to poorly documented databases, overwhelmed database product owners,
+overworked data engineers, and finally SQL and all of its variations
+
+-   I recommend you take the time to learn SQL -- the basics are very
+similar to the dplyr commands you already know (slight tweaking of 
+evaluation order and syntax) so the beginners learning curve isn't steep
+
+:::{.callout-note collapse="true"}
+
+## How much SQL should I learn?
+
+If you're curious how much SQL you should learn, below is a framework that I
+found to be helpful, with their R equivalent
+
+    
+```{r}
+#| warning: false
+#| echo: false
+#| eval: true
+
+library(tidyverse)
+
+tribble(
+  ~sql,~dpylr,~comment
+  ,"WHERE"               ,"filter()", "Pass arguments with AND or OR,\nSometimes the first argument is TRUE for purely formatting purposes"
+  ,"SELECT"             ,"select()" , "* is short cut for all columns\nseperate multiple columns with a comma"
+  ,"GROUP BY"           ,"group_by()", "seperate multiple columns with a comma"
+  ,"SUM"                ,"sum()","works the same as sum, na.rm is always TRUE for SQL"
+  ,"MIN"                ,"min()","works the same as min, na.rm is always TRUE for SQL" 
+  ,"MAX"                ,"max()","works the same as max, na.rm is always TRUE for SQL"
+  ,"COUNT(*)"           ,"n()","wworks same as n()" 
+  ,"DISTINCT"           ,"distinct()"  ,"works similar"
+  ,"SELECT DISTINCT"    , "select() |> distinct()","specify the columns you want"
+  ,"PARTITION"          ,"group_by() |> mutate()","you will need to specify which colums you want with OVER() and BY()"
+  ,"LEFT JOIN"          , "left_join()", "Uses ON to join conditions"
+  ,"LIKE"               ,"str_detect()", "works with WHERE, % is wildcard"
+  ,"TOP"                ,"head()"      ,"work the same as TOP"
+  ,"DESCRIBE"           ,"glimpse()"   ,"works simliar, will display the columns and thier data types"
+  ,"SET"                ," <- "        ,"works simliar to assign for a single variables"
+  ,"BETWEEN"            ,"between()"   ,"VAR BETWEEN X AND Y"
+  ,"MONTH"              ,"month()"     ,"works similar"
+  ,"YEAR"               ,"year()"      ,"works similar"
+  ,"DAY"                ,"day()"       ,"works similar"
+  ,"QUARTER"            ,"quarter()"   ,"works similar"
+  ,"DATEDIFF"           ,"difftime() " ,"works similar"
+  ,"DATETRUC"           ,"floor_date()","works similar, can input minute, hour, day, week, month, quarter, year, etc"
+  ,"CREATE OR REPLACE"  ,"tibble()"    ,"conceptually the same, but use this to create the final table"
+  ,'IN'                 ," %in%"       , "works similar"
+  ,"AS"                 , "rename()"   ,"work similar"
+  ,"WITH"               , "tibble()"   , "Use this to create CTE or basic mini tables that you can then reference in different steps of the query, makes readable easier"
+  ,"HAVING"             , "filter()","Similiar to WHERE, but must be used with aggregated measures"
+) |> 
+  gt::gt() |> 
+  gt::cols_label(
+    sql="SQL"
+    ) |> 
+  gt::tab_header(
+    title="Summary of SQL commands and their dplyr counterpart"
+  )
+
+
+```
+    
+There are some nuances, in particular the evaluation order and  coding conventions that typically trip up new SQL users but in general if you understand the above R commands you will quickly learn the SQL counterparts.
+
+With anything, you need to practice! luckily there are multiple SQL resources and practice studios which can help with reinforcement learning.
+:::
+
+
+-   The reason you can survive off of a beginners knowledge base of SQL is that
+luckily there is a life saving package called `dbplyr` that translates your 
+dplyr queries into SQL for you
+
+-   It has fairly great coverage but there are limitations which is why 
+eventually it will help you to learn some intermediate SQL commands and 
+overall database frameworks
+
+-   This chapter will go over database essentials and provide resources to
+learn more
+
+## The Essentials
+
+**What do you need to access data in a database?**
+
+-   A database with data inside of it  
+-   Access / permission to the database
+-   Location, user name and password to database (or equivalent protocols as 
+dictated by your organization's security model)
+-   Database driver and related utilities
+-   SQL querys
+-   Patience
+
+
+::: {.callout-note collapse="true"}
+
+## "What is the advantage of a database?" 
+
+It comes down to scale and size. At some point your organization or process
+will generate substantial data and needs a more structured process to store
+the data so that multiple parties can access the data at scale.
+
+When dealing with a new database some key frameworks are:
+
+- Cloud vs. On-Premise
+- Security model and access
+- "Flavor" of database
+
+
+- Improved data management: A database centralizes data, making it 
+easier to manage and maintain
+
+- Enhanced data security: A database provides secure storage and 
+retrieval of sensitive data through user authentication and access 
+control mechanisms
+
+- Better data organization: A database **theoretically** allows for better organization 
+and structure of data through the use of tables, indexes, and 
+relationships
+
+- Improved query performance: Databases are optimized for query 
+performance, allowing for faster retrieval of data.
+
+
+- Scalability: Databases can handle large amounts of data and scale as 
+needed to meet growing storage demands.
+
+Cloud vs On-Premise Database:
+
+- Cloud databases are hosted on remote servers, while on-premise 
+databases are hosted on local servers (when you read servers just replace it with the word computers. You are either using your organization's computer (on prem) or you are using someone else (cloud))
+
+- Cloud databases offer greater flexibility in terms of scalability and
+accessibility, as they can be accessed from any location with an 
+internet connection.
+
+- On-premise databases provide more control over data security and 
+privacy, as the data is stored on a local server and not transmitted 
+over the internet.
+
+- Cloud databases typically require less setup and maintenance than 
+on-premise databases, as they are managed by the provider.
+
+- Cost: Cloud databases are often subscription-based and can be more 
+cost-effective than on-premise databases, especially for small to 
+medium-sized businesses.
+
+*Security Model and Access:*
+
+- Security model: A database's security model determines who has access
+to the data and how they can access it. Common security models include 
+Role-Based Access Control (RBAC), Attribute-Based Access Control (ABAC),
+and Identity-Based Access Control (IBAC).
+
+- Access control: A database's access control mechanisms determine who 
+can view, edit, or delete data. This can be based on user 
+authentication, role-based access control, or attribute-based access 
+control.
+
+
+- Authentication methods: Databases support various authentication 
+methods such as username and password, single sign-on (SSO), and 
+two-factor authentication (2FA).
+
+- Authorization methods: Databases support various authorization 
+methods such as row-level security, column-level security, and 
+table-level security.
+
+- Auditing and logging: Databases can log all access attempts and 
+successful accesses to track user activity and detect potential security
+breaches.
+
+- Encryption: Databases can encrypt data both in transit and at rest to
+protect it from unauthorized access.
+
+- Backup and recovery: Databases provide mechanisms for backing up data
+and recovering from failures or security incidents.
+
+- Identity and access management (IAM): IAM systems manage user 
+identities and access rights within the database, ensuring that only 
+authorized users can access the data.
+
+- Role-based access control (RBAC): RBAC allows for assigning roles to 
+users based on their job function or responsibilities, limiting the data
+they have access to.
+
+- Attribute-based access control (ABAC): ABAC grants or denies access 
+to data based on attributes associated with the user or the data itself,
+such as location or time of day.
+
+:::
+
+
+**What does a database need from you?**
+
+-   The most frustrating part of database is getting access to the database,
+setting up the database utilities and then making the initial connection
+
+-   There are multiple ways to connect to a database however  almost all
+require the following:
+    -   User name
+    -   Password
+    -   Database driver
+    -   Connection string and associated arguments
+    -   SQL query
+
+-   We will review the DSN method for connecting to a database
+
+-   These tend to be confusing because much of this is controlled and managed
+by your local IT department so whatever documentation or guide you read on 
+online may not translate one for one to your localized experienced (this 
+includes this guide as well :(
+
+## Set up ODBC Driver
+
+-   Download (if required) a database driver for your database -- this is
+typically on the database company's website
+
+    -    Your company may have centralized package manager system where you
+    will need to download and install all required drivers via that packet 
+    manager
+
+-   Configure your DSN so that you can be authenticated
+
+-   Your database platform should have documentation on how to do this and 
+your internal IT team **should** be able to articulate any proxy / security 
+requirements
+
+-   Here is some example
+[documentation](https://docs.snowflake.com/en/developer-guide/odbc/odbc-windows)
+
+-   You are essentially saving the required information (listed above)
+to your computer so that you can pass these arguments to the database
+
+-   Pay attention to the name you setup the DSN driver, you will need this
+later one
+
+**Example Paramaters are below**
+
+-   User
+-   Password
+-   Server
+-   Database
+-   Schema
+-   Warehouse      
+-   Tracing
+-   Authenticator
+  
+
+## Create Connection String
+
+-   If the above is done correctly you can then use DBI package in R 
+to connect to the database of your choice
+
+-  Create a connection string with DBI::dbConnect()
+
+      -   Select the DBMS wtih the driver_name such as ODBC::ODBC() 
+            to access your DSN set up connect to external database or can use
+            DMBS package such as duckdb::duckdb() to replicate an internal 
+            instance of a database
+
+      -   DSN name if external database (the name used to set up ODBC driver)
+
+      -   Alternatively, you can directly supply the arguments 
+            in DBI::dbConnect() such as hostname,port,username, etc
+
+
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-fold: true
+#| error: false
+#| warning: false
+#| fig-cap: "hello"
+#| label: "fig-example"
+
+## this uses duckdb example to create a connection string
+
+con <- DBI::dbConnect(drv=duckdb::duckdb())
+
+## this is alternative example using a made up DSN name 
+
+con  <- DBI::dbConnect(
+  drv=odbc:odbc()
+  ,dsn="your_DSN_name" 
+  )
+
+```
+
+
+::: {.callout-note collapse="true"}
+
+## Additional Utilities
+
+-   the DBI and ODBC packages are extremely useful for database related 
+utilities
+-   While they have some existing overlap, they can be used to view the 
+schema in your database, list active connections and also disconnect.
+-   Below are some useful utilities:
+
+
+```{r}
+tribble(
+  
+  ~name                      ,~purpose
+  ,"odbc::odbcListDrivers()","list your drivers"
+  ,"DBI::dbListConnections()","as you create connections with dbConnect(), this wil list active connections"
+  ,"DBI::dbCanConnect()","checks if you can connect to tables"
+  ,"DBI::dbListTables()","lists tables associated with the connection"
+)
+
+
+```
+
+:::
+
+## Are all tables equal?
+
+
+There are three *types* of tables in most databases. Understanding the different tables and how they can be used or referenced will you help you.
+
+
+-   Temporary Tables / CTE
+    
+    -   These are tables that only exist when you run them
+    -   Helpful as interim steps or to break code into subqueries to make it more modular
+
+
+```{sql}
+--| eval: false
+
+WITH TEMP AS (
+
+SELECT 
+CUT
+,MEAN(PRICE) AS AVG_PRICE
+,COUNT(*) AS N
+
+FROM
+DIAMOND_DB
+
+GROUP BY
+CUT
+
+)
+
+SELECT *
+FROM
+DIAMOND_DB AS MAIN
+
+LEFT JOIN
+TEMP ON MAIN.CUT=TEMP.CUT
+
+)
+
+```
+
+-   Curated tables
+    
+    -   Often times you may have loads of raw tables (eg 100s) that you need to join together, filter or aggregrate before the data can be usable
+    -   This process of turning raw /streaming data into table that can be consumed for analysis is oftern called data curation
+    -   This is often times created as a view which can be though of as particular snapshot of a table 
+    
+```{sql}
+--| eval: false
+
+CREATE VIEW DiamondSummaryView AS
+WITH TEMP AS (
+    SELECT 
+        CUT,
+        MEAN(PRICE) AS AVG_PRICE,
+        COUNT(*) AS N
+    FROM
+        DIAMONDS_DB
+    GROUP BY
+        CUT
+)
+SELECT *
+FROM
+    DIAMONDS_DB AS MAIN
+LEFT JOIN
+    TEMP ON MAIN.CUT = TEMP.CUT;
+```
+    
+    
+    
+-   Materialized layers
+    
+    -   Materialized layer means the data is more persistent so when you run it its not triggering the underlying queries (which will save you alot of time)      
+
+```{sql}
+--| eval: false
+
+CREATE MATERIALIZED VIEW DiamondSummaryMaterializedView AS
+WITH TEMP AS (
+    SELECT 
+        CUT,
+        MEAN(PRICE) AS AVG_PRICE,
+        COUNT(*) AS N
+    FROM
+        DIAMONDS_DB
+    GROUP BY
+        CUT
+)
+SELECT *
+FROM
+    DIAMONDS_DB AS MAIN
+LEFT JOIN
+    TEMP ON MAIN.CUT = TEMP.CUT;
+
+```
+
+
+**Database structure**
+
+-   Security Model
+
+    -   Because data can be privileged, without a doubt your organization has some security model that will aplly row level security and IDs to ensure when you access a table you are seeing what you should be seeing
+    -    There is way to  much to write here about it and honestly, I'm not the right person to answer it
+  
+You may not need to know any of this but this mostly depends on your organizations
+data strategy, staffing levels and operating model
+
+
+DBI::dbCanConnect()
+
+## List tables listed under connection
+
+
+
+### list tables in connection
+`dbListTables(con)` to list tables associated with a connection
+
+:::
+
+-   After you have created a connection string you now need to retrieve 
+information from the database
+
+   
+## Option 1: Create SQL string
+
+-   If you know the database, schema and table name that you want, you can 
+write the initial sql query to connect to the database
+
+-   You can write simple or advance query insde the  `dplyr::sql()` function 
+        
+```{r}
+#| echo: true
+#| eval: false
+#| error: false
+#| warning: false
+
+
+sql_query <- dplyr::sql("select *  from database_name")
+```
+
+## Accessing Databse
+
+-   Use connection string and sql query together to create a lazy table with `dplyr::tbl()`
+-   We call this a lazy table because it won't actually execute the query and 
+return the results which is good because your query might return 100s of results
+
+```{r}
+#| echo: true
+#| eval: false
+#| error: false
+#| warning: false
+
+data_db <- dplyr::tbl(con,sql_query)
+
+```
+
+-   From there you can use *dplyr* back end queries to see everything 
+(notice the distinction between **db**pyr and dplyr
+
+-   If you use the dbplyr package, you are limited to queries that can 
+be translated to sql which are detailed below
+    -   [github of dplyr commands that can be used in dbplyr](https://github.com/tidyverse/dbplyr/blob/main/R/backend-.R)
+    -   You can also check the database specific[here]([https://github.com/tidyverse/dbplyr/blob/main/R/backend-snowflake.R)
+-   You can see what query it will generate with `dbplyr::show_query()`
+-   Notice the class of the object you return, you are returning a database 
+object -- if you want to return a dataframe you need to use  `dplyr::collect()`
+
+
+## Option 2: Push existing data into a database
+
+-   First you need to have a connection string to a database (and write permissions)
+    
+-   If you already have something as a dataframe you can upload it to a 
+database with DBI::dbWriteTable(con,"tbl_name",df) which will write the table 
+to the connection with the name you gave 
+
+    -   DBI::dbWriteTable() can write a r dataframe or you can use sql to create a virtual table if you want
+    -   dbplyr::copy_inline(con_db,df = df) is alternative method
+    -   If you have duckdb connection you can use the duckdb::duckdb_register()
+```{r}
+# create connection
+con_db <- DBI::dbConnect(duckdb::duckdb())
+
+# write data into database
+DBI::dbWriteTable(con_db,name = "diamonds_db",value = ggplot2::diamonds)
+
+# or alternative use the database argument to regester
+duckdb::duckdb_register(con_db, "diamonds_db_2",df =  ggplot2::diamonds)
+
+# validate data is in database by reference connection
+DBI::dbListTables(con_db)
+
+# Pull in data in database format
+diamonds_db <- dplyr::tbl(con_db,"diamonds_db")
+
+```
+
+
+
+
+
+## What happens if dbplyr doesn't have a function that I need?
+
+-   This will happen, take for example if you want to do the ceiling date of date column (eg. round 2024-01-05 to 2024-01-31)
+-   
+
+### built in helper functions
+
+-   translate_sql()
+
+### create sql query and use it
+
+
+    Use a parameterised query with dbSendQuery() and dbBind()
+    Use the sqlInterpolate() function to safely combine a SQL string with data
+    Manually escape the inputs using dbQuoteString()
+https://solutions.posit.co/connections/db/best-practices/run-queries-safely/
+
+
+## how can I build a package for this?
+
+build_sql()
+
+airport <- dbSendQuery(con, "SELECT * FROM airports WHERE faa = ?")
+
+Use dbBind() to execute the query with specific values, then dbFetch() to get the results:
+
+dbBind(airport, list("GPT"))
+dbFetch(airport)
+
+Once you’re done using the parameterised query, clean it up by calling dbClearResult()
+
+dbClearResult(airport)
+
+
+
+## Putting it all together
+
+-   Set up your drive, get required database info and related utilities
+-   Create connection to your database
+-   write an inital query to select the columns that you want or need
+-   Use dbplyr to translate dplyr queries to SQL
+-   return results to your local machine with dplyr::collect()
+
+# Larger than memory problems
+
+-   Sometimes you don't have a database but have data that is larger than
+memory
+-   Luckily, you don't need a database to take advantage of the tricks we have 
+learnt to move solve your data larger than memomory problems
+
+
+-   Sometimes you may not have a database to connect to and instead have a 
+very large csv file or dataframes
+-   There are two packages that are exceptionally helpful here
+    -   duckdb() and arrow()
+-   This isn't the technically correct response but duckdb() allows you to build
+an in memory database whereas arrow compresses your information into some sort 
+of parquet type structure
+
+-   What makes these so great is that dbplyr will translate your dplyr commands
+to either duckdb or arrow language
+-   Some dplyr functions are avaialble in one package that aren't avaialble in 
+the other
+-   However you can pass an object from duckdb to arrow as much as you want
+
+**What is key difference?**
+
+-   Duckdb will return first 1000 rows of your query so you can check if your
+query worked well, whereas arrow won't let you see it (including if your query
+returns an error which can be annoying)
+
+
+To understand how to use the packages,let us define two scenarios: 
+
+1) You have a lot of csv files that you need to upload and analyze
+2) As a result of simulation of some other you have multiple tables that 
+seperately are okay but together are generating you have very large
+dataframe that you need to join together to  analyze and manipulate
+3) You have interim data that you want to save in workflow that is large
+
+### Large csv files that you need to work with:
+
+-   If you have large offline files you can quickly easily load this into 
+duckdb with `duckdb_read_csv()` or the collection of arrow functions 
+(eg. `arrow::read_csv_arrow()`).
+
+
+::: .callout-note
+
+Arrow will support json, feather, delimiter, parquet, or csv amongst other 
+whereas duckdb only supports csv (if not already an object) 
+:::
+
+-   This will load the csv files directly to your duck db in memory database
+-   You first need to create connection string
+
+### Existing dataframes (however they got there) that are either too large
+or individually are okay but seperately aren't okay
+   
+-   You first need to get your data into R as a dataframe 
+-   Then you need to register your dataframe to your in duckdb memory database
+-   From there you can move the datafrme from duckdb to arrow as you would like
+
+
+
+# Special tricks
+
+##  You can pass one database object to duckdb
+
+
+```{r}
+#| echo: fenced
+#| label: db-connect example
+#| eval: true
+
+
+## create connection string locally
+con_db <- DBI::dbConnect(duckdb::duckdb())
+
+# loads data into your connection either in memory
+DBI::dbWriteTable(con_db,"diamonds_db",ggplot2::diamonds)
+
+#create new table to the connection
+
+DBI::dbExecute(con_db, "CREATE TABLE duckdb_table (col1 INT, col2 STRING)")
+```
+#preview what is in your connection
+```{r}
+#| eval: false
+
+DBI::dbListTables(con_db)
+
+dbplyr::copy_inline(con_db,df = diamonds)
+
+
+diamonds_db <- dplyr::tbl(con_db
+    ,"diamonds_db"
+    )
+
+
+
+```
+
+
+# Example of passing one database object to arrow
+
+```{r}
+#| echo: true
+#| label: query-example
+#| eval: false
+#| error: false
+#| warning: false
+
+
+diamonds_db %>% 
+  
+  mutate(good_indicator=if_else(cut=="Good",1,0)) %>%
+  group_by(color) %>% 
+  summarise(
+    n=n()
+    ,mean=mean(carat)
+    ,mean_price=mean(price)
+    ,mean_ind=mean(good_indicator)
+    ,mean_adj=mean(carat[good_indicator==1])
+  ) %>% 
+
+  arrange(desc(color)) %>% 
+  mutate(rolling_price=cumsum(mean_price)) %>% 
+    arrow::to_arrow() %>% 
+  ungroup() %>% 
+ filter(color=="H") %>% 
+  select(color,mean_adj) %>% 
+  collect()
+```
+
+# Additional tricks
+
+### Running SQL in R
+
+-   If you are using rmakrdown or quarto, you can run the sql query in a window
+and have it results saved as a datafarme
+
+```{sql}
+--| eval: false
+--| connection: con_db
+--| output.var: test.tbl
+--| echo: fenced
+
+SELECT * 
+
+FROM diamonds_db
+
+WHERE cut=='Good'
+
+LIMIT 100
+
+
+
+```
+
+-   If you want to run it in rmarkdown, you can do the following
+
+```{sql, eval=FALSE,connection=con_db, output.var = "mydataframe"}
+--| echo: fenced
+SELECT * 
+
+FROM diamonds_db
+
+WHERE cut=='Good'
+
+LIMIT 100
+
+```
+
+
+
+
+## How to plot a database object
+
+rm package
+pool
+
+
+
+```{r}
+library(dm)
+install.packages("dm")
+dm <- dm_nycflights13()
+
+dm
+```
+
+```{r}
+dm %>%
+  dm_draw()
+```
+
+
+
+```{r}
+library(tidyverse)
+
+price <- 2
+
+diamonds |> 
+  mutate(
+    test=.data$price*2
+    ,test3=price*2
+    ,test2=.env$price*.data$price
+  ) |> 
+  relocate(contains("test"))
+
+```
+
+
+```{r}
+library(duckdb)
+library(tidyverse)
+library(duckplyr)
+
+
+
+drv <- duckdb::duckdb(dbdir = "data/database.duckdb")
+
+con <- dbConnect(drv)
+
+dbListTables(con)
+# gets column names
+DBI::dbListFields(con,"diamonds.dbi")
+
+DBI::dbListTables(con)
+
+
+library(duckplyr)
+
+duckdb::dbWriteTable(con, "diamonds.dbi", diamonds, append = TRUE)
+
+nested_sql <- sql("
+select 
+cut
+,list({'x':x,'y':y,'z':z,'carat':carat}) as list
+
+from 'diamonds.dbi'
+
+group by all
+           ")
+
+
+diamonds_nested_dbi <- tbl(con,nested_sql)
+
+diamonds_mod_tbl <- diamonds_nested_tbl |> 
+  mutate(
+    mod=map(list,\(x) lm(carat ~.,data=x))
+    ,tidy=map(mod,\(x) broom::tidy(x))
+    ,glance=map(mod,\(x) broom::glance(x))
+  ) |> 
+  select(-mod)
+
+beaver_tbl <- tbl(con,sql("select *  from 'beaver.dbi'"))
+diamonds_nested_tbl <- diamonds_nested_dbi |> collect()
+
+
+
+diamonds_nested_tbl
+
+duckdb::dbWriteTable(con, "diamonds_nested.dbi", diamonds_nested_dbi |> collect(), append = TRUE)
+
+duckdb::dbRemoveTable(con, "diamonds_mod_dbi")
+duckdb::dbRemoveTable(con, "diamonds_nested_dbi")
+
+
+nested_dbi <- tbl(con,sql("select * from 'diamonds_nested.dbi'"))
+
+diamonds_dm <- diamonds_dbi |> dm::dm()
+
+diamonds_arw <- arrow::to_arrow(diamonds_dbi)
+
+
+pak::pak("arrow")
+
+```
+
+```{r}
+
+#creats temporary view
+
+duckdb_register(con,"diamonds",diamonds,overwrite = TRUE)
+
+duckdb_register(con,"mtcars",mtcars,overwrite = TRUE)
+
+duckdb_register(con,"cars",cars,overwrite = TRUE)
+
+#writes table to the database
+
+duckdb::dbWriteTable(con, "diamonds.dbi", diamonds, append = TRUE)
+
+duckdb::dbWriteTable(con, "mtcars.dbi", mtcars, append = TRUE)
+
+duckdb::dbWriteTable(con, "cars.dbi", cars, append = TRUE)
+
+
+
+tbl(con_db,sql("select * from temp.information_schema.columns"))
+
+duckdb::dbListTables(con)
+
+
+
+
+tbl(con,sql("select * from temp.information_schema.schemata"))
+
+
+tbl(con,sql("SELECT * FROM duckdb_views()"))
+
+" SELECT * FROM 'cars.dbi' USING SAMPLE 50 PERCENT (bernoulli) "
+
+"SELECT * FROM 'cars.dbi' USING SAMPLE 50 PERCENT (system, 377)"
+tbl(con,sql("
+            
+            SELECT * FROM 'cars.dbi' USING SAMPLE 50 PERCENT (system, 377)
+
+            
+            
+            "))
+
+
+  mtcars_dbi <- tbl(con,sql("select * from 'mtcars.dbi'"))
+
+mtcars_dbi |> sample_n(10)
+
+Sys.getenv("DATABASE_NAME")
+
+cars |> 
+  apply(
+    MARGIN = 1,\(x) x-lag(x)
+  ) 
+  bind_cols(cars)
+
+```
+
+## how to create your own database
+
+You need need two things -- storage and data. From there you then need to decide to you want your database limited to RAM or do yu want a database that is capable of larger then memory.
+
+Either a persistance database (eg. one that lives on even after you close your computer) or a temporary database (one that just exists for session) you set iwth our initial driver argument duckdb().
+
+For either method For temprorary tables simplfy set your driver to duckdb::duckdb() or set the dbdir arg in duckdb to a temp file.
+
+This works because without passing dbdir it defaults to `DBDIR_MEMORY` which is just means using your RAM
+
+```{r}
+library(duckdb)
+
+drv1 <- ?duckdb()
+
+temp_name_vec <- tempfile(fileext = ".duckdb")
+
+# this will enable larger than memory quries but will disappear
+drv2 <- duckdb::duckdb(dbdir=temp_name_vec)
+
+db_name_vec <- "data/database.duckdb"
+
+drv3 <- duckdb::duckdb(dbdir=db_name_vec)
+
+```
+
+We can check that our DBI package can use the driver
+
+```{r}
+
+DBI::dbCanConnect(drv)
+```
+
+From there, we will not build a connection to our database which is easy to do with DBI::dbConnect()
+
+-   This step is easy to remember because you will use it to connect to any database (eg your own on your computer or another server)
+
+-   Under the hood, I'm sure alot is going on but simply you are identifying the type of database you will connect by teferenceing the database driver, then you are passing on your creditentials to your drive so that it can make a connection to the database. These credentials are typically informataion that identifys who you are, where is the database located, and any security information.
+
+-   Since you created your own database, we don't need need that info so we can leave the args blank (unlike when we connect to a third party database)
+
+```{r}
+
+con_db <- dbConnect(drv)
+
+
+
+```
+
+okay -- so from here we have now connected to our database, we can validate that connection with the ``
+
+```{r}
+
+DBI::dbIsValid(con_db)
+
+```
+
+Great -- it works and active
+
+So what do we have in our brand new database?
+
+```{r}
+
+DBI::dbListTables(con_db)
+
+```
+
+That's right -- nothing. Thats because we haven't saved any data to it. 
+
+So now we explore the second part of the equation, we need data to make our database work.
+
+The good news is that duckdb is incredible flexible in putting your data in the database. 
+
+-   existing dataframe
+-   files on your computer
+-   External website
+-   External database
+
+lets go through these one by one
+
+In general the root function you should be aware of is the DBI fucntion DBI::DbSendQuery().
+
+With this you can do all but you need to write in SQL. If youre not as confident in your skills or just lazy, there is  some sugar syntax available that makes it easier
+
+
+
+### Existing tibble in R
+
+```{r}
+
+DBI::dbWriteTable(con_db,"diamonds.dbi",value=diamonds,append=TRUE)
+
+
+```
+This takes your existing tibble and saves it to your database. If you made it persistence, this will continue to exist after you quit your session.
+
+What if you need to update your data. For example you want to add new rows of eixsting columns
+
+```{r}
+
+
+DBI::dbAppendTable(con_db,name = "diamonds.dbi",value = diamonds)
+
+
+tbl_query(con_db,"'diamonds.dbi'") |> summarize(n=n())
+```
+
+What if we need to add or delete new columns
+
+
+
+# files on your computer
+
+-   read csv, excel, parquet, or feather files
+
+-   two approaches if whether the data is larger than memory  or if its can fit in memory
+
+-   larger than memory you can go with any of your standard import functions read_csv, read_excel, read_feather, fread, rio, etc
+
+From there since its a dataframe you can use the above to create and save a table in the database.
+
+
+But what if your data is larger than memory?
+
+Alternatively for dukdb specifically you can use its built in function to read directly to the databse
+
+```{r}
+duckdb::duckdb_read_csv()
+```
+
+
+If its not a csv file (feather, parquet, etc), you can canload directly database with dbSendQuery
+
+```{r}
+DBI::dbSendQuery()
+```
+
+
+## Extensions overview
+
+if your standard tool kit doesn't work you can explore duckdb extensions.
+
+for example hugging face has large datasets that we can accces but can't wiht our regular tool kit.
+
+If we downlaod hte hf extension, we can do xxx
+
+```{r}
+
+```
+
+
+
+## from other database or views
+
+```{r}
+
+```
+
+
+
+no problem -- you can load directly to the database form your ylocal files with 
+
+
+```{r}
+
+"hf://datasets/datasets-examples/doc-formats-csv-1/data.csv"
+```
+
+
+
+```{r}
+tbl_vec <- c("diamonds","mtcars","cars")
+
+sql_vec <- glue_sql("
+  SELECT *
+  FROM {tbl_vec}
+  "
+  ,.con = con
+  ,
+  )
+
+```
+
+```{r}
+
+sql <- sql("
+select 
+cut
+,list({'x':x,'y':y,'z':z,'carat':carat}) as list
+
+from diamonds
+
+group by all
+           ")
+
+tbl(con,sql) |> 
+  mutate(
+  test=regr_slope(CAST('x->price AS DOUBLE'),CAST('x->carat AS DOUBLE'))
+  )
+
+
+res <- tbl(con,sql)
+
+duckdb::duckdb_register(con,"res",res)
+
+dbGetQuery(con, "
+      SELECT 
+      cut,
+      regr_slope(cast(x->'y' AS DOUBLE, CAST(x->'carat' AS DOUBLE)),
+      unnest(list) as data
+      FROM res
+    ")
+
+tbl(con,sql) |> 
+  mutate(
+    mod=list_aggregate(list,'min')
+    ,rev=list_reverse(list)
+    ,sel=list_select(list,'[1,2]')
+    ,slice=	list_slice(list, 2, 3)
+    ,last=list_last(list)
+    ,pop=list_count(list)
+  ) 
+  group_by(
+    cut
+  ) |> 
+  summarize(
+    
+  )
+  mutate(
+    map_test=map(test,min)
+  ) |> 
+  unnest(map_test)
+  
+  ",list_filter([diamonds.price], x -> x > 1000) as test from diamonds"
+
+  
+  
+
+
+dbListFields(con,"mtcars.duckdb")
+
+dbListObjects(con)$table
+
+dbList
+
+dbi_lst <- map(
+  sql_vec
+  ,.f = \(x) dplyr::tbl(con,sql(x))
+)
+
+names(dbi_lst) <- tbl_vec
+```
+
+```{r}
+tbl_lst <- starwars |> 
+  select(
+    where(
+      \(x) is.list(x)
+    )
+  )
+
+tbl_lst |> 
+  rowwise() |> 
+  mutate(
+    films_max=list(films |> str_count()  )
+    # veh_max=list(vehicles |> str_count() |> max() )
+  ) |> 
+  unnest(c(contains("max"),films) )
+  pull(films_max) |> max(na.rm = TRUE)
+
+tbl_lst |> 
+  map(
+    \(x) str_count(x) 
+  )
+
+```
+
+
+# how to save a view to a database
+
+```{r}
+library(tidyverse)
+library(duckdb)
+drv <- duckdb("data/database.duckdb")
+
+con <- dbConnect(drv)
+
+diamonds.dbi <- tbl(con,sql("select * from 'diamonds.dbi'"))
+
+
+duckdb::dbGetInfo(drv)
+
+sql <- sql("
+select 
+cut
+,list({'x':x,'y':y,'z':z,'carat':carat}) as list
+
+from 'diamonds.dbi'
+
+group by all
+           ")
+
+diamonds_nested.tbi <- tbl(con,sql("select * from 'diamonds.dbi'"))
+
+dbListTables(con)
+
+DBI::dbCreateTable(con,"diamonds.dbi",diamonds,append = TRUE)
+
+DBI::dbWriteTable(conn = con,name = "sleep.dbi",value = sleep.dbi)
+
+DBI::dbRemoveTable(con,"diamonds.dbi")
+
+duckdb::tbl_query(con,"'senate'")
+
+duckdb::duckdb_read_csv(con,"test",files=sql("SELECT *
+FROM 'hf://datasets/datasets-examples/doc-formats-csv-1/data.csv'"))
+
+duckdb::duckdb_register(con,"temp_table.dbi",ggplot2::economics)
+
+dbSendQuery(
+  con
+  ,sql("
+       
+CREATE or replace TABLE new_table AS
+SELECT *
+FROM 'temp_table.dbi'
+WHERE 1 = 0
+       
+            ")
+)
+
+
+
+dbSendQuery(
+  con
+  ,sql("
+       
+show tables;
+       
+            ")
+)
+
+
+
+dbExecute(
+  con
+  ,sql("
+       
+show tables;
+       
+            ")
+)
+
+
+
+```
+
+```{r}
+translate_sql(con = con,x == 1 && (y < 2 || z > 3))
+translate_sql(con=con,x ^ 2 < 10)
+translate_sql(con=con,x %% 2 == 10)
+?translate_sql(x %like% "ab%",con=con)
+translate_sql(con=con,if (x > 5) "big" else "small")
+translate_sql(cumsum(mpg), vars_order = "mpg", con = con)
+```
+
+```{r}
+library(duckplyr)
+
+
+out <-
+  palmerpenguins::penguins %>%
+  drop_na() |> 
+  # CAVEAT: factor columns are not supported yet
+  mutate(across(where(is.factor), as.character)) %>%
+  duckplyr::as_duckplyr_df() %>%
+  mutate(bill_area = bill_length_mm * bill_depth_mm)
+
+duckplyr::methods_overwrite()
+
+out |> 
+  mutate(
+    data=list(data)
+    # ,mod=list(lm(bill_length_mm~sex,data=data))
+  ) |> 
+  explain()
+
+duckplyr::relexpr_function()
+
+con <- DBI::dbConnect(duckdb(dbdir = "data/database.duckdb",config=list('allow_unsigned_extensions'='true')))
+
+
+dbExecute(con, "LOAD 'data/database.duckdb/build/release/extension/httpfs/httpfs.duckdb_extension'")
+
+```
+
+

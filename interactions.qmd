@@ -1,0 +1,435 @@
+---
+title: "Understanding a model outcome"
+---
+# Setup
+
+```{r}
+#| echo: true
+#| eval: true
+
+#load libraries and summarize data to be be used in later analysis
+
+library(tidyverse)
+library(marginaleffects)
+
+#devtools::install_github("alejandrohagan/fpaR")
+
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  left_join(fpaR::contoso_dim_product %>% janitor::clean_names(),by = join_by(product_key))
+
+# create dataset 
+df_summary <- df %>% 
+  mutate(rev=unit_price.x*sales_quantity) %>% 
+  summarise(
+    rev=sum(rev)
+    ,n=n()
+    ,vol=sum(sales_quantity)
+    ,avg_vol=mean(sales_quantity)
+    ,distinct_col=length(unique(color_name))
+    ,.by = c(date_key,brand_name,color_name)
+  ) %>% 
+  mutate(
+  vol_group=
+  cut_number(
+  vol
+  ,n= 5
+  ,labels=c(
+  "0 - 638"
+  ,"639 - 1,207"
+  ,"1,208 -  1,900"
+  ,"1,901 - 2,544"
+  ,"2,544 - 3,180")
+  )
+)
+```
+
+## Summary
+
+-   Trying to interpret a model outcome can be complex when you have complex
+models
+
+-   Fortunately there are tools and framework that we can use to help us 
+understand our model outcomes and how outcomes can differ between groups
+
+-   `marginaleffects` is useful to understand a statistical model along four
+key metrics
+
+    -   *predicitons:* What is the model predicting?
+    -   *comparsion:* how do factors or group compare to eachother
+    -   *slopes:*  how to estimates compare across a range of references
+    -   *hypothesis:* How to test a statistical question
+
+
+-   When doing any analysis, the below framework is useful to understand:
+
+    -   **Estimate**
+
+        -   What is the target variable you want to understand?
+        -   This is traditionally the y value in a formula
+        -   Important to pay attention to the units if you transform it
+            -   Contrast
+            -   Risk ratio
+            -   Oddlogs
+            -   Slope
+
+    -   **Grid**
+
+        - What granularity do you want to understand the model results
+        -   This can be equivalent to each row of the underlying dataframe or 
+        this can be scenarios that you want to understand the average affects
+
+        -   This is specfically the granularity you want to apply the model to,
+        it may or may not be the same granularity that you want to report
+        the model results
+
+    -   Do we want to produce estimates for the individuals in our dataset,
+    or for hypothetical or represnts?
+            -   prediction of the average person?
+            -   observed units
+            -   synthic units (counter-factual)
+
+    -   **Aggregation**
+
+        -   How do you want sum and report the insights? 
+        -   What group do you want to average (or sometimes called marginalize
+        the insights by)
+
+    -   average fitted value
+    -   average risk difference
+    -   average slope for high school graduates
+
+    -   **Uncertainity** 
+
+        -   How do you want to measure the uncertainity of 
+    the estimate
+
+-   How do we quantify uncertainity about our estimates
+    -   Delta method
+    -   Boostrap
+    -   Simulaiton based inference
+
+    -   **Hypothesis**
+
+        -   What question do you want to answer
+        -   Eg is the estimate signficant than zero?
+
+    -   What hypotheis or equivalent test do we conduct?
+
+# Functions overview
+
+## Predictions
+
+-   Able to generate three functions
+    -   predictions using counter-factual data (eg. controlling variable
+    at various levels) 
+
+::: .callout-note
+
+    `predictions(mod,variables=list(am=c(0,1)))`
+:::
+
+    -   predictions keeping input regressors at their mean, median or mode values
+
+::: .callout-note
+
+    -   `predictions(mod,newdata="mean")`
+
+    -   `predictions(mod,newdata=datagrid())``
+
+    -   predictions(mod,
+            datagrid(
+            FUN_numeric = mean
+            ,FUN_character=unique
+            )
+    )
+:::
+
+    -   predictions keeping input regressors at a specfic value via a 
+    *structured datagrid*
+
+::: .callout-note
+
+    `predictions(
+    mod
+    ,newdata=
+    datagrid(
+        am=c(0,1)
+        )
+    )`
+:::
+
+
+-   If no datagrid() or newdata argument is specified the predictions will 
+return a new data 
+
+-   You can optionally summarize the information through the:
+    -   `by` argument
+    -   `datagrid()`,
+    -   `avg_predictions()`
+
+
+-   the uncertainty test can be changed through the `vcov` argument
+
+```{mermaid}
+flowchart TD
+
+    A[Start] --> base{Predictions}
+    
+    %% counterfactual prediction
+
+    base -->|Create\npredictions\nbased on\nwhat if| counterfactual["Create\ncounterfactual\ndataset\n(duplicates the data)"]
+    counterfactual --> |formula| counter_formula["predictions(\nmod\n,variables=list(var=c(0,1))\n)"]
+    counterfactual --> |data only| counterfactual_grid_only["datagrid(\nmodel = mod,\nhp = c(100, 110),\ngrid_type = 'counterfactual')"]
+    %% static inputs based on mean/median or mode
+
+    base -->|Predict with\nthe inputs at\ntheir means| static_inputs[Controlling\ninput\nvariables at\ntheir\nmean\median\mode]
+    static_inputs -->newdata["predictions(\nmod\n,newdata='mean'\n)"]
+    static_inputs -->datagrid["predictions(\nmod\n,datagrid(\nFUN_numeric=mean\nFUN_factor = unique) \n ) "]
+    static_inputs-->default["predictions(\nmod\n,datagrid() \n ) "]
+ 
+    %% rowlevel predictions on existing data
+    
+    base -->|Predict with existing data| rowwise[Produce row level prediction]
+    rowwise -->prediction_formula["prediction(mod)"]
+    
+    %% predictions based on structured grid
+
+    base -->|predict based on structured scenario| structured_scenario["create scenario"]
+    
+    structured_scenario -->datagrid["predictions(\nmod\n,newdata =\n datagrid(\ncyl = mtcars$cyl\n, hp = c(90,100))\n"]
+```
+
+
+
+## Hypotheses function
+
+-   Hypotheses() command is similiar to summary()
+-   It will show the p values of the estimates
+-   You can change the test argument with the `hypothesis` arguments can
+change null instead of 0 to be another value 
+
+    -   Can be numeric value hypotheses(mod,hypothesis=2)
+    -   Can be categorical differences "distanceMedium=distanceLong"
+    -   Simply put the LHS and equal and put a formala or reference value
+    -   Can reference variables by b(eta), number or  names(coef(mod))
+    eg "b4=b5","b4=b2"
+    -   Hypothesis = "pairwise" to see pairs of  arguments
+    -   hypothesis = "Sequential" to see sequential comparisons of arguments
+
+-   Expand the null hypothesis to a range eg. is the effect between a,b
+    vs. just 0
+
+- hypotheses(mod,equivalence=c(-3,3))
+
+:::{.callout-note}
+
+-   How to read output?
+    -   S value is equivalent to how many times you will toss a head in a row
+
+:::
+
+-   Useful to compare modeling outcomes between groups or within factors
+
+
+comparison(
+    mod
+    ,variables #the thing we want to understand
+    -   variables=list(color=c("red","black") -- change of red to black
+    -   variables=list(unit_price=5) -- chagne of prices increase 5
+    -   variables=list(unit_price="sd") -- change of one standard deviatin of the price
+    -   variables=list(unit_price="iqr") -- change of across iqr of the price
+    -   variables=list(unit_price=c(10,500)) -- change of ten to 500
+    ,comparison #can make it into a ratio, any built in funciton or custom function
+    ,newdata=   # the datagrid we want to understand the comparison by 
+    ,by =       # the dimension we we want to aggregate by 
+    ,vcov=      # uncertainity
+    ,hypothesis # the specific question we want to answer or test for
+    )
+
+
+
+
+## how to understand model outputs
+-   Create a sample dataframe framing the example
+variables that you want to understand (this creates the constant argument)
+
+-   Use the predicitions on the dataframe
+-   to understand the relative difference of variance, use the comparison
+
+
+#common categorical variables
+-unique
+-sequential
+-pairwise
+
+
+## helper packages
+
+matchit -- stratify data
+mice -- impute missing data
+
+## notes for class
+-   different column names when using view for predictions vs. what is printed
+in the console
+-   is setting variables argument in prediction the same as setting the grid_type="counterfactual"
+-   in the newdata=datagrid is there a way to get average values per group (eg.
+if you use FUN_factor=unique
+
+# Summary of functions
+
+
+- First create a linear model 
+
+```{r}
+mod_simple <- df_summary %>% 
+lm(rev~factor(brand_name)+factor(color_name)+avg_vol,data=.)
+
+
+```
+
+-   You can use the predictions function to augment the predictions, this is 
+very similiar to the broom::augment() function
+
+        -   Returns a prediction to each row
+        -   Std. Error -- the different between Estimate and actual value
+        -   2.5% to 97.% range of the estimate
+        -   The input values 
+        -   However additional arguments can be passed through to custom
+
+```{r}
+library(tidyverse)
+library(marginaleffects)
+
+preds_out <- mod_simple %>%
+predictions()
+```
+
+**predictions**
+
+-   predict row level
+-   predict based on average/median values if inputs
+-   Create counter factual data sets (eg. if values were set to x what would 
+happen --duplicates dataset)
+-   Create group level summaries
+
+-   Alternatively you can supply a summary data frame to see how predicted
+values on counterfactual data
+-   you can use the `variables` function to supply a list of values to variable
+-   An alternative to the variable function is the to supply the  variable 
+paramters directly and then set grid_type="counter factor"
+-   Alternatively you can set the new_data model to "mean" in lieu of datagrid()
+-   this will "control" the input of that variable by returning duplicate
+datasets controlling for reach dataset
+-   Create group level predictions by suppling quoted grouping variables to 
+`by` argument
+    -   Equivalent to using dplyr group_by() and summarize()
+
+
+
+```{r}
+#| echo: false
+#| eval: true
+
+tribble(
+~type,~"function"
+,"row level prediction","predictions()"
+,"single prediction on average values","predictions(mod,newdata='mean')"
+,"single prediction on average values","predictions(mod,newdata=datagrid())"
+,"prediction on groups","predictions(mod,by='group_name')"
+,"prediction based counterfactual data"," predictions(variable=list(var=c(1,10)))"
+,"prediction based counterfactual data", "predictions(newdata=datagrid(var=c(1,10)))"
+) |> 
+  gt::gt()
+
+```
+
+
+
+
+**avg_predictions**
+- takes the average of an estimate
+
+**plot_predictions**
+
+-   plot predictions by passing the model and `condition`
+-   this will create a plot of estimate on y axis and variable on the x axis
+-   if two variables are passed to condition the second variable will color
+-   Set draw=FALSE to return a dataframe with a group column
+
+
+## Predictions
+
+```{r}
+#| echo: true
+#| eval: true
+
+counterfactual_predictions <- predictions(mod_simple,variables=list(avg_vol=c(4,1000)))
+
+counterfactual_predictions %>% 
+
+group_by(avg_vol) %>% 
+
+summarize( 
+    avg_rev=mean(estimate,na.rm=TRUE)
+    )
+```
+
+-   Alternatively you can use the datagrid() arguement to create new a dataset
+with each value at their average, median or mode value
+
+    -   use the FUN_factor() and FUN_numeric to sample datamodel
+    -   this will take overall mean or median values (not group specific)
+    -   based on these unique values and overall avg values it will do a prediction per mini group
+
+```{r}
+
+predictions(
+        mod_simple
+        ,newdata=
+        datagrid(
+            FUN_numeric=median
+            ,FUN_factor=unique)
+) 
+
+```
+
+## Plot predictions
+
+```{r}
+
+mod_simple %>%  
+
+plot_predictions(condition=c("avg_vol","brand_name"))
+
+mod_simple %>%  
+
+plot_predictions(condition=c("avg_vol","brand_name"),   draw=FALSE)
+
+
+```
+
+flowchart TD
+    A --> C{Predictions with ..}
+    C -->|counterfactual data| D["counterfactual\n(duplicates data)"]
+    D --> counter["predictions(\nmod\n,variables=list(var=c(0,1))\n)"]
+    C -->|averging effects\nacross equally across a grid| E["marginalmeans()"]
+    C -->|regressors at their\nmeans/medians/mode/etc| G[Predict values\ncontrolling regressors at contstant value]
+    C --> H[aggregate predictions]
+    G -->newdata["predictions(\nmod\n,newdata='mean'\n)"]
+    G -->datagrid["predictions(\nmod\n,datagrid(\nFUN_numeric=mean) \n ) "]
+    datagrid-->default["predictions(\nmod\n,datagrid() \n ) "]
+    H -->by["predictions(\nmod\n,by='var')"]
+    H -->avg_predictions["avg_predictions(\nmod\n,by='var')"]
+    H -->datagrid_by["predictions(\nmod\n,newdata =\n datagrid(\ncyl = mtcars$cyl\n, hp = c(90,100))\n,by='var\n) "]
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

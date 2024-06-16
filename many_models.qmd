@@ -1,0 +1,418 @@
+---
+title: "many_models"
+---
+
+source
+
+(https://tim-tiefenbach.de/post/2023-dplyr-many-models/)
+
+
+
+```{r}
+
+install.packages("dplyover")
+remotes::install_github("TimTeaFan/dplyover")
+
+library(tidyverse)        # <- necessary
+library(tidyr)        # <- necessary
+library(broom)        # <- necessary
+library(rlang)        # <- nice to have
+library(modelsummary) # <- for output
+library(purrr)        # <- not really needed
+library(dplyover)     # <- only for the data
+
+```
+
+
+
+
+
+
+```{r}
+
+lookup_vec <- set_names(names(csatraw), names(csat))
+
+
+
+csat_named <- csatraw |>
+  rename(any_of(lookup_vec)) |>
+  select(cust_id, type, product, csat,
+         ends_with("rating"))
+
+csat_named_nested <- csat_named %>% 
+  nest_by(product) %>% 
+  mutate(data=list(data))
+
+# make forumla
+lm_fomrula <- my_formula <- csat ~ postal_rating + phone_rating + email_rating +
+  website_rating + shop_rating
+
+#use formula and gather results
+csat_prod_nested_res <- csat_named_nested %>% 
+    mutate(
+      mod = list(lm(my_formula, data = data))
+      ,modstat = list(broom::glance(mod))
+      ,res =     list(broom::tidy(mod))
+      )
+      
+
+```
+
+
+```{r}
+csat_prod_nested_res |>
+  select(product, modstat) |>
+  unnest(modstat) |>
+  select(r.squared, p.value, nobs)
+```
+
+
+```{r}
+csat_prod_nested_res |>
+  select(product, res) |>
+  unnest(res) |>
+  filter(term != "(Intercept)")
+```
+
+
+## Advanced features to super charge
+
+
+### How to add a all to different subcomponents
+
+1. For the dimension you are querying add a "All" component
+2. pass this to `bind_rows()` to the original dataframe
+
+
+```{r}
+
+csat_all <- csat_named |>
+  mutate(product = "All") |>
+  bind_rows(csat_named) 
+
+```
+
+
+```{r}
+csat_named_nested <- csat_all %>% 
+  nest_by(product) %>% 
+  mutate(
+    data=list(data)
+    ,mod=list(lm(my_formula,data=data))
+    ,mod2=list(lm(csat~postal_rating,data=data))
+    ,modstat2=list(broom::glance(mod2))
+    ,res=list(broom::tidy(mod))
+    ,modstat=list(broom::glance(mod))
+    )
+
+csat_named_nested %>% 
+  unnest(modstat2)
+
+
+
+```
+
+## how to dynamic filter datasets or augmented based on user input  conditions
+
+
+-   Create a list of named arguments that would be passed on filter()
+        -   The names are will be used as row entries later on
+        -   Use `TRUE` to keep all rows (eg no filter)
+        -   If you want to to filter rows / data then you need to use `expr()` to capture the expression that would go directly into filter of the nested dataset
+        -   Write it as if you were directly filtering data in a regular filter, eg  `eval(cut=="Fair")`
+
+-   Use `expand_grid()` to create pair of each nested table by the filter criteria
+-   In the framing table use, create a new column with the names (using `names()`) of the list containing the filter object
+-   Create a new column that filters the data set and evaluates the arguments `filter(data,eval(filter_ls))`
+    -    Remember to use `expr()` for non logical arguments
+    -   Alternative you can directly name the column names from the datamodel
+-   When doing additional modling on the data objects, it can be difficult to understand what has been done to each data object
+    -   instead of using `list(lm(my_formula,data=data))` you can use `rlang::list2({product}_{type}:=lm(my_formula,data=data))` which makes it easier to know what is going on 
+-   You can nest the formula arguments inside as well by creating a named list for the arguments and directly passing that through
+-   From there you can use `eval()` in `lm()` to execute the arguments
+
+### Add section on how to do it more dynamically with glue::glue and expr()
+
+-   You can use create strings use glue::glue to construct customer arguments
+-   Then use `rlang::parse_expr()`to execute that argument
+
+
+```{r}
+
+
+filter_ls <- list(
+  All = TRUE,
+  no_reactivate = expr(type != "reactivate")
+)
+
+```
+
+
+
+```{r}
+cast_all_groups <- csat_all %>% 
+  nest_by(product) %>% 
+  mutate(data=list(data)) %>% 
+  expand_grid(filter_ls) %>% 
+  mutate(
+    type=names(filter_ls)
+    ,.after = product
+    )
+  
+```
+
+
+```{r}
+
+named_formula <- list2(standard=my_formula <- csat ~ postal_rating + phone_rating + email_rating +
+  website_rating + shop_rating)
+cast_all_groups %>% 
+  rowwise() %>% 
+  mutate(
+    data=list(
+      filter(data,eval(filter_ls))
+      )
+    ,formula=named_formula
+    ,formula_name=names(named_formula)
+    ,.keep = "unused"
+  ) %>% 
+  mutate(
+    mod=list2("{product}_{type}":=lm(eval(formula),data=data))
+    ,res=list2("{product}_{type}":=broom::glance(mod))
+  ) %>% unnest(res)
+```
+
+## Dynamically create formulas with multiple conditions
+
+
+-   reformulate() is alternative way to create a model argument and can be directly used in a lm()
+    
+    -   reformulate(independent_vars,dependent_vars)   
+    
+    
+```{r}
+
+lm(
+  reformulate(
+  termlabels = c("carat","cut","color","x")
+  ,response = "price"
+  ),data = diamonds
+  )
+
+
+```
+
+-   Create vector of quoted column names and use expand grid to directly put them in the framing table
+-   From there you can directly reference the names
+
+
+```{r}
+
+indep_vars <- c("postal_rating",
+                "phone_rating",
+                "email_rating",
+                "website_rating",
+                "shop_rating")
+csat_all %>% 
+  nest_by(product) %>% 
+  mutate(data=list(data)) %>% 
+  expand_grid(filter_ls,indep_vars) %>% 
+  mutate(
+    type=names(filter_ls)
+    ,.after = product
+    ) %>% 
+  rowwise() %>% 
+  mutate(
+    data=list(filter(data,eval(filter_ls)))
+    ,mod=list(lm(reformulate(termlabels=indep_vars,response="csat"),data=data))
+    ,modstat=list(broom::glance(mod))
+  ) %>% unnest(modstat)
+```
+
+-   Real strength is using this in combination with `update()` to dynamically update the arguments to include more and more arguments
+-   Create baseline argument
+-   Create named list of updated vars that you want to incremental add to argument
+-   Create column of named arguments
+-   use pattern update(base_formula,reformulate(c(".",update_vars)
+    -   "." says to take all original variables and ad c() and update vars to them
+    -   NULL is wont update anything and is the baseline model
+```{r}
+
+my_formula2 <- csat ~ postal_rating + phone_rating + shop_rating
+
+update_vars <- list2(base = NULL,
+                    email = "email_rating",
+                    website = "website_rating+email_rating")
+
+
+test <- csat_all %>% 
+  nest_by(product) %>% 
+  mutate(data=list(data)) %>% 
+  expand_grid(filter_ls,update_vars) %>% 
+  mutate(
+    type=names(filter_ls)
+    ,args=names(update_vars)
+    ,.after = type
+    ) %>% 
+  rowwise() %>% 
+  mutate(
+    form=list(
+      update(my_formula2,reformulate(c(".",update_vars),intercept = 0))
+    )
+    ,mod=list(
+      lm(form,data=data)
+    )
+    ,modstat=list(
+      broom::glance(mod)
+    )
+  ) %>% 
+  unnest(modstat)
+
+head(test$form)
+```
+
+# Alternative pattern, Data-less grids
+
+- when you have a column shares a name in the grid and in the underlying datamodel, you can use the .env$col_name to clarify which context you are referring to things 
+
+```{r}
+
+
+product <- c(
+  "All", unique(csat_named$product)
+)
+
+all_grps_grid <- expand_grid(product, filter_ls) |>
+  mutate(type = names(filter_ls),
+         .after = product)
+
+
+
+
+
+```
+
+
+## Practice
+
+
+```{r}
+
+library(tidyverse)
+
+filter_args <- rlang::list2(All=TRUE,
+                     low_price=expr(price<2000)
+                     ,med_price=expr(price>2000&price<12000)
+                     ,high_price=expr(price>12000)
+                     )
+
+
+diamonds %>% 
+  mutate(color="All") %>% 
+  bind_rows(diamonds) %>% 
+  nest_by(color) %>% 
+  mutate(data=list(data)) %>% 
+  expand_grid(filter_args) %>% 
+  mutate(
+    filter_names=names(filter_args)
+    ) %>% 
+  rowwise() %>% 
+  mutate(
+    data=list(filter(data,eval(filter_args)))
+    ,.keep = "unused"
+  ) %>% 
+  mutate(
+    cor=list(cor(data$carat,data$price))
+    ) %>% 
+  unnest(cor) %>% 
+  select(color,filter_names,cor) %>% 
+  # pivot_wider(names_from=filter_names,values_from=cor) %>% 
+  echarts4r::e_charts(x=filter_names) %>% 
+  echarts4r::e_scatter(serie =cor,legend = TRUE) %>% 
+  # echarts4r::e_scatter(serie =low_price,symbol_size = 10) %>% 
+  # echarts4r::e_scatter(serie =high_price,symbol_size = 10) %>% 
+  echarts4r::e_visual_map(cor)
+
+
+
+```
+
+
+
+
+
+```{r}
+library(tidyverse)
+cum_sum_vec<- c("price","x","y","z","carat")
+
+ input <- "sum(1:10)"
+ str(expr(input))
+ eval(parse_expr(input))
+ 
+args_lst <- rlang::list2(
+
+rlang::call2('cumsum',expr(price))
+
+  
+  )
+
+
+diamonds %>% 
+  nest_by(cut) %>%
+  mutate(data=list(data)) %>% 
+  expand_grid(input_args=cum_sum_vec) %>% 
+  mutate(args=glue::glue("cumsum({input_args})")) %>% 
+  rowwise() %>% 
+  mutate(
+    data_mod=list(
+      mutate(data
+           ,"{input_args}_cumsum":=eval(parse_expr(args))
+             )
+      )
+  ) %>% 
+
+pull(data_mod) %>% .[[1]]
+  
+```
+
+## Reproduce Stackoverflow posts
+
+```{r}
+
+make_data_fixed <- function(df) {
+
+  df %>% 
+    mutate(price_cumsum=cumsum(price),
+           max_price_cumsum=max(price_cumsum))
+}
+
+make_data_input <- function(df,x) {
+  df %>% 
+    mutate("{{x}}_cumsum":=cumsum({{x}}),
+           "max_{{x}}_cumsum":=max("{{x}}_cumsum")
+           )
+}
+
+selected_cols <- c("clarity","depth")
+   
+
+```
+
+
+
+
+```{r}
+
+library(tidyverse)
+
+diamonds %>% 
+  nest_by(cut) %>% 
+  mutate(data=list(data)) %>% 
+  mutate(mod=list(lm(price~carat,data=data)))
+  
+  
+
+
+
+```
+

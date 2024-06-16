@@ -1,0 +1,209 @@
+---
+title: "functions"
+---
+
+Function are your friend. They are here to help you. Don't be scared of them.
+
+I was intimidated by functions and put it off as long as I could to learn it. I don't know why. Maybe the unfamiliar syntax?
+
+The errors? perceptions that this was advanced?
+
+Functions are actually incredible easy. Its more of a familiarity issue. Let's explore how we get your next skill set.
+
+Let's review the function basics.
+
+
+```{r}
+#| label: function-body
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+function_name <- function(input){ #<1>
+  
+  #function body #<1>
+    out <- body |> 
+      do_something |> 
+      do_something_else |> 
+      final_step
+    
+    return(out) #<3>
+    
+} #<4>
+
+
+```
+
+
+Okay -- yes it does look a scary and complex but let's break it down.
+
+Ultimately your function is taking some inputs, doing something to them and then returning an output.
+
+This "doing something to them" can be as simple as you want it to be or as complex as you want it to be. 
+
+There are some added complexities that occur in the  function body phase which will deal with later but if you're new to functions, the biggest challenge will be understanding why and when you should use it.
+
+In general you become a more efficient worker if you follow a single principle **DRY** Don't Repeat Yourself.
+
+This is challenging for excel users because you most likely never created functions. You created formulas or used build in function that you would copy, paste, drag, and drop but rarely did you create your own functions.
+
+Breaking your typical work flow of just copying and pasting is typically what will prevent you from using a function. But honestly embrace it -- That combined with iterations is the secret to maxing you productivity.
+
+Not convinced? let's shameless borrow that R for data science example, say we have a random table of values `df` below
+
+```{r}
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / 
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / 
+  (max(df$b, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / 
+  (max(df$c, na.rm = TRUE) - min(df$c, na.rm = TRUE))
+
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / 
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+
+```
+
+```{r}
+vec <- 1:10
+
+
+scale(vec,center = TRUE
+mtcars |> 
+  mutate(
+    across(where(is.numeric),scale,center=TRUE)
+  )
+```
+
+
+Beginner:
+-   function(x)
+-   predicate functions with lists
+
+all()
+,any()
+,every()
+,none()
+,some()
+,which()
+,whic.max()
+,which.min()
+keep(x, is.numeric)
+discard(x, is.numeric)
+head_while(x, is.character)
+detect(x, is.character)
+detect_index(x, is.character)
+has_element(x, "foo")
+
+
+
+
+```{r}
+x <- list(a = 1:10, b = 11:20, c = 21:30)
+y <- list(1, 2, 3)
+z <- list(4, 5, 6)
+l1 <- list(x = c("a", "b"), y = c("c", "d"))
+l2 <- list(x = "a", y = "z")
+
+```
+
+```{r}
+
+
+
+every(x,.p=\(x) is.numeric(x))
+
+none(x,.p=\(x) is.numeric(x))
+
+some(x,.p=\(x) is.numeric(x))
+
+```
+
+
+Intermediate:
+-   functions with tables
+-   data.masking
+-   environment
+
+
+
+```{r}
+list(1:10,letters) |> 
+  none(.p = \(x) is.numeric(x))
+
+
+x <- list(1:10,20:200) 
+
+every_homemade <- function(x){
+out <- list()
+for (i in seq_along(x)){
+  
+  out[i] <- is.numeric(x[[i]])
+}
+
+all(out==TRUE)
+}
+
+every_homemade(x)
+
+mod <- is.numeric
+
+do.call(mod,x)
+
+mod |> exec()
+```
+
+```{r}
+
+
+
+set.seed(123)  # For reproducibility
+
+mydf <- data.frame(user_id = 1:100) |> 
+  expand_grid(data.frame(day = 1:365)) |> 
+  mutate(logins = floor(abs(rnorm(1,10,10))))
+
+lambdas <- c(0.01, 0.05, 0.1)
+
+mydfx <- mydf |> 
+  mutate(
+    lambda_logins_01 = logins * exp(-lambdas[1] * day),
+    lambda_logins_05 = logins * exp(-lambdas[2] * day),
+    lambda_logins_1 = logins * exp(-lambdas[3] * day),
+    )
+
+map(
+  .x=lambdas
+  ,.f=\(.x) transmute(mydf,x=logins * exp(-.x * day))
+  ) |> 
+  purrr::list_cbind() |> 
+  ?rename_with()
+
+
+
+  map(
+    .x=c("a","b","c")
+    ,.y=_
+    ,.f=\(.x,.y) .y |> as_tibble(.name_repair="unique") |> rename(.x=1)
+  )
+  
+ 
+  purrr::list_cbind() |> 
+  unnest()
+
+rename()
+```
+
+

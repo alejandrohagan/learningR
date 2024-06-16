@@ -1,0 +1,1208 @@
+---
+title: "time series"
+---
+
+```{r}
+#| echo: false
+#| output: false
+#| label: etl
+
+library(tidyverse)
+library(timetk)
+library(modeltime)
+library(tidymodels)
+library(sparklyr)
+
+pkgload::load_all("/home/hagan/R/fpaR")
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    date_key=mdy(date_key)
+    ,rev=sales_quantity*unit_price
+    )
+```
+
+
+
+```{r}
+#| echo: false
+#| label: create-spark
+#| eval: TRUE
+  
+sc <- spark_connect(master ="local")
+
+df_sdf <- sparklyr::copy_to(sc,df = df,name = "df_spark")
+```
+
+
+
+
+# Simplified framework
+
+1. summarize by date column
+2. add dimensions that you want in learning
+3. check and add correlations
+4. feature engineer such as scaling and normalizing data, difference and logging log
+5. add time related signatures
+6. create test and train data sets for augmentation and back testing too 
+7. select models
+8. tune models
+9. create model workflows
+10. fit models
+
+
+# Introduction to key functions
+
+## how to summarize a dataframe by a date dimension
+
+
+-   `summarize_by_time()` works similar to group_by()+summarize
+    
+    -   Easy way to aggregate dimenions by a time signature (daily, weekly, etc)
+    -   You can use across and any other verbs to help with the aggregation
+    -   Date column must be in date format
+
+```{r}
+#| echo: false
+#| label: summarize-by-time
+#| eval: true
+#| error: false
+#| warning: false
+
+
+(df_daily <- df %>%
+  summarise_by_time(
+    .date_var = date_key # date column
+    ,.by = "day" # aggregation level such as day, month 8 weeks, quarter or year
+    ,rev=sum(rev) # aggregation columns can you across*()
+    ,vol=sum(sales_quantity)
+    ,mean_unit_price=mean(unit_price)
+    #,.type = ("ceiling","round","floor") optional rounding column
+    ) %>% 
+  mutate(price_realization=rev/vol)
+)
+
+```
+
+
+
+
+##  how to pad time when there gaps in data series
+- `pad_by_time()`  use to fill gaps with values in your time series
+-   Useful when you have gaps in data and need complete time series signatures
+
+```{r}
+#| eval: false
+#| label: pad-time
+df %>% 
+  group_by(store_key) %>% 
+pad_by_time(
+    .date_var=date_key
+    ,.pad_value = 0
+    ,.by = "day"
+    ,.fill_na_direction = "down"
+    ,.start_date = ymd("2007-01-01")
+  )
+
+```
+
+
+
+## How to visualize time series
+-   `plot_time_series()` used to plot times series in either plotly (default), ggplot (set interactive to FALSE) or trelliscope (set .trelleiscope=FALSE)
+-   If you passed a grouped dataframe you will get faceted polots or alternative you can use the facet_vars argument
+-   contains additional formatting and plotly arguments
+-   date_var and value are the most critical 
+
+```{r}
+df_daily %>% 
+  plot_time_series(
+    .date_var = date_key
+    ,.value=rev # the column to plot
+    ,.line_color = "red" 
+    ,.line_type = "dotted"
+    ,.smooth_period = 30
+    ,.smooth_span = .2 # percentage of data
+    ,.smooth_color = "green"
+    ,.trelliscope = FALSE
+    ,.plotly_slider = FALSE # add in a slider
+    ,.color_var = "black"
+      ,.x_lab = "X aixs title"
+    ,.y_lab = "Y axies title"
+    ,.color_lab = "blue"
+      ,.smooth_alpha = .3
+    ,.title = "Thi is title to the plot"
+    ,.interactive = TRUE 
+#    ,.facet_vars = column_name optional to facet
+    )
+```
+
+## Filter time series 
+-   Use `filter_by_time()` to filter times series with greater flexibility 
+-   you can put a start date with one granularity (2013) and end date with a different (2015-02-01) or use "start" and "end" for the min and max of the dataset
+
+```{r}
+#| eval: false
+#| label: "filter-ts"
+df_daily %>% 
+  filter_by_time(
+    .date_var=date_key
+    ,.start_date = "2007-06" # or can put 2007 or 2007-12-05
+    ,.end_date ='end' # can use this or specific date
+  )
+```
+
+## split into training and test set
+
+-   Similar to tidymodels `split()` this will split a time series 
+-   you assign the split data to an object and use it with tidymodels `train()` and `test()`
+-   need to set cumulative true if you want the training set to be historical to the assessment period
+-   You need to clarify where you want the training data to start (eg. at the beginning or end with the aessess and initial arguments as well cumulative)
+-   Use the `tk_time_series_cv_plan()` and  `plot_time_series_cv_plan()` to show the series
+
+
+```{r}
+df_split <- df_daily %>% 
+  time_series_split(
+    date_var = date_key
+    ,assess = 100 # or "8 weeks" -- this is the testing points straight on the end (when cumulative is set to FALSE)
+    # ,initial = 300 # This is the training points working back from the testing (when cumulative is set to FALSE) 
+    ,point_forecast = FALSE
+    ,cumulative = TRUE # when set to TRUE you just need the assess
+  )
+
+
+
+```
+
+- you can use the `training()` or `testing()` on the split object to get the various split elements
+
+-   To view of plot of the split object you first need to pass the split object to `tk_time_series_cv_plan()`  and then use `plot_time_Series_cv_plan()` 
+
+```{r}
+
+df_split %>% 
+  tk_time_series_cv_plan() %>% 
+  plot_time_series_cv_plan(
+    .date_var = date_key
+    ,.value = rev
+    ,.interactive=FALSE
+    # ,.smooth = TRUE
+    ,.title="Trainig vs. Testing set"
+  ) +
+  scale_y_continuous(labels = label_comma(scale=1/1e6,suffix = "M"),limits = c(0,4e6))
+
+```
+## create different time series models
+
+-   Linear model 
+
+```{r}
+lm_mod <- linear_reg() 
+
+```
+
+-   Facbeook's prophet model
+
+```{r}
+prophet_mod <- prophet_reg() %>% 
+set_engine("prophet")
+
+```
+
+### How to use the training set?
+
+-   Create recipes
+-   create modeling frameworks
+-   Fit models with a recipe (formula + feature engineering) and fit to to data set to training data 
+-   Add models to model time workflow `modeltime_table` (similiar to other workflow
+-   Use modeltime
+-   Similar to tidy models framework
+-   Set data to be training() version of the split
+
+
+
+```{r}
+lm_fit <- lm_mod %>% 
+  fit(rev~month(date_key)+vol*mean_unit_price,data=training(df_split))
+
+prophet_fit <-  prophet_mod %>% 
+  fit(rev~date_key+vol,data=training(df_split))
+
+```
+
+
+
+## model time worfklow
+
+
+### Modeltime_table()
+-   As you create models you put them together in a table with the `modeltime_table()`
+
+
+```{r}
+model_tbl <- modeltime_table(
+  lm_fit,
+  prophet_fit
+)
+```
+
+
+
+### Model_time_calibrate()
+
+-   Use this with `modeltime_calibrate()` to calibrate the model against testing dataset
+-   Set the new_data argument to be the `testing()` argument
+-   It will label the models with genric name
+
+
+
+```{r}
+calib_tbl <- model_tbl %>% 
+  modeltime_calibrate(
+    new_data=testing(df_split)
+    )
+```
+
+
+- key field is .calibration_data which will have the actual, forecasted and 
+residuals columns
+
+
+
+### how to see model results
+
+-   Use the `modetime_forecast()` to see the tables of forecast results and actual date with confidence interfaces
+-   Need to have actual data (pass it to actual argument)
+-   Need to have testing data
+-   Need to transform the xxx data to match the pre-processing steps
+-   If you pass the calibradated model that has a data already in it you don't need to supply new data
+
+- Use `plot_modeltime_forecast()` to then see the forecast options
+  - option to view as trillescope.js and other visualization options
+
+
+```{r}
+calib_tbl %>% 
+  modeltime_forecast(
+    new_data=testing(df_split)
+    ,actual_data = df_daily
+    ,conf_interval = .2 # as forecasting error
+    ) %>% 
+  plot_modeltime_forecast()
+```
+
+
+- 
+
+## how to see forecasting accuracy
+
+-   Pass the calibrated tbl to `modeltime_accuracy()` to get the common forecasting erorrs
+
+```{r}
+calib_tbl %>% 
+  modeltime_accuracy()
+```
+
+- 
+
+## Feature Engineering
+
+### plot seasonal diagnostics
+
+-   Helpful to log plotting variable if there are high outliers
+-   Use the `plot_seasonal_diagnostics()` to see diagnostics
+
+
+```{r}
+
+df_store_daily <- df %>%
+  group_by(store_key) %>% 
+  pad_by_time(
+    .date_var=date_key
+    # ,.pad_value = 0
+    ,.by = "day"
+    # ,.fill_na_direction =  c("updown")
+    ,.start_date = ymd("2007-01-01")
+    ,.end_date = ymd("2008-09-30")
+  ) %>% 
+  timetk::summarise_by_time(
+    .date_var=date_key
+    ,.by = "day"
+    ,rev=sum(rev)
+  ) %>% 
+  ungroup() 
+
+
+seasonality_plots <- df_store_daily %>% 
+  nest_by(store_key) %>% 
+  mutate(
+    data=list(data)
+    ,plots=
+      list(
+      plot_seasonal_diagnostics(
+        .date_var = date_key
+        ,.value=rev
+        ,.feature_set = c("week")
+        ,.data=data
+        ,.interactive = FALSE
+        )
+      
+      )
+    
+  )
+seasonality_plots  
+
+
+```
+
+
+## How to create formual recipe and pre-processing steps
+-   you provide the transformation steps here
+-   be mindful that your training and and testing datasets need the to be converted with the training steps so that when you back test or fits everythign works
+-   same transformation columns
+-   ability to transform predictions back to untransformed output
+- `step_time_series_signature()`
+-   take note of the transformation vectors
+-   you apply the steps to the dataset with prep %>% juicemii
+
+```{r}
+df_daily:
+rec_basic_raw=recipe(rev~ . ,data=training(df_split))
+```
+
+## time series signature
+1.3.4 in video --
+
+```{r}
+rec_basic=rec_basic_raw %>% 
+step_timeseries_signature(date_key)
+```
+
+# use this to center large variables
+step_normalize(index.num,_year)
+-typically done with large variables
+
+#remove feautres
+`step_rm()`
+
+`step_rm(starts_with(".iso"),ends_with(".xts"),contains("hour"),contains("minute"),contains("second"),"contains("am.pm")`
+
+```{r}
+rec_basic=rec_basic %>%
+step_rm(
+starts_with(".iso")
+,ends_with(".xts")
+,contains("hour")
+,contains("minute")
+,contains("second")
+,contains("am.pm")
+)
+```
+
+###  add dummy steps
+
+```{r}
+rec_basic <- rec_basic %>% 
+  step_dummy(all_nominal_predictors())
+```
+
+### how to see model results?
+- pass the recipe through to prep() and juice() to see the model time resutls
+    
+
+```{r}
+
+rec_basic %>% 
+  prep() %>% 
+  juice()
+
+```
+
+
+# overview of EDA 
+
+-   visualize time series
+-   plot acf diagnostics  (plot_acf_diagnostics)
+    -   auto correaltion
+    -   correlation between predictaors
+-   plot seasonality to get idea of time attributes (`plot_seasonal_diagnostics()`)
+-   plot  anomaly detection to get an idea of outliers (`plot_anomaly_diagnostics()`)
+-   get linear model as quickly as you can
+
+
+## diagnostics functions
+
+### ACF
+
+-   helpful to detect correlations between lagged and how many lags to use in a model
+-   helps us understand if there is lagged version of variable -- 
+    -   first entry is always one because it is always one vs. one
+-   set the `.ccf_vars` options to the columns you want to correlate against ( dones't currently work)
+
+
+```{r}
+
+plot_anomaly_diagnostics()
+df_daily %>% 
+  plot_acf_diagnostics(
+    .date_var=date_key
+    ,.value=rev ## this can be logged
+    ,.lags = 1:10
+    ,.ccf_vars = c(mean_unit_price)
+    ,.interactive = TRUE
+    # ,.show_ccf_vars_only = TRUE
+    # ,.show_ccf_vars_only = TRUE
+  )
+```
+
+## sesaonality
+
+-   Helpful to see if there are certain seasonality drivers (eg. weekly, monthly, day of month, etc) effect
+
+-   helpful to which time signures we want to include in the model or undersatnd more 
+
+
+```{r}
+df_daily %>% 
+  plot_seasonal_diagnostics(
+    .date_var=date_key
+    ,.value = rev
+      )
+
+```
+
+
+### anolomy
+
+-   helpful to detect and plot anomalies detection
+-   
+
+plot_anomaly_diagnostics(
+.date_var=date_col
+.value=value_col
+.alpha= .01 #change anomaly sensitivity
+.max_anolamoies =.01 # peak anomaly
+
+)
+
+
+```{r}
+df_daily %>% 
+  plot_anomaly_diagnostics(
+    .date_var = date_key
+    ,.value=rev
+    ,.alpha=.2
+  )
+```
+
+
+
+```{r}
+df_daily %>% 
+  timetk::tk_anomaly_diagnostics(
+    .date_var = date_key
+    ,.value=rev
+    ,.alpha = .3
+  )
+```
+
+
+## seasons decomposition
+
+-   Useful to understand how anomoliges are being detcted
+
+-   There is a seasonal cycle
+-   There is a trend cycle
+-   
+
+## mode diagnosics
+detect lagged fuctions
+plot_acf_diagnoistcs(
+.lags="1 year", 25:100,100
+.ccf_vars=columns,
+.show_ccf_vars-only=TRUe # ony cross correlations var
+,.facet_ncol=number of column
+
+
+)
+
+```{r}
+df_daily %>% 
+  plot_stl_diagnostics(
+    .date_var=date_key
+    ,.value=rev
+    ,.feature_set = c("season","trend")
+  )
+```
+
+
+
+## linear regression plot
+
+-   shortcut function of `lm()` to help identify which features are meaningful or not
+
+## uses linear regression
+
+helps ot identify useful features
+
+plot_time_series_regression(
+.date_var=data column
+.formula= value~ as.numeric(date_col)+
+wday(date_col)+
+month(date_col)
+show_summary= TRUE, shows summary ouptut
+)
+
+
+
+```{r}
+df_daily %>% 
+  plot_time_series_regression(
+    .date_var = date_key
+    ,.formula = log(rev+1) ~ vol+week(date_key)+mean_unit_price+timetk::lag_vec(date_key,lag=2)+timetk::lag_vec(date_key,lag=3)
+    ,.show_summary = TRUE
+    # ,show_summary=TRUE
+  )
+
+```
+
+
+## transformation functions
+
+-   provides time based mutate over time windows this is like group_by + mutate
+mutate_by_time(
+.by="week"
+,formula
+)
+
+- applies log +1 to a column
+loglp() 
+
+- standardize and centers
+standarize_vec() 
+
+-   normalize a vector
+timetk::normalize_vec()
+
+
+-   lags a columns
+
+lag_vec( shifts a vector)
+
+-   creates many lags against a column
+
+tk_augment_lag(
+.lags=1:10
+
+show_summary=TRUE
+)
+
+
+provides time based mutate over time windows this is like group_by + mutate
+mutate_by_time(
+.by="week"
+,formula
+
+
+transofmration
+
+loglp - applies log
+standarize_vec - standardize and centers
+
+
+tk_index() creates index
+
+tk_make_timeseries makes time table
+
+tk_make_holiday_sequence(
+year_start
+year_end
+clandar
+) %>% 
+tk_get_holiday_signature( converst to grid matrix)
+
+makes future time series
+ts_make_future_time_zeries
+
+future_frame(
+lengt_out=periods
+)
+
+
+
+
+
+)
+
+)
+
+date_col %-time% "1 day"
+
+date_col %+time% "6 weeks"
+
+## slidify
+
+-   Creates function that does a rolling application, like mean, or correlation
+-   use anonymous function ~ as function definition and then plug in other parameters
+-   apply that function to a name
+-   now you can that function as you want normally eg fun_name()
+
+fun_name = slidify(
+.f= function that you want ~cor(.x,.y,use="pairwise.complete.obs")
+,period= window length
+,align=where is the gap
+,partial=what to do with partial
+)
+
+```{r}
+
+roll_corr_30 <- slidify(
+  .align = "center"
+  ,.f=~cor(.x,.y)
+  ,.period=30
+)
+
+df_daily %>% 
+  mutate(
+    roll_30_cor=roll_corr_30(.x=vol,.y=mean_up)
+    ,rev_change=diff_vec(rev,lag=1)
+    ,rev_change_prop=rev_change/lag_vec(rev,lag=1)
+    ,roll_30_cor_rev=roll_corr_30(.x=rev_change_prop,.y=roll_30_cor)     
+         ) %>% 
+  ggplot(aes(x=date_key,y=roll_30_cor_rev))+
+  geom_line()+
+  # geom_line(aes(y=rev_change_prop),col="red")+
+  scale_x_date(date_breaks = "1 month") 
+  plotly::ggplotly()
+
+  
+
+```
+
+
+
+
+
+slidify_vec()
+
+- similar put to a vector
+
+
+```{r}
+#| eval: false
+slidify_vec(.x = df_daily$vol,.f=~cor(.x,df_daily$mean_up),period=10,.align = "left")
+
+
+cor(df_daily$vol,df_daily$mean_up)
+
+
+prep_df <- df_daily %>% 
+  recipe(rev~.,data=.) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors()) %>% 
+  step_rm(date_key) %>% 
+
+  prep()
+  
+juice_df =prep_df%>% 
+juice()
+
+
+tidy_df <- prep_df %>% tidy()
+
+tidy_df
+
+df_daily %>% 
+  recipe(rev~.,data=.) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors()) %>% 
+  step_rm(date_key) %>% tidy()
+
+
+df %>% 
+  group_by(store_key) %>% 
+  summarise(
+    rev=sum(rev)
+    ,vol=sum(sales_quantity)
+    ,returns=sum(return_amount)
+    ,discounts=sum(discount_amount)
+    ,.groups = "drop"        
+    )  %>% 
+  mutate(across(2:5,~.x/sum(.x))) %>% 
+  recipe(store_key~.,data=.) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors(),num_comp = 3) %>% 
+  prep() %>% juice() %>% 
+  pivot_longer(-1) %>% 
+  mutate(
+    value=value
+    ,store_key=factor(store_key)
+    ) %>% 
+  filter(store_key %in% 1:10) %>% 
+  ggplot(aes(y=store_key,x=value,fill=store_key))+
+  geom_col(show.legend = FALSE)+
+  facet_wrap(~name,nrow = 1,scales = "free")
+step_pca()
+
+
+df %>% 
+  nest_by(store_key) %>% 
+  mutate(
+    data=list(data)
+    ,n=nrow(data)
+    ,rev=sum(data$rev)
+    ,vol=sum(data$sales_quantity)
+    ,lm_mod=list(lm(rev~sales_quantity,data=data))
+  ) %>% 
+  mutate(
+    rev_prop=rev/sum(rev)
+    ,cum_rev_prop=cumsum(rev_prop)
+    ,tidy_lm=list(broom::tidy(lm_mod) %>% pull(term))
+    ) %>% 
+  unnest(tidy_lm)
+
+
+```
+
+
+-   creates differences between a log
+-   typically used with cumsum for changes in a series
+-   lag is how far you want to go back
+-   diff =1 is simple lag (period over period)
+-   diff=2 is the change in your lagged values, it is the acceleration of difference
+diff_vec(
+lag
+,difference=1 for normal 2 for acceleration
+)
+
+```{r}
+df_daily %>% 
+  mutate(vol_diff=diff_vec(vol,lag=1,diff=1)
+         ,vol_acc=diff_vec(vol,lag=1,diff=2)
+         ,lag_one=vol-lag(vol,n=1)
+         ,lag_of_lag=lag_one-lag(lag_one,1)
+           )
+
+
+343+756
+```
+
+
+- creates forier funcitons, similiar to lag
+forier_vec(
+period = lag
+k=offset
+type=cos,sin
+)
+
+
+
+## Signature
+- creates index
+tk_index() 
+
+makes time table similiar to create date
+
+tk_make_timeseries() 
+
+- makes a holiday sequence signatures
+
+tk_make_holiday_sequence(
+year_start
+year_end
+calendar
+)
+
+tk_get_holiday_signature()
+
+
+
+makes future time series
+ts_make_future_time_zeries()
+
+future_frame(
+lengt_out=periods
+)
+
+# Framework
+
+## Extend forcast window
+
+- scale & normalize variables
+
+- create horizon
+-   create rolling lag based on horizon
+-   create rolling periods
+
+basically make sure our dataframe has everything that it needs for future projects (eg. lags and rolling averages)
+- tip create rolling lag of forecast period
+
+- add window
+
+bind_rows(
+dataframe,
+dataframe %>% 
+future_frame(
+.data_var
+.length_out)
+)
+
+- add lags
+
+
+tk_augment_lags(
+variable
+.lags
+)
+
+- add rolling averages
+tk_augment_slidify(
+.value=thing that you want rolling average
+.f=mean or whatever
+.period= c(30,60,90)
+.align="center"
+.partial=true
+)
+
+- add events
+
+anonlomies and external regressors
+
+- save forecast table as seperate table and historical table as seperate
+
+
+## split and train
+
+-take historical dataset and assign it to object this is your splits
+
+time_series_split(
+assess=time horizon
+cumulative=TRUE
+)
+
+- validate teh splits are right you can use:
+
+tk_time_series_cv_plan() %>% 
+plot_time_seris_cv_plan()
+
+
+## recipe
+
+- can create a base recipe
+
+- to see how these recipes happen use prep() %>% juice() to apply transformats to the dataset
+
+recipe(
+formula
+data)
+%>% 
+
+### creates time series seinguatre
+step_timeseries_siganture() #
+)
+
+### normalize
+
+- consider to normalize time series signatures 
+
+step_normalize()
+
+### dummy variables
+step_dummy(one_hot=TRUE)
+
+### interaction
+step_interaction(~ (col)*(col))
+
+### foriere
+- base foriere on lags
+
+step_fourier(date,periods=c(),K=2)
+
+### spline
+- need to remove lag and date column if you do this
+- step_ns(
+ends_with(index.num),deg_free=2
+)
+
+### lag
+
+-   make sure to remove nas with step_naomit
+-   lags added with tk_augment_lags
+
+
+## workflow
+
+-workflow are model management tools
+-   workflows are data dependent due to reciept spec dependecy
+-   new data must have the same structure as the unstranformed recipe data
+-   worlfow should be created for each combination of model & recipe
+-   fitting a wroflow trains the model & recipe on data
+
+- add model and recipe and can fit
+- ensure fit is based on same data as reciept (training)
+
+add_model()
+add_reciepe()
+fit()
+## modeltime
+
+- how you compare and forecast models
+- modeltime only works with fitted models that have parsnip and workflow
+- basically add to to modetime so you acollection of workflows
+-   then caolbirate against a dataset (testing)
+    
+    -   then forecast (against against testing set)
+    -   or get accuracy
+
+-add worlflow to model modeltime table
+modeltime_table(workflow1,workwlow2)
+
+you can rename model IDs with update_model_description()
+
+- to apply model to different data set (testing),  you use modeltime_calibrate
+- ensure you same the calibrated table as a new object
+modeltime_calibrate(new_data=testing(split))
+
+
+-   use modeltime_forecast to apply model to a forecast (pass calibration table\)
+-   Need to be mindful that external regressors have column in the forecast table for models
+modeltime_forecast(
+new_data=testing(splits)
+,actual_date=actual_data
+,conf_interval=0.0
+h= "8 weeks"is horizon can only be used if no external regressors
+) %>% 
+table_modeltime_accuracy(.interactive=FALSE % GT table) # prints to table
+
+- to get accuracy use modeltime_accuracy() (pass calibration data through to it)
+modeltime_acurracy(
+metric_set=default_forecast_accuracy_metric_set() for defaul metrics or
+metrict_set=yardstick::metric_set(list metrics)
+)
+
+- plot model time forecast
+plot_modeltime_forecast(
+.lengend_max_width=25
+)
+
+
+
+### refit
+-     use to pass model specs to new data source like your future forecasted dataset
+-     can use to train data on full dataset
+-   pass calibration table to modeltime_refit
+calibration_tbl %>% 
+modeltime_refit(data=originaltbl)
+
+### residuals
+
+modeltime_residuals() lets you look at the residaual sof the moel
+
+
+## transfer and revert back
+
+- keep track of parateters that were used to transfrom (log) or normalize data
+- make sure you do it in the right order
+
+standarize_inv_vec() to undon standarization
+
+log_interval_inv_vec() to undo log
+
+
+## Extract elements
+-   to pull fit of a workflow use pull_workflow_fit %>% pluck (fit) %>% summary(0)
+-   this will tell you how the applied workflow fit looks like
+
+
+## compare models
+-   add wor
+
+
+
+
+## model types
+
+### arima Regression
+arima_reg() %>% 
+seg_enging("auto_arima")
+
+
+-   order max tells you how many coefficients you want
+-   thee lags are the same as lm(var ~ lag(var,1)+lag(var,2))
+
+
+```{r}
+#| eval: false
+
+library(tidyverse)
+library(timetk)
+
+
+df <- fpaR::contoso_fact_sales %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    revenue=unit_price*sales_quantity
+   ,date=mdy(date_key) 
+    ) 
+
+
+
+daily_sales_tbl <- df %>% 
+  relocate(last_col()) %>%
+  timetk::summarise_by_time(date
+                            ,.by = "day"
+                            ,n= n()
+                            ,revenue=sum(revenue)
+                            ,quantity=sum(sales_quantity)
+                            ,store_count=length(unique(store_key))
+                            ,rev_per_store=revenue/store_count
+                            ,quantity_per_store=quantity/store_count
+                            )
+
+
+augment_daily_sales_tbl <- daily_sales_tbl %>% 
+  # plot_acf_diagnostics(
+  #   .date_var = date
+  #   ,.value = rev_per_store
+  # )
+
+  mutate(across(-date,timetk::standardize_vec)) %>% 
+  tk_augment_lags(
+    revenue
+    ,.lags = 1:5
+                  ) %>% 
+  tk_augment_lags(
+    quantity
+    ,.lags = 1:5
+                  ) %>% 
+  tk_augment_lags(
+    rev_per_store
+    ,.lags = 1:5
+                  ) %>% 
+  timetk::tk_augment_timeseries_signature(date)
+
+
+
+augment_daily_sales_tbl %>%
+  timetk::tk_augment_holiday_signature(.date_var = date
+                                        ,.holiday_pattern = "US_"
+                                       ,.locale_set = "US",
+                                       .exchange_set="none")
+
+
+
+
+augment_daily_sales_tbl %>% 
+  bind_rows(
+    future_frame(date_var=date
+      ,.length_out = 30
+
+    )
+    
+  )
+bind_rows(
+augment_daily_sales_tbl,
+augment_daily_sales_tbl %>% 
+  future_frame(.date_var = date
+               ,.length_out = 30)
+)
+
+```
+
+
+
+```{r}
+#| eval: false
+
+plot_acf <- daily_sales_tbl %>% 
+  plot_acf_diagnostics(.date_var,.value) 
+
+plot_anomaly <- daily_sales_tbl %>% 
+  plot_anomaly_diagnostics(.date_var,.value)
+
+plot_seasonal <- daily_sales_tbl %>% 
+  plot_seasonal_diagnostics(
+    .date_var
+    ,.value
+    )
+
+daily_sales_tbl %>% 
+  timetk::tk_augment_timeseries_signature(.date_var) %>% 
+  mutate(across(where(is.ordered),as.character)) %>%
+  timetk::mutate_by_time(.date_var = .date_var
+                         ,.by ="week"
+                         ,.type = "round"
+                         ,weekly_rev=sum(.value)
+                         ,weekly_mean=mean(.value)
+                         ,weekly_median=median(.value)
+                         ) %>% 
+  relocate(last_col()) %>% 
+  mutate(across(contains("weekly_")
+                ,standardize_vec)) %>% 
+
+  
+  mutate(.value=log(.value+1),
+         
+  ) %>% view()
+  lm(.value ~.-.date_var
+     ,data=.) %>% 
+  summary()
+  broom::tidy() %>% 
+  filter(p.value<.05)
+  timetk::plot_time_series_regression(.date_var,
+                                      .value~.)
+
+
+```
+
+
+```{r}
+#| eval: false
+library(tidymodels)
+split <- daily_sales_tbl %>% 
+  timetk::time_series_split(
+    date_var =date
+    ,assess = 8
+    ,cumulative = TRUE
+    )
+
+train <- rsample::training(split)
+test <- rsample::testing(split)
+
+
+
+lm_mod <- parsnip::linear_reg()
+ph_mod <- modeltime::arima_boost()
+
+
+rec_basic <- recipes::recipe(revenue~.,data=train) %>% 
+  timetk::step_timeseries_signature(date) %>% 
+  timetk::step_fourier(date,period =c(1,3,7),K = 2)
+
+
+rec_basic 
+
+
+lm_basic <- workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(rec_basic) %>% 
+  fit(train)
+
+ph_basic <-  workflow() %>% 
+  add_model(ph_mod) %>% 
+  add_recipe(rec_basic) %>% 
+  fit(train)
+
+modeltime::modeltime_table(
+  lm_basic
+  ,ph_basic
+) %>% 
+  modeltime::modeltime_calibrate(new_data = train) %>% 
+  modeltime::modeltime_accuracy()
+
+
+
+```
+

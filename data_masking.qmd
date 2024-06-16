@@ -1,0 +1,363 @@
+---
+title: "data_masking"
+---
+
+## Resources
+
+[https://brad-cannell.github.io/r_notes/confidence-intervals.html]
+
+
+### data masking
+
+
+enquoes
+-   quotes functions eg. turns mpg into "mpg" AND declares the environment eg. global or local for the quoted return to be put in. 
+-   eg. ... or mpg needs to but into enquos(...) or enquo(mpg)
+-   you evalute unquoted objects with !! or despare
+- or combine both enquo() and !! with {}
+-   if you have a list of quoted objects you need !!! to unlist
+
+- rlang::qq_show() around your evaluated expresssion to show
+-   if input is a quoted input put it around sym (enquo for unquoted)
+
+
+
+```{r}
+library(tidyverse)
+
+my_mean <- function(data, var) {
+  
+  var <- ensym(var)
+  
+  rlang::qq_show(data %>% dplyr::summarise(mean(var)))
+}
+
+mtcars %>% my_mean(cyl)
+```
+
+
+```{r}
+
+custom <- function(.data,group,focus){
+  
+  group <- enquos(group)
+  focus <- enquo(focus)
+    
+
+  
+    .data %>% 
+    group_by(pick(!!!group)) %>% 
+      summarize(
+        mean=mean(!!focus)
+        ,.groups="drop"
+      )
+  
+  
+}
+
+diamonds %>% custom(group=c(color,cut),focus=x)
+```
+
+
+
+sym() is used to take a quoted input "x" and use it in a context without quotes. Need !!sym("x") to be used
+
+or  rlang::englue("var) within the .data[[var]] context
+
+
+.data[[rlang::englue("var")]]
+
+.env$var to refer to grid table
+
+```{r}
+library(tidyverse)
+
+
+col_numbers <- 1:ncol(diamonds)
+
+  map(
+    .x=col_numbers
+      ,.f=~diamonds[.x:10]
+  )
+
+  split(diamonds, ~ cut) %>% 
+    map(
+      .x=.
+      ,~.x %>% pull(price) %>% sum) %>% 
+    stack()
+
+ 
+    map(
+      .x=col_numbers
+      ,.f = ~mtcars[.x] %>% table()
+      )
+```
+
+
+
+```{r}
+diamonds %>% select(cut,color) %>% 
+  table()
+```
+
+
+
+```{r}
+library(tidyverse)
+cols <- c("mpg","cyl")
+
+df <- expand.grid(cols) %>% 
+  mutate(data=list(mtcars))
+
+
+df
+global_env_unquoted <- function(data,col){
+  
+  
+  data %>% 
+    filter(eval({{col}}))
+}
+
+
+
+df %>% 
+  rowwise() %>% 
+  mutate(args=list(rlang::parse_expr(paste0(Var1,">18")))) %>% 
+  mutate(
+    fun=list(global_env_unquoted(data,args))
+  ) 
+
+```
+
+
+## Select
+
+
+```{r}
+library(tidyverse)
+basic <- function(){
+  
+  mtcars %>% 
+    select(mpg)
+}
+
+basic()
+
+direct_quoted <- function(){
+  
+  name <- "mpg"
+  
+  mtcars %>% 
+    select(name)
+  
+}
+
+direct_quoted()
+
+input_quoted <- function(name){
+  
+  mtcars %>% 
+    select(name)
+}
+
+input_quoted("mpg")
+
+input_quoted_2 <- function(name){
+  
+  
+  mtcars %>% 
+    select(any_of(name))
+}
+
+
+input_quoted_2("mpg")
+
+input_unquoted <- function(name){
+  
+  
+  mtcars %>% 
+    select({{name}})
+}
+
+input_unquoted(mpg)
+
+derived_calculad <- function(name){
+  
+ mtcars2 <-  mtcars %>% 
+    mutate("{{name}}_2":={{name}})
+  
+  
+  mtcars2 %>% 
+    select(any_of(rlang::englue("{{name}}_2")))
+}
+derived_calculad(mpg)
+
+quoted_in_body <- function(){
+  
+name <-   paste0("m","p","g")
+  mtcars %>% 
+    select(name)
+  
+  
+}
+quoted_in_body()
+
+
+
+select_col_names <- function(name){
+  
+  mtcars %>% 
+    select(contains(name))
+}
+select_col_names("m")
+
+
+numeric_args <- function(args){
+  
+  args_input <- rlang::parse_expr(args)
+  mtcars %>% select(eval(args_input))
+}
+
+
+
+numeric_args("where(~sum(.x)<180)")
+```
+
+
+```{r}
+mtcars %>% 
+  select(where(~sum(.x)<180))
+
+```
+
+
+## unquoted in table
+
+```{r}
+library(tidyverse)
+
+test <- function(data,col_names){
+  
+  select(data,any_of(col_names))
+         }
+
+tibble(
+  col_names=c("mpg","hp")
+  ,data=list(mtcars)
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    fun=list(function(data,col_names) select(data,any_of(col_names)))
+    ,defined_fun=list(test(data,col_names))
+  ) %>% unnest(defined_fun)
+
+
+tibble(
+  col_names=list("mpg/hp"=c("mpg","hp"),"mpg"=c("mpg"))
+  ,data=list(mtcars)
+  ,names=names(col_names)
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    defined_fun=list(test(data,col_names))
+  ) %>% unnest(defined_fun)
+```
+
+
+### Mutate
+
+
+```{r}
+
+direct <- function(){
+  
+  mtcars %>% 
+    mutate(mtcars2=mtcars*2)
+  
+}
+
+direct()
+
+
+```
+
+## quoted as input directly to function header
+
+```{r}
+
+quoted_input <- function(input_name,input_col){
+  
+  input_col <- sym(input_col)
+  
+  mtcars %>% 
+    mutate(
+      "{input_name}":=!!input_col*2
+    )
+  
+  
+}
+
+quoted_input("test","mpg")
+```
+
+## Unquoted input
+
+```{r}
+
+unquoted_input <- function(name,input_col){
+  
+
+  
+  
+  mtcars %>% 
+    mutate(
+      "{{name}}":={{input_col}}
+    ) %>% 
+    relocate(last_col())
+  
+}
+
+unquoted_input(name=test,input_col=mpg)
+```
+
+## Dirived as quote in body
+
+
+```{r}
+
+derived_from_body <- function(){
+  
+  obj <- "mpg2" 
+  
+  obj2 <- sym("mpg")
+  
+  mtcars %>% 
+    mutate("{obj}":=!!obj2)
+  
+}
+
+derived_from_body()
+
+
+is(ymd("2022-01-01"),"Date")
+```
+```{r}
+
+
+yr_mo <- function(.data){
+  
+  fpaR::contoso_fact_sales %>% 
+    mutate(
+      DateKey=mdy(DateKey)
+      ,yr_mo_report_date=format.Date(DateKey,"%y%m")
+             
+             
+             ) %>% 
+    relocate(last_col())
+  
+}
+
+yr_mo()
+
+```
+

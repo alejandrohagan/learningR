@@ -1,0 +1,154 @@
+---
+title: "bslibs"
+format:
+  html:
+    theme: solar
+---
+
+
+
+
+```{r}
+library(tidyverse)
+thematic::thematic_rmd()
+
+g <- diamonds |> 
+  ggplot(aes(x=price,y=carat,fill=cut))+
+  geom_point()
+```
+
+
+
+```{r}
+#| label: test
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+library(bslib)
+library(tidyverse)
+
+plot_card <- card(
+  full_screen = TRUE,
+  card_header("Plot"),
+  plotly::plot_ly()
+)
+
+page_fillable(
+  layout_columns(plot_card, plot_card),
+  plot_card
+)
+
+
+```
+
+
+```{r}
+spam <- 50
+```
+
+
+```{r}
+#| content: valuebox
+#| title: "Spam per day"
+list(
+  icon = "trash",
+  color = "danger",
+  value = spam
+)
+```
+
+
+:::{.panel-tabset .tabset-pills}
+## test{.p3 .border .rounded}
+
+hello
+
+
+## what is this
+
+hello
+
+:::
+
+
+```{r}
+library(bslib)
+library(bsicons)
+value_box(
+  title = "Value",
+  value = 10 
+  ,showcase = bs_icon("music-note-beamed")
+)
+```
+
+::: {.card}
+Gapminder combines data from multiple sources into
+unique coherent time-series that can’t be found
+elsewhere. Learn more about the Gampminder dataset at
+<https://www.gapminder.org/data/>.
+:::
+
+
+::: {.card title="Life Expectancy"}
+```{r}
+#| label: card-test
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
+plotly::plot_ly()
+```
+
+
+Gapminder combines data from multiple sources into
+unique coherent time-series that can’t be found
+elsewhere. Learn more about the Gampminder dataset at
+<https://www.gapminder.org/data/>.
+
+
+:::
+
+```{r}
+
+bslib::card(
+  bslib::card_header(
+    class = "bg-dark",
+    "A header"
+  ),
+  bslib::card_body(
+    "Some text with a [link](https://github.com)"
+  )
+)
+```
+
+
+
+```{r}
+library(plotly)
+plotly_widget <- plot_ly(x = diamonds$cut) %>%
+  config(displayModeBar = FALSE) %>%
+  layout(margin = list(t = 0, b = 0, l = 0, r = 0))
+
+bslib::card(
+  card_title("This is a test")
+  ,card_body(plotly_widget)
+  ,full_screen = TRUE
+  ,fill = TRUE
+  ,card_footer(
+    class = "fs-6",
+    "Copyright 2023 RStudio, PBC"
+  )
+)
+```
+A goat tower has 10 floors, each of which can accommodate a single goat. Ten goats approach the tower, and each goat has its own (random) preference of floor. Multiple goats can prefer the same floor.
+
+One by one, each goat walks up the tower to its preferred room. If the floor is empty, the goat will make itself at home. But if the floor is already occupied by another goat, then it will keep going up until it finds the next empty floor, which it will occupy. But if it does not find any empty floors, the goat will be stuck on the roof of the tower.
+
+What is the probability that all 10 goats will have their own floor, meaning no goat is left stranded on the roof of the tower?
+
+

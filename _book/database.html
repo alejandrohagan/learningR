@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Excel to R: A Survivor’s Guide for the Corporate Environment - 2&nbsp; Database and Larger Than Memory Problems</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./learningR.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li><li class="breadcrumb-item"><a href="./database.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Excel to R: A Survivor’s Guide for the Corporate Environment</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./learningR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">How to save things on Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./database.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#resource" id="toc-resource" class="nav-link active" data-scroll-target="#resource"><span class="header-section-number">3</span> Resource</a></li>
+  <li><a href="#why-is-this-important" id="toc-why-is-this-important" class="nav-link" data-scroll-target="#why-is-this-important"><span class="header-section-number">4</span> Why is this important?</a>
+  <ul class="collapse">
+  <li><a href="#the-essentials" id="toc-the-essentials" class="nav-link" data-scroll-target="#the-essentials"><span class="header-section-number">4.1</span> The Essentials</a></li>
+  <li><a href="#set-up-odbc-driver" id="toc-set-up-odbc-driver" class="nav-link" data-scroll-target="#set-up-odbc-driver"><span class="header-section-number">4.2</span> Set up ODBC Driver</a></li>
+  <li><a href="#create-connection-string" id="toc-create-connection-string" class="nav-link" data-scroll-target="#create-connection-string"><span class="header-section-number">4.3</span> Create Connection String</a></li>
+  <li><a href="#option-1-create-sql-string" id="toc-option-1-create-sql-string" class="nav-link" data-scroll-target="#option-1-create-sql-string"><span class="header-section-number">4.6</span> Option 1: Create SQL string</a></li>
+  <li><a href="#accessing-databse" id="toc-accessing-databse" class="nav-link" data-scroll-target="#accessing-databse"><span class="header-section-number">4.7</span> Accessing Databse</a></li>
+  <li><a href="#option-2-push-existing-data-into-a-database" id="toc-option-2-push-existing-data-into-a-database" class="nav-link" data-scroll-target="#option-2-push-existing-data-into-a-database"><span class="header-section-number">4.8</span> Option 2: Push existing data into a database</a></li>
+  <li><a href="#what-happens-if-dbplyr-doesnt-have-a-function-that-i-need" id="toc-what-happens-if-dbplyr-doesnt-have-a-function-that-i-need" class="nav-link" data-scroll-target="#what-happens-if-dbplyr-doesnt-have-a-function-that-i-need"><span class="header-section-number">4.9</span> What happens if dbplyr doesn’t have a function that I need?</a>
+  <ul class="collapse">
+  <li><a href="#built-in-helper-functions" id="toc-built-in-helper-functions" class="nav-link" data-scroll-target="#built-in-helper-functions"><span class="header-section-number">4.9.1</span> built in helper functions</a></li>
+  <li><a href="#create-sql-query-and-use-it" id="toc-create-sql-query-and-use-it" class="nav-link" data-scroll-target="#create-sql-query-and-use-it"><span class="header-section-number">4.9.2</span> create sql query and use it</a></li>
+  </ul></li>
+  <li><a href="#how-can-i-build-a-package-for-this" id="toc-how-can-i-build-a-package-for-this" class="nav-link" data-scroll-target="#how-can-i-build-a-package-for-this"><span class="header-section-number">4.10</span> how can I build a package for this?</a>
+  <ul class="collapse">
+  <li><a href="#sprintf-and-sql" id="toc-sprintf-and-sql" class="nav-link" data-scroll-target="#sprintf-and-sql"><span class="header-section-number">4.10.1</span> sprintf() and SQL</a></li>
+  <li><a href="#dbplyr" id="toc-dbplyr" class="nav-link" data-scroll-target="#dbplyr"><span class="header-section-number">4.10.2</span> dbplyr</a></li>
+  </ul></li>
+  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together"><span class="header-section-number">4.11</span> Putting it all together</a></li>
+  </ul></li>
+  <li><a href="#larger-than-memory-problems" id="toc-larger-than-memory-problems" class="nav-link" data-scroll-target="#larger-than-memory-problems"><span class="header-section-number">5</span> Larger than memory problems</a>
+  <ul class="collapse">
+  <li><a href="#large-csv-files-that-you-need-to-work-with" id="toc-large-csv-files-that-you-need-to-work-with" class="nav-link" data-scroll-target="#large-csv-files-that-you-need-to-work-with"><span class="header-section-number">5.0.1</span> Large csv files that you need to work with:</a></li>
+  <li><a href="#existing-dataframes-however-they-got-there-that-are-either-too-large" id="toc-existing-dataframes-however-they-got-there-that-are-either-too-large" class="nav-link" data-scroll-target="#existing-dataframes-however-they-got-there-that-are-either-too-large"><span class="header-section-number">5.0.2</span> Existing dataframes (however they got there) that are either too large</a></li>
+  </ul></li>
+  <li><a href="#special-tricks" id="toc-special-tricks" class="nav-link" data-scroll-target="#special-tricks"><span class="header-section-number">6</span> Special tricks</a>
+  <ul class="collapse">
+  <li><a href="#you-can-pass-one-database-object-to-duckdb" id="toc-you-can-pass-one-database-object-to-duckdb" class="nav-link" data-scroll-target="#you-can-pass-one-database-object-to-duckdb"><span class="header-section-number">6.1</span> You can pass one database object to duckdb</a></li>
+  </ul></li>
+  <li><a href="#example-of-passing-one-database-object-to-arrow" id="toc-example-of-passing-one-database-object-to-arrow" class="nav-link" data-scroll-target="#example-of-passing-one-database-object-to-arrow"><span class="header-section-number">7</span> Example of passing one database object to arrow</a></li>
+  <li><a href="#additional-tricks" id="toc-additional-tricks" class="nav-link" data-scroll-target="#additional-tricks"><span class="header-section-number">8</span> Additional tricks</a>
+  <ul class="collapse">
+  <li><a href="#running-sql-in-r" id="toc-running-sql-in-r" class="nav-link" data-scroll-target="#running-sql-in-r"><span class="header-section-number">8.0.1</span> Running SQL in R</a></li>
+  <li><a href="#run-sql-queries-safely" id="toc-run-sql-queries-safely" class="nav-link" data-scroll-target="#run-sql-queries-safely"><span class="header-section-number">8.1</span> Run SQL queries safely</a></li>
+  <li><a href="#how-to-plot-a-database-object" id="toc-how-to-plot-a-database-object" class="nav-link" data-scroll-target="#how-to-plot-a-database-object"><span class="header-section-number">8.2</span> How to plot a database object</a></li>
+  <li><a href="#how-to-build-packages-or-function-to-access-dbplyr" id="toc-how-to-build-packages-or-function-to-access-dbplyr" class="nav-link" data-scroll-target="#how-to-build-packages-or-function-to-access-dbplyr"><span class="header-section-number">8.3</span> How to build packages or function to access dbplyr</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li><li class="breadcrumb-item"><a href="./database.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database and Larger Than Memory Problems</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="resource" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Resource</h1>
+<p><a href="https://smithjd.github.io/sql-pet/chapter-setup-adventureworks-db.html#">Resource to understand databases</a></p>
+<p><a href="https://r4ds.hadley.nz/databases.html">R for datascience chapter on database</a></p>
+<p><a href="https://dbplyr.tidyverse.org/articles/translation-function.html">Dbplyr functions</a></p>
+<p><a href="https://bwlewis.github.io/duckdb_and_r/talk/talk.html">How to use duckdb</a></p>
+<p><a href="https://dbi.r-dbi.org/">DBI function overivew</a></p>
+<p><a href="https://solutions.posit.co/connections/db/">Posit learning materials</a></p>
+<p><a href="https://edgararuiz.github.io/dbplot/">dbplot_histogram</a></p>
+</section>
+<section id="why-is-this-important" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Why is this important?</h1>
+<ul>
+<li><p>You will get to a point where the data you need is inside a database and not excel sheets or csv files</p></li>
+<li><p>This is a point of potential rejoice or mourning</p></li>
+<li><p>While we can say goodbye excel sheets and csv files we also need to say hello to poorly documented databases, overwhelmed database product owners, overworked data engineers, and finally SQL and all of its variations</p></li>
+<li><p>I recommend you take the time to learn SQL – the basics are very similar to the dplyr commands you already know (slight tweaking of evaluation order and syntax) so the beginners learning curve isn’t steep</p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+How much SQL should I learn?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If you’re curious how much SQL you should learn, below is a framework that I found to be helpful:</p>
+<ul>
+<li>Functions</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div id="mnvjngxesa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mnvjngxesa table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mnvjngxesa thead, #mnvjngxesa tbody, #mnvjngxesa tfoot, #mnvjngxesa tr, #mnvjngxesa td, #mnvjngxesa th {
+  border-style: none;
+}
+
+#mnvjngxesa p {
+  margin: 0;
+  padding: 0;
+}
+
+#mnvjngxesa .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mnvjngxesa .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mnvjngxesa .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mnvjngxesa .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mnvjngxesa .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mnvjngxesa .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mnvjngxesa .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mnvjngxesa .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mnvjngxesa .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mnvjngxesa .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mnvjngxesa .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mnvjngxesa .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mnvjngxesa .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mnvjngxesa .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mnvjngxesa .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mnvjngxesa .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mnvjngxesa .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mnvjngxesa .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mnvjngxesa .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mnvjngxesa .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mnvjngxesa .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mnvjngxesa .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mnvjngxesa .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mnvjngxesa .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mnvjngxesa .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mnvjngxesa .gt_left {
+  text-align: left;
+}
+
+#mnvjngxesa .gt_center {
+  text-align: center;
+}
+
+#mnvjngxesa .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mnvjngxesa .gt_font_normal {
+  font-weight: normal;
+}
+
+#mnvjngxesa .gt_font_bold {
+  font-weight: bold;
+}
+
+#mnvjngxesa .gt_font_italic {
+  font-style: italic;
+}
+
+#mnvjngxesa .gt_super {
+  font-size: 65%;
+}
+
+#mnvjngxesa .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mnvjngxesa .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mnvjngxesa .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mnvjngxesa .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mnvjngxesa .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mnvjngxesa .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mnvjngxesa .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border">Summary of SQL commands and their dplyr counterpart</th>
+</tr>
+<tr class="odd gt_col_headings">
+<th id="SQL" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">SQL</th>
+<th id="dpylr" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">dpylr</th>
+<th id="comment" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">comment</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">where</td>
+<td class="gt_row gt_left" headers="dpylr">filter()</td>
+<td class="gt_row gt_left" headers="comment">can be viewed as one for one replacement to filter(), you can pass arguments with AND or OR, Sometimes the first argument is TRUE for purely formatting purposes</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">select</td>
+<td class="gt_row gt_left" headers="dpylr">select()</td>
+<td class="gt_row gt_left" headers="comment">Can be viewed as one for one replacement for select(), * is short cut for all columns</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">group by</td>
+<td class="gt_row gt_left" headers="dpylr">group_by()</td>
+<td class="gt_row gt_left" headers="comment">can be viewed as one for replacement for group_by(), you need for it summarization measures as well as partition measures</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">sum</td>
+<td class="gt_row gt_left" headers="dpylr">sum()</td>
+<td class="gt_row gt_left" headers="comment">works the same as sum, na.rm is always TRUE for SQL</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">min</td>
+<td class="gt_row gt_left" headers="dpylr">min()</td>
+<td class="gt_row gt_left" headers="comment">works the same as sum, na.rm is always TRUE for SQL</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">max</td>
+<td class="gt_row gt_left" headers="dpylr">max()</td>
+<td class="gt_row gt_left" headers="comment">works the same as sum, na.rm is always TRUE for SQL</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">count(*)</td>
+<td class="gt_row gt_left" headers="dpylr">n()</td>
+<td class="gt_row gt_left" headers="comment">works similiar to n()</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">select distinct</td>
+<td class="gt_row gt_left" headers="dpylr">select() |&gt; distinct()</td>
+<td class="gt_row gt_left" headers="comment">works almost exactly the same</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">partition</td>
+<td class="gt_row gt_left" headers="dpylr">group_by() |&gt; mutate()</td>
+<td class="gt_row gt_left" headers="comment">works exactly the same</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">join</td>
+<td class="gt_row gt_left" headers="dpylr">left_join()</td>
+<td class="gt_row gt_left" headers="comment">works similiar</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">like</td>
+<td class="gt_row gt_left" headers="dpylr">str_detect()</td>
+<td class="gt_row gt_left" headers="comment">similiar</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">top</td>
+<td class="gt_row gt_left" headers="dpylr">head()</td>
+<td class="gt_row gt_left" headers="comment">works the same</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">DISTINCT</td>
+<td class="gt_row gt_left" headers="dpylr">distinct()</td>
+<td class="gt_row gt_left" headers="comment">works the same</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">DESCRIBE</td>
+<td class="gt_row gt_left" headers="dpylr">glimpse()</td>
+<td class="gt_row gt_left" headers="comment">works simliar, will display the columns and thier data types</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">SET</td>
+<td class="gt_row gt_left" headers="dpylr">&lt;-</td>
+<td class="gt_row gt_left" headers="comment">works simliar to assign single variables</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">BETWEEN</td>
+<td class="gt_row gt_left" headers="dpylr">between()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">MONTH</td>
+<td class="gt_row gt_left" headers="dpylr">month()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">YEAR</td>
+<td class="gt_row gt_left" headers="dpylr">year()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">DAY</td>
+<td class="gt_row gt_left" headers="dpylr">day()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">QUARTER</td>
+<td class="gt_row gt_left" headers="dpylr">quarter()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">DATEDIFF</td>
+<td class="gt_row gt_left" headers="dpylr">difftime()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">DATETRUC</td>
+<td class="gt_row gt_left" headers="dpylr">floor_date()</td>
+<td class="gt_row gt_left" headers="comment">similar</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">create or replace</td>
+<td class="gt_row gt_left" headers="dpylr">tibble()</td>
+<td class="gt_row gt_left" headers="comment">use this to create the final table</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">in</td>
+<td class="gt_row gt_left" headers="dpylr">%in%</td>
+<td class="gt_row gt_left" headers="comment">similiar</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">as</td>
+<td class="gt_row gt_left" headers="dpylr">rename()</td>
+<td class="gt_row gt_left" headers="comment">simliar</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="sql">with</td>
+<td class="gt_row gt_left" headers="dpylr">tibble()</td>
+<td class="gt_row gt_left" headers="comment">Use this to create CTE or basic mini tables that you can then reference in different steps of the query, makes readable easier</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sql">having</td>
+<td class="gt_row gt_left" headers="dpylr">filter() or '['</td>
+<td class="gt_row gt_left" headers="comment">similiar to where</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>There are some nuances, in particular the evaluation order that typically trip up new SQL users and also some coding conventions that will be different than what you are used to but in general if you understand the above R commands you will quickly learn the SQL counterparts.</p>
+<p>With anything, you need to practice! luckily there are multiple SQL resources and practice studios which can help with reinforcement learning.</p>
+<p><strong>Database frameworks</strong></p>
+<ul>
+<li><p>Temporary Tables / CTE</p>
+<ul>
+<li>These are tables that only exist when you run them</li>
+<li>Helpful as interim steps or to break code into subqueries to make it more modular</li>
+</ul></li>
+<li><p>Curated tables</p>
+<ul>
+<li>Often times you may have loads of raw tables (eg 100s) that you need to join together, filter or aggregrate before the data can be usable</li>
+<li>This process of turning raw /streaming data into table that can be consumed for analysis is oftern called data curation</li>
+<li>This is often times created as a view which can be though of as particular snapshot of a table</li>
+</ul></li>
+<li><p>Materialized layers</p>
+<ul>
+<li>Materialized layer means the data is more persistent so when you run it its not triggering the underlying queries (which will save you alot of time)<br>
+</li>
+<li>Typically you won’t know</li>
+</ul></li>
+</ul>
+<p>Database structure</p>
+<ul>
+<li><p>Security Model</p>
+<ul>
+<li>Because data can be privildedged, without a doubt your organization has some security model that will aplly row level security and IDs to ensure when you access a table you are seeing what you should be seeing</li>
+<li>There is way to much to write here about it and honestly, I’m not the right person to answer it</li>
+</ul></li>
+</ul>
+<p>You may not need to know any of this but this mostly depends on your organizations data strategy, staffing levels and operating model</p>
+</div>
+</div>
+</div>
+<ul>
+<li><p>The reason you can survive off of a beginners knowledge base of SQL is that luckily there is a life saving package called <code>dbplyr</code> that translates your dplyr queries into SQL for you</p></li>
+<li><p>It has fairly great coverage but there are limitations which is why eventually it will help you to learn some intermediate SQL commands and overall database frameworks</p></li>
+<li><p>This chapter will go over database essentials and provide resources to learn more</p></li>
+</ul>
+<section id="the-essentials" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="the-essentials"><span class="header-section-number">4.1</span> The Essentials</h2>
+<p><strong>What do you need to access data in a database?</strong></p>
+<ul>
+<li>A database with data inside of it<br>
+</li>
+<li>Access / permission to the database</li>
+<li>Location, user name and password to database (or equivalent protocols as dictated by your organization’s security model)</li>
+<li>Database driver and related utilities</li>
+<li>SQL querys</li>
+<li>Patience</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+“What is the advantage of a database?”
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>It comes down to scale and size. At some point your organization or process will generate substantial data and needs a more structured process to store the data so that multiple parties can access the data at scale.</p>
+<p>When dealing with a new database some key frameworks are:</p>
+<ul>
+<li><p>Cloud vs.&nbsp;On-Premise</p></li>
+<li><p>Security model and access</p></li>
+<li><p>“Flavor” of database</p></li>
+<li><p>Improved data management: A database centralizes data, making it easier to manage and maintain</p></li>
+<li><p>Enhanced data security: A database provides secure storage and retrieval of sensitive data through user authentication and access control mechanisms</p></li>
+<li><p>Better data organization: A database <strong>theoretically</strong> allows for better organization and structure of data through the use of tables, indexes, and relationships</p></li>
+<li><p>Improved query performance: Databases are optimized for query performance, allowing for faster retrieval of data.</p></li>
+<li><p>Scalability: Databases can handle large amounts of data and scale as needed to meet growing storage demands.</p></li>
+</ul>
+<p>Cloud vs On-Premise Database:</p>
+<ul>
+<li><p>Cloud databases are hosted on remote servers, while on-premise databases are hosted on local servers (when you read servers just replace it with the word computers. You are either using your organization’s computer (on prem) or you are using someone else (cloud))</p></li>
+<li><p>Cloud databases offer greater flexibility in terms of scalability and accessibility, as they can be accessed from any location with an internet connection.</p></li>
+<li><p>On-premise databases provide more control over data security and privacy, as the data is stored on a local server and not transmitted over the internet.</p></li>
+<li><p>Cloud databases typically require less setup and maintenance than on-premise databases, as they are managed by the provider.</p></li>
+<li><p>Cost: Cloud databases are often subscription-based and can be more cost-effective than on-premise databases, especially for small to medium-sized businesses.</p></li>
+</ul>
+<p><em>Security Model and Access:</em></p>
+<ul>
+<li><p>Security model: A database’s security model determines who has access to the data and how they can access it. Common security models include Role-Based Access Control (RBAC), Attribute-Based Access Control (ABAC), and Identity-Based Access Control (IBAC).</p></li>
+<li><p>Access control: A database’s access control mechanisms determine who can view, edit, or delete data. This can be based on user authentication, role-based access control, or attribute-based access control.</p></li>
+<li><p>Authentication methods: Databases support various authentication methods such as username and password, single sign-on (SSO), and two-factor authentication (2FA).</p></li>
+<li><p>Authorization methods: Databases support various authorization methods such as row-level security, column-level security, and table-level security.</p></li>
+<li><p>Auditing and logging: Databases can log all access attempts and successful accesses to track user activity and detect potential security breaches.</p></li>
+<li><p>Encryption: Databases can encrypt data both in transit and at rest to protect it from unauthorized access.</p></li>
+<li><p>Backup and recovery: Databases provide mechanisms for backing up data and recovering from failures or security incidents.</p></li>
+<li><p>Identity and access management (IAM): IAM systems manage user identities and access rights within the database, ensuring that only authorized users can access the data.</p></li>
+<li><p>Role-based access control (RBAC): RBAC allows for assigning roles to users based on their job function or responsibilities, limiting the data they have access to.</p></li>
+<li><p>Attribute-based access control (ABAC): ABAC grants or denies access to data based on attributes associated with the user or the data itself, such as location or time of day.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<p><strong>What does a database need from you?</strong></p>
+<ul>
+<li><p>The most frustrating part of database is getting access to the database, setting up the database utilities and then making the initial connection</p></li>
+<li><p>There are multiple ways to connect to a database however almost all require the following:</p>
+<ul>
+<li>User name</li>
+<li>Password</li>
+<li>Database driver</li>
+<li>Connection string and associated arguments</li>
+<li>SQL query</li>
+</ul></li>
+<li><p>We will review the DSN method for connecting to a database</p></li>
+<li><p>These tend to be confusing because much of this is controlled and managed by your local IT department so whatever documentation or guide you read on online may not translate one for one to your localized experienced (this includes this guide as well :(</p></li>
+</ul>
+</section>
+<section id="set-up-odbc-driver" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="set-up-odbc-driver"><span class="header-section-number">4.2</span> Set up ODBC Driver</h2>
+<ul>
+<li><p>Download (if required) a database driver for your database – this is typically on the database company’s website</p>
+<ul>
+<li>Your company may have centralized package manager system where you will need to download and install all required drivers via that packet manager</li>
+</ul></li>
+<li><p>Configure your DSN so that you can be authenticated</p></li>
+<li><p>Your database platform should have documentation on how to do this and your internal IT team <strong>should</strong> be able to articulate any proxy / security requirements</p></li>
+<li><p>Here is some example <a href="https://docs.snowflake.com/en/developer-guide/odbc/odbc-windows">documentation</a></p></li>
+<li><p>You are essentially saving the required information (listed above) to your computer so that you can pass these arguments to the database</p></li>
+<li><p>Pay attention to the name you setup the DSN driver, you will need this later one</p></li>
+</ul>
+<p><strong>Example Paramaters are below</strong></p>
+<ul>
+<li>User</li>
+<li>Password</li>
+<li>Server</li>
+<li>Database</li>
+<li>Schema</li>
+<li>Warehouse<br>
+</li>
+<li>Tracing</li>
+<li>Authenticator</li>
+</ul>
+</section>
+<section id="create-connection-string" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="create-connection-string"><span class="header-section-number">4.3</span> Create Connection String</h2>
+<ul>
+<li><p>If the above is done correctly you can then use DBI package in R to connect to the database of your choice</p></li>
+<li><p>Create a connection string with DBI::dbConnect()</p>
+<ul>
+<li><p>Select the DBMS wtih the driver_name such as ODBC::ODBC() to access your DSN set up connect to external database or can use DMBS package such as duckdb::duckdb() to replicate an internal instance of a database</p></li>
+<li><p>DSN name if external database (the name used to set up ODBC driver)</p></li>
+<li><p>Alternatively, you can directly supply the arguments in DBI::dbConnect() such as hostname,port,username, etc</p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## this uses duckdb example to create a connection string</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(<span class="at">drv=</span>duckdb<span class="sc">::</span><span class="fu">duckdb</span>())</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## this is alternative example using a made up DSN name </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>con  <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">drv=</span>odbc<span class="sc">:</span><span class="fu">odbc</span>()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  ,<span class="at">dsn=</span><span class="st">"your_DSN_name"</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Additional Utilities
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>the DBI and ODBC packages are extremely useful for database related utilities</li>
+<li>While they have some existing overlap, they can be used to view the schema in your database, list active connections and also disconnect.</li>
+<li>Below are some useful utilities:</li>
+</ul>
+<section id="list-your-drivers" class="level4" data-number="4.3.0.1">
+<h4 data-number="4.3.0.1" class="anchored" data-anchor-id="list-your-drivers"><span class="header-section-number">4.3.0.1</span> list your drivers</h4>
+<p>odbc::odbcListDrivers()</p>
+</section>
+<section id="list-active-connections" class="level4" data-number="4.3.0.2">
+<h4 data-number="4.3.0.2" class="anchored" data-anchor-id="list-active-connections"><span class="header-section-number">4.3.0.2</span> list active connections</h4>
+<p>DBI::dbListConnections()</p>
+</section>
+<section id="checks-if-you-can-connect" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="checks-if-you-can-connect"><span class="header-section-number">4.4</span> Checks if you can connect</h2>
+<p>DBI::dbCanConnect()</p>
+</section>
+<section id="list-tables-listed-under-connection" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="list-tables-listed-under-connection"><span class="header-section-number">4.5</span> List tables listed under connection</h2>
+<p>DBI::dbListTables()</p>
+<section id="list-tables-in-connection" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="list-tables-in-connection"><span class="header-section-number">4.5.1</span> list tables in connection</h3>
+<p><code>dbListTables(con)</code> to list tables associated with a connection</p>
+</section>
+</section>
+</div>
+</div>
+</div>
+<ul>
+<li>After you have created a connection string you now need to retrieve information from the database</li>
+</ul>
+</section>
+<section id="option-1-create-sql-string" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="option-1-create-sql-string"><span class="header-section-number">4.6</span> Option 1: Create SQL string</h2>
+<ul>
+<li><p>If you know the database, schema and table name that you want, you can write the initial sql query to connect to the database</p></li>
+<li><p>You can write simple or advance query insde the <code>dplyr::sql()</code> function</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sql_query <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">SQL</span>(<span class="st">"select *  from database_name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="accessing-databse" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="accessing-databse"><span class="header-section-number">4.7</span> Accessing Databse</h2>
+<ul>
+<li>Use connection string and sql query together to create a lazy table with <code>dplyr::tbl()</code></li>
+<li>We call this a lazy table because it won’t actually execute the query and return the results which is good because your query might return 100s of results</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_db <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">tbl</span>(con,sql_query)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>From there you can use <em>dplyr</em> back end queries to see everything (notice the distinction betwee <strong>db</strong>pyr and dplyr</p></li>
+<li><p>If you use the dbplyr package, you are limited to queries that can be translated to sql which are detailed below</p>
+<ul>
+<li><a href="https://github.com/tidyverse/dbplyr/blob/main/R/backend-.R">github of dplyr commands that can be used in dbplyr</a></li>
+<li>You can also check the database specific<a href="[https://github.com/tidyverse/dbplyr/blob/main/R/backend-snowflake.R">here</a></li>
+</ul></li>
+<li><p>You can see what query it will generate with <code>dbplyr::show_query()</code></p></li>
+<li><p>Notice the class of the object you return, you are returning a database object – if you want to return a dataframe you need to use <code>dplyr::collect()</code></p></li>
+</ul>
+</section>
+<section id="option-2-push-existing-data-into-a-database" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="option-2-push-existing-data-into-a-database"><span class="header-section-number">4.8</span> Option 2: Push existing data into a database</h2>
+<ul>
+<li><p>First you need to have a connection string to a database (and write permissions)</p></li>
+<li><p>If you already have something as a dataframe you can upload it to a database with DBI::dbWriteTable(con,“tbl_name”,df) which will write the table to the connection with the name you gave</p>
+<ul>
+<li>DBI::dbWriteTable() can write a r dataframe or you can use sql to create a virtual table if you want</li>
+<li>dbplyr::copy_inline(con_db,df = df) is alternative method</li>
+<li>If you have duckdb connection you can use the duckdb::duckdb_register()</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create connection</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>con_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>())</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write data into database</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbWriteTable</span>(con_db,<span class="at">name =</span> <span class="st">"diamonds_db"</span>,<span class="at">value =</span> ggplot2<span class="sc">::</span>diamonds)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># or alternative use the database argument to regester</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>duckdb<span class="sc">::</span><span class="fu">duckdb_register</span>(con_db, <span class="st">"diamonds_db_2"</span>,<span class="at">df =</span>  ggplot2<span class="sc">::</span>diamonds)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># validate data is in database by reference connection</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbListTables</span>(con_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "diamonds_db"   "diamonds_db_2"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull in data in database format</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>diamonds_db <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">tbl</span>(con_db,<span class="st">"diamonds_db"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="what-happens-if-dbplyr-doesnt-have-a-function-that-i-need" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="what-happens-if-dbplyr-doesnt-have-a-function-that-i-need"><span class="header-section-number">4.9</span> What happens if dbplyr doesn’t have a function that I need?</h2>
+<section id="built-in-helper-functions" class="level3" data-number="4.9.1">
+<h3 data-number="4.9.1" class="anchored" data-anchor-id="built-in-helper-functions"><span class="header-section-number">4.9.1</span> built in helper functions</h3>
+</section>
+<section id="create-sql-query-and-use-it" class="level3" data-number="4.9.2">
+<h3 data-number="4.9.2" class="anchored" data-anchor-id="create-sql-query-and-use-it"><span class="header-section-number">4.9.2</span> create sql query and use it</h3>
+</section>
+</section>
+<section id="how-can-i-build-a-package-for-this" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="how-can-i-build-a-package-for-this"><span class="header-section-number">4.10</span> how can I build a package for this?</h2>
+<section id="sprintf-and-sql" class="level3" data-number="4.10.1">
+<h3 data-number="4.10.1" class="anchored" data-anchor-id="sprintf-and-sql"><span class="header-section-number">4.10.1</span> sprintf() and SQL</h3>
+</section>
+<section id="dbplyr" class="level3" data-number="4.10.2">
+<h3 data-number="4.10.2" class="anchored" data-anchor-id="dbplyr"><span class="header-section-number">4.10.2</span> dbplyr</h3>
+</section>
+</section>
+<section id="putting-it-all-together" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="putting-it-all-together"><span class="header-section-number">4.11</span> Putting it all together</h2>
+<ul>
+<li>Set up your drive, get required database info and related utilities</li>
+<li>Create connection to your database</li>
+<li>write an inital query to select the columns that you want or need</li>
+<li>Use dbplyr to translate dplyr queries to SQL</li>
+<li>return results to your local machine with dplyr::collect()</li>
+</ul>
+</section>
+</section>
+<section id="larger-than-memory-problems" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Larger than memory problems</h1>
+<ul>
+<li><p>Sometimes you don’t have a database but have data that is larger than memory</p></li>
+<li><p>Luckily, you don’t need a database to take advantage of the tricks we have learnt to move solve your data larger than memomory problems</p></li>
+<li><p>Sometimes you may not have a database to connect to and instead have a very large csv file or dataframes</p></li>
+<li><p>There are two packages that are exceptionally helpful here</p>
+<ul>
+<li>duckdb() and arrow()</li>
+</ul></li>
+<li><p>This isn’t the technically correct response but duckdb() allows you to build an in memory database whereas arrow compresses your information into some sort of parquet type structure</p></li>
+<li><p>What makes these so great is that dbplyr will translate your dplyr commands to either duckdb or arrow language</p></li>
+<li><p>Some dplyr functions are avaialble in one package that aren’t avaialble in the other</p></li>
+<li><p>However you can pass an object from duckdb to arrow as much as you want</p></li>
+</ul>
+<p><strong>What is key difference?</strong></p>
+<ul>
+<li>Duckdb will return first 1000 rows of your query so you can check if your query worked well, whereas arrow won’t let you see it (including if your query returns an error which can be annoying)</li>
+</ul>
+<p>To understand how to use the packages,let us define two scenarios:</p>
+<ol type="1">
+<li>You have a lot of csv files that you need to upload and analyze</li>
+<li>As a result of simulation of some other you have multiple tables that seperately are okay but together are generating you have very large dataframe that you need to join together to analyze and manipulate</li>
+<li>You have interim data that you want to save in workflow that is large</li>
+</ol>
+<section id="large-csv-files-that-you-need-to-work-with" class="level3" data-number="5.0.1">
+<h3 data-number="5.0.1" class="anchored" data-anchor-id="large-csv-files-that-you-need-to-work-with"><span class="header-section-number">5.0.1</span> Large csv files that you need to work with:</h3>
+<ul>
+<li>If you have large offline files you can quickly easily load this into duckdb with <code>duckdb_read_csv()</code> or the collection of arrow functions (eg. <code>arrow::read_csv_arrow()</code>).</li>
+</ul>
+<div class=".callout-note">
+<p>Arrow will support json, feather, delimiter, parquet, or csv amongst other whereas duckdb only supports csv (if not already an object)</p>
+</div>
+<ul>
+<li>This will load the csv files directly to your duck db in memory database</li>
+<li>You first need to create connection string</li>
+</ul>
+</section>
+<section id="existing-dataframes-however-they-got-there-that-are-either-too-large" class="level3" data-number="5.0.2">
+<h3 data-number="5.0.2" class="anchored" data-anchor-id="existing-dataframes-however-they-got-there-that-are-either-too-large"><span class="header-section-number">5.0.2</span> Existing dataframes (however they got there) that are either too large</h3>
+<p>or individually are okay but seperately aren’t okay</p>
+<ul>
+<li>You first need to get your data into R as a dataframe</li>
+<li>Then you need to register your dataframe to your in duckdb memory database</li>
+<li>From there you can move the datafrme from duckdb to arrow as you would like</li>
+</ul>
+</section>
+</section>
+<section id="special-tricks" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Special tricks</h1>
+<section id="you-can-pass-one-database-object-to-duckdb" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="you-can-pass-one-database-object-to-duckdb"><span class="header-section-number">6.1</span> You can pass one database object to duckdb</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="in">#| label: db-connect example</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="in">#| eval: true</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="in">## create connection string locally</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="in">con_db &lt;- DBI::dbConnect(duckdb::duckdb())</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="in"># loads data into your connection either in memory</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="in">DBI::dbWriteTable(con_db,"diamonds_db",ggplot2::diamonds)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="in">#create new table to the connection</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="in">DBI::dbExecute(con_db, "CREATE TABLE duckdb_table (col1 INT, col2 STRING)")</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>#preview what is in your connection</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbListTables</span>(con_db)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dbplyr<span class="sc">::</span><span class="fu">copy_inline</span>(con_db,<span class="at">df =</span> diamonds)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>diamonds_db <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">tbl</span>(con_db</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    ,<span class="st">"diamonds_db"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="example-of-passing-one-database-object-to-arrow" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Example of passing one database object to arrow</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>diamonds_db <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">good_indicator=</span><span class="fu">if_else</span>(cut<span class="sc">==</span><span class="st">"Good"</span>,<span class="dv">1</span>,<span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(color) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">n=</span><span class="fu">n</span>()</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">mean=</span><span class="fu">mean</span>(carat)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">mean_price=</span><span class="fu">mean</span>(price)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">mean_ind=</span><span class="fu">mean</span>(good_indicator)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    ,<span class="at">mean_adj=</span><span class="fu">mean</span>(carat[good_indicator<span class="sc">==</span><span class="dv">1</span>])</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(color)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rolling_price=</span><span class="fu">cumsum</span>(mean_price)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    arrow<span class="sc">::</span><span class="fu">to_arrow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(color<span class="sc">==</span><span class="st">"H"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(color,mean_adj) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="additional-tricks" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Additional tricks</h1>
+<section id="running-sql-in-r" class="level3" data-number="8.0.1">
+<h3 data-number="8.0.1" class="anchored" data-anchor-id="running-sql-in-r"><span class="header-section-number">8.0.1</span> Running SQL in R</h3>
+<ul>
+<li>If you are using rmakrdown or quarto, you can run the sql query in a window and have it results saved as a datafarme</li>
+</ul>
+<div class="cell" data-output.var="test.tbl">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> diamonds_db</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> cut<span class="op">==</span><span class="st">'Good'</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>If you want to run it in rmarkdown, you can do the following</li>
+</ul>
+<div class="cell" data-output.var="mydataframe">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> diamonds_db</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> cut<span class="op">==</span><span class="st">'Good'</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="run-sql-queries-safely" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="run-sql-queries-safely"><span class="header-section-number">8.1</span> Run SQL queries safely</h2>
+</section>
+<section id="how-to-plot-a-database-object" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="how-to-plot-a-database-object"><span class="header-section-number">8.2</span> How to plot a database object</h2>
+</section>
+<section id="how-to-build-packages-or-function-to-access-dbplyr" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="how-to-build-packages-or-function-to-access-dbplyr"><span class="header-section-number">8.3</span> How to build packages or function to access dbplyr</h2>
+<ul>
+<li><p>two options:</p>
+<ul>
+<li>sprintf to generate actual sql queries</li>
+<li>dbplyr / similiar to spring</li>
+</ul></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./learningR.html" class="pagination-link" aria-label="How to save things on Git">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">How to save things on Git</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

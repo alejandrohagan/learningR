@@ -1,0 +1,55 @@
+# Introduction {.unnumbered}
+
+I have been to the darkest corners of the internet and beyond, searching for answers to the most impossible data problems. I've scoured every forum, every blog, every tutorial, and even ventured into the depths of the forbidden knowledge that mere mortals should not possess. But fear not, my friends, for I have returned with solutions that will save you agony and frustration.
+
+I'm not just talking about your everyday, run-of-the-mill data issues. No, no, no. I'm talking about the kind of data that would make even the most experienced analyst shake in their boots. Messy, inconsistent, non-standard, and downright ugly data that makes you want to throw your computer out the window. But fear not, for I have conquered these data demons and emerged victorious.
+
+And now, I am here to share my knowledge with you, my dear comrades in data crunching. This book will solve 80% of your data problems, with no complex macros or advanced languages required. It's like a data superhero that will swoop in and save the day, leaving you with more time to sip on a margarita and bask in the glory of your newfound data skills.
+
+So if you're tired of staring at your computer screen, tears streaming down your face, and feeling like you're stuck in a never-ending data nightmare, then this book is for you. It's time to take back control of your data, and with my help, you'll be a data champion in no time.
+
+This is meant to quickly reference guide. I will teach you patterns techniques so that you can quickly and effectively get to solutions to your problems. This means building up your analysis frameworks and tool kits.
+
+If you've been counting, you've noticed I've used "effective" almost 15 times. What do I mean by that, I'm balancing your time, With all the skills, you can (and some of you should) significantly advanced your knowledge but what happens? For many of you, you'll build a tool only you can use, you will need to spend significantly amount of your time learning these skills and testing these skills. Things will go wrong. You will be frustrated, eventually you'll get it right, you will be better for it. But then you will move, the person replacing you will have no clue what you are doing and will quickly undo it, and sure you've learnt an advance skill, but unless your organization is build around that level of skill standard - you may not intend it but you will do more harm than good.
+
+It also means you will be able to do a typical problem in an defined amount of time. Trust me, there is no point reading this if you can't do a simple analysis in 15 minutes. Why? Because you spent time training on to have any benefit with your work.
+
+By the time you are done, you will gladly look forward to data. It will not intimidate you. You will be excited to quickly semi automate many of your processes. You will be confident. You will be focus on value and process.
+
+I want to tell you that you will be able to great in 2 weeks but I will lie to you. Yes, for sure you will do some great things very quickly and if you are lucky enough that your data is already perfectly organized and your management teams actually know what they want with data than for sure - you will hit the ground running quickly. However for the rest of us, it will take time to replicate your existing Excel skill set in R and than surpass it. However, I promise you, this is investment is worth it when you are able to automate a report in 10 minutes that used to take you a week.
+
+Be patient, the concepts taught here are not hard or complex they are just *different* than what you know. As you become more familiar with the new concepts you will learn it very quickly.
+
+
+### Books purpose
+
+This book will guide you through realistic business scenarios on how to create and automate reports with an emphasis on maximizing your team's effectiveness
+
+You read this and 1) will know how to apply tools to the real life situations that you have faced with an emphasis of effectiveness (as defined by your team & maintenance of the reports you build)
+
+While there are some fantastic R reasources [www.bigbookofR.com](www.bigbookofR.com), the referenced example datasets rarely prepare you for the real life complexities of dealing with Corporate datasets, including challenges of dealing with messy Corporate datasets, maintaining reports when there is significant process changes, and system and offline manual data manipulation required to generate reports.
+
+Additionally, whether it is R or python, most learning resources tend to have a heavy focus on statistical techniques / applications which while useful in certain contexts in reality do not help most analyst or managers with their business reporting.
+
+This book is focused on developing effective analyst skills that will improve both your R and Excel skills, recognizing that he reality of using exclusively being able to use R in a corporate environment is rare. Furthermore by relating R to excel, you will gain a deeper learning into how R works.
+
+There will be better ways to do things that we are teaching you however, they often involve wider resources or time commitments that you may not be able to maintain (however we will provide resources in case you are curious!)
+
+> The dirty secret of popular data science languages are they are **perishable**, that is to say if you don't use them frequently you will forget the techniques, syntax and common patterns to solve your issues.
+
+the real barrier and challenge to learning R is not the language itself, although you won't believe it now, R is very simple to learn, the challenge will be getting sufficient practice to learn the patterns in your daily life
+
+For this -- its up to you and your level of dedication / committment.
+
+I'd recommend to find 30 minutes every day to practice specific skill elements.
+
+
+Excels main benefit is its visual user interface -- eg you can click buttons, drag and drop columns/rows and you can see your data responds.
+
+To help with the R journey, we will introduce (when possible / appropriate) their corresponding Excel actions.
+
+It will help you understand what R is doing but help you understand the productivity benefits of R.
+
+
+
+Now we get to the hard part. Your learning path. There are two approaches to learning

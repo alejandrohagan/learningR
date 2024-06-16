@@ -1,0 +1,237 @@
+# Core concepts and Principles
+
+You are a low code professional, what does this mean? it means that you are use R Studio for your workflows, occasionally excel and other Microsoft products. You've been learning tidyverse and sprinkling in some key base R functions. Concepts such as evaluation order, environments and xxx are foreign to you. 
+
+You may using R for business reports, analysis, or research. 
+
+This book isn't going to teach you how to code, it won't teach you stats it 
+won't teach you what the difference between object orient programming and 
+functional programming. I don't care if R starts at 1 and python starts 0.
+I don't care if one language starts indexing at 0 and another starts at 1. 
+I'm here to improve your productivity. 
+I'm here to teach you patterns. I will try to teach the underlying concepts 
+of why this happens. 
+
+You try to code every day but you often don't have time.
+I want to pass on what was most effective for me and how I improved my 
+productivity.
+
+You are constrained by your work environment in what you can install and do
+You are constrained by your work team, their skill sets, work flow and deliverable
+You are constrained by managers, their understanding and fluency of the data
+You are contained by your systems, data engineering, and information flows
+
+In short this has two frameworks 
+
+
+Some folks start with the eye candy stuff and teach you all the visualizations stuff upfront as that is certainly one of the most beautiful and power aspects of this language (and practical for your work).
+
+This is beneficial because you can instant apply your skills and you get some immediate return for your time investment. 
+
+The challenge of this approach is that there will be some basic things you need to do, lets say change the order of the bars from highest to lowest, so you will google a solution and you will either not understand it, apply it wrong or it will just flat out confuse you. So then as you try to get into other concepts you may get frustrated and confused mainly because your foundation is weak. It doesn't mean you can't do it, it just means maybe there is more hair pulling and crying then there really needed to be becuase a learning resource may assume you have some understanding of a concept that you don't yet have.
+
+Now compare that to the alternative approach which starts with the fundamentals and introduces concepts sequentially that build upon each other. 
+
+The benefit of this is that you even "advanced" will be more easily understood and you will have far more confidence in your learning journey. The problem is that learning the fundamentals is... well, kinda boring. Well not really boring, just as standalone topics you won't understand **why** you need to learn this. You'll think about your work and be like -- how is this relevant at all? So that may cause you to loose interest and motivation and then you will stop learning and we all loose.
+
+So look-- there is no perfect answer -- I try to take a balance of these two with a focus perhaps on the fundamentals. Mainly because if you get this right, then you will seriously sing and sail your way through the rest of the topics. 
+
+Also -- beyond some basic descriptive statistics there is no statistics in this book. I'm not against statistics its just that so much of the learning materials I found were statistics based which made me first learn the statistics and then the code. 
+
+This is just focused on the code and applications towards your workflow. 
+
+Lastly, to understand this book and how it compares to others, you do need to understand that there was a bit of history of how R language has evolved and the different frameworks. 
+
+  While R has been around for a long long time, around 2012 a couple key things started happening. First was the invention of the `%>%` pipe which you can still see used today (in this book we will use `|>` replacement pipe which will explain in a bit). This made your code easier to read and more ergonomic to type codes
+  
+  Then came ggplot2 which was and still is one of the best graphic tools around.
+  
+  Then also came rmarkdown which we explore which is basically an interactive notebook and made sharing and writing reports with your code easier
+  
+  
+  Then came this tidyverse which basically provided a unified syntax to how to common data analysis. 
+  
+  It provided a whole lot of sugar syntax (eg making things easier to type and remember) and strucutred taxonomy of terms and packaging integration that, in my opinion, leaves it as the greatest coding framework.
+  
+  While that may seem dramatic, by learning this syntax, you will know how to code in Python, Julia, Spark and SQL.
+  
+  Why is that? because people saw how amazing these framework is and sought to adopt it.
+  
+  So whats the alternative? well for starters its problematic to think of it as an alternative, but its called Base R. 
+  
+  You need both, although for most of your common actions, tidyverse is just easier to remember and use so we will often default to it. But don't worry we will show you the best of all worlds.
+  
+  okay! so tons of talking lets get to it. 
+  
+  
+## Learning Path
+
+
+We start with the basics, if you come from a excel background you won't really appreciate that there are differnet types of objects. 
+
+Don't worry, this is more about introducing new vocabulary then it is about new conceptural frameworks. You will find that each different object type is just an aggregateion of smaller objects.
+
+-   objects and types (draft)
+        
+        -   Object names/types
+          -   vectors
+          -   lists
+          -   tables
+        -   types
+          -   character
+           -   numeric
+          -   factor
+          -   dates
+          
+From here, we will work on generating data. You may not appreciate it yet, but being able to generate data will save you lots of typing and administrative work
+
+        -   generating data
+          -   seq()
+          -   rep()
+          -   seq.Date()
+          -   generating from other data
+            -   subset
+            -   reference
+Now we start to learn skills that are immediate applicable -- adding or subtracting columns to objects
+
+          -   add or subtract from objects
+          -   mutate()
+          -   count()
+          -   create dictionary
+          
+We continue by learning how to reference columns in a table 
+
+-   tidyselect verbs (draft)
+
+    -   :
+    -   !
+    -   c()
+    =   everything()
+    -   last_col()
+    -   group_cols()
+    -   starts_with()
+    -   ends_with()
+    -   contains()
+    -   matches()
+    -   num_range()
+    -   all_of()
+    -   any_of()
+    -   where() part 1
+
+Now we get to what is the most impactful and power section -- how to fillter, summarize and otherwise edit objects
+
+-   How to manipulate data (not started)
+
+        -   filter()
+        -   group_by() and summarize()
+            -   simple
+            -   conditional subset
+        -   variables
+            -   .env vs. .data
+        -   pivot_longer() and pivot_wider()
+        -   fct_*
+          -   abbreviate
+        -   str_*
+        -   dates
+        -   rename/ relocate
+  
+  
+-   Import or write data
+
+        -   read multiple files (repeating action)
+        
+            -   setting / navigating working directories
+            -   csv vs. excel 
+            -   naming convention
+            
+        -   writing data
+            -   how to create metadata
+            -   how to reference data vs. metadata 
+                    -   column values
+                    -   column names
+                    -   object type
+
+
+-   tidying and organizaton data
+    
+    -   crossing()
+    -   unique()
+    -   expand()
+    -   complete
+    -   pivot_longer()
+    -   pivot_wider()
+    -   drop_na()
+    -   unite
+    -   seperate_wider
+    -   replace_na()
+
+
+-   functional programming
+
+    -   function structure
+    -   predicate functions
+    -   quoted vs. unquoted
+    -   vectors vs. tables
+    -   where() part 2
+
+
+-   data masking
+    
+    -   enquos()
+    -   sym()
+    -   glue
+
+-   Iterations (started)
+
+    -   across()
+    -   if_any()
+    -   if_all()
+    -   replicate()
+    -   map()
+    -   rowwise()
+    -   patterns and techniques
+      -   sample
+      -   replicate
+      -   crossing
+      -   accumulate
+      -   optimize
+      -   rowwise()
+    -   riddles
+      
+
+-   ggplot, colors and formatting   
+    
+    -   ggplot2()
+    -   gt()
+    -   bslibs
+    -   crosstalk()
+    -   trelliscope
+
+-   Sharing reports (Quarto)
+    
+    -   Quarto related 
+    -   Github pages
+    -   Sharepoint
+    -   Shinylive
+
+-   database and larger than memory
+
+    -   What is a database -- how to connect to one
+    -   Basic SQL (draft)
+    -   create your own database
+    -   Intermediate SQL
+    -   database utilities
+    -   Advanced SQL
+   
+-   Tips, tricks and best practices
+    
+    -   Best of twitter
+
+-   Vim related (draft)
+
+    -   Rstudio vim bindings
+        -   Motions
+        -   Action
+        -   Search and Replace
+        -   macros
+
