@@ -218,20 +218,30 @@ This becomes a frustration when:
 
 Type coercion works inconsistently across structures. For example, when we get to tibbles, you will see they are strict on data structures and will throw an error.
 
+Vectors are the building blocks of R. So let's see what we can build with them.
+
 ## Lists
 
--   You can think of lists as the ultimate flexible structure.
--   Not only can you combine multiple data types
--   Forget data types, do you want to hold different structures all together? then you need a `list()`
+-   You can think of lists as the ultimate flexible structure
+
+-   Not only can you combine multiple data types but you can hold together different object types all together
+
 -   Lists are  flexible and once you get used to manipulating and sub-setting lists you will feel very comfortable referencing them
 
--   For the purposes going forward even though there is a base::list(), we will use the rlang::list2(), equivalent features but rlang::list2() has some cool benefits that we reference down the road.
+-   For the purposes going forward even though there is a `base::list()`, we will use the `rlang::list2()`, equivalent features but `rlang::list2()` has some cool benefits that we reference down the road.
 
 -   Lists are also the foundation of a tibble, which is nothing more but lists stitched together
 
 
 
 ```{r}
+#| label: list2
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
 a <- c(1:10)
 b <- rlang::list2(1:10)
 
@@ -248,6 +258,13 @@ identical(a,b[[1]])
 There are many ways to simplify and reduce vectors and lists but a little known trick with `c()` which is to use the argument `recursive` argument to `TRUE`
 
 ```{r}
+#| label: list-vs-vectors
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| include: true
+
 
 c(1:10,2:21,1,1,list(10:1))
 
@@ -266,20 +283,22 @@ Not a whole lot at this point but you are  great building blocks for your analys
 
 Checking classes of data isn't always a routine action but if you have errors, its helpful in solving this
 
-We use `class()` or `typeof()` to return an objects class . Alternatively if we want a binary outcome (EG TRUE or FALSE) we can use the below specific functions. Below are list of some helpful class validation functions.
+We use `class()` or `typeof()` to return an objects class . Alternatively if we want a binary outcome (e.g `TRUE` or `FALSE`) we can use the below specific functions. 
 
--   is.Data.frame()
--   is.list
--   is.vector
+Below are list of some helpful class validation functions:
 
--   is.na()
--   is.infinite()
--   is.logical()
+-   `is.Data.frame()`
+-   `is.list()`
+-   `is.vector()`
 
--   is.numeric()
--   is.character()
--   is.Date()
--   is.factor()
+-   `is.na()`
+-   `is.infinite()`
+-   `is.logical()`
+
+-   `is.numeric()`
+-   `is.character()`
+-   `is.Date()`
+-   `is.factor()`
 
 
 ```{r}

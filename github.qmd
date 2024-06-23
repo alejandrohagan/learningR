@@ -91,6 +91,8 @@ gh::gh_whoami()
 usethis::git_sitrep()
 ```
 
+```{r}
+```
 
 ## connect to a repo
 
