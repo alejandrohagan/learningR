@@ -98,7 +98,6 @@ not_available <- NA
 null <- NULL
 ```
 
-
 You don't pay attention to data types in Excel as much until you have problems -- it is a strength and weakness. You can throw any values together and excel doesn't care (until you try to do something with it).
 
 R (and most other languages) really care about data types -- in fact most^[Yes I know there is something called type coercion that we will review in a bit] of the time they let you do anything unless the data types are aligned. 
@@ -114,7 +113,26 @@ This is mainly for you benefit / protection -- even if its annoying at first
     -   text
     -   percentage
     
-You will find alot of jokes about how excel converts a bunch of integrets into dates
+You will find a lot of jokes about how excel converts a bunch of integers into dates and you will laugh at them until it bites you.
+
+::: {.callout-note}
+## How to fix it?
+
+
+```{r}
+#| label: janitor-example
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| include: true
+
+janitor:::excel_numeric_to_date()
+```
+
+
+:::
+
 
 ## Structure
 
@@ -128,6 +146,10 @@ n R you will through four main "structures"
 -   matrix (but we will cover this later on)
 
 This may feel overwhelming -- in reality it will feel very intuitive -- only later on will some nuance really distinguish between these types
+
+The trick to understanding this is to know that dataframes is object that is made up of lists and lists are objects made up vectors. 
+
+So let's explore
 
 ### Vector
 
