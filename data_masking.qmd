@@ -7,17 +7,25 @@ title: "data_masking"
 [https://brad-cannell.github.io/r_notes/confidence-intervals.html]
 
 
-### data masking
+### Data masking
+```{r}
+
+base::deparse()
+```
 
 
-enquoes
+#### Enquoes
 -   quotes functions eg. turns mpg into "mpg" AND declares the environment eg. global or local for the quoted return to be put in. 
 -   eg. ... or mpg needs to but into enquos(...) or enquo(mpg)
--   you evalute unquoted objects with !! or despare
-- or combine both enquo() and !! with {}
+-   you evaluate unquoted objects with !! or `base::deparse()`
+-   or combine both enquo() and !! with {}
 -   if you have a list of quoted objects you need !!! to unlist
 
-- rlang::qq_show() around your evaluated expresssion to show
+
+
+
+
+- rlang::qq_show() around your evaluated expression to show
 -   if input is a quoted input put it around sym (enquo for unquoted)
 
 
@@ -27,12 +35,19 @@ library(tidyverse)
 
 my_mean <- function(data, var) {
   
-  var <- ensym(var)
+  var <- dplyr::sym(var)
   
-  rlang::qq_show(data %>% dplyr::summarise(mean(var)))
+  rlang::qq_show(
+    
+    data |>  dplyr::summarise(mean(!!var))
+    
+    )
 }
 
-mtcars %>% my_mean(cyl)
+mtcars |>
+  my_mean("cyl")
+
+
 ```
 
 
