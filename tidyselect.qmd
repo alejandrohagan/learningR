@@ -688,7 +688,7 @@ diamonds |>
   head()
 
 ```
-1. selects any columns that is.factor returns TRUE
+1. selects any columns that is.factor returns TRUEt
 ```{r}
 #| label: where-factor-gt
 #| echo: false
