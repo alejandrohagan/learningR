@@ -5,6 +5,100 @@ title: "data_masking"
 ## Resources
 
 [https://brad-cannell.github.io/r_notes/confidence-intervals.html]
+[https://rlang.r-lib.org/reference/topic-quosure.html]
+[https://dplyr.tidyverse.org/articles/programming.html]
+[https://rlang.r-lib.org/reference/topic-data-mask-programming.html]
+[https://rlang.r-lib.org/reference/topic-multiple-columns.html]
+[https://mastering-shiny.org/action-tidy.html]
+[https://adv-r.hadley.nz/expressions.html]
+
+## basics
+
+### enquo() and !! / `{{}}`
+
+enquo() is called quosures  -- it lets R know which environment an environment should be called. It is used for  varaiables that data masked
+
+When an environment is quosured it then needs to be defused which you do with !! or xx. 
+
+Alternatively you can just use `{{}}` 
+
+For multiple arguments in ..., pass them on to functions that also take ... like group_by(), or pass them within c() for functions taking tidy selection in a single argument like pivot_longer():
+
+```{r}
+# Pass dots through
+my_group_by <- function(.data, ...) {
+  .data %>% dplyr::group_by(...)
+}
+
+my_pivot_longer <- function(.data, ...) {
+  .data %>% tidyr::pivot_longer(c(...))
+}
+```
+
+
+for enquo() var you can use quo_get_expr() and quo_get_env() to validate the expression and environment they are are declared in
+
+#### expr and !! or eval_tidy()
+
+expr is used to capture an unquoted argument and you defuse with !! or eval_tidy()
+
+
+
+```{r}
+
+library(rlang)
+my_mean <- function(data, var) {
+  # `expr()` is sufficient, no need for `quo()`
+  var_quo <- enquo(var)
+  expr <- expr(mean({{ var }}))
+  
+  quo_get_expr(var_quo)
+  
+  # dplyr::summarise(data, !!expr)
+}
+
+my_mean(mtcars,vs)
+```
+
+expr() returns an expression, an object that captures the structure of the code without evaluating it (i.e. running it). If you have an expression, you can evaluate it with base::eval():
+```{r}
+install.packages("lobstr")
+lobstr::ast(mean(c(1:10),5,na.rm=TRUE) |> min())
+```
+
+## symbol
+
+Symbo is expression (eg captured code) that references an object (x,mtcars, mean) or a string directly covered to an expression sym()
+
+turn a symbo back to a string with rlang::as_string() or as.character()
+
+
+##  Calls
+
+A call object represents a captured function call. Call objects are a special type of list90 where the first component specifies the function to call (usually a symbol), and the remaining elements are the arguments for that call. Call objects create branches in the AST, because calls can be nested inside other calls.
+
+
+
+
+### Constructing
+
+You can construct a call object from its components using rlang::call2(). The first argument is the name of the function to call (either as a string, a symbol, or another call). The remaining arguments will be passed along to the call:
+
+
+```{r}
+call2("mean", x = expr(x), na.rm = TRUE)
+#> mean(x = x, na.rm = TRUE)
+call2(expr(base::mean), x = expr(x), na.rm = TRUE)
+#> base::mean(x = x, na.rm = TRUE)
+
+```
+Using call2() to create complex expressions is a bit clunky. You’ll learn another technique in Chapter 19.
+
+
+#### using this in practice 
+### Alternative to call2
+
+In short, use enexpr() and enexprs() to capture the expressions supplied as arguments by the user. Use expr() and exprs() to capture expressions that you supply.
 
 
 ### Data masking
@@ -22,8 +116,13 @@ base::deparse()
 -   if you have a list of quoted objects you need !!! to unlist
 
 
+#### alternative to sym
+ 19.3.2 Capturing symbols
+
+Sometimes you only want to allow the user to specify a variable name, not an arbitrary expression. In this case, you can use ensym() or ensyms(). These are variants of enexpr() and enexprs() that check the captured expression is either symbol or a string (which is converted to a symbol96). ensym() and ensyms() throw an error if given anything else.
 
 
+## Other
 
 - rlang::qq_show() around your evaluated expression to show
 -   if input is a quoted input put it around sym (enquo for unquoted)
@@ -373,6 +472,22 @@ yr_mo <- function(.data){
 }
 
 yr_mo()
+
+```
+
+## why does this fail?
+
+```{r}
+lm3a <- function(formula, data) {
+  
+  formula <- enexpr(formula)
+
+  lm_call <- expr(lm(!!formula, data = data))
+  eval(expr = lm_call,)
+}
+
+lm3a(mpg ~ disp+drat+hp*vs, data=mtcars)
+
 
 ```
 
